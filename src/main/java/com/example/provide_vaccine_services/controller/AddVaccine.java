@@ -1,0 +1,98 @@
+
+package com.example.provide_vaccine_services.controller;
+
+import com.example.provide_vaccine_services.dao.*;
+import com.example.provide_vaccine_services.dao.model.*;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
+import jakarta.servlet.annotation.*;
+
+import java.io.File;
+import java.sql.PreparedStatement;
+import java.time.LocalDateTime;
+import java.io.IOException;
+
+@WebServlet(name = "AddVaccine", value = "/addVaccine")
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 100,  // 100 KB
+        maxFileSize = 1024 * 500,       // 500 KB
+        maxRequestSize = 1024 * 1024   * 10 // 10 MB
+)
+public class AddVaccine extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
+//        Duong dan luu file tren o D
+        String uploadPath = "D:" + File.separator + "uploads";
+
+//        Tao thu muc uploads neu chua ton tai
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) uploadDir.mkdirs();
+
+        Part filePart = request.getPart("file");
+        String fileName = filePart.getSubmittedFileName();
+        String filePath = uploadPath + File.separator + fileName;
+
+//        Luu file vao thu muc tren o D
+        filePart.write(filePath);
+
+//        Luu duong dan anh vao database
+        String imagePath = "/uploads/" + fileName;
+
+//        Phan vac xin
+        String name = request.getParameter("vaccineName");
+        String quantity = request.getParameter("quantityVaccine");
+        String price = request.getParameter("price");
+        String status = request.getParameter("status");
+        String description = request.getParameter("description");
+        String prevention = request.getParameter("prevention");
+
+        LocalDateTime createdAt = LocalDateTime.now();
+
+        int quantityI = Integer.parseInt(quantity);
+        float priceF = Float.parseFloat(price);
+        int supplierId = Integer.parseInt(request.getParameter("supplier"));
+        String statusText = (Integer.parseInt(status) == 1) ? "Còn hàng" : "Hết hàng";
+
+//      Phan thong tin chi tiet + content
+        String target = request.getParameter("editor-dt");
+        String immunization = request.getParameter("editor-pdt");
+        String  adverseReactions = request.getParameter("editor-pu");
+
+        String origin = request.getParameter("editor-ng");
+        String administrationRoute = request.getParameter("editor-dt");
+        String contraindications = request.getParameter("editor-ccd");
+        String precaution = request.getParameter("editor-tt");
+        String drugInteractions = request.getParameter("editor-ttt");
+        String sideEffects = request.getParameter("editor-tdp");
+
+//        Phan do tuoi hoac nhom benh
+        int idAgeGroup = Integer.parseInt(request.getParameter("age-name"));
+        int idDisaseGroup = Integer.parseInt(request.getParameter("disage-name"));
+
+        VaccineDao vaccineDao = new VaccineDao();
+        Vaccines vaccine = new Vaccines(supplierId, name, description, quantityI, priceF, imagePath, statusText, createdAt, prevention);
+        int idVaccine = vaccineDao.insert(vaccine);
+
+        VacccineDetailDao vdDao = new VacccineDetailDao();
+        VacccineDetails vd = new VacccineDetails(idVaccine, target, immunization, adverseReactions);
+        int idDetail = vdDao.insert(vd);
+
+        VaccineContentDao vcDao = new VaccineContentDao();
+        VaccineContents vc = new VaccineContents(idDetail, origin, administrationRoute, contraindications, precaution, drugInteractions, sideEffects);
+        vcDao.insert(vc);
+
+        VaccineTypes vt = new VaccineTypes(idVaccine, idAgeGroup, idDisaseGroup);
+        VaccineTypeDao vtDao = new VaccineTypeDao();
+        vtDao.insert(vt);
+
+        response.sendRedirect("table-data-vacxin");
+    }
+}

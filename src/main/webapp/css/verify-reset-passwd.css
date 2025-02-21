@@ -1,0 +1,125 @@
+
+body {
+    background-color: #f9f9f9;
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+/* Main content styles */
+.main-content {
+    max-width: 600px;
+    margin: 100px auto; /* Căn giữa và tạo khoảng cách trên/dưới */
+    padding: 30px 40px;
+    background-color: #fff;
+    border-radius: 8px; /* Bo góc */
+    box-shadow: 2px 2px 2px 4px rgba(0, 0, 0, 0.1); /* Bóng đổ */
+    border-top: 1px solid #2a2c2d01; /* Viền trên màu xanh */
+}
+
+/* Welcome message */
+h1.welcome-message {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #2A388F;
+    text-align: center; /* Căn giữa tiêu đề */
+}
+
+/* Form styles */
+.info-card .form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+/* Button styles */
+.info-card .btn-edit {
+    padding: 13px;
+    background-color: #2A388F;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 0px auto;
+    display: flex
+}
+
+.info-card .btn-edit:hover {
+    background-color: #4D63A6;
+}
+/* Loại bỏ dấu gạch chân cho các liên kết trong header và footer */
+.header a, .footer a {
+    text-decoration: none;
+}
+.header {
+    padding: 3px 0;
+    background: #2a388f;
+}
+/* Responsive cho màn hình nhỏ hơn 992px */
+@media (max-width: 992px) {
+    .main-content {
+        max-width: 90%; /* Giảm độ rộng nội dung */
+        padding: 20px; /* Giảm padding để phù hợp với không gian nhỏ */
+    }
+
+    .info-card .form-control {
+        font-size: 14px; /* Giảm kích thước chữ trong input */
+    }
+
+    .info-card .btn-edit {
+        font-size: 14px; /* Giảm kích thước chữ trong nút */
+        padding: 8px; /* Giảm padding cho nút */
+    }
+}
+
+/* Responsive cho màn hình nhỏ hơn 768px */
+@media (max-width: 768px) {
+    .welcome-message {
+        font-size: 20px; /* Giảm kích thước tiêu đề */
+    }
+
+    .main-content {
+        margin: 50px auto; /* Giảm khoảng cách phía trên */
+        box-shadow: none; /* Bỏ bóng đổ trên màn hình nhỏ */
+    }
+}
+
+/* Responsive cho màn hình nhỏ hơn 576px */
+@media (max-width: 576px) {
+    .main-content {
+        margin: 20px auto; /* Giảm khoảng cách phía trên/dưới */
+        padding: 15px; /* Giảm padding để tối ưu không gian */
+    }
+
+    .info-card .form-control {
+        font-size: 12px; /* Giảm kích thước chữ trong input */
+    }
+
+    .info-card .btn-edit {
+        font-size: 12px; /* Giảm kích thước nút */
+        padding: 6px; /* Giảm padding cho nút */
+    }
+}
+
+/* Responsive cho màn hình rất nhỏ (nhỏ hơn 430px) */
+@media (max-width: 430px) {
+    h1.welcome-message {
+        font-size: 18px; /* Giảm kích thước tiêu đề */
+    }
+
+    .main-content {
+        padding: 10px; /* Giảm padding cho nội dung nhỏ */
+    }
+
+    .info-card .form-control {
+        font-size: 10px; /* Giảm kích thước chữ trong input */
+    }
+
+    .info-card .btn-edit {
+        font-size: 10px; /* Giảm kích thước nút */
+        padding: 5px; /* Tối ưu nút nhỏ */
+    }
+}

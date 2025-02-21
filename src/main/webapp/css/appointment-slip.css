@@ -1,0 +1,115 @@
+body {
+    padding: 0;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    height: 100%;
+    background-color: #ffff;
+    flex-direction: column;
+}
+a {
+    text-decoration: none;
+}
+.appointmentSlip-content{
+    display: flex;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 700px;
+    background-color: white;
+    max-height: 90%;
+    margin: 40px auto; /* Căn giữa nội dung theo chiều dọc */
+}
+.appointmentSlip-info{
+    background-color: #2558cb;
+    color: #ffffff;
+    width: 40%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+.appointmentSlip-info p{
+    margin: 20px 0;
+    font-size: 14px;
+
+}
+.appointmentSlip-info h2{
+    margin-top: 0;
+    text-align: center;
+}
+.appointmentSlip-details{
+    padding: 20px;
+    width: 60%;
+}
+.appointmentSlip-details h2{
+    margin-top: 0;
+    text-align: center;
+
+}
+.appointmentSlip-details p {
+    color: #333333;
+    margin: 5px 0;
+    font-size: 14px;
+}
+form{
+    display: flex;
+    flex-direction: column;
+}
+.info-row {
+    font-weight: 500;
+    color: #333333; /* Đậm màu hơn cho nhãn */
+    margin-bottom: 10px;
+}
+
+.info-row .value {
+    color: #888888; /* Nhạt màu hơn cho giá trị */
+    font-weight: normal;
+    font-size: 14px;
+}
+.note{
+    color: #ff8b07 !important;
+    margin-top: 10px;
+    font-weight: 500;
+}
+/* Responsive */
+@media (max-width: 768px) {
+    .appointmentSlip-content {
+        flex-direction: column;
+        box-shadow: none;
+        border-radius: 0;
+        margin: 0 auto;
+    }
+    .appointmentSlip-info, .appointmentSlip-details {
+        width: 100%;
+    }
+    .buttons {
+        gap: 10px;
+    }
+    .complete-btn, .cancel-btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .appointmentSlip-details {
+        text-align: center;
+        width: 100%;
+    }
+    .appointmentSlip-info h2, .AppointmentSlip-details h2 {
+        font-size: 16px;
+    }
+    .appointmentSlip-info p, .info-row, .info-row .value {
+        font-size: 12px;
+    }
+    .note {
+        font-size: 12px;
+    }
+    .complete-btn, .cancel-btn {
+        font-size: 12px;
+        padding: 8px;
+    }
+}
+
+
+
+
+

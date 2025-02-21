@@ -1,0 +1,108 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+html {
+    scroll-padding-top: 150px;
+    scroll-behavior: smooth;
+}
+a {
+    text-decoration: none;
+}
+p {
+    white-space: normal;
+    word-break: break-word;
+    font-size: 16px;
+}
+.list-group {
+    border-radius: 5px;
+    box-shadow: 0 2px 3px #cecece;
+}
+.list-group-item.active {
+    color: #fff !important;
+    background-color: #f8c02d !important;
+    border-color: transparent !important;
+}
+.list-group-item {
+    color: #2A388F;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+a.list-group-item:hover {
+    color: #2A388F;
+}
+.list-group-item img {
+    margin-right: 10px;
+    max-height: 40px;
+    width: auto;
+}
+.section-vaccine-detail .section-title {
+    font-weight: 500;
+    padding: 15px 10px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    color: #f8c02d;
+    background: linear-gradient(90deg, #295B99 0%, #1F306B 50%, #202974 100%);
+}
+.section-vaccine-detail .section-body {
+    padding: 10px;
+}
+.section-vaccine-detail strong {
+    color: #2A388F;
+    font-weight: 600;
+}
+.section-vaccine-detail .detail-contents {
+    border-radius: 5px;
+    border: 1px solid #2A388F;
+    margin-bottom: 20px;
+}
+.accordion {
+    display: none;
+}
+#section-content {
+    margin: 30px 0;
+}
+@media (max-width: 768px) {
+    .list-group {
+        display: none;
+    }
+    .list-group-item {
+        border: none;
+        box-shadow: none;
+    }
+    .accordion {
+        display: block;
+        margin-bottom: 30px;
+    }
+    .accordion-body {
+        padding:0;
+    }
+    .accordion-button {
+        font-size: 16px;
+        color: #fff !important;
+        background: linear-gradient(90deg, #295B99 0%, #1F306B 50%, #202974 100%);
+    }
+    .accordion-button:focus {
+        box-shadow: none;
+    }
+    .accordion-button::after {
+        filter: brightness(0) invert(1);
+    }
+    h4 {
+        font-size: 18px;
+    }
+    h5 {
+        font-size: 16px;
+    }
+    ul {
+        padding-left: 8px;
+    }
+    .indent {
+        margin-left: 20px; /* Thụt vào 20px */
+    }
+
+}

@@ -1,0 +1,82 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+a {
+    text-decoration: none;
+}
+.main {
+    font-size: 16px;
+    margin: 30px 0;
+}
+.main .title {
+    font-size: 24px;
+    font-weight: 500;
+    text-transform: uppercase;
+    text-align: center;
+    color: #2A388F;
+}
+.main h5 {
+    color: #2e3a92;
+    font-weight: 500;
+}
+/*information_vacxin.html*/
+.card {
+    border: none;
+    margin: 10px 0;
+    cursor: pointer;
+}
+.card-body {
+    padding-left: 0;
+    padding-right: 0;
+    color: #333;
+    font-weight: 500;
+}
+/*pre-vaccination.html*/
+.alert-info {
+    color: #31708f;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+    padding: 15px 15px 5px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+/*after-vaccination.html*/
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+td, th {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+thead {
+    text-align: center;
+    background-color: #f9f9f9;
+}
+td:nth-child(1), td:nth-child(2) {
+    text-align: center; /* Căn giữa cột 1 và 2 */
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+@media (max-width: 576px) {
+    table {
+        display: block;
+        overflow: auto;
+        height: 327px;
+    }
+}
+
+@media (max-width: 320px) {
+    * {
+        font-size: 12px !important;
+    }
+    .main ul {
+        padding-left: 15px;
+    }
+}

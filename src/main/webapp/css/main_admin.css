@@ -1,0 +1,573 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+    font-size: 16px;
+}
+.ck-content.ck-editor__editable {
+    height: 200px;
+}
+.dropdown-menu {
+    width: 100%;
+    max-height: 200px !important;
+    overflow-y: auto !important;
+}
+.dropdown i {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    margin-top: 7px;
+}
+body {
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+    transition: all 0.3s ease;
+}
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 110px;
+    height: 100vh;
+    background: linear-gradient(90deg, #052065 100%, #0780CB 44.77%);
+    color: #fff;
+    padding: 0 1.7rem;
+    transition: width 0.3s ease, padding 0.3s ease;
+    z-index: 1000;
+    overflow: hidden;
+}
+.sidebar:hover {
+    width: 240px;
+}
+
+.sidebar:hover + .main-content {
+    margin-left: 240px;
+}
+
+.sidebar:hover .menu a span {
+    opacity: 1;
+}
+.menu {
+    height: 88%;
+    position: relative;
+    list-style-type: none;
+    padding: 0;
+    margin-top: 1rem;
+    transition: all 0.3s ease-in-out;
+}
+
+.menu li {
+    padding: 1.2rem;
+    margin: 8px 0;
+    border-radius: 8px;
+    transition: background 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+}
+.menu li:hover, .menu li.active {
+    background: #e0e0e058;
+}
+.menu a {
+    color: #fff;
+    font-size: 14px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.menu a span {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+}
+
+.sidebar:hover .menu a span {
+    opacity: 1;
+}
+
+.sidebar:hover .user-res {
+    display: flex;
+    opacity: 1;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+.logout {
+    width: 100% !important;
+    padding: 1rem 1.5rem !important;
+    border-radius: 8px;
+}
+.user-res {
+    display: none !important;
+}
+.navbar-toggler {
+    margin-left: auto;
+}
+.navbar {
+    display: none;
+}
+.main-content {
+    width: 100%;
+    margin-left: 110px;
+    padding: 1rem;
+    background: #f2f2f2;
+    transition: margin-left 0.3s ease, padding-left 0.3s ease;
+}
+.header-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    background: #fff;
+    border-radius: 10px;
+    padding: 10px 2rem;
+    margin-bottom: 1rem;
+}
+.header-title {
+    color: rgba(113, 99, 186, 255);
+}
+.header-wrapper .user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-weight: 500;
+}
+.header-wrapper .img-admin {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 50%;
+}
+.main-title {
+    color: #2A388F;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #2A388F;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.tabular-wrapper {
+    background-color: #fff;
+    margin-top: 1rem;
+    border-radius: 10px;
+    padding: 2rem;
+}
+.tabular-wrapper table thead {
+    background: linear-gradient(90deg, #052065 100%, #0780CB 44.77%);
+    color: #fff;
+}
+.tabular-wrapper thead th {
+    vertical-align: middle;
+    text-align: left;
+}
+label {
+    font-size: 16px;
+    font-weight: 500;
+}
+input {
+    padding-left: 3px;
+    border-radius: 4px;
+    background-color: #f1f1f1;
+    border: 1px solid #dadada;
+}
+.tabular-wrapper select {
+    border-radius: 4px;
+    background-color: #f1f1f1;
+    border: 1px solid #dadada;
+}
+select:focus,
+input:focus {
+    outline: none;
+}
+/*Phan trang cua DataTabel*/
+/* Nut phan trang mac dinh */
+.page-item .page-link {
+    background-color: #f1f1f1;
+    color: #333;
+    border: 1px solid #dadada;
+    margin: 0 2px;
+    border-radius: 5px;
+    font-weight: 400;
+    transition: all 0.3s ease; /* Hieu ung chuyen doi khi hover */
+}
+/* Nut khong phai nut hien tai khi hover */
+.page-item .page-link:hover {
+    background: linear-gradient(90deg, #052065 100%, #0780CB 44.77%);
+    color: #fff !important;
+    border-color: transparent;
+}
+/* Nut hien tai */
+.page-item.active .page-link {
+    background: linear-gradient(90deg, #052065 100%, #0780CB 44.77%);
+    color: #fff !important;
+    font-weight: 500;
+    border-color: transparent;
+}
+.page-item.active .page-link:focus {
+    box-shadow: none;
+}
+.modal .modal-title {
+    color: #2A388F !important;
+}
+/*Modal cua nut xoa*/
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+.modal-box {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    text-align: center;
+}
+.modal-actions {
+    margin-top: 15px;
+}
+.modal-actions button {
+    margin: 0 5px;
+}
+/*Nut them vacxin*/
+.btn-add {
+    padding: 5px;
+    font-size: 13px;
+    line-height: 1.5;
+    padding-left: 10px;
+    border-radius: .357rem;
+    padding-right: 10px;
+    font-weight: 500;
+    background-color: #b9ffd3;
+    color: #003c00 !important;
+    margin-bottom: 15px;
+    margin-right: 10px;
+}
+/*Form them vacxin*/
+input:focus,
+textarea:focus,
+.btn:focus,
+select:focus {
+    box-shadow: none !important;
+}
+
+.info-vaccine-wrapper .vaccine-info-form {
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+    background: #fff;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+.form-control,
+.form-select {
+    background: #e9ecef;
+}
+.form-control:focus {
+    background: #fff;
+}
+.info-vaccine-wrapper .vaccine-info-form .form-label,
+.form-floating {
+    font-weight: 500;
+}
+.section-title {
+    color: #2A388F;
+    font-weight: 500;
+    font-size: 20px;
+}
+.border-black {
+    opacity: 1;
+    border-color: rgba(0, 0, 0, 1);
+    border-width: 1px; /* Giảm độ dày viền */
+}
+.border-dotted {
+    border-style: dotted;
+    border-width: 1px; /* Giảm độ dày viền */
+}
+.hidden {
+    display: inline-block;
+    background-color: transparent;
+    border: 1px solid #ccc;
+}
+.info-vaccine-wrapper svg {
+    margin-bottom: 8px;
+}
+.btn-save,
+.btn-save:hover {
+    background-color: rgb(166, 236, 171);
+    color: rgb(1, 123, 10);
+    font-weight: 500;
+}
+.btn-cancel,
+.btn-cancel:hover {
+    background-color: rgb(255, 197, 197);
+    color: rgb(190, 40, 40);
+    font-weight: 500;
+}
+.btn-return,
+.btn-return:hover{
+    background-color: #3997D5;
+    border-color: #3997D5;
+    font-weight: 500;
+    color: #fff;
+}
+.light-orange {
+    background-color: #fde1c3;
+}
+.light-green {
+    background-color: #b9ffd3 !important;
+}
+.light-blue {
+    background: #adcbf3;
+}
+.dark-orange {
+    background: #ff8b07;
+}
+.drak-green {
+    background: #22ad56 !important;
+}
+.dark-blue {
+    background-color: #1d5aab;
+}
+.light-red {
+    background-color: #f9c9cd;
+}
+.color-green {
+    color: #008000 !important;
+}
+.color-blue {
+    color: #0f2094;
+}
+.color-red {
+    color: #a90312;
+}
+.status {
+    font-weight: 500;
+    padding: 2px 5px;
+    font-size: 13px;
+    border-radius: 3px;
+}
+.nav-item {
+    font-size: 16px;
+    padding: 5px 10px 2px;
+    cursor: pointer;
+}
+.nav-item.active {
+    color: #337ab7;
+    border-bottom: 2px solid #337ab7;
+}
+.accordion-button:focus {
+    box-shadow: none;
+}
+#preview-container {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.preview-image {
+    position: relative;
+    width: 400px;
+    height: 200px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    margin-bottom: 15px;
+}
+.preview-image .remove-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.status-select {
+    font-size: 13px;
+    background: #fff;
+    color: #000;
+}
+.status.active {
+    border-color: #b9ffd3;
+    background-color: #b9ffd3;
+    color: #008000;
+}
+.status.inactive {
+    border-color: #f9c9cd;
+    background-color: #f9c9cd;
+    color: #a90312;
+}
+.selected-vaccine {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 10px;
+}
+.hidden-image {
+    display: none;
+}
+.img-container {
+    position: relative;
+    display: inline-block;
+    margin-right: 10px;
+}
+.delete-btn {
+    position: absolute;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+}
+.vaccine-option {
+    display: block;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+.vaccine-checkbox {
+    margin-right: 10px;
+}
+.vaccine-list-col {
+    max-width: 150px;
+}
+.border-vaccine {
+    overflow-y: scroll;
+    height: 180px;
+    scrollbar-width: none;
+}
+.border-vaccine::-webkit-scrollbar {
+    display: none;
+}
+
+@media (max-width: 786px) {
+    body {
+        flex-direction: column;
+    }
+    table.dataTable, table.dataTable th, table.dataTable td {
+        box-sizing: border-box !important;
+    }
+    .navbar-toggler {
+        background: #fff;
+    }
+    .header-wrapper {
+        display: none;
+    }
+    .sidebar {
+        transform: translateX(-250px);
+        width: 250px;
+    }
+    .sidebar:hover {
+        width: 250px;
+    }
+    .sidebar.show {
+        transform: translateX(0);
+    }
+    .menu a span {
+        opacity: 1;
+    }
+    .main-content {
+        margin-left: 0;
+    }
+    .navbar {
+        display: flex !important;
+        width: 100%;
+        padding: 1rem;
+        background: linear-gradient(90deg, #052065 100%, #0780CB 44.77%) !important;
+    }
+    .logo,
+    .user-res {
+        display: block;
+    }
+    .sidebar:hover + .main-content {
+        margin-left: 0 ;
+    }
+    .sidebar:hover + .main-content .card-wrapper {
+        height: 120px;
+        gap: 0;
+    }
+    div.dataTables_wrapper div.dataTables_length {
+        margin-bottom: 5px;
+    }
+    /*table*/
+    .table, .table thead, .table tbody, .table th, .table td, .table tr {
+        display: block;
+        width: 100%;
+    }
+    .table>:not(caption)>*>* {
+        box-shadow: none;
+    }
+    .table thead {
+        display: none;
+    }
+    .table tr {
+        margin-bottom: 8px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+
+        background: #f9f9f9;
+        text-align: center;
+    }
+    .table td {
+        padding: 6px;
+        font-size: 12px; /* Giảm kích thước chữ */
+        border-bottom: 1px solid #ddd;
+    }
+    .table td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: #333;
+        width: 40%;
+        text-align: right;
+        padding-right: 6px;
+        font-size: 12px;
+    }
+    .table td:last-child {
+        border-bottom: none;
+    }
+}
+@media (max-width: 320px) {
+    * {
+        font-size: 12px !important;
+    }
+    .navbar {
+        display: flex !important;
+    }
+    .navbar img {
+        width: 80%;
+    }
+    .tabular-wrapper {
+        padding: 5px;
+    }
+    .tabular-wrapper label,
+    .tabular-wrapper input  {
+        width: 100%;
+    }
+    .tabular-wrapper select  {
+        height: 100%;
+    }
+    .table td:before {
+        width: 45%;
+        padding-right: 4px;
+        font-size: 10px;
+    }
+    .dataTables_wrapper .dataTables_filter input {
+        margin-left: 0;
+    }
+    .main-content {
+        padding: 0;
+        background-color: #fff;
+    }
+}

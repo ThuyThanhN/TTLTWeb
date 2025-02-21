@@ -1,0 +1,144 @@
+.footer {
+    padding: 30px 0;
+    background: #2A388F;
+}
+.footer .footer-title {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+.footer a {
+    text-decoration: none;
+    color: #fff !important;
+}
+.footer .email {
+    position: relative;
+}
+.footer .single-contact{
+    font-size: 15px;
+    color: #fff;
+    display: flex;
+    white-space: normal;
+}
+.footer .policies-title {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 5px;
+}
+.footer .policies-title a {
+    color: #007bff;
+}
+.footer .policies-desc {
+    font-size: 14px;
+    opacity: 0.75;
+}
+.footer .single-contact {
+    display: flex;
+    align-items: baseline;
+    font-size: 15px;
+    margin-bottom: 10px;
+}
+.footer ul.list-menu {
+    padding: 0;
+}
+.footer ul.list-menu .li-menu {
+    list-style: none;
+    color: #fff;
+    font-size: 15px;
+    padding: 5px 0;
+}
+.footer .input-group-field {
+    width: 100%;
+    height: 47px;
+    padding-right: 100px;
+    border: 1px solid transparent;
+    border-radius: 25px;
+    box-sizing: border-box;
+}
+.footer .button-subscribe {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    width: 85px;
+    height: 40px;
+    border-radius: 25px;
+    background: #1691E2;
+    color: #fff;
+    font-size: 15px;
+}
+.footer .input-find-product {
+    width: 85%;
+    height: 47px;
+    border: 1px solid #000;
+    border-radius: 25px;
+}
+.footer .button-find {
+    width: 60px;
+    position: absolute;
+    top: 3px;
+    right: 15.5%;
+    border-radius: 30px;
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    font-size: 17px;
+}
+.footer .newsletter {
+    font-size: 15px;
+}
+.btn:focus,
+.form-control:focus {
+    box-shadow: none;
+}
+.footer .social-media img {
+    width: 28px;
+    height: 28px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+}
+#copy-right {
+    font-size: 14px;
+    color: #fff;
+    display: flex;
+    gap: 10px;
+    white-space: normal;
+}
+
+/*Màn hình < 430px*/
+@media (max-width: 430px) {
+    .header-middle .navbar-collapse img {
+        width: 40%;
+    }
+    .newsletter,
+    .footer-title,
+    .single-contact,
+    #copy-right {
+        font-size: 12px !important;
+    }
+}
+
+/*Màn hình < 320px*/
+@media (max-width: 320px) {
+    .footer a,
+    .footer .content,
+    .footer-title {
+        font-size: 12px !important;
+    }
+    .footer img {
+        width: 80px;
+    }
+    .footer .input-group-field{
+        width: 100%;
+        height: 30px !important;
+        font-size: 12px;
+    }
+    .footer .button-subscribe {
+        width: 40%;
+        height: 26px;
+        font-size: 6px !important;
+        top: 2px;
+        right: 2px;
+    }
+}

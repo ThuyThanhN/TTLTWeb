@@ -1,0 +1,211 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+.error-message,
+.error-vaccine,
+.error-gender,
+.error-phone {
+    color: #e5285d;
+    font-size: 12px;
+}
+a {
+    text-decoration: none;
+}
+.vaccine-type-content .row {
+    display: flex;
+    flex-wrap: wrap;
+}
+.vaccine-type-content .col-lg-4 {
+    display: flex;
+    align-items: stretch;
+}
+
+.vaccine-package {
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    border: 1px solid #dcdfe6;
+}
+.vaccine-package-list .row {
+    user-select: none;
+    cursor: pointer;
+}
+.vaccine-package-list .col-7 {
+    font-size: 14px;
+    color: #000;
+    line-height: 1.4em;
+}
+.vaccine-package .vaccine-description {
+    color: #888;
+    font-size: 12px;
+}
+.vaccine-package .vaccine-price {
+    text-align: right;
+    color: #1f28af;
+    font-size: 14px;
+}
+.vaccine-type-content-item {
+    color: #6D6E70;
+    font-weight: 500;
+    margin: 5px 0;
+    cursor: pointer;
+}
+.modal-body {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    row-gap: 10px;
+    column-gap: 10px;
+}
+.dropdown-menu .dropdown-item:hover {
+    color: #fff;
+    background-color: #2a388f;
+}
+.time-option {
+    padding: 5px 0;
+    color: #337ab7;
+    text-align: center;
+    border: 1px solid #337ab7;
+    border-radius: 25px;
+    cursor: pointer;
+}
+.hidden-field {
+    display: none;
+}
+input:focus {
+    box-shadow: none !important;
+}
+input::placeholder {
+    font-size: 14px;
+}
+.is-active {
+    background-color: #007bff;
+    color: #fff;
+}
+.asterisk {
+    color: #e5285d;
+}
+/*API*/
+.form-control[readonly] {
+    background-color: #fff;
+}
+.dropdown-menu {
+    max-height: 300px;
+    overflow-y: auto;
+}
+.cskh-info {
+    padding: 5px 15px;
+    margin: 0;
+}
+.cskh-title {
+    border-bottom: 2px solid #fff;
+}
+.cskh-title a {
+    color: #fff;
+    padding: 10px 0 0px 10px;
+}
+.hidden-vx {
+    display: none;
+}
+#section-content {
+    margin: 30px 0;
+    font-size: 16px;
+}
+#section-content .section-content-title {
+    color: #2a388f;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+#section-content .col-12 {
+    margin-top: 5px;
+}
+#section-content label {
+    font-weight: 500;
+}
+#section-content .section-col-title {
+    color: #6D6E70;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-top: 1rem;
+    margin-bottom: 0.25rem;
+}
+#section-content .form-control,
+#section-content .btn-group,
+#section-content select {
+    margin-bottom: .5rem;
+    margin-top: .2rem;
+}
+#section-content #timeButton {
+    margin-bottom: .5rem;
+    margin-top: .2rem;
+    border: 1px solid #ced4da;
+}
+#section-content .dropdown input {
+    cursor: pointer;
+}
+#section-content .dropdown-menu {
+    width: 100%;
+}
+#section-content .dropdown i {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    margin-top: 5px;
+}
+#section-content .form-section-label {
+    font-weight: 500;
+}
+#section-content .btn-group label.btn {
+    border: 1px solid #ced4da;
+}
+#section-content .btn-check:focus+.btn, .btn:focus,
+select:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+#section-content .btn-primary {
+    background-color: #3997D5;
+    border-color: inherit;
+}
+#section-content .btn-primary:hover {
+    background-color: #4d63a6;
+}
+#section-content .row  .col-lg-3 img {
+    margin-bottom: 20px;
+}
+#section-content .cskh {
+    padding: 10px;
+    color: #fff;
+    border-radius: 4px;
+    background: radial-gradient(farthest-corner at 40% -20%, #00b3ef, #00b3ef 0%, #2a388f 80%);
+}
+#section-content .selected,
+input[type="radio"]:checked + label {
+    color: #fff !important;
+    background-color: #2a388f !important;
+}
+@media (max-width: 992px) {
+    #section-content .row  .col-lg-3 {
+        display: none;
+    }
+}
+@media (max-width: 576px) {
+    .modal-body {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .time-option,
+    label,
+    .asterisk,
+    .form-section-label {
+        font-size: 12px !important;
+        margin: 0;
+    }
+    #section-content .section-content-title {
+        font-size: 18px;
+    }
+    #section-content .section-col-title {
+        font-size: 13px;
+    }
+}

@@ -1,0 +1,107 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+a {
+    text-decoration: none;
+}
+.price-select-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+/* Phong cách tiêu đề */
+h4.text-primary {
+    font-weight: 500;
+    color: #2a388f !important; /* Màu xanh đậm */
+}
+
+/* Định dạng nút dropdown */
+.dropdown-menu {
+    min-width: 200px; /* Chiều rộng tối thiểu */
+}
+
+.btn-outline-primary {
+    border: 2px solid #0d6efd;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.btn-outline-primary:hover {
+    background-color: #0d6efd;
+    color: white;
+}
+
+/* Bảng định dạng */
+.table-bordered {
+    border: 1px solid #92b0cd; /* Đường viền đậm */
+}
+
+.table-bordered th, .table-bordered td {
+    padding: 8px;
+    vertical-align: middle;
+}
+
+.table-bordered th {
+    background-color: #3a6ded; /* Màu xanh đậm */
+    color: #ffffff; /* Màu chữ trắng */
+    text-align: center;
+    vertical-align: middle;
+}
+
+.table-bordered td:nth-child(1) {
+    background-color: #c2e4ff; /* Màu xanh nhạt */
+    color: #0d66a3; /* Chữ xanh đậm */
+}
+.table-bordered td:nth-child(2) {
+    text-align: left;
+}
+.table-bordered td:nth-child(5), 
+.table-bordered td:nth-child(6) {
+    background-color: #3a6ded; /* Màu xanh đậm */
+    color: white;
+}
+
+/* Hiệu ứng hover */
+.table-bordered tbody tr:hover {
+    background-color: #d1e7ff; /* Màu xanh nhạt khi hover */
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .table-bordered th, .table-bordered td {
+        padding: 6px;
+        font-size: 12px;
+    }
+    .dropdown-menu {
+        min-width: 150px;
+    }
+    .btn-outline-primary {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 350px) {
+    * {
+        font-size: 12px;
+    }
+
+    .table-bordered th, .table-bordered td {
+        padding: 4px;
+    }
+    .btn-outline-primary {
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+    table {
+        display: block;
+        overflow: auto;
+        height: 327px;
+    }
+    .price-select-title {
+        display: block;
+    }
+}
