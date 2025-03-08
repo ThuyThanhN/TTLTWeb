@@ -1,4 +1,3 @@
-<%@ page import="com.example.provide_vaccine_services.dao.model.Users" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -23,7 +22,7 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <!-- Css   -->
-    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="../css/dashboard.css">
 </head>
 <body>
 <jsp:include page="sidebar.jsp"></jsp:include>
@@ -106,6 +105,6 @@
         </div>
     </div>
 </div>
-<script src="js/dashboard.js"></script>
+<script src="../js/dashboard.js"></script>
 </body>
 </html>
