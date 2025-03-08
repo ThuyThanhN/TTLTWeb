@@ -7,7 +7,7 @@
 <body>
 <div class="header-wrapper">
   <div class="header-title">
-    <a href="index"><img src="image/logo.png" alt=""></a>
+    <a href="index"><img src="../image/logo.png" alt=""></a>
   </div>
   <div class="user-info">
     <%
@@ -19,7 +19,7 @@
       <!-- Nếu đã đăng nhập, hiển thị tên người dùng -->
       <a href="#" class="d-flex text-decoration-none">
         <span style="margin: 5px 5px 0 0;">Xin chào, <%= user.getFullname() %>!</span>
-        <span><img class="img-admin" src="image/hacker.png"> </span>
+        <span><img class="img-admin" src="../image/hacker.png"> </span>
       </a>
       <% }  %>
     </div>

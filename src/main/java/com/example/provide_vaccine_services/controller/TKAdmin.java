@@ -14,7 +14,7 @@ import jakarta.servlet.annotation.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "TKAdmin", value = "/dashboard")
+@WebServlet(name = "TKAdmin", value = "/admin/dashboard")
 public class TKAdmin extends HttpServlet {
 
     @Override
@@ -36,7 +36,7 @@ public class TKAdmin extends HttpServlet {
         request.setAttribute("totalOrder", totalOrder);
         request.setAttribute("countOrder", countOrder);
 
-        request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+        request.getRequestDispatcher("/admin/dashboard.jsp").forward(request, response);
     }
 
     @Override

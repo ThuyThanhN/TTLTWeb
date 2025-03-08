@@ -6,14 +6,14 @@
 <body>
 <div class="sidebar" id="sidebar">
     <div class="text-center user-res">
-        <img class="mt-2 img-admin" src="image/hacker.png" alt=""><span>Thanh Thủy</span>
+        <img class="mt-2 img-admin" src="../image/hacker.png" alt=""><span>Thanh Thủy</span>
         <div class="search-box">
             <i class="fa-solid fa-search"></i>
             <input type="text" name="" placeholder="Search">
         </div>
     </div>
     <ul class="menu">
-        <li class="<%= (request.getRequestURI().contains("admin")) ? "active" : "" %>">
+        <li class="<%= (request.getRequestURI().contains("dashboard")) ? "active" : "" %>">
             <a href="dashboard">
                 <i class="fas fa-chart-bar"></i>
                 <span>Thống kê</span>
@@ -62,7 +62,7 @@
             </a>
         </li>
         <li class="logout">
-            <a href="/provide_vaccine_services_war/logout">
+            <a href="logout">
                 <i class="fas fa-sign-out-alt"></i>
                 <span>Đăng xuất</span>
             </a>

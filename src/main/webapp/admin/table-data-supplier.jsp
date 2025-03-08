@@ -22,7 +22,7 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <!-- Css   -->
-    <link rel="stylesheet" href="css/main_admin.css">
+    <link rel="stylesheet" href="../css/main_admin.css">
 </head>
 <body>
 <jsp:include page="sidebar.jsp"></jsp:include>
@@ -57,7 +57,7 @@
                         <!-- Nut sua -->
                         <a href="updateSupplier?id=${supplier.id}" class="text-decoration-none edit-btn"  data-bs-toggle="modal"
                            data-bs-target="#editSupplierModal-${supplier.id}">
-                            <img src="image/edit.png" alt="Sửa" width="22" height="22">
+                            <img src="../image/edit.png" alt="Sửa" width="22" height="22">
                         </a>
                         <!-- Nut xoa -->
                         <a href="#"
@@ -65,7 +65,7 @@
                            data-bs-toggle="modal"
                            data-bs-target="#deleteSupplier"
                            data-id="${supplier.id}" data-name="${supplier.name}">
-                            <img src="image/bin.png" alt="Xóa" width="24" height="24">
+                            <img src="../image/bin.png" alt="Xóa" width="24" height="24">
                         </a>
                     </td>
                 </tr>
@@ -146,5 +146,5 @@
     </div>
 </div>
 </body>
-<script src="js/table-data-supplier.js"></script>
+<script src="../js/table-data-supplier.js"></script>
 </html>

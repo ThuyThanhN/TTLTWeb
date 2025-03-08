@@ -21,7 +21,7 @@
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
   <!-- Css   -->
-  <link rel="stylesheet" href="css/main_admin.css">
+  <link rel="stylesheet" href="../css/main_admin.css">
 </head>
 <body>
 <jsp:include page="sidebar.jsp"></jsp:include>
@@ -58,7 +58,7 @@
             <!-- Nut sua -->
             <a href="updateCenter?id=${center.id}" class="text-decoration-none edit-btn" data-bs-toggle="modal"
                data-bs-target="#editCenterModal-${center.id}">
-              <img src="image/edit.png" alt="Sửa" width="22" height="22">
+              <img src="../image/edit.png" alt="Sửa" width="22" height="22">
             </a>
             <!-- Nut xoa -->
             <a href="#"
@@ -66,7 +66,7 @@
                data-bs-toggle="modal"
                data-bs-target="#deleteCenter"
                data-id="${center.id}" data-name="${center.name}">
-              <img src="image/bin.png" alt="Xóa" width="24" height="24">
+              <img src="../image/bin.png" alt="Xóa" width="24" height="24">
             </a>
             <!-- Modal nut sua -->
             <div class="modal fade" id="editCenterModal-${center.id}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editCenterModalLabel" aria-hidden="true">
@@ -230,7 +230,7 @@
     </div>
   </div>
 </div>
-<script src="js/api_address.js"></script>
-<script src="js/table-data-center.js"></script>
+<script src="../js/api_address.js"></script>
+<script src="../js/table-data-center.js"></script>
 </body>
 </html>
