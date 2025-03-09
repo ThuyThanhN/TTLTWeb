@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet(name = "ListOrderAdmin", value = "/table-data-order")
+@WebServlet(name = "ListOrderAdmin", value = "/admin/table-data-order")
 public class ListOrderAdmin extends HttpServlet {
 
     @Override

@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "ListPackage", value = "/table-data-vax-package")
+@WebServlet(name = "ListPackage", value = "/admin/table-data-vax-package")
 public class ListPackageAdmin extends HttpServlet {
 
     @Override

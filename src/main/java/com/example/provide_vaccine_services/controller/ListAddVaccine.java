@@ -13,7 +13,7 @@ import jakarta.servlet.annotation.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "ListAddVaccine", value = "/form-add-vacxin")
+@WebServlet(name = "ListAddVaccine", value = "/admin/form-add-vacxin")
 public class ListAddVaccine extends HttpServlet {
 
     @Override

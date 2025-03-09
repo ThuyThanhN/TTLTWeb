@@ -7,7 +7,7 @@ import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 
-@WebServlet(name = "RemovePackage", value = "/removePackage")
+@WebServlet(name = "RemovePackage", value = "/admin/removePackage")
 public class RemovePackage extends HttpServlet {
 
     @Override

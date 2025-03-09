@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "ListStaffAdmin", value = "/table-data-staff")
+@WebServlet(name = "ListStaffAdmin", value = "/admin/table-data-staff")
 public class ListStaffAdmin extends HttpServlet {
 
     @Override

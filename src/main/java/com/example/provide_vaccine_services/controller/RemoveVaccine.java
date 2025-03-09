@@ -7,7 +7,7 @@ import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 
-@WebServlet(name = "RemoveVaccine", value = "/removeVaccine")
+@WebServlet(name = "RemoveVaccine", value = "/admin/removeVaccine")
 public class RemoveVaccine extends HttpServlet {
 
     @Override
