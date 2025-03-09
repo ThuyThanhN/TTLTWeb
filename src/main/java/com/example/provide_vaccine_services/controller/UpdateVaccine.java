@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@WebServlet(name = "UpdateVaccine", value = "/updateVaccine")
+@WebServlet(name = "UpdateVaccine", value = "/admin/updateVaccine")
 @MultipartConfig(
         fileSizeThreshold = 1024 * 50,  // 50 KB
         maxFileSize = 1024 * 500,       // 500 KB

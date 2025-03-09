@@ -1,14 +1,13 @@
 package com.example.provide_vaccine_services.controller;
 
 import com.example.provide_vaccine_services.dao.CenterDao;
-import com.example.provide_vaccine_services.dao.SupplierDao;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 
-@WebServlet(name = "RemoveCenter", value = "/removeCenter")
+@WebServlet(name = "RemoveCenter", value = "/admin/removeCenter")
 public class RemoveCenter extends HttpServlet {
 
     @Override

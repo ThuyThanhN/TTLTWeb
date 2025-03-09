@@ -12,7 +12,7 @@ import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 
-@WebServlet(name = "AddPMapping", value = "/addPMapping")
+@WebServlet(name = "AddPMapping", value = "/admin/addPMapping")
 public class AddPMapping extends HttpServlet {
 
     @Override
