@@ -148,4 +148,21 @@ public class Vaccines implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", idSupplier=" + idSupplier +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", stockQuantity=" + stockQuantity +
+                ", price=" + price +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", status='" + status + '\'' +
+                ", createdAt=" + createdAt +
+                ", prevention='" + prevention + '\'' +
+                ", countryOfOrigin='" + countryOfOrigin + '\'' +
+                ", orderCount=" + orderCount +
+                '}';
+    }
 }

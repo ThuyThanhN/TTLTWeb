@@ -37,9 +37,9 @@
         </div>
         <div class="search-bar">
             <form action="/vaccine-information" method="get">
-                <input type="text" name="searchQuery" placeholder="Tìm kiếm..."
+                <input type="text" id="searchQuery" name="searchQuery" placeholder="Tìm kiếm..."
                        value="${searchQuery != null ? searchQuery : ''}">
-                <button type="submit" class="search-btn">
+                <button type="button" id="searchBtn" class="search-btn">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
             </form>
@@ -197,9 +197,11 @@
         </div>
 
     </div>
+
+    <%-- danh sách vaccine --%>
     <div class="main-content">
         <div class="container">
-            <div class="row">
+            <div id="vaccine-list" class="row">
                 <c:forEach var ="v" items="${vaccines}">
                     <div class="col-12 col-md-4 mb-3">
                         <div class="vx_item">
@@ -244,5 +246,8 @@
 <!--    Phần footer -->
 <jsp:include page="footer.jsp"></jsp:include>
 </div>
+
+<script src="js/search.js"></script>
+
 </body>
 </html>

@@ -17,7 +17,39 @@ public class ListVaccineInfo extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        String action = request.getParameter("action");
 
+        // kiểm tra xem gọi doGet bằng action nào
+        if ("search".equals(action)) {
+            handleAjaxSearch(request, response); // Gọi phương thức xử lý AJAX
+        } else {
+            handlePageRequest(request, response); // Gọi request bình thường ( reload trang )
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Không cần xử lý POST trong trường hợp này
+    }
+
+    // xử lí tìm kiếm sản phẩm trong trang
+    private void handleAjaxSearch(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String searchQuery = request.getParameter("query");
+        VaccineDao vaccineDao = new VaccineDao();
+        System.out.println("query: " + searchQuery);
+        // tìm danh sách theo từ khoá
+        List<Vaccines> vaccines = vaccineDao.searchByName(searchQuery);
+
+        for (Vaccines vaccine : vaccines) {
+            System.out.println(vaccine.toString());
+        }
+        // chuyển list về json
+        //to do
+
+    }
+
+    // xử lí khi tải trang
+    private void handlePageRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Lấy thông tin trang hiện tại từ query parameter, nếu không có thì mặc định là trang 1
         String pageSize = request.getParameter("page");
         if (pageSize == null || pageSize.isEmpty()) {
@@ -60,10 +92,5 @@ public class ListVaccineInfo extends HttpServlet {
 
         // Chuyển tiếp đến trang JSP
         request.getRequestDispatcher("vaccine-information.jsp").forward(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Không cần xử lý POST trong trường hợp này
     }
 }
