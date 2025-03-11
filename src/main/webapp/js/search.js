@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $("#searchBtn").click(function () {
-        searchVaccine(); // Gọi function tìm kiếm
+        searchVaccine();
     });
 
     $("#searchQuery").keypress(function (event) {
@@ -18,23 +18,31 @@ function searchVaccine() {
         type: "GET",
         data: {action: "search", query: query},
         success: function (response) {
-            // Xóa nội dung hiện tại
-            $("#vaccine-list").empty();
 
-            // Cập nhật danh sách vaccine
-            response.forEach(vaccine => {
-                const vaccineItem = `
+            // nếu không tìm thấy sản phẩm trả về
+            if (response.length === 0) {
+                $("#vaccine-list").html("<p>Không tìm thấy kết quả.</p>");
+                return;
+            }
+
+            //set lại danh sách trang
+
+
+            // Xóa nội dung hiện tại trong thẻ div chứa danh sách sản phẩm
+            $("#vaccine-list").empty();
+            // Cập nhật lại danh sách vaccine vào thẻ div
+            response.forEach(v => {
+                $("#vaccine-list").append(`
                     <div class="col-12 col-md-4 mb-3">
                         <div class="vx_item">
-                            <a href="detail_vaccines?id=${vaccine.id}">
-                                <img src="${vaccine.imageUrl}" alt="">
-                                <div class="vaccine_name" title="${vaccine.name}">${vaccine.name}</div>
+                            <a href="detail_vaccines?id=${v.id}">
+                                <img src="${v.imageUrl}" alt="">
+                                <div class="vaccine_name" title="${v.name}">${v.name}</div>
                             </a>
-                            <div class="vaccine-content">${vaccine.description}</div>
+                            <div class="vaccine-content">${v.description}</div>
                         </div>
                     </div>
-                `;
-                $(".row").append(vaccineItem);
+                `);
             });
         },
         error:function () {

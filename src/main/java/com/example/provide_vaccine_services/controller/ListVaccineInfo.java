@@ -2,6 +2,9 @@ package com.example.provide_vaccine_services.controller;
 
 import com.example.provide_vaccine_services.dao.VaccineDao;
 import com.example.provide_vaccine_services.dao.model.Vaccines;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -40,11 +43,21 @@ public class ListVaccineInfo extends HttpServlet {
         // tìm danh sách theo từ khoá
         List<Vaccines> vaccines = vaccineDao.searchByName(searchQuery);
 
-        for (Vaccines vaccine : vaccines) {
-            System.out.println(vaccine.toString());
-        }
-        // chuyển list về json
-        //to do
+        System.out.println("vaccines: " + vaccines);
+        // chuyển đổi thành json
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+        String jsonString = mapper.writeValueAsString(vaccines);
+
+        System.out.println(jsonString);
+
+        // Gửi dữ liệu JSON về client
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(jsonString);
+
 
     }
 
