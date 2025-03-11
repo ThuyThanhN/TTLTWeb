@@ -1,22 +1,28 @@
+let currentSearchPage = 1;
+
 $(document).ready(function () {
+
     $("#searchBtn").click(function () {
-        searchVaccine();
+        searchVaccine(currentSearchPage);
     });
 
     $("#searchQuery").keypress(function (event) {
         if (event.which === 13) { // Nhấn Enter sẽ gọi searchVaccine()
-            searchVaccine();
+            searchVaccine(currentSearchPage);
         }
     });
+
+    searchVaccine(currentSearchPage);
+
 });
 
-function searchVaccine() {
+function searchVaccine(page) {
     const query = $("#searchQuery").val().trim();
 
     $.ajax({
         url: "/provide_vaccine_services_war/vaccine-information",
         type: "GET",
-        data: {action: "search", query: query},
+        data: { action: "search", query: query, page: page },
         success: function (response) {
 
             // nếu không tìm thấy sản phẩm trả về
@@ -25,13 +31,16 @@ function searchVaccine() {
                 return;
             }
 
-            //set lại danh sách trang
+            currentSearchPage = response.pageNumber;
 
+            //set lại danh sách trang
+            updatePagination(response.totalPages);
 
             // Xóa nội dung hiện tại trong thẻ div chứa danh sách sản phẩm
             $("#vaccine-list").empty();
-            // Cập nhật lại danh sách vaccine vào thẻ div
-            response.forEach(v => {
+
+            const vaccinesList = response.vaccines;
+            vaccinesList.forEach(v => {
                 $("#vaccine-list").append(`
                     <div class="col-12 col-md-4 mb-3">
                         <div class="vx_item">
@@ -44,9 +53,29 @@ function searchVaccine() {
                     </div>
                 `);
             });
+
         },
         error:function () {
             alert("lỗi tìm sản phẩm");
         }
     });
+}
+
+// cập nhật phân trang
+function updatePagination(totalPages) {
+    let paginationHtml = "";
+
+    if (currentSearchPage > 1) {
+        paginationHtml += `<li class="page-item"><a class="page-link" onclick="searchVaccine(${currentSearchPage--})"><i class="fa-solid fa-arrow-left"></i></a></li>`;
+    }
+
+    for (let i = 1; i <= totalPages; i++) {
+        paginationHtml += `<li class="page-item ${i === currentSearchPage ? 'active' : ''}"><a class="page-link" onclick="searchVaccine(${i})">${i}</a></li>`;
+    }
+
+    if (currentSearchPage < totalPages) {
+        paginationHtml += `<li class="page-item"><a class="page-link" onclick="searchVaccine(${currentSearchPage++})"><i class="fa-solid fa-arrow-right"></i></a></li>`;
+    }
+
+    $("#pagination").html(paginationHtml);
 }

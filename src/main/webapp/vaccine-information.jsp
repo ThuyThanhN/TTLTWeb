@@ -202,43 +202,11 @@
     <div class="main-content">
         <div class="container">
             <div id="vaccine-list" class="row">
-                <c:forEach var ="v" items="${vaccines}">
-                    <div class="col-12 col-md-4 mb-3">
-                        <div class="vx_item">
-                            <a href="detail_vaccines?id=${v.id}">
-                                <img src="${v.imageUrl}" alt="">
-                                <div class="vaccine_name" title="${v.name}">${v.name}</div>
-                            </a>
-                            <div class="vaccine-content">${v.description}</div>
-                        </div>
-                    </div>
-                </c:forEach>
+
             </div>
             <!-- Phân trang -->
-            <ul class="pagination justify-content-center mb-3">
-                <!-- Nút Previous -->
-                <c:if test="${currentPage > 1}">
-                    <li class="page-item">
-                        <a class="page-link" href="?page=${currentPage - 1}">
-                            <i class="fa-solid fa-arrow-left"></i>
-                        </a>
-                    </li>
-                </c:if>
-                <!-- Hiển thị số trang -->
-                <c:forEach begin="1" end="${totalPages}" var="i">
-                    <li class="page-item ${i == currentPage ? 'active' : ''}">
-                        <a class="page-link" href="?page=${i}">${i}</a>
-                    </li>
-                </c:forEach>
+            <ul id="pagination" class="pagination justify-content-center mb-3">
 
-                <!-- Nút Next -->
-                <c:if test="${currentPage < totalPages}">
-                    <li class="page-item">
-                        <a class="page-link" href="?page=${currentPage + 1}">
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </a>
-                    </li>
-                </c:if>
             </ul>
         </div>
     </div>

@@ -337,6 +337,22 @@ public class VaccineDao {
         return 0;
     }
 
+    public int getTotalCount(String searchQuery) {
+        String sql = "SELECT COUNT(*) FROM Vaccines WHERE name LIKE ?";
+
+        try (PreparedStatement pst = DBConnect.get(sql)) {
+            pst.setString(1, "%" + searchQuery + "%");
+            ResultSet resultSet = pst.executeQuery();
+            while (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
     public List<Vaccines> searchByName(String searchQuery) {
         List<Vaccines> vaccines = new ArrayList<>();
         String sql = "SELECT * FROM vaccines WHERE name LIKE ?";
@@ -370,6 +386,37 @@ public class VaccineDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return vaccines;
+    }
+
+    public List<Vaccines> getSearchedVaccinesByPage(String searchQuery, int page) {
+        List<Vaccines> vaccines = new ArrayList<>();
+        String sql = "SELECT * FROM vaccines WHERE name LIKE ? LIMIT 12 OFFSET ?;";
+
+        try (PreparedStatement stmt = DBConnect.get(sql)) {
+            stmt.setString(1, "%" + searchQuery + "%");
+            stmt.setInt(2, (page - 1) * 12);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int idSupplier = rs.getInt("idSupplier");
+                String name = rs.getString("name");
+                String description = rs.getString("description");
+                int stockQuantity = rs.getInt("stockQuantity");
+                float price = rs.getFloat("price");
+                String imageUrl = rs.getString("imageUrl");
+                String status = rs.getString("status");
+                Timestamp timestamp = rs.getTimestamp("createdAt");
+                LocalDateTime createAt = timestamp != null ? timestamp.toLocalDateTime() : null;
+                String prevention = rs.getString("prevention");
+
+                Vaccines vaccine = new Vaccines(id, idSupplier, name, description, stockQuantity, price, imageUrl, status, createAt, prevention);
+                vaccines.add(vaccine);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         return vaccines;
     }
 
