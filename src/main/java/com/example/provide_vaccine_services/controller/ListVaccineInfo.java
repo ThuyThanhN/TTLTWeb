@@ -55,7 +55,7 @@ public class ListVaccineInfo extends HttpServlet {
         VaccineDao vaccineDao = new VaccineDao();
 
         // kiểm tra có tìm theo từ khoá hay không?
-        if(searchQuery == null || searchQuery.isEmpty()) {
+        if (searchQuery == null || searchQuery.isEmpty()) {
             totalVaccine = vaccineDao.getTotalCount();
             vaccines = vaccineDao.getVaccinesByPage(pageNumber);
         } else {
@@ -64,7 +64,7 @@ public class ListVaccineInfo extends HttpServlet {
         }
 
         //tổng số trang
-        int totalPages = ( totalVaccine + 11 ) / 12; // Giả sử mỗi trang có 12 sản phẩm
+        int totalPages = (totalVaccine + 11) / 12; // Giả sử mỗi trang có 12 sản phẩm
 
         // map json
         Map<String, Object> jsonMap = new HashMap<>();

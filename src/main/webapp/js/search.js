@@ -4,7 +4,7 @@ let currentSearchPage = 1;
 $(document).ready(function () {
 
     // khi click nút tìm kiếm
-    $("#searchBtn").click( () => searchVaccine(currentSearchPage));
+    $("#searchBtn").click(() => searchVaccine(currentSearchPage));
 
 
     // khi nhấn enter
@@ -27,7 +27,7 @@ function searchVaccine(page) {
     $.ajax({
         url: "/provide_vaccine_services_war/vaccine-information",
         type: "GET",
-        data: { action: "search", query: query, page: page },
+        data: {action: "search", query: query, page: page},
         success: function (response) {
 
             // nếu không tìm thấy sản phẩm trả về
@@ -58,9 +58,12 @@ function searchVaccine(page) {
                     </div>
                 `);
             });
-
+            // Cuộn lên đầu danh sách với hiệu ứng mượt
+            $('html, body').animate({
+                scrollTop: $("#searchQuery").offset().top
+            }, 500);
         },
-        error:function () {
+        error: function () {
             alert("lỗi tìm sản phẩm");
         }
     });

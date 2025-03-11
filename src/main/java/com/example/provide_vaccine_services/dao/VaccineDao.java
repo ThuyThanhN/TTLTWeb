@@ -52,9 +52,9 @@ public class VaccineDao {
         try {
             // Xoa orderdeatail lien quan toi nha cung cap
             String deleteOrderDetailsSql = "DELETE FROM orderdetails " +
-                                            "WHERE idVaccine IN (" +
-                                            "SELECT id FROM vaccines " +
-                                            "WHERE idSupplier = ?)";
+                    "WHERE idVaccine IN (" +
+                    "SELECT id FROM vaccines " +
+                    "WHERE idSupplier = ?)";
             PreparedStatement pstOrderDetails = DBConnect.get(deleteOrderDetailsSql);
             pstOrderDetails.setInt(1, idS);
             pstOrderDetails.executeUpdate();
@@ -462,6 +462,7 @@ public class VaccineDao {
         }
         return vaccines;
     }
+
     public List<Vaccines> getRandomVaccines() {
         List<Vaccines> vaccines = new ArrayList<>();
         try {
@@ -627,7 +628,6 @@ public class VaccineDao {
         }
         return list;
     }
-
 
 
     public Map<String, Object> getVaccineDetailsById(int id) {
