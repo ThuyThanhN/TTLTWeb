@@ -1,11 +1,13 @@
 let currentSearchPage = 1;
 
+// khi vừa load trang set các sự kiện
 $(document).ready(function () {
 
-    $("#searchBtn").click(function () {
-        searchVaccine(currentSearchPage);
-    });
+    // khi click nút tìm kiếm
+    $("#searchBtn").click( () => searchVaccine(currentSearchPage));
 
+
+    // khi nhấn enter
     $("#searchQuery").keypress(function (event) {
         if (event.which === 13) { // Nhấn Enter sẽ gọi searchVaccine()
             event.preventDefault(); // ngăn reload trang
@@ -13,10 +15,12 @@ $(document).ready(function () {
         }
     });
 
+    //chạy lần đầu sẽ gọi để load dữ liệu
     searchVaccine(currentSearchPage);
-
 });
 
+
+// tìm theo từ khoá và số trang
 function searchVaccine(page) {
     const query = $("#searchQuery").val().trim();
 
@@ -62,6 +66,7 @@ function searchVaccine(page) {
     });
 }
 
+// update số trang
 function updatePagination(totalPages) {
     let paginationHtml = "";
 

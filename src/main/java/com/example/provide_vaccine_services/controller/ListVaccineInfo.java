@@ -23,6 +23,7 @@ public class ListVaccineInfo extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
+        // kiểm tra xem có phải action search không
         if ("search".equals(action)) {
             handleAjaxSearch(request, response);
         } else {
@@ -48,14 +49,9 @@ public class ListVaccineInfo extends HttpServlet {
         List<Vaccines> vaccines;
 
         // phân trang
-        String pageSize = request.getParameter("page");
-        if (pageSize == null || pageSize.isEmpty()) {
-            pageSize = "1";  // Mặc định trang 1
-        }
-        int pageNumber = Integer.parseInt(pageSize);
+        int pageNumber = parseIntOrDefault(request.getParameter("page"), 1);
 
         String searchQuery = request.getParameter("query");
-        System.out.println("searchQuery: " + searchQuery);
         VaccineDao vaccineDao = new VaccineDao();
 
         // kiểm tra có tìm theo từ khoá hay không?
@@ -66,8 +62,6 @@ public class ListVaccineInfo extends HttpServlet {
             totalVaccine = vaccineDao.getTotalCount(searchQuery);
             vaccines = vaccineDao.getSearchedVaccinesByPage(searchQuery, pageNumber);
         }
-
-
 
         //tổng số trang
         int totalPages = ( totalVaccine + 11 ) / 12; // Giả sử mỗi trang có 12 sản phẩm
@@ -89,32 +83,12 @@ public class ListVaccineInfo extends HttpServlet {
         response.getWriter().write(jsonString);
     }
 
-    // xử lí khi tải trang
-    private void handlePageRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Lấy thông tin trang hiện tại từ query parameter, nếu không có thì mặc định là trang 1
-        String pageSize = request.getParameter("page");
-        if (pageSize == null || pageSize.isEmpty()) {
-            pageSize = "1";  // Mặc định trang 1
+    private int parseIntOrDefault(String value, int defaultValue) {
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return defaultValue;
         }
-        int page = Integer.parseInt(pageSize);
-
-        // Khởi tạo VaccineDao
-        VaccineDao vaccineDao = new VaccineDao();
-
-        // Lấy tổng số lượng vắc xin trong DB
-        int count = vaccineDao.getTotalCount();
-        int totalPages = (int) Math.ceil((double) count / 12); // Giả sử mỗi trang có 12 sản phẩm
-
-        // Kiểm tra nếu trang cuối cùng không có sản phẩm
-        if (count % 12 == 0 && count != 0) {
-            totalPages--; // Giảm tổng số trang nếu trang cuối cùng không có sản phẩm
-        }
-
-        // Danh sách vắc xin sẽ được tìm kiếm và lọc
-        List<Vaccines> vaccines;
-
-        vaccines = vaccineDao.getVaccinesByPage(page); // Phân trang vắc xin
-
-
     }
+
 }
