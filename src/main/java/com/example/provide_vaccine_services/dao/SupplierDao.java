@@ -12,26 +12,27 @@ import java.util.List;
 public class SupplierDao {
     //    Them nha cung cap
     public int insert(Suppliers s) {
-        int re = 0;
-
+        int newId = -1;
         try {
-            String sql = "insert into suppliers(name, countryOfOrigin) values(?, ?)";
+            String sql = "INSERT INTO suppliers(name, countryOfOrigin) VALUES(?, ?)";
             PreparedStatement pst = DBConnect.get(sql);
             pst.setString(1, s.getName());
             pst.setString(2, s.getCountryOfOrigin());
+            int affectedRows = pst.executeUpdate();
 
-            re = pst.executeUpdate();
-
-            if (re > 0) {
-                System.out.println("Them du lieu thanh cong");
-            } else {
-                System.out.println("Them du lieu that bai!");
+            if (affectedRows > 0) {
+                // lay id moi nhat
+                String getIdSql = "SELECT MAX(id) FROM suppliers";
+                PreparedStatement getIdStmt = DBConnect.get(getIdSql);
+                ResultSet rs = getIdStmt.executeQuery();
+                if (rs.next()) {
+                    newId = rs.getInt(1);
+                }
             }
-            return re;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return re;
+        return newId;
     }
 
     // Cap nhat nha cung cap
