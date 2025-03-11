@@ -93,7 +93,9 @@
                     <div>
                         <label for="phone"><strong>SĐT (Tài Khoản) <span class="required">*</span></strong></label>
                         <input type="text" id="phone" name="phone" required>
+                        <span class="error-message" id="phone-error" style="color: red; display: none;"></span>
                     </div>
+
                     <div>
                         <label for="password"><strong>Mật khẩu <span class="required">*</span></strong></label>
                         <input type="password" id="password" name="password" required>
