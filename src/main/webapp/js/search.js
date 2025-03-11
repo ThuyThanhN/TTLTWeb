@@ -8,6 +8,7 @@ $(document).ready(function () {
 
     $("#searchQuery").keypress(function (event) {
         if (event.which === 13) { // Nhấn Enter sẽ gọi searchVaccine()
+            event.preventDefault(); // ngăn reload trang
             searchVaccine(currentSearchPage);
         }
     });
@@ -61,20 +62,19 @@ function searchVaccine(page) {
     });
 }
 
-// cập nhật phân trang
 function updatePagination(totalPages) {
     let paginationHtml = "";
 
     if (currentSearchPage > 1) {
-        paginationHtml += `<li class="page-item"><a class="page-link" onclick="searchVaccine(${currentSearchPage--})"><i class="fa-solid fa-arrow-left"></i></a></li>`;
+        paginationHtml += `<li class="page-item"><button class="page-link" onclick="searchVaccine(${currentSearchPage - 1})"><i class="fa-solid fa-arrow-left"></i></button></li>`;
     }
 
     for (let i = 1; i <= totalPages; i++) {
-        paginationHtml += `<li class="page-item ${i === currentSearchPage ? 'active' : ''}"><a class="page-link" onclick="searchVaccine(${i})">${i}</a></li>`;
+        paginationHtml += `<li class="page-item ${i === currentSearchPage ? 'active' : ''}"><button class="page-link" onclick="searchVaccine(${i})">${i}</button></li>`;
     }
 
     if (currentSearchPage < totalPages) {
-        paginationHtml += `<li class="page-item"><a class="page-link" onclick="searchVaccine(${currentSearchPage++})"><i class="fa-solid fa-arrow-right"></i></a></li>`;
+        paginationHtml += `<li class="page-item"><button class="page-link" onclick="searchVaccine(${currentSearchPage + 1})"><i class="fa-solid fa-arrow-right"></i></button></li>`;
     }
 
     $("#pagination").html(paginationHtml);
