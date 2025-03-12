@@ -14,7 +14,8 @@
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
     <!-- Font awesome-->
-    <script src="https://kit.fontawesome.com/33ad855007.js" crossorigin="anonymous"></script>
+<%--    <script src="https://kit.fontawesome.com/33ad855007.js" crossorigin="anonymous"></script>--%>
+    <script src="https://kit.fontawesome.com/4760c40adb.js" crossorigin="anonymous"></script>
     <!-- Font chữ   -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,20 +35,21 @@
         <h1 class="title">Thông Tin Sản Phẩm Vắc Xin</h1>
         <div class="button-group">
             <!-- Nút "VẮC XIN THEO NHÓM ĐỘ TUỔI" -->
-            <button class="btn" onclick="location.href='/provide_vaccine_services_war/age'">VẮC XIN THEO NHÓM ĐỘ TUỔI
+            <button class="btn" onclick="ageFilter()">VẮC XIN THEO NHÓM ĐỘ TUỔI
             </button>
 
             <!-- Nút "VẮC XIN THEO NHÓM BỆNH" -->
-            <button class="btn" onclick="location.href='/provide_vaccine_services_war/disase'">VẮC XIN THEO NHÓM BỆNH
+            <button class="btn" onclick="diseaseFilter()">VẮC XIN THEO NHÓM BỆNH
             </button>
         </div>
         <div class="search-bar">
             <form action="/vaccine-information" method="get">
-                <input type="text" id="searchQuery" name="searchQuery" placeholder="Tìm kiếm..."
+                <input style="width: 500px" type="text" id="searchQuery" name="searchQuery" placeholder="Tìm kiếm..."
                        value="${searchQuery != null ? searchQuery : ''}">
                 <button type="button" id="searchBtn" class="search-btn">
-                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <i class="fa-solid fa-magnifying-glass" style="color: #000000;"></i>
                 </button>
+
             </form>
         </div>
 
@@ -227,7 +229,6 @@
 <!--    Phần footer -->
 <jsp:include page="footer.jsp"></jsp:include>
 </div>
-
 <script src="js/search.js"></script>
 
 </body>

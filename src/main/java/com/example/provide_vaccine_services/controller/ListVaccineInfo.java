@@ -23,8 +23,7 @@ public class ListVaccineInfo extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
-        // kiểm tra xem có phải action search không
-        if ("search".equals(action)) {
+        if (action != null) {
             handleAjaxSearch(request, response);
         } else {
             request.getRequestDispatcher("vaccine-information.jsp").forward(request, response);
@@ -40,6 +39,12 @@ public class ListVaccineInfo extends HttpServlet {
     private void handleAjaxSearch(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String jsonString = "";
         int totalVaccine = 0;
+        String searchQuery = request.getParameter("query");
+        String action = request.getParameter("action");
+        boolean age = "boolean".equals(request.getParameter("age"));
+        boolean disease = "disease".equals(request.getParameter("disease"));
+        int pageNumber = parseIntOrDefault(request.getParameter("page"), 1);
+
 
         // xử lí format thời gian
         ObjectMapper mapper = new ObjectMapper();
@@ -47,20 +52,20 @@ public class ListVaccineInfo extends HttpServlet {
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
         List<Vaccines> vaccines;
-
-        // phân trang
-        int pageNumber = parseIntOrDefault(request.getParameter("page"), 1);
-
-        String searchQuery = request.getParameter("query");
         VaccineDao vaccineDao = new VaccineDao();
 
-        // kiểm tra có tìm theo từ khoá hay không?
-        if (searchQuery == null || searchQuery.isEmpty()) {
-            totalVaccine = vaccineDao.getTotalCount();
-            vaccines = vaccineDao.getVaccinesByPage(pageNumber);
-        } else {
-            totalVaccine = vaccineDao.getTotalCount(searchQuery);
-            vaccines = vaccineDao.getSearchedVaccinesByPage(searchQuery, pageNumber);
+        switch (action) {
+            case "search": {
+                totalVaccine = vaccineDao.getTotalCount(searchQuery);
+                vaccines = vaccineDao.getSearchedVaccinesByPage(searchQuery, pageNumber, age, disease);
+                break;
+            }
+            default: {
+                totalVaccine = vaccineDao.getTotalCount();
+                vaccines = vaccineDao.getVaccinesByPage(pageNumber, age, disease);
+                break;
+            }
+
         }
 
         //tổng số trang
@@ -82,6 +87,9 @@ public class ListVaccineInfo extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(jsonString);
     }
+
+    private void SearchByAge(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {}
+
 
     private int parseIntOrDefault(String value, int defaultValue) {
         try {

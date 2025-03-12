@@ -1,17 +1,23 @@
 let currentSearchPage = 1;
+let age = false;
+let disease = false;
 
 // khi vừa load trang set các sự kiện
 $(document).ready(function () {
 
     // khi click nút tìm kiếm
-    $("#searchBtn").click(() => searchVaccine(currentSearchPage));
+    $("#searchBtn").click(() => {
+        searchVaccine(1);
+        currentSearchPage = 1;
+    });
 
 
     // khi nhấn enter
-    $("#searchQuery").keypress(function (event) {
+    $("#searchQuery").keypress((event) => {
         if (event.which === 13) { // Nhấn Enter sẽ gọi searchVaccine()
             event.preventDefault(); // ngăn reload trang
-            searchVaccine(currentSearchPage);
+            searchVaccine(1);
+            currentSearchPage = 1;
         }
     });
 
@@ -19,6 +25,16 @@ $(document).ready(function () {
     searchVaccine(currentSearchPage);
 });
 
+function ageFilter() {
+    age = !age;
+    console.log(age);
+    searchVaccine(currentSearchPage);
+}
+
+function diseaseFilter() {
+    disease = !disease;
+    searchVaccine(currentSearchPage);
+}
 
 // tìm theo từ khoá và số trang
 function searchVaccine(page) {
@@ -27,26 +43,35 @@ function searchVaccine(page) {
     $.ajax({
         url: "/provide_vaccine_services_war/vaccine-information",
         type: "GET",
-        data: {action: "search", query: query, page: page},
-        success: function (response) {
+        data: {action: "search", query: query, page: page, age: age, disease: disease},
+        success: (response) => {
+            showVaccines(response);
+        },
+        error: function () {
+            alert("lỗi tìm sản phẩm");
+        }
+    });
+}
 
-            // nếu không tìm thấy sản phẩm trả về
-            if (response.length === 0) {
-                $("#vaccine-list").html("<p>Không tìm thấy kết quả.</p>");
-                return;
-            }
 
-            currentSearchPage = response.pageNumber;
+// hiển thị vaccines
+function showVaccines(response) {
+// nếu không tìm thấy sản phẩm trả về
+    if (response.vaccines === undefined) {
+        $("#vaccine-list").append("<p>Không tìm thấy kết quả.</p>");
+        return;
+    }
 
-            //set lại danh sách trang
-            updatePagination(response.totalPages);
+    currentSearchPage = response.pageNumber;
+    //set lại danh sách trang
+    updatePagination(response.totalPages);
+    const vaccinesList = response.vaccines;
 
-            // Xóa nội dung hiện tại trong thẻ div chứa danh sách sản phẩm
-            $("#vaccine-list").empty();
+    // Xóa nội dung hiện tại trong thẻ div chứa danh sách sản phẩm
+    $("#vaccine-list").empty();
 
-            const vaccinesList = response.vaccines;
-            vaccinesList.forEach(v => {
-                $("#vaccine-list").append(`
+    vaccinesList.forEach(v => {
+        $("#vaccine-list").append(`
                     <div class="col-12 col-md-4 mb-3">
                         <div class="vx_item">
                             <a href="detail_vaccines?id=${v.id}">
@@ -57,16 +82,11 @@ function searchVaccine(page) {
                         </div>
                     </div>
                 `);
-            });
-            // Cuộn lên đầu danh sách với hiệu ứng mượt
-            $('html, body').animate({
-                scrollTop: $("#searchQuery").offset().top
-            }, 500);
-        },
-        error: function () {
-            alert("lỗi tìm sản phẩm");
-        }
     });
+    // Cuộn lên đầu danh sách với hiệu ứng
+    $('html, body').animate({
+        scrollTop: $("#searchQuery").offset().top
+    }, 500);
 }
 
 // update số trang
