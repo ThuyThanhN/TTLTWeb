@@ -14,7 +14,7 @@ public class SupplierDao {
     public int insert(Suppliers s) {
         int newId = -1;
         try {
-            String sql = "INSERT INTO suppliers(name, countryOfOrigin) VALUES(?, ?)";
+            String sql = "insert into suppliers(name, countryOfOrigin) values(?, ?)";
             PreparedStatement pst = DBConnect.get(sql);
             pst.setString(1, s.getName());
             pst.setString(2, s.getCountryOfOrigin());

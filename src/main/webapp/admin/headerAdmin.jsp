@@ -7,7 +7,7 @@
 <body>
 <div class="header-wrapper">
   <div class="header-title">
-    <a href="index"><img src="../image/logo.png" alt=""></a>
+    <a href="../index"><img src="../image/logo.png" alt=""></a>
   </div>
   <div class="user-info">
     <%

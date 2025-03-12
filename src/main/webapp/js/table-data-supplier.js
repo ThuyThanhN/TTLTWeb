@@ -91,7 +91,48 @@ $(document).ready(function () {
         });
     }
 
+    function handleEditSupplier() {
+        $(document).on("submit", ".editSupplierForm", function (e) {
+            e.preventDefault(); // ngan hanh dong mac dinh
+
+            let modal = $(this).closest(".modal");
+            let supplierId = modal.find("input[name='id']").val();
+            let name = modal.find("input[name='supplier-name']").val();
+            let country = modal.find("input[name='supplier-country']").val();
+
+            if (!supplierId || !name || !country) {
+                alert("Vui lòng nhập đầy đủ thông tin!");
+                return;
+            }
+
+            $.ajax({
+                url: "/provide_vaccine_services_war/admin/updateSupplier",
+                type: "POST",
+                data: { id: supplierId, "supplier-name": name, "supplier-country": country },
+                dataType: "json",
+                success: function (response) {
+                    if (response.status === "success") {
+
+                        // tim id cua nha cung cap tuong ung
+                        let row = $(`#supplier tr:has(td:contains('${supplierId}'))`);
+                        row.find("td:eq(1)").text(response.name);
+                        row.find("td:eq(2)").text(response.country);
+
+                        // an modal
+                        modal.modal("hide");
+                    } else {
+                        alert("Cập nhật thất bại: " + response.message);
+                    }
+                },
+                error: function (xhr) {
+                    console.log("Có lỗi xảy ra: " + xhr.responseText);
+                }
+            });
+        });
+    }
+
     initializeDataTable('#supplier');
     handleDeleteButton('deleteSupplier', 'removeSupplier');
     handleAddSupplier();
+    handleEditSupplier();
 });

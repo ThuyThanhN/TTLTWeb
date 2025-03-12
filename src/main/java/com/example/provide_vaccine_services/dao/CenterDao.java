@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CenterDao {
-    //    Them nha cung cap
+    //    Them trung tam
     public int insert(Centers c) {
         int re = 0;
 
