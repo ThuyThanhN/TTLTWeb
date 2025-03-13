@@ -23,25 +23,25 @@ $(document).ready(function () {
     }
 
     // Ham xu ly chuc nang xoa
-    function handleDeleteButton(modalId, removeUrlPrefix) {
-        $("#supplier").on("click", ".delete-btn", function (e) {
-            e.preventDefault();
-            e.currentTarget.blur(); // Fix loi aria-hidden
-
-            let removeUrl = `./${removeUrlPrefix}`;
-            let modalSelector = `#${modalId}`;
-            let itemId = $(this).data("id");
-            let itemName = $(this).data("name");
-
-            console.log("ID - Ten:", "data-supplier " + modalSelector + " " + itemId + " " + itemName);
-
-            let modal = document.querySelector(modalSelector);
-            modal.querySelector('.modal-body').textContent = `Ban co chac chan muon xoa ${itemName}?`;
-
-            // Cap nhat link nut xac nhan xoa
-            modal.querySelector('#confirmDelete').setAttribute('href', removeUrl + '?id=' + itemId);
-        });
-    }
+    // function handleDeleteButton(modalId, removeUrlPrefix) {
+    //     $("#supplier").on("click", ".delete-btn", function (e) {
+    //         e.preventDefault();
+    //         e.currentTarget.blur(); // Fix loi aria-hidden
+    //
+    //         let removeUrl = `./${removeUrlPrefix}`;
+    //         let modalSelector = `#${modalId}`;
+    //         let itemId = $(this).data("id");
+    //         let itemName = $(this).data("name");
+    //
+    //         console.log("ID - Ten:", "data-supplier " + modalSelector + " " + itemId + " " + itemName);
+    //
+    //         let modal = document.querySelector(modalSelector);
+    //         modal.querySelector('.modal-body').textContent = `Ban co chac chan muon xoa ${itemName}?`;
+    //
+    //         // Cap nhat link nut xac nhan xoa
+    //         modal.querySelector('#confirmDelete').setAttribute('href', removeUrl + '?id=' + itemId);
+    //     });
+    // }
 
     // Ham xu ly chuc nang them
     function handleAddSupplier() {
@@ -91,7 +91,7 @@ $(document).ready(function () {
         });
     }
 
-    function handleEditSupplier() {
+    function handleUpdateSupplier() {
         $(document).on("submit", ".editSupplierForm", function (e) {
             e.preventDefault(); // ngan hanh dong mac dinh
 
@@ -131,8 +131,51 @@ $(document).ready(function () {
         });
     }
 
+    function handleDeleteButton(modalId, removeUrlPrefix) {
+        let deleteId = null;
+
+        $("#supplier").on("click", ".delete-btn", function (e) {
+            e.preventDefault();
+            e.currentTarget.blur(); // Fix lỗi aria-hidden
+
+            let modalSelector = `#${modalId}`;
+            deleteId = $(this).data("id");
+            let itemName = $(this).data("name");
+
+            console.log("ID - Tên:", "data-supplier " + modalSelector + " " + deleteId + " " + itemName);
+
+            let modal = document.querySelector(modalSelector);
+            modal.querySelector('.modal-body').textContent = `Bạn có chắc chắn muốn xóa ${itemName}?`;
+
+            // hien modal
+            $(modalSelector).modal("show");
+        });
+
+        // Xử lý xác nhận xóa bằng AJAX
+        $("#confirmDelete").on("click", function () {
+            if (!deleteId) return;
+
+            $.ajax({
+                url: `./${removeUrlPrefix}`,
+                type: "POST",
+                data: { id: deleteId },
+                dataType: "json",
+                success: function (response) {
+                    if (response.status === "success") {
+                        // xoa nha cung cap tuong ung qua id
+                        $(`#supplier tr:has(td:contains('${deleteId}'))`).remove();
+                        $(`#${modalId}`).modal("hide"); // an modal
+                    }
+                },
+                error: function (xhr) {
+                    alert("Loi : " + xhr.responseText);
+                }
+            });
+        });
+    }
+
     initializeDataTable('#supplier');
-    handleDeleteButton('deleteSupplier', 'removeSupplier');
     handleAddSupplier();
-    handleEditSupplier();
+    handleUpdateSupplier()
+    handleDeleteButton('deleteSupplier', 'removeSupplier');
 });
