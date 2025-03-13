@@ -35,11 +35,11 @@
         <h1 class="title">Thông Tin Sản Phẩm Vắc Xin</h1>
         <div class="button-group">
             <!-- Nút "VẮC XIN THEO NHÓM ĐỘ TUỔI" -->
-            <button class="btn" onclick="ageFilter()">VẮC XIN THEO NHÓM ĐỘ TUỔI
+            <button id="ageButton" class="btn" onclick="ageFilter()">VẮC XIN THEO NHÓM ĐỘ TUỔI
             </button>
 
             <!-- Nút "VẮC XIN THEO NHÓM BỆNH" -->
-            <button class="btn" onclick="diseaseFilter()">VẮC XIN THEO NHÓM BỆNH
+            <button id="diseaseButton" class="btn" onclick="diseaseFilter()">VẮC XIN THEO NHÓM BỆNH
             </button>
         </div>
         <div class="search-bar">

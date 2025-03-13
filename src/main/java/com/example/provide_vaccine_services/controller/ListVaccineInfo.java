@@ -41,10 +41,9 @@ public class ListVaccineInfo extends HttpServlet {
         int totalVaccine = 0;
         String searchQuery = request.getParameter("query");
         String action = request.getParameter("action");
-        boolean age = "boolean".equals(request.getParameter("age"));
-        boolean disease = "disease".equals(request.getParameter("disease"));
+        boolean age = Boolean.parseBoolean(request.getParameter("age"));
+        boolean disease = Boolean.parseBoolean(request.getParameter("disease"));
         int pageNumber = parseIntOrDefault(request.getParameter("page"), 1);
-
 
         // xử lí format thời gian
         ObjectMapper mapper = new ObjectMapper();
@@ -56,12 +55,12 @@ public class ListVaccineInfo extends HttpServlet {
 
         switch (action) {
             case "search": {
-                totalVaccine = vaccineDao.getTotalCount(searchQuery);
+                totalVaccine = vaccineDao.getTotalCount(searchQuery, age, disease);
                 vaccines = vaccineDao.getSearchedVaccinesByPage(searchQuery, pageNumber, age, disease);
                 break;
             }
             default: {
-                totalVaccine = vaccineDao.getTotalCount();
+                totalVaccine = vaccineDao.getTotalCount(age, disease);
                 vaccines = vaccineDao.getVaccinesByPage(pageNumber, age, disease);
                 break;
             }

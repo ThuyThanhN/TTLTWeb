@@ -27,12 +27,23 @@ $(document).ready(function () {
 
 function ageFilter() {
     age = !age;
-    console.log(age);
+    const ageButton = document.getElementById("ageButton");
+    if(age) {
+        ageButton.classList.toggle("active");
+    } else {
+        ageButton.classList.remove("active");
+    }
     searchVaccine(currentSearchPage);
 }
 
 function diseaseFilter() {
     disease = !disease;
+    const diseaseButton = document.getElementById("diseaseButton");
+    if(disease) {
+        diseaseButton.classList.toggle("active");
+    } else {
+        diseaseButton.classList.remove("active");
+    }
     searchVaccine(currentSearchPage);
 }
 
@@ -45,6 +56,7 @@ function searchVaccine(page) {
         type: "GET",
         data: {action: "search", query: query, page: page, age: age, disease: disease},
         success: (response) => {
+            console.log(response);
             showVaccines(response);
         },
         error: function () {

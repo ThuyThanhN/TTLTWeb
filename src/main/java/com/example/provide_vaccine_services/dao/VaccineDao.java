@@ -387,6 +387,31 @@ public class VaccineDao {
         return 0;
     }
 
+    public int getTotalCount( boolean age, boolean disease) {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM vaccines v");
+
+        if (age) {
+            sql.append(" JOIN vaccinetypes vt ON v.id = vt.idVaccine ")
+                    .append(" JOIN agegroups ag ON vt.idAgeGroup = ag.id ");
+        }
+
+        if (disease) {
+            sql.append(age ? " JOIN diseasetypes dt ON vt.idDisease = dt.id " : " JOIN vaccinetypes vt ON v.id = vt.idVaccine JOIN diseasetypes dt ON vt.idDisease = dt.id ");
+        }
+
+        try (PreparedStatement pst = DBConnect.get(sql.toString())) {
+            ResultSet resultSet = pst.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+
     public int getTotalCount(String searchQuery) {
         String sql = "SELECT COUNT(*) FROM Vaccines WHERE name LIKE ?";
 
@@ -402,6 +427,34 @@ public class VaccineDao {
 
         return 0;
     }
+
+    public int getTotalCount(String searchQuery, boolean age, boolean disease) {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM vaccines v");
+
+        if (age) {
+            sql.append(" JOIN vaccinetypes vt ON v.id = vt.idVaccine ")
+                    .append(" JOIN agegroups ag ON vt.idAgeGroup = ag.id ");
+        }
+
+        if (disease) {
+            sql.append(age ? " JOIN diseasetypes dt ON vt.idDisease = dt.id " : " JOIN vaccinetypes vt ON v.id = vt.idVaccine JOIN diseasetypes dt ON vt.idDisease = dt.id ");
+        }
+
+        sql.append(" WHERE v.name LIKE ? ");
+
+        try (PreparedStatement pst = DBConnect.get(sql.toString())) {
+            pst.setString(1, "%" + searchQuery + "%");
+            ResultSet resultSet = pst.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
 
     public List<Vaccines> searchByName(String searchQuery) {
         List<Vaccines> vaccines = new ArrayList<>();
@@ -442,6 +495,8 @@ public class VaccineDao {
     public List<Vaccines> getSearchedVaccinesByPage(String searchQuery, int page, boolean age, boolean disease) {
         List<Vaccines> vaccines = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT v.* FROM vaccines v");
+
+        System.out.println(age);
 
         if (age) {
             sql.append(" JOIN vaccinetypes vt ON v.id = vt.idVaccine ")

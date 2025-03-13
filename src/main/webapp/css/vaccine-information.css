@@ -38,7 +38,7 @@ a {
     color: #6D6E70;
 }
 
-.vaccine-info-container {
+.vaccine-info-container  {
     text-align: center;
     /*background: linear-gradient(to bottom, #0b46a0, #2a388f);*/
     background: #2e3a92;
@@ -72,6 +72,10 @@ a {
 .vaccine-info-container .btn:hover {
     background-color: #ef5322;
     color: #fff;
+}
+
+.btn.active {
+    background-color: #ef5322;
 }
 
 /* Search Bar */
