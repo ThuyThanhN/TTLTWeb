@@ -25,10 +25,11 @@ $(document).ready(function () {
     searchVaccine(currentSearchPage);
 });
 
+//tìm kiếm
 function ageFilter() {
     age = !age;
     const ageButton = document.getElementById("ageButton");
-    if(age) {
+    if (age) {
         ageButton.classList.toggle("active");
     } else {
         ageButton.classList.remove("active");
@@ -39,7 +40,7 @@ function ageFilter() {
 function diseaseFilter() {
     disease = !disease;
     const diseaseButton = document.getElementById("diseaseButton");
-    if(disease) {
+    if (disease) {
         diseaseButton.classList.toggle("active");
     } else {
         diseaseButton.classList.remove("active");
@@ -118,4 +119,41 @@ function updatePagination(totalPages) {
     }
 
     $("#pagination").html(paginationHtml);
+}
+
+// đề xuất từ khoá
+function autoComplete() {
+    const query = document.getElementById("#searchQuery");
+
+    $.ajax({
+        url: "/provide_vaccine_services_war/vaccine-information",
+        type: "GET",
+        data: {action: "autoComplete", query: query },
+        success: (data) => {
+            let listHtml = "";
+            data.forEach(item => {
+                listHtml += `<div class="autocomplete-item">${item}</div>`;
+            });
+            $("#autocomplete-list").html(listHtml);
+        },
+        error: function () {
+            alert("lỗi tìm sản phẩm");
+        }
+    });
+
+
+    // Click vào item trong autocomplete
+    $(document).on("click", ".autocomplete-item", function () {
+        $("#searchQuery").val($(this).text());
+        $("#autocomplete-list").html("");
+    });
+
+
+    // Ẩn danh sách khi click ra ngoài
+    $(document).click(function (event) {
+        if (!$(event.target).closest("#autocomplete-list, #searchQuery").length) {
+            $("#autocomplete-list").html("");
+        }
+    });
+
 }

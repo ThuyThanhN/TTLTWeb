@@ -399,6 +399,8 @@ public class VaccineDao {
             sql.append(age ? " JOIN diseasetypes dt ON vt.idDisease = dt.id " : " JOIN vaccinetypes vt ON v.id = vt.idVaccine JOIN diseasetypes dt ON vt.idDisease = dt.id ");
         }
 
+        System.out.println("query: " + sql.toString());
+
         try (PreparedStatement pst = DBConnect.get(sql.toString())) {
             ResultSet resultSet = pst.executeQuery();
             if (resultSet.next()) {
@@ -545,6 +547,23 @@ public class VaccineDao {
         }
 
         return vaccines;
+    }
+
+    public List<String> getAutoCompleteSuggestions(String query) {
+        List<String> suggestions = new ArrayList<>();
+        String sql = "SELECT DISTINCT name FROM vaccines WHERE name LIKE ? LIMIT 5";
+
+        try (PreparedStatement stmt = DBConnect.get(sql)) {
+            stmt.setString(1, query + "%");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                suggestions.add(rs.getString("name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return suggestions;
     }
 
     public List<Vaccines> getTopVaccines() {

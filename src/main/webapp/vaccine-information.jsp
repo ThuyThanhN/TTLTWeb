@@ -44,12 +44,11 @@
         </div>
         <div class="search-bar">
             <form action="/vaccine-information" method="get">
-                <input style="width: 500px" type="text" id="searchQuery" name="searchQuery" placeholder="Tìm kiếm..."
-                       value="${searchQuery != null ? searchQuery : ''}">
+                <input style="width: 500px" type="text" id="searchQuery" name="searchQuery" placeholder="Tìm kiếm..." value="${searchQuery != null ? searchQuery : ''}" onchange="autoComplete()" >
+                <div id="autocomplete-list" class="autocomplete-items"></div>
                 <button type="button" id="searchBtn" class="search-btn">
                     <i class="fa-solid fa-magnifying-glass" style="color: #000000;"></i>
                 </button>
-
             </form>
         </div>
 

@@ -23,16 +23,45 @@ public class ListVaccineInfo extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
-        if (action != null) {
-            handleAjaxSearch(request, response);
-        } else {
-            request.getRequestDispatcher("vaccine-information.jsp").forward(request, response);
+
+        // Kiểm tra nếu action là null thì gán giá trị mặc định
+        if (action == null) {
+            action = "";
         }
+
+        System.out.println(action);
+        switch (action) {
+            case "search": {
+                System.out.println("action: search");
+                handleAjaxSearch(request, response);
+                break;
+            }
+            case "autoComplete": {
+                handleAutoComplete(request, response);
+                break;
+            }
+            default: {
+                request.getRequestDispatcher("vaccine-information.jsp").forward(request, response);
+                break;
+            }
+        }
+
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Không cần xử lý POST trong trường hợp này
+    }
+
+    private void handleAutoComplete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String query = request.getParameter("query");
+        if (query != null && !query.trim().isEmpty()) {
+            List<String> suggestions = new VaccineDao().getAutoCompleteSuggestions(query);
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(new ObjectMapper().writeValueAsString(suggestions));
+        }
     }
 
     // xử lí tìm kiếm sản phẩm trong trang
@@ -53,22 +82,25 @@ public class ListVaccineInfo extends HttpServlet {
         List<Vaccines> vaccines;
         VaccineDao vaccineDao = new VaccineDao();
 
-        switch (action) {
-            case "search": {
-                totalVaccine = vaccineDao.getTotalCount(searchQuery, age, disease);
-                vaccines = vaccineDao.getSearchedVaccinesByPage(searchQuery, pageNumber, age, disease);
-                break;
-            }
-            default: {
-                totalVaccine = vaccineDao.getTotalCount(age, disease);
-                vaccines = vaccineDao.getVaccinesByPage(pageNumber, age, disease);
-                break;
-            }
 
+        if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+            System.out.println("searchQuery is searching: " + searchQuery);
+            totalVaccine = vaccineDao.getTotalCount(searchQuery, age, disease);
+            System.out.println("totalVaccine: " + totalVaccine);
+            vaccines = vaccineDao.getSearchedVaccinesByPage(searchQuery, pageNumber, age, disease);
+        } else {
+            System.out.println("searchQuery not search: " + searchQuery);
+            totalVaccine = vaccineDao.getTotalCount(age, disease);
+            System.out.println("totalVaccine: " + totalVaccine);
+            vaccines = vaccineDao.getVaccinesByPage(pageNumber, age, disease);
         }
 
         //tổng số trang
         int totalPages = (totalVaccine + 11) / 12; // Giả sử mỗi trang có 12 sản phẩm
+
+        for (Vaccines v : vaccines) {
+            System.out.println(v.toString());
+        }
 
         // map json
         Map<String, Object> jsonMap = new HashMap<>();
@@ -87,7 +119,8 @@ public class ListVaccineInfo extends HttpServlet {
         response.getWriter().write(jsonString);
     }
 
-    private void SearchByAge(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {}
+    private void SearchByAge(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    }
 
 
     private int parseIntOrDefault(String value, int defaultValue) {
