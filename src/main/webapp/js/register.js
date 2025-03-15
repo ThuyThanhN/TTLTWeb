@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   // Ngừng thông báo mặc định của trình duyệt khi form được submit
-  document.querySelector('form').addEventListener('submit', function(event) {
+  document.querySelector('form').addEventListener('submit', function (event) {
     const fullNameInput = document.getElementById('full-name');
     const errorMessage = document.getElementById('full-name-error');
 
@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
-// Kiểm tra số điện thoại
+  // Kiểm tra số điện thoại
   document.getElementById("phone").addEventListener("input", function () {
     const phoneInput = this.value;
     const errorMessage = document.getElementById("phone-error");
@@ -81,6 +81,22 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
 
+  // Kiểm tra mật khẩu
+  document.getElementById("password").addEventListener("input", function () {
+    const passwordInput = this.value;
+    const errorMessage = document.getElementById("password-error");
+
+    // Biểu thức chính quy để kiểm tra mật khẩu (ít nhất 8 ký tự, có chữ hoa, chữ thường, số và ký tự đặc biệt)
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    // Kiểm tra nếu mật khẩu không hợp lệ
+    if (!passwordPattern.test(passwordInput)) {
+      errorMessage.style.display = "block";
+      errorMessage.textContent = "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, chữ số và ký tự đặc biệt.";
+    } else {
+      errorMessage.style.display = "none"; // Ẩn thông báo lỗi nếu mật khẩu hợp lệ
+    }
+  });
 
 
   // Kiểm tra mật khẩu và xác nhận mật khẩu
@@ -91,8 +107,10 @@ document.addEventListener("DOMContentLoaded", function() {
   function checkPasswordMatch() {
     if (confirmPassword.value.trim() === '') {
       confirmPasswordError.style.display = 'block';
+      confirmPasswordError.textContent = 'Xác nhận mật khẩu không được để trống';
     } else if (password.value !== confirmPassword.value) {
       confirmPasswordError.style.display = 'block';
+      confirmPasswordError.textContent = 'Mật khẩu và xác nhận mật khẩu không khớp';
     } else {
       confirmPasswordError.style.display = 'none';
     }
@@ -100,4 +118,5 @@ document.addEventListener("DOMContentLoaded", function() {
 
   password.addEventListener('input', checkPasswordMatch);
   confirmPassword.addEventListener('input', checkPasswordMatch);
-});
+
+}); // Đóng ngoặc sự kiện DOMContentLoaded
