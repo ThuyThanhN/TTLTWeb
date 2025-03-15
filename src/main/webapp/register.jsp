@@ -30,6 +30,7 @@
                     <div>
                         <label for="full-name"><strong>Họ và tên <span class="required">*</span></strong></label>
                         <input type="text" id="full-name" name="fullname" required>
+                        <span class="error-message" id="full-name-error" style="display:none; color: red;">Vui lòng điền họ và tên.</span>
                     </div>
                     <div>
                         <label for="gender"><strong>Giới tính <span class="required">*</span></strong></label>
@@ -54,7 +55,9 @@
                     <div>
                         <label for="email"><strong>Email <span class="required">*</span></strong></label>
                         <input type="email" id="email" name="email" required>
+                        <span class="error-message" id="email-error" style="display:none; color: red;">Vui lòng nhập một địa chỉ email hợp lệ.</span>
                     </div>
+
                     <div class="dropdown">
                         <label for="province-select"><strong>Tỉnh thành <span class="required">*</span></strong></label>
                         <input type="text" placeholder="Chọn" id="province-select" name="province"
@@ -92,12 +95,16 @@
                 <div class="form-group">
                     <div>
                         <label for="phone"><strong>SĐT (Tài Khoản) <span class="required">*</span></strong></label>
-                        <input type="text" id="phone" name="phone" required>
+                        <input type="tel" id="phone" name="phone" required>
+                        <span class="error-message" id="phone-error" style="color: red; display: none;"></span>
                     </div>
+
                     <div>
                         <label for="password"><strong>Mật khẩu <span class="required">*</span></strong></label>
                         <input type="password" id="password" name="password" required>
+                        <span id="password-error" style="color: red; display: none;"></span>
                     </div>
+
                     <div>
                         <label for="confirm-password"><strong>Xác nhận mật khẩu <span class="required">*</span></strong></label>
                         <input type="password" id="confirm-password" name="confirmPassword" required>
