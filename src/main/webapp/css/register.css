@@ -54,7 +54,7 @@ a {
     margin-bottom: 5px;
 }
 .form-container .form-group input,
-.form-container .form-group select { 
+.form-container .form-group select {
     height : 43.2px;
     width: 100%;
     padding: 8px;
@@ -122,6 +122,33 @@ a {
     color: red;
     font-weight: bold;
   }
+/* Áp dụng ảnh nền cho toàn bộ body */
+body {
+    background-image: url('../image/register1.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+    height: 100vh;  /* Đảm bảo body có chiều cao đầy đủ */
+    /*background-color: #0f38d3;  !* Thêm màu nền tạm thời *!*/
+}
+
+/* Áp dụng ảnh nền cho các section trong form */
+.form-container .section {
+    border: 1px solid #1542ec;
+    padding: 15px;
+    margin: 20px;
+    border-radius: 4px;
+    background: rgba(42, 131, 198, 0.8); /* Nền mờ */
+}
+
+
+/* Đảm bảo không có các thuộc tính z-index che khuất ảnh nền */
+#registrationForm {
+    z-index: 1;
+}
+
 
 @media (max-width: 768px) {
     .form-container .form-group {
@@ -148,4 +175,7 @@ a {
         border: none;
         box-shadow: none;
     }
+
+
+
 }
