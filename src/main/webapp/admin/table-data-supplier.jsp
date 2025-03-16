@@ -25,9 +25,12 @@
     <!-- pdfMake (xuat PDF) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <!-- JSZip (xuat Excel) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <!-- DataTable Buttons -->
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
     <!-- Css   -->
     <link rel="stylesheet" href="../css/main_admin.css">
 </head>
@@ -45,8 +48,17 @@
                 <i class="fa-solid fa-plus"></i> Thêm nhà cung cấp
             </a>
 
-            <button class="btn btn-printPdf btn-sm light-red color-red" id="printPDF">
+            <button class="btn btn-common btn-sm" id="print">
+                <i class="fas fa-print"></i> In dữ liệu
+            </button>
+
+            <button class="btn btn-common btn-sm" id="exportPDF">
                 <i class="fas fa-file-pdf"></i> Xuất PDF
+            </button>
+
+
+            <button class="btn btn-common btn-sm" id="exportExcel">
+                <i class="fas fas fa-file-excel"></i> Xuất Excel
             </button>
         </div>
         <table class="w-100 table table-striped" id="supplier">

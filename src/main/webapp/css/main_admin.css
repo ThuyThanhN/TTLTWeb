@@ -451,7 +451,7 @@ select:focus {
 .border-vaccine::-webkit-scrollbar {
     display: none;
 }
-.btn-printPdf {
+.btn-common {
     padding: 5px;
     font-size: 13px !important;
     line-height: 1.5;
@@ -459,13 +459,8 @@ select:focus {
     font-weight: 500;
     margin-bottom: 15px;
     margin-right: 10px;
-    background-color: rgb(255, 197, 197);
-    color: rgb(190, 40, 40);
-}
-
-.btn-printPdf:hover{
-    background-color: rgb(255, 197, 197);
-    color: rgb(190, 40, 40);
+    border: 1px solid #6D6E70;
+    color: #6D6E70
 }
 @media (max-width: 786px) {
     body {

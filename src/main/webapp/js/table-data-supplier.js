@@ -21,20 +21,36 @@ $(document).ready(function () {
             },
             buttons: [
                 {
+                    extend: "print",
+                    title: "Danh sách Nhà Cung Cấp",
+                    exportOptions: { columns: [0, 1, 2] }
+                },
+                {
                     extend: "pdfHtml5",
                     title: "Danh sách Nhà Cung Cấp",
-                    exportOptions: {
-                        columns: [0, 1, 2]
-                    },
+                    exportOptions: { columns: [0, 1, 2] },
                     customize: function (doc) {
                         doc.content[1].table.widths = ["auto", "*", "*"];
                     }
+                },
+                {
+                    extend: "excelHtml5",
+                    title: "Danh sách Nhà Cung Cấp",
+                    exportOptions: { columns: [0, 1, 2] }
                 }
             ]
         });
 
-        $("#printPDF").on("click", function () {
+        $("#print").on("click", function () {
             table.button(0).trigger();
+        });
+
+        $("#exportPDF").on("click", function () {
+            table.button(1).trigger();
+        });
+
+        $("#exportExcel").on("click", function () {
+            table.button(2).trigger();
         });
     }
 
