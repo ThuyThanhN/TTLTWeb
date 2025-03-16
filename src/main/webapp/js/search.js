@@ -34,7 +34,7 @@ function ageFilter() {
     } else {
         ageButton.classList.remove("active");
     }
-    searchVaccine(currentSearchPage);
+    searchVaccine(1);
 }
 
 function diseaseFilter() {
@@ -45,7 +45,7 @@ function diseaseFilter() {
     } else {
         diseaseButton.classList.remove("active");
     }
-    searchVaccine(currentSearchPage);
+    searchVaccine(1);
 }
 
 // tìm theo từ khoá và số trang
@@ -57,7 +57,6 @@ function searchVaccine(page) {
         type: "GET",
         data: {action: "search", query: query, page: page, age: age, disease: disease},
         success: (response) => {
-            console.log(response);
             showVaccines(response);
         },
         error: function () {
@@ -82,7 +81,13 @@ function showVaccines(response) {
 
     // Xóa nội dung hiện tại trong thẻ div chứa danh sách sản phẩm
     $("#vaccine-list").empty();
+    if(vaccinesList.length == 0) {
+        $("#vaccine-list").append(`<div class="vx_item">
+                    <div class="vaccine_name" title="Khong tim thay san pham nao"> khong tim thay san pham </div>
+                        </div>
 
+        `);
+    }
     vaccinesList.forEach(v => {
         $("#vaccine-list").append(`
                     <div class="col-12 col-md-4 mb-3">

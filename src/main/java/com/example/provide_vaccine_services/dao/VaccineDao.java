@@ -332,15 +332,15 @@ public class VaccineDao {
         }
 
         if (disease) {
-            sql.append(age ? " JOIN diseasetypes dt ON vt.idDisease = dt.id " : " JOIN vaccinetypes vt ON v.id = vt.idVaccine JOIN diseasetypes dt ON vt.idDisease = dt.id ");
+            sql.append(age ? " JOIN disasegroups dt ON vt.idDisaseGroup = dt.id " : " JOIN vaccinetypes vt ON v.id = vt.idVaccine JOIN disasegroups dt ON vt.idDisaseGroup = dt.id ");
         }
 
         if (age && disease) {
-            sql.append(" GROUP BY ag.id, dt.id ");
+            sql.append(" ORDER BY ag.id, dt.id ");
         } else if (age) {
-            sql.append(" GROUP BY ag.id ");
+            sql.append(" ORDER BY ag.id ");
         } else if (disease) {
-            sql.append(" GROUP BY dt.id ");
+            sql.append(" ORDER BY dt.id ");
         }
 
         sql.append(" LIMIT 12 OFFSET ?");
@@ -396,10 +396,8 @@ public class VaccineDao {
         }
 
         if (disease) {
-            sql.append(age ? " JOIN diseasetypes dt ON vt.idDisease = dt.id " : " JOIN vaccinetypes vt ON v.id = vt.idVaccine JOIN diseasetypes dt ON vt.idDisease = dt.id ");
+            sql.append(age ? " JOIN disasegroups dt ON vt.idDisease = dt.id " : " JOIN vaccinetypes vt ON v.id = vt.idVaccine JOIN disasegroups dt ON vt.idDisaseGroup = dt.id ");
         }
-
-        System.out.println("query: " + sql.toString());
 
         try (PreparedStatement pst = DBConnect.get(sql.toString())) {
             ResultSet resultSet = pst.executeQuery();
@@ -512,11 +510,11 @@ public class VaccineDao {
         sql.append(" WHERE v.name LIKE ? ");
 
         if (age && disease) {
-            sql.append(" GROUP BY ag.id, dt.id ");
+            sql.append(" ORDER BY ag.id, dt.id ");
         } else if (age) {
-            sql.append(" GROUP BY ag.id ");
+            sql.append(" ORDER BY ag.id ");
         } else if (disease) {
-            sql.append(" GROUP BY dt.id ");
+            sql.append(" ORDER BY dt.id ");
         }
 
         sql.append(" LIMIT 12 OFFSET ?");
