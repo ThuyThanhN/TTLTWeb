@@ -106,6 +106,28 @@ a {
     color: #2a388f;
 }
 
+/* auto complete */
+.autocomplete-items {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    background: white;
+    color: #1a1a1a;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.autocomplete-items .vx_item {
+    cursor: pointer;
+    padding: 10px;
+    transition: background-color 0.2s;
+}
+
+.autocomplete-items .vx_item:hover {
+    background-color: #f8f9fa;
+}
+
 /* Vaccine Icons */
 .vaccine-icons {
     display: flex;

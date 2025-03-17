@@ -29,10 +29,8 @@ public class ListVaccineInfo extends HttpServlet {
             action = "";
         }
 
-        System.out.println(action);
         switch (action) {
             case "search": {
-                System.out.println("action: search");
                 handleAjaxSearch(request, response);
                 break;
             }
@@ -55,12 +53,27 @@ public class ListVaccineInfo extends HttpServlet {
 
     private void handleAutoComplete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String query = request.getParameter("query");
+        String jsonString ="";
         if (query != null && !query.trim().isEmpty()) {
             List<String> suggestions = new VaccineDao().getAutoCompleteSuggestions(query);
 
+            for(String s : suggestions) {
+                System.out.println(s);
+            }
+
+            // object mapper
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> jsonMap = new HashMap<>();
+            jsonMap.put("suggestions", suggestions);
+
+            // chuyển thành json
+            jsonString = mapper.writeValueAsString(jsonMap);
+
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.getWriter().write(new ObjectMapper().writeValueAsString(suggestions));
+            response.getWriter().write(jsonString);
+
+
         }
     }
 
@@ -84,23 +97,15 @@ public class ListVaccineInfo extends HttpServlet {
 
 
         if (searchQuery != null && !searchQuery.trim().isEmpty()) {
-            System.out.println("searchQuery is searching: " + searchQuery);
             totalVaccine = vaccineDao.getTotalCount(searchQuery, age, disease);
-            System.out.println("totalVaccine: " + totalVaccine);
             vaccines = vaccineDao.getSearchedVaccinesByPage(searchQuery, pageNumber, age, disease);
         } else {
-            System.out.println("searchQuery not search: " + searchQuery);
             totalVaccine = vaccineDao.getTotalCount(age, disease);
-            System.out.println("totalVaccine: " + totalVaccine);
             vaccines = vaccineDao.getVaccinesByPage(pageNumber, age, disease);
         }
 
         //tổng số trang
         int totalPages = (totalVaccine + 11) / 12; // Giả sử mỗi trang có 12 sản phẩm
-
-        for (Vaccines v : vaccines) {
-            System.out.println(v.toString());
-        }
 
         // map json
         Map<String, Object> jsonMap = new HashMap<>();

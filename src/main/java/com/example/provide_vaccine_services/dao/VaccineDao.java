@@ -551,8 +551,13 @@ public class VaccineDao {
         List<String> suggestions = new ArrayList<>();
         String sql = "SELECT DISTINCT name FROM vaccines WHERE name LIKE ? LIMIT 5";
 
+        System.out.println(query);
+
         try (PreparedStatement stmt = DBConnect.get(sql)) {
-            stmt.setString(1, query + "%");
+            stmt.setString(1, "%" + query + "%");
+
+            System.out.println(stmt);
+
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 suggestions.add(rs.getString("name"));

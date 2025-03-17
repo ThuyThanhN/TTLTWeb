@@ -2,6 +2,10 @@ let currentSearchPage = 1;
 let age = false;
 let disease = false;
 
+document.getElementById("searchQuery").addEventListener("input", function() {
+    autoComplete();
+});
+
 // khi vừa load trang set các sự kiện
 $(document).ready(function () {
 
@@ -20,6 +24,8 @@ $(document).ready(function () {
             currentSearchPage = 1;
         }
     });
+
+
 
     //chạy lần đầu sẽ gọi để load dữ liệu
     searchVaccine(currentSearchPage);
@@ -128,15 +134,17 @@ function updatePagination(totalPages) {
 
 // đề xuất từ khoá
 function autoComplete() {
-    const query = document.getElementById("#searchQuery");
+    const query = $("#searchQuery").val().trim();
+    console.log("query: " + query);
 
     $.ajax({
         url: "/provide_vaccine_services_war/vaccine-information",
         type: "GET",
-        data: {action: "autoComplete", query: query },
-        success: (data) => {
+        data: { action: "autoComplete", query: query },
+        success: (response) => {
+            console.log(response.suggestions);
             let listHtml = "";
-            data.forEach(item => {
+            response.suggestions.forEach(item => {
                 listHtml += `<div class="autocomplete-item">${item}</div>`;
             });
             $("#autocomplete-list").html(listHtml);
