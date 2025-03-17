@@ -103,11 +103,13 @@
                                             <input type="hidden" name="id" value="${supplier.id}">
                                             <div class="mb-3">
                                                 <label for="supplier-name-${supplier.id}" class="form-label">Nhập tên nhà cung cấp</label>
-                                                <input type="text" class="form-control" id="supplier-name-${supplier.id}" name="supplier-name" value="${supplier.name}" maxlength="80">
+                                                <input type="text" class="form-control" id="supplier-name-${supplier.id}" name="supplier-name" value="${supplier.name}" maxlength="80" data-validate>
+                                                <div class="error-message">Vui lòng nhập đúng.</div>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="supplier-country-${supplier.id}" class="form-label">Nhập nước sản xuất</label>
-                                                <input type="text" class="form-control" id="supplier-country-${supplier.id}" name="supplier-country" value="${supplier.countryOfOrigin}" maxlength="80">
+                                                <input type="text" class="form-control" id="supplier-country-${supplier.id}" name="supplier-country" value="${supplier.countryOfOrigin}" maxlength="80" data-validate>
+                                                <div class="error-message">Vui lòng nhập đúng.</div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="submit" class="btn btn-save">Lưu lại</button>
@@ -151,11 +153,13 @@
                         <form id="addSupplierForm" method="post">
                             <div class="mb-3">
                                 <label for="supplier-name" class="form-label">Nhập tên nhà cung cấp</label>
-                                <input type="text" class="form-control" id="supplier-name" name="supplier-name" maxlength="80" required>
+                                <input type="text" class="form-control" id="supplier-name" name="supplier-name" maxlength="80" required data-validate>
+                                <div class="error-message">Vui lòng nhập đúng.</div>
                             </div>
                             <div class="mb-3">
                                 <label for="supplier-country" class="form-label">Nhập nước sản xuất</label>
-                                <input type="text" class="form-control" id="supplier-country" name="supplier-country" maxlength="80" required>
+                                <input type="text" class="form-control" id="supplier-country" name="supplier-country" maxlength="80" required data-validate>
+                                <div class="error-message">Vui lòng nhập đúng.</div>
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-save">Lưu lại</button>

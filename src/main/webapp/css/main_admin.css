@@ -462,6 +462,12 @@ select:focus {
     border: 1px solid #6D6E70;
     color: #6D6E70
 }
+.error-message {
+    font-size: 12px;
+    margin-top: 10px;
+    color: #ef5350;
+    display: none;
+}
 @media (max-width: 786px) {
     body {
         flex-direction: column;

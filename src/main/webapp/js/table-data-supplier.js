@@ -2,6 +2,14 @@ function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("show");
 }
 
+document.querySelectorAll("[data-validate]").forEach(input => {
+    input.addEventListener("input", function () {
+        let isInvalid = /^\s|\d/.test(this.value);
+        this.classList.toggle("is-invalid", isInvalid);
+        this.nextElementSibling.style.display = isInvalid ? "block" : "none";
+    });
+});
+
 $(document).ready(function () {
     // Ham khoi tao DataTable
     function initializeDataTable(selector) {
