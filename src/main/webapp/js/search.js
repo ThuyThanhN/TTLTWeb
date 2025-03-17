@@ -3,6 +3,7 @@ let age = false;
 let disease = false;
 
 document.getElementById("searchQuery").addEventListener("input", function() {
+    document.querySelector(".autocomplete-container").hidden = false;
     autoComplete();
 });
 
@@ -91,7 +92,6 @@ function showVaccines(response) {
         $("#vaccine-list").append(`<div class="vx_item">
                     <div class="vaccine_name" title="Khong tim thay san pham nao"> khong tim thay san pham </div>
                         </div>
-
         `);
     }
     vaccinesList.forEach(v => {
@@ -144,6 +144,7 @@ function autoComplete() {
         success: (response) => {
             console.log(response.suggestions);
             let listHtml = "";
+            listHtml += `<div class="autocomplete-item"> ${query} </div>`;
             response.suggestions.forEach(item => {
                 listHtml += `<div class="autocomplete-item">${item}</div>`;
             });
@@ -167,6 +168,9 @@ function autoComplete() {
         if (!$(event.target).closest("#autocomplete-list, #searchQuery").length) {
             $("#autocomplete-list").html("");
         }
+
+        document.querySelector(".autocomplete-container").hidden = true;
+
     });
 
 }

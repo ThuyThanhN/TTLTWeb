@@ -80,6 +80,7 @@ a {
 
 /* Search Bar */
 .search-bar {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -107,26 +108,36 @@ a {
 }
 
 /* auto complete */
+.autocomplete-container {
+    top: 100%;
+    position: absolute;
+    margin-top: 5px; /* Space between input and autocomplete */
+    width: 100%;
+    max-width: 570px;
+    z-index: 3;
+}
+
 .autocomplete-items {
-    display: flex;
-    flex-direction: column;
-    width: 500px;
     background: white;
     color: #1a1a1a;
-    max-height: 200px;
-    overflow-y: auto;
-    z-index: 1000;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.autocomplete-items .vx_item {
-    cursor: pointer;
+.autocomplete-items .autocomplete-item {
     padding: 10px;
-    transition: background-color 0.2s;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 14px;
+    border-bottom: 1px solid #d6d2d2;
+    text-align: left;
 }
 
-.autocomplete-items .vx_item:hover {
-    background-color: #f8f9fa;
+.autocomplete-items .autocomplete-item:hover {
+    background: #858383;
 }
+
 
 /* Vaccine Icons */
 .vaccine-icons {

@@ -49,11 +49,11 @@
                     <i class="fa-solid fa-magnifying-glass" style="color: #000000;"></i>
                 </button>
             </form>
+            <div class="autocomplete-container" hidden>
+                <div id="autocomplete-list" class="autocomplete-items"  ></div>
+            </div>
+        </div>
 
-        </div>
-        <div class="d-flex justify-content-center" style="margin-bottom: 10px">
-            <div id="autocomplete-list" class="autocomplete-items"></div>
-        </div>
 
 
         <!-- Carousel -->
