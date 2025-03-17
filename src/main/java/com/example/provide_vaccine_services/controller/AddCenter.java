@@ -1,3 +1,4 @@
+
 package com.example.provide_vaccine_services.controller;
 
 import com.example.provide_vaccine_services.dao.CenterDao;
@@ -32,4 +33,3 @@ public class AddCenter extends HttpServlet {
         response.sendRedirect("table-data-center");
     }
 }
-

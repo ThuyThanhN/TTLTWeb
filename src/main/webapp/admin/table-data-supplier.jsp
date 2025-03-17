@@ -16,10 +16,21 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <%-- Ajax --%>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- DataTable -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <!-- pdfMake (xuat PDF) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <!-- JSZip (xuat Excel) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- DataTable Buttons -->
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
     <!-- Css   -->
     <link rel="stylesheet" href="../css/main_admin.css">
 </head>
@@ -36,6 +47,19 @@
             <a href="#" class="btn btn-add btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">
                 <i class="fa-solid fa-plus"></i> Thêm nhà cung cấp
             </a>
+
+            <button class="btn btn-common btn-sm" id="print">
+                <i class="fas fa-print"></i> In dữ liệu
+            </button>
+
+            <button class="btn btn-common btn-sm" id="exportPDF">
+                <i class="fas fa-file-pdf"></i> Xuất PDF
+            </button>
+
+
+            <button class="btn btn-common btn-sm" id="exportExcel">
+                <i class="fas fas fa-file-excel"></i> Xuất Excel
+            </button>
         </div>
         <table class="w-100 table table-striped" id="supplier">
             <thead>
@@ -66,36 +90,38 @@
                            data-id="${supplier.id}" data-name="${supplier.name}">
                             <img src="../image/bin.png" alt="Xóa" width="24" height="24">
                         </a>
-                    </td>
-                </tr>
-                <!-- Modal nut sua -->
-                <div class="modal fade" id="editSupplierModal-${supplier.id}" tabindex="-1" aria-labelledby="editSupplierLabel-${supplier.id}" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                           <div class="modal-header">
-                               <h5 class="modal-title">Chỉnh sửa nhà cung cấp</h5>
-                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                           </div>
-                            <div class="modal-body">
-                                <form action="updateSupplier?id=${supplier.id}" method="post">
-                                    <input type="hidden" name="id" value="${supplier.id}">
-                                    <div class="mb-3">
-                                        <label for="supplier-name-${supplier.id}" class="form-label">Nhập tên nhà cung cấp</label>
-                                        <input type="text" class="form-control" id="supplier-name-${supplier.id}" name="supplier-name" value="${supplier.name}" maxlength="80">
+                        <!-- Modal nut sua -->
+                        <div class="modal fade" id="editSupplierModal-${supplier.id}" tabindex="-1" aria-labelledby="editSupplierLabel-${supplier.id}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Chỉnh sửa nhà cung cấp</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="supplier-country-${supplier.id}" class="form-label">Nhập nước sản xuất</label>
-                                        <input type="text" class="form-control" id="supplier-country-${supplier.id}" name="supplier-country" value="${supplier.countryOfOrigin}" maxlength="80">
+                                    <div class="modal-body">
+                                        <form class="editSupplierForm" method="post">
+                                            <input type="hidden" name="id" value="${supplier.id}">
+                                            <div class="mb-3">
+                                                <label for="supplier-name-${supplier.id}" class="form-label">Nhập tên nhà cung cấp</label>
+                                                <input type="text" class="form-control" id="supplier-name-${supplier.id}" name="supplier-name" value="${supplier.name}" maxlength="80" data-validate>
+                                                <div class="error-message">Vui lòng nhập đúng.</div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="supplier-country-${supplier.id}" class="form-label">Nhập nước sản xuất</label>
+                                                <input type="text" class="form-control" id="supplier-country-${supplier.id}" name="supplier-country" value="${supplier.countryOfOrigin}" maxlength="80" data-validate>
+                                                <div class="error-message">Vui lòng nhập đúng.</div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" class="btn btn-save">Lưu lại</button>
+                                                <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Hủy bỏ</button>
+                                            </div>
+                                        </form>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="submit" class="btn btn-save">Lưu lại</button>
-                                        <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Hủy bỏ</button>
-                                    </div>
-                                </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </td>
+                </tr>
             </c:forEach>
             </tbody>
         </table>
@@ -124,14 +150,16 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="addSupplier" method="post">
+                        <form id="addSupplierForm" method="post">
                             <div class="mb-3">
                                 <label for="supplier-name" class="form-label">Nhập tên nhà cung cấp</label>
-                                <input type="text" class="form-control" id="supplier-name" name="supplier-name" maxlength="80" required>
+                                <input type="text" class="form-control" id="supplier-name" name="supplier-name" maxlength="80" required data-validate>
+                                <div class="error-message">Vui lòng nhập đúng.</div>
                             </div>
                             <div class="mb-3">
                                 <label for="supplier-country" class="form-label">Nhập nước sản xuất</label>
-                                <input type="text" class="form-control" id="supplier-country" name="supplier-country" maxlength="80" required>
+                                <input type="text" class="form-control" id="supplier-country" name="supplier-country" maxlength="80" required data-validate>
+                                <div class="error-message">Vui lòng nhập đúng.</div>
                             </div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-save">Lưu lại</button>

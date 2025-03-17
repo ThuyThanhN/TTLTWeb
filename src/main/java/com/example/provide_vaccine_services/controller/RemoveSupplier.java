@@ -15,20 +15,27 @@ public class RemoveSupplier extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-
-        String id = request.getParameter("id");
-        int idS = Integer.parseInt(id);
-        SupplierDao supplierDao = new SupplierDao();
-        VaccineDao vaccineDao = new VaccineDao();
-
-        vaccineDao.deleteByIdSupplier(idS);
-        supplierDao.deleteSupplier(idS);
-
-        response.sendRedirect("table-data-supplier");
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        String id = request.getParameter("id");
+
+        try {
+            int idS = Integer.parseInt(id);
+            SupplierDao supplierDao = new SupplierDao();
+            VaccineDao vaccineDao = new VaccineDao();
+
+            vaccineDao.deleteByIdSupplier(idS);
+            supplierDao.deleteSupplier(idS);
+
+            response.getWriter().write("{\"status\": \"success\", \"message\": \"Xóa thành công\"}");
+        } catch (Exception e) {
+            response.getWriter().write("{\"status\": \"error\", \"message\": \"Xóa thất bại!\"}");
+        }
     }
 }

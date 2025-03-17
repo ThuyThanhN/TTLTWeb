@@ -451,7 +451,23 @@ select:focus {
 .border-vaccine::-webkit-scrollbar {
     display: none;
 }
-
+.btn-common {
+    padding: 5px;
+    font-size: 13px !important;
+    line-height: 1.5;
+    border-radius: .357rem;
+    font-weight: 500;
+    margin-bottom: 15px;
+    margin-right: 10px;
+    border: 1px solid #6D6E70;
+    color: #6D6E70
+}
+.error-message {
+    font-size: 12px;
+    margin-top: 10px;
+    color: #ef5350;
+    display: none;
+}
 @media (max-width: 786px) {
     body {
         flex-direction: column;
