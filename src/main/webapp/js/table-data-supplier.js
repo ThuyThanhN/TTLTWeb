@@ -111,6 +111,8 @@ $(document).ready(function () {
                 success: function (response) {
                     if (response.status === "success") {
                         console.log("ID moi:", response.id);
+                        // Xóa focus các thành phần bên trong modal trước khi ẩn
+                        $("#addModal").find("button, input, textarea, select").blur();
                         // an modal
                         $("#addModal").modal("hide");
                         // xoa nd input
@@ -144,7 +146,7 @@ $(document).ready(function () {
     // Ham xu ly chuc nang cap nhat
     function handleUpdateSupplier() {
         $(document).on("submit", ".editSupplierForm", function (e) {
-            e.preventDefault(); // ngan hanh dong mac dinh
+            e.preventDefault(); // ngăn hành động mặc định
 
             let modal = $(this).closest(".modal");
             let supplierId = modal.find("input[name='id']").val();
@@ -158,16 +160,20 @@ $(document).ready(function () {
                 dataType: "json",
                 success: function (response) {
                     if (response.status === "success") {
-                        // tim id cua nha cung cap tuong ung
+                        // cập nhật dữ liệu trong bảng
                         let row = $(`#supplier tr:has(td:contains('${supplierId}'))`);
                         row.find("td:eq(1)").text(response.name);
                         row.find("td:eq(2)").text(response.country);
+
+                        // xoa focus
+                        modal.find("button, input, textarea, select").blur();
                         // an modal
-                        modal.modal("hide");
+                        const bsModal = bootstrap.Modal.getInstance(modal[0]);
+                        bsModal.hide();
                     }
                 },
                 error: function (xhr) {
-                    console.log("Loi: " + xhr.responseText);
+                    console.log("Lỗi: " + xhr.responseText);
                 }
             });
         });
@@ -180,7 +186,6 @@ $(document).ready(function () {
 
         $("#supplier").on("click", ".delete-btn", function (e) {
             e.preventDefault();
-            e.currentTarget.blur();
 
             deleteId = $(this).data("id");
             let itemName = $(this).data("name");
@@ -203,7 +208,11 @@ $(document).ready(function () {
                 success: function (response) {
                     if (response.status === "success") {
                         deleteRow.remove().draw();
-                        $(`#${modalId}`).modal("hide");
+                        // xoa focus
+                        $(`#${modalId}`).find("button, input, textarea, select").blur();
+                        // an modal
+                        const bsModal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+                        bsModal.hide();
                     } else {
                         alert("Xóa thất bại");
                     }
@@ -214,6 +223,12 @@ $(document).ready(function () {
             });
         });
     }
+
+
+    // bo focus khoi cac phan tu trong modal tranh loi aria-hidden
+    $(document).on("click", "[data-bs-dismiss='modal']", function () {
+        $(this).closest(".modal").find("button, input, textarea, select").blur();
+    });
 
     const supplierTable = initializeDataTable("#supplier");
     handleAddSupplier();
