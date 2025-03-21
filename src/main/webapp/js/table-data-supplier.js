@@ -4,7 +4,7 @@ function toggleSidebar() {
 
 document.querySelectorAll("[data-validate]").forEach(input => {
     input.addEventListener("input", function () {
-        let isInvalid = /^\s|\d/.test(this.value);
+        let isInvalid = /^[\s\d]/.test(this.value);
         this.classList.toggle("is-invalid", isInvalid);
         this.nextElementSibling.style.display = isInvalid ? "block" : "none";
     });
@@ -60,10 +60,40 @@ $(document).ready(function () {
         $("#exportExcel").on("click", function () {
             table.button(2).trigger();
         });
+
+        return table;
     }
 
-
-
+    function generateEditModalHtml(id, name, country) {
+        return `
+            <div class="modal fade" id="editSupplierModal-${id}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Chỉnh sửa nhà cung cấp</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="editSupplierForm">
+                                <input type="hidden" name="id" value="${id}">
+                                <div class="mb-3">
+                                    <label class="form-label">Tên nhà cung cấp</label>
+                                    <input type="text" class="form-control" name="supplier-name" value="${name}">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Nước sản xuất</label>
+                                    <input type="text" class="form-control" name="supplier-country" value="${country}">
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-save">Lưu</button>
+                                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Hủy</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+    }
 
     // Ham xu ly chuc nang them
     function handleAddSupplier() {
@@ -81,15 +111,16 @@ $(document).ready(function () {
                 success: function (response) {
                     if (response.status === "success") {
                         console.log("ID moi:", response.id);
-
-                        // An modal
+                        // Xóa focus các thành phần bên trong modal trước khi ẩn
+                        $("#addModal").find("button, input, textarea, select").blur();
+                        // an modal
                         $("#addModal").modal("hide");
-
-                        // Xoa noi dung input
+                        // xoa nd input
                         $("#supplier-name").val("");
                         $("#supplier-country").val("");
+                        // them modal moi vao
+                        $("body").append(generateEditModalHtml(response.id, name, country));
 
-                        // Them dong moi vao DataTable
                         let newRow = [
                             response.id,
                             name,
@@ -102,7 +133,6 @@ $(document).ready(function () {
                             </a>`
                         ];
 
-                        console.log("Du lieu them vao DataTable:", newRow);
                         $("#supplier").DataTable().row.add(newRow).draw(false);
                     }
                 },
@@ -113,19 +143,15 @@ $(document).ready(function () {
         });
     }
 
+    // Ham xu ly chuc nang cap nhat
     function handleUpdateSupplier() {
         $(document).on("submit", ".editSupplierForm", function (e) {
-            e.preventDefault(); // ngan hanh dong mac dinh
+            e.preventDefault(); // ngăn hành động mặc định
 
             let modal = $(this).closest(".modal");
             let supplierId = modal.find("input[name='id']").val();
             let name = modal.find("input[name='supplier-name']").val();
             let country = modal.find("input[name='supplier-country']").val();
-
-            if (!supplierId || !name || !country) {
-                alert("Vui lòng nhập đầy đủ thông tin!");
-                return;
-            }
 
             $.ajax({
                 url: "/provide_vaccine_services_war/admin/updateSupplier",
@@ -134,48 +160,45 @@ $(document).ready(function () {
                 dataType: "json",
                 success: function (response) {
                     if (response.status === "success") {
-
-                        // tim id cua nha cung cap tuong ung
+                        // cập nhật dữ liệu trong bảng
                         let row = $(`#supplier tr:has(td:contains('${supplierId}'))`);
                         row.find("td:eq(1)").text(response.name);
                         row.find("td:eq(2)").text(response.country);
 
+                        // xoa focus
+                        modal.find("button, input, textarea, select").blur();
                         // an modal
-                        modal.modal("hide");
-                    } else {
-                        alert("Cập nhật thất bại: " + response.message);
+                        const bsModal = bootstrap.Modal.getInstance(modal[0]);
+                        bsModal.hide();
                     }
                 },
                 error: function (xhr) {
-                    console.log("Có lỗi xảy ra: " + xhr.responseText);
+                    console.log("Lỗi: " + xhr.responseText);
                 }
             });
         });
     }
 
-    function handleDeleteButton(modalId, removeUrlPrefix) {
+    // Ham xu ly chuc nang xoa
+    function handleDeleteButton(modalId, removeUrlPrefix, table) {
+        let deleteRow = null;
         let deleteId = null;
 
         $("#supplier").on("click", ".delete-btn", function (e) {
             e.preventDefault();
-            e.currentTarget.blur(); // Fix lỗi aria-hidden
 
-            let modalSelector = `#${modalId}`;
             deleteId = $(this).data("id");
             let itemName = $(this).data("name");
+            deleteRow = table.row($(this).closest("tr"));
 
-            console.log("ID - Tên:", "data-supplier " + modalSelector + " " + deleteId + " " + itemName);
+            let modalSelector = `#${modalId}`;
+            document.querySelector(modalSelector).querySelector('.modal-body').textContent = `Bạn có chắc chắn muốn xóa ${itemName}?`;
 
-            let modal = document.querySelector(modalSelector);
-            modal.querySelector('.modal-body').textContent = `Bạn có chắc chắn muốn xóa ${itemName}?`;
-
-            // hien modal
             $(modalSelector).modal("show");
         });
 
-        // Xử lý xác nhận xóa bằng AJAX
         $("#confirmDelete").on("click", function () {
-            if (!deleteId) return;
+            if (!deleteId || !deleteRow) return;
 
             $.ajax({
                 url: `./${removeUrlPrefix}`,
@@ -184,20 +207,32 @@ $(document).ready(function () {
                 dataType: "json",
                 success: function (response) {
                     if (response.status === "success") {
-                        // xoa nha cung cap tuong ung qua id
-                        $(`#supplier tr:has(td:contains('${deleteId}'))`).remove();
-                        $(`#${modalId}`).modal("hide"); // an modal
+                        deleteRow.remove().draw();
+                        // xoa focus
+                        $(`#${modalId}`).find("button, input, textarea, select").blur();
+                        // an modal
+                        const bsModal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+                        bsModal.hide();
+                    } else {
+                        alert("Xóa thất bại");
                     }
                 },
                 error: function (xhr) {
-                    alert("Loi : " + xhr.responseText);
+                    alert("Lỗi: " + xhr.responseText);
                 }
             });
         });
     }
 
-    initializeDataTable('#supplier');
+
+    // bo focus khoi cac phan tu trong modal tranh loi aria-hidden
+    $(document).on("click", "[data-bs-dismiss='modal']", function () {
+        $(this).closest(".modal").find("button, input, textarea, select").blur();
+    });
+
+    const supplierTable = initializeDataTable("#supplier");
     handleAddSupplier();
     handleUpdateSupplier()
-    handleDeleteButton('deleteSupplier', 'removeSupplier');
+    handleDeleteButton('deleteSupplier', 'removeSupplier', supplierTable);
+
 });

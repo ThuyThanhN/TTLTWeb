@@ -136,7 +136,7 @@
                     <div class="modal-body"></div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Hủy</button>
-                        <a href="#" id="confirmDelete" class="btn btn-danger">Xóa</a>
+                        <button id="confirmDelete" class="btn btn-danger">Xóa</button>
                     </div>
                 </div>
             </div>
