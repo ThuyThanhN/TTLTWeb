@@ -30,12 +30,19 @@
                     </p>
                     <input type="text" id="otp" name="otp" class="form-control" placeholder="Nhập mã OTP đã nhận được" required>
 
+                    <!-- Hiển thị thông báo khi người dùng nhập sai 3 lần -->
+                    <p id="lock-message" style="color: red; font-size: 14px; margin-top: 5px; display: none;">
+                        Bạn đã nhập sai 3 lần. Vui lòng đợi 1 phút để thử lại.
+                    </p>
+
+                    <!-- Thông báo lỗi từ server -->
                     <% if (request.getAttribute("error") != null) { %>
                     <p id="error-message" style="color: red; font-size: 14px; margin-top: 5px;">
                         <%= request.getAttribute("error") %>
                     </p>
                     <% } %>
                 </div>
+
                 <button type="submit" class="btn-edit">Xác nhận</button>
             </div>
         </form>
