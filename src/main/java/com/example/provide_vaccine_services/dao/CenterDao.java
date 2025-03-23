@@ -12,7 +12,7 @@ import java.util.List;
 public class CenterDao {
     //    Them trung tam
     public int insert(Centers c) {
-        int re = 0;
+        int newId = -1;
 
         try {
             String sql = "insert into centers(name, address, province, district, ward, phone) values(?, ?, ?, ?, ?, ?)";
@@ -24,18 +24,23 @@ public class CenterDao {
             pst.setString(5, c.getWard());
             pst.setString(6, c.getPhone());
 
-            re = pst.executeUpdate();
+            int affectedRows = pst.executeUpdate();
 
-            if (re > 0) {
-                System.out.println("Them du lieu thanh cong");
-            } else {
-                System.out.println("Them du lieu that bai!");
+            if (affectedRows > 0) {
+                // lay id moi nhat
+                String getIdSql = "SELECT MAX(id) FROM centers";
+                PreparedStatement getIdStmt = DBConnect.get(getIdSql);
+                ResultSet rs = getIdStmt.executeQuery();
+                if (rs.next()) {
+                    newId = rs.getInt(1);
+                }
             }
-            return re;
+
+            return newId;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return re;
+        return newId;
     }
 
     // Cap nhat nha cung cap
