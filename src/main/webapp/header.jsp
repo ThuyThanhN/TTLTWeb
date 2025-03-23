@@ -29,7 +29,8 @@
                             <div class="calendar-days">
                                 <% if (user == null) { %>
                                 <!-- Hien thi toast khi chua dang nhap -->
-                                <a href="#" onclick="showToast()"><i class="fa-regular fa-calendar-days"></i> Đặt lịch tiêm</a>
+                                <a href="#" onclick="showToast()"><i class="fa-regular fa-calendar-days"></i> Đặt lịch
+                                    tiêm</a>
                                 <% } else { %>
                                 <a href="dosing_schedule"><i class="fa-regular fa-calendar-days"></i> Đặt lịch tiêm</a>
                                 <% } %>
@@ -37,11 +38,15 @@
 
                             <!-- Toast thong bao khi chua dang nhap -->
                             <div class="toast-container position-fixed" style="z-index: 1050;">
-                                <div id="loginToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                                <div id="loginToast" class="toast" role="alert" aria-live="assertive"
+                                     aria-atomic="true">
                                     <div class="toast-body">
                                         <div class="d-flex justify-content-between">
                                             <div>Bạn cần đăng nhập để đặt lịch tiêm.</div>
-                                            <div><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button></div>
+                                            <div>
+                                                <button type="button" class="btn-close" data-bs-dismiss="toast"
+                                                        aria-label="Close"></button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -79,13 +84,14 @@
                     <div>
                         <nav class="navbar navbar-expand-lg navbar-light">
                             <div class="">
+                                <%-- Nút mở navbar --%>
                                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#navbarNav" aria-expanded="false"
                                         aria-label="Toggle navigation">
                                     <span class="navbar-toggler-icon"></span>
                                 </button>
                                 <div class="collapse navbar-collapse" id="navbarNav">
-                                    <!-- Nút đóng -->
+                                    <!-- Nút đóng navbar-->
                                     <span class="close-btn" onclick="closeNav()"><i class="fa-solid fa-x"></i></span>
                                     <ul class="navbar-nav">
                                         <li class="nav-item d-lg-none">
@@ -98,8 +104,12 @@
                                                 <i class="fa-solid fa-magnifying-glass"></i>
                                             </a>
                                         </li>
-                                        <li class="nav-item active">
-                                            <a class="nav-link" href="index">Trang chủ</a>
+
+
+
+
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">Trang chủ</a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="introduction.jsp">Giới thiệu</a>
@@ -165,4 +175,6 @@
 </div>
 </body>
 <script src="js/header.js"></script>
+<script src="js/navbar.js"></script>
+
 </html>
