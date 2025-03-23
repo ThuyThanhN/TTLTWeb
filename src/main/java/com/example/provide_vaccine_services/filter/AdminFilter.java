@@ -10,9 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebFilter(filterName = "AdminFilter",
-        urlPatterns = {"/dashboard", "/table-data-staff", "/table-data-user",
-                "/table-data-center", "/table-data-order", "/table-data-supplier",
-                "/table-data-vacxin", "/table-data-vax-package"})
+        urlPatterns = {"/admin/*"})
 public class AdminFilter implements Filter {
 
     public void init(FilterConfig config) throws ServletException {
@@ -31,7 +29,7 @@ public class AdminFilter implements Filter {
         Users u = (Users) session.getAttribute("user");
 
         if (u == null || u.getRole() == 0) {
-            response.sendRedirect("error404.jsp");
+            response.sendRedirect("../error404.jsp");
             return;
         }
 

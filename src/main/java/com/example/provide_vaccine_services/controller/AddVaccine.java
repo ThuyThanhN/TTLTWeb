@@ -12,7 +12,7 @@ import java.sql.PreparedStatement;
 import java.time.LocalDateTime;
 import java.io.IOException;
 
-@WebServlet(name = "AddVaccine", value = "/addVaccine")
+@WebServlet(name = "AddVaccine", value = "/admin/addVaccine")
 @MultipartConfig(
         fileSizeThreshold = 1024 * 100,  // 100 KB
         maxFileSize = 1024 * 500,       // 500 KB

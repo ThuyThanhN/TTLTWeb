@@ -16,8 +16,8 @@
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
     <!-- Font awesome-->
-    <script src="https://kit.fontawesome.com/33ad855007.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <!-- Font chữ   -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,7 +28,7 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <!-- Css   -->
-    <link rel="stylesheet" href="css/main_admin.css">
+    <link rel="stylesheet" href="../css/main_admin.css">
 </head>
 <body>
 <jsp:include page="sidebar.jsp"></jsp:include>
@@ -70,14 +70,14 @@
                         <!-- Nut sua -->
                         <a href="updatePackage?id=${pkg.package_id}" class="text-decoration-none edit-btn"
                            data-bs-target="#editModal-${pkg.package_id}" data-bs-toggle="modal">
-                            <img src="image/edit.png" alt="Sửa" width="22" height="22">
+                            <img src="../image/edit.png" alt="Sửa" width="22" height="22">
                         </a>
                         <!-- Nut xoa -->
                         <a href="#" class="text-decoration-none delete-btn"
                            data-bs-toggle="modal" data-bs-target="#deleteModal"
                            data-id="${pkg.package_id}"
                            data-name="${pkg.package_name}">
-                            <img src="image/bin.png" alt="Xóa" width="24" height="24">
+                            <img src="../image/bin.png" alt="Xóa" width="24" height="24">
                         </a>
 
                             <%-- Sua   --%>
@@ -282,5 +282,5 @@
 </div>
 </body>
 
-<script src="js/table-data-vax-package.js"></script>
+<script src="../js/table-data-vax-package.js"></script>
 </html>

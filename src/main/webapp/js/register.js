@@ -1,43 +1,122 @@
-document.getElementById("id-number").addEventListener("input", function () {
-  const idNumberInput = this.value;
-  const errorMessage = document.getElementById("id-number-error");
+document.addEventListener("DOMContentLoaded", function() {
+  // Kiểm tra mã định danh
+  document.getElementById("id-number").addEventListener("input", function () {
+    const idNumberInput = this.value;
+    const errorMessage = document.getElementById("id-number-error");
 
-  if (idNumberInput === "") {
-    // Nếu người dùng xóa nội dung
-    errorMessage.style.display = "block";
-    errorMessage.textContent = "Vui lòng điền mã định danh.";
-  } else if (!/^[0-9]*$/.test(idNumberInput)) {
-    // Nếu có ký tự không phải số
-    errorMessage.style.display = "block";
-    errorMessage.textContent = "Mã định danh chỉ được chứa các số.";
-  } else if (idNumberInput.length < 12) {
-    // Nếu không đủ 12 số
-    errorMessage.style.display = "block";
-    errorMessage.textContent = "Mã định danh phải đủ 12 số.";
-  } else if (idNumberInput.length > 12) {
-    // Kiểm tra trường hợp vượt quá độ dài (ngăn chặn bằng maxlength, nhưng thêm để an toàn)
-    errorMessage.style.display = "block";
-    errorMessage.textContent = "Mã định danh không được vượt quá 12 số.";
-  } else {
-    // Nếu hợp lệ
-    errorMessage.style.display = "none";
+    if (idNumberInput === "") {
+      errorMessage.style.display = "block";
+      errorMessage.textContent = "Vui lòng điền mã định danh.";
+    } else if (!/^[0-9]*$/.test(idNumberInput)) {
+      errorMessage.style.display = "block";
+      errorMessage.textContent = "Mã định danh chỉ được chứa các số.";
+    } else if (idNumberInput.length < 12) {
+      errorMessage.style.display = "block";
+      errorMessage.textContent = "Mã định danh phải đủ 12 số.";
+    } else if (idNumberInput.length > 12) {
+      errorMessage.style.display = "block";
+      errorMessage.textContent = "Mã định danh không được vượt quá 12 số.";
+    } else {
+      errorMessage.style.display = "none";
+    }
+  });
+
+  // Kiểm tra họ và tên
+  document.getElementById("full-name").addEventListener("input", function () {
+    const fullNameInput = this.value;
+    const errorMessage = document.getElementById("full-name-error");
+
+    // Kiểm tra nếu trường họ và tên trống
+    if (fullNameInput.trim() === "") {
+      errorMessage.style.display = "block";
+      errorMessage.textContent = "Vui lòng điền họ và tên.";
+    } else {
+      errorMessage.style.display = "none"; // Ẩn thông báo lỗi nếu có giá trị
+    }
+  });
+
+  // Ngừng thông báo mặc định của trình duyệt khi form được submit
+  document.querySelector('form').addEventListener('submit', function (event) {
+    const fullNameInput = document.getElementById('full-name');
+    const errorMessage = document.getElementById('full-name-error');
+
+    if (fullNameInput.validity.valueMissing) {
+      event.preventDefault(); // Ngừng gửi form nếu trường trống
+      errorMessage.style.display = "block"; // Hiển thị thông báo lỗi tùy chỉnh
+      errorMessage.textContent = "Vui lòng điền họ và tên.";
+    }
+  });
+
+  // Kiểm tra email
+  document.getElementById("email").addEventListener("input", function () {
+    const emailInput = this.value;
+    const errorMessage = document.getElementById("email-error");
+
+    // Biểu thức chính quy để kiểm tra tính hợp lệ của email
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
+    // Kiểm tra nếu email không hợp lệ
+    if (!emailPattern.test(emailInput)) {
+      errorMessage.style.display = "block";
+      errorMessage.textContent = "Vui lòng nhập một địa chỉ email hợp lệ.";
+    } else {
+      errorMessage.style.display = "none"; // Ẩn thông báo lỗi nếu email hợp lệ
+    }
+  });
+
+  // Kiểm tra số điện thoại
+  document.getElementById("phone").addEventListener("input", function () {
+    const phoneInput = this.value;
+    const errorMessage = document.getElementById("phone-error");
+
+    // Biểu thức chính quy để kiểm tra số điện thoại có 10 hoặc 11 chữ số
+    const phonePattern = /^\d{10,11}$/;
+
+    // Kiểm tra nếu số điện thoại không hợp lệ
+    if (!phonePattern.test(phoneInput)) {
+      errorMessage.style.display = "block";
+      errorMessage.textContent = "Số điện thoại phải có 10 hoặc 11 chữ số.";
+    } else {
+      errorMessage.style.display = "none"; // Ẩn thông báo lỗi nếu số điện thoại hợp lệ
+    }
+  });
+
+  // Kiểm tra mật khẩu
+  document.getElementById("password").addEventListener("input", function () {
+    const passwordInput = this.value;
+    const errorMessage = document.getElementById("password-error");
+
+    // Biểu thức chính quy để kiểm tra mật khẩu (ít nhất 8 ký tự, có chữ hoa, chữ thường, số và ký tự đặc biệt)
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    // Kiểm tra nếu mật khẩu không hợp lệ
+    if (!passwordPattern.test(passwordInput)) {
+      errorMessage.style.display = "block";
+      errorMessage.textContent = "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, chữ số và ký tự đặc biệt.";
+    } else {
+      errorMessage.style.display = "none"; // Ẩn thông báo lỗi nếu mật khẩu hợp lệ
+    }
+  });
+
+
+  // Kiểm tra mật khẩu và xác nhận mật khẩu
+  const password = document.getElementById('password');
+  const confirmPassword = document.getElementById('confirm-password');
+  const confirmPasswordError = document.getElementById('confirm-password-error');
+
+  function checkPasswordMatch() {
+    if (confirmPassword.value.trim() === '') {
+      confirmPasswordError.style.display = 'block';
+      confirmPasswordError.textContent = 'Xác nhận mật khẩu không được để trống';
+    } else if (password.value !== confirmPassword.value) {
+      confirmPasswordError.style.display = 'block';
+      confirmPasswordError.textContent = 'Mật khẩu và xác nhận mật khẩu không khớp';
+    } else {
+      confirmPasswordError.style.display = 'none';
+    }
   }
-});
 
-// Kiểm tra mật khẩu và xác nhận mật khẩu
-const password = document.getElementById('password');
-const confirmPassword = document.getElementById('confirm-password');
-const errorMessage = document.getElementById('confirm-password-error');
+  password.addEventListener('input', checkPasswordMatch);
+  confirmPassword.addEventListener('input', checkPasswordMatch);
 
-function checkPasswordMatch() {
-  if (confirmPassword.value.trim() === '') {
-    errorMessage.style.display = 'block';
-  } else if (password.value !== confirmPassword.value) {
-    errorMessage.style.display = 'block';
-  } else {
-    errorMessage.style.display = 'none';
-  }
-}
-
-password.addEventListener('input', checkPasswordMatch);
-confirmPassword.addEventListener('input', checkPasswordMatch);
+}); // Đóng ngoặc sự kiện DOMContentLoaded

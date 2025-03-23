@@ -57,7 +57,7 @@ public class RegisterUsers extends HttpServlet {
 
         //
         if (result > 0) {
-            if (users.getRole() == 1) {
+            if (users != null) {
                 response.sendRedirect("table-data-user");
             } else {
                 response.sendRedirect("login");

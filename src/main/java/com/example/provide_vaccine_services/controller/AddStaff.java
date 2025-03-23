@@ -10,7 +10,7 @@ import jakarta.servlet.annotation.*;
 import java.io.IOException;
 import java.sql.Date;
 
-@WebServlet(name = "AddStaff", value = "/addStaff")
+@WebServlet(name = "AddStaff", value = "/admin/addStaff")
 public class AddStaff extends HttpServlet {
 
     @Override

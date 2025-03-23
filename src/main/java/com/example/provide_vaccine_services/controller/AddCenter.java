@@ -1,3 +1,4 @@
+
 package com.example.provide_vaccine_services.controller;
 
 import com.example.provide_vaccine_services.dao.CenterDao;
@@ -8,7 +9,7 @@ import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 
-@WebServlet(name = "AddCenter", value = "/addCenter")
+@WebServlet(name = "AddCenter", value = "/admin/addCenter")
 public class AddCenter extends HttpServlet {
 
     @Override
@@ -32,4 +33,3 @@ public class AddCenter extends HttpServlet {
         response.sendRedirect("table-data-center");
     }
 }
-

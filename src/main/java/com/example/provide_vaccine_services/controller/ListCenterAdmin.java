@@ -9,7 +9,7 @@ import jakarta.servlet.annotation.*;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "ListCenterAdmin", value = "/table-data-center")
+@WebServlet(name = "ListCenterAdmin", value = "/admin/table-data-center")
 public class ListCenterAdmin extends HttpServlet {
 
     @Override

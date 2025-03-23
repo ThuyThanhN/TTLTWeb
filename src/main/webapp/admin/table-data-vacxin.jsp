@@ -17,8 +17,7 @@
             crossorigin="anonymous"></script>
 
     <!-- Font awesome-->
-    <script src="https://kit.fontawesome.com/33ad855007.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <!-- Font chữ   -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,7 +28,7 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <!-- Css   -->
-    <link rel="stylesheet" href="css/main_admin.css">
+    <link rel="stylesheet" href="../css/main_admin.css">
 </head>
 <body>
 <jsp:include page="sidebar.jsp"></jsp:include>
@@ -85,7 +84,7 @@
                     <td>
                         <!-- Nut sua -->
                         <a href="updateVaccine?id=${v.id}" class="text-decoration-none edit-btn">
-                            <img src="image/edit.png" alt="Sửa" width="22" height="22">
+                            <img src="../image/edit.png" alt="Sửa" width="22" height="22">
                         </a>
                         <!-- Nut xoa -->
                         <a href="#"
@@ -93,7 +92,7 @@
                            data-bs-toggle="modal"
                            data-bs-target="#deleteVaccine"
                            data-id="${v.id}" data-name="${v.name}">
-                            <img src="image/bin.png" alt="Xóa" width="24" height="24">
+                            <img src="../image/bin.png" alt="Xóa" width="24" height="24">
                         </a>
                     </td>
                 </tr>
@@ -120,5 +119,5 @@
     </div>
 </div>
 </body>
-<script src="js/table-data-vacxin.js"></script>
+<script src="../js/table-data-vacxin.js"></script>
 </html>

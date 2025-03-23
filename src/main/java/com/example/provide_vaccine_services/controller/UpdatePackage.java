@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@WebServlet(name = "UpdatePackage", value = "/updatePackage")
+@WebServlet(name = "UpdatePackage", value = "/admin/updatePackage")
 public class UpdatePackage extends HttpServlet {
 
     @Override

@@ -9,7 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <script src="https://kit.fontawesome.com/33ad855007.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
@@ -30,6 +30,7 @@
                     <div>
                         <label for="full-name"><strong>Họ và tên <span class="required">*</span></strong></label>
                         <input type="text" id="full-name" name="fullname" required>
+                        <span class="error-message" id="full-name-error" style="display:none; color: red;">Vui lòng điền họ và tên.</span>
                     </div>
                     <div>
                         <label for="gender"><strong>Giới tính <span class="required">*</span></strong></label>
@@ -54,7 +55,9 @@
                     <div>
                         <label for="email"><strong>Email <span class="required">*</span></strong></label>
                         <input type="email" id="email" name="email" required>
+                        <span class="error-message" id="email-error" style="display:none; color: red;">Vui lòng nhập một địa chỉ email hợp lệ.</span>
                     </div>
+
                     <div class="dropdown">
                         <label for="province-select"><strong>Tỉnh thành <span class="required">*</span></strong></label>
                         <input type="text" placeholder="Chọn" id="province-select" name="province"
@@ -92,12 +95,16 @@
                 <div class="form-group">
                     <div>
                         <label for="phone"><strong>SĐT (Tài Khoản) <span class="required">*</span></strong></label>
-                        <input type="text" id="phone" name="phone" required>
+                        <input type="tel" id="phone" name="phone" required>
+                        <span class="error-message" id="phone-error" style="color: red; display: none;"></span>
                     </div>
+
                     <div>
                         <label for="password"><strong>Mật khẩu <span class="required">*</span></strong></label>
                         <input type="password" id="password" name="password" required>
+                        <span id="password-error" style="color: red; display: none;"></span>
                     </div>
+
                     <div>
                         <label for="confirm-password"><strong>Xác nhận mật khẩu <span class="required">*</span></strong></label>
                         <input type="password" id="confirm-password" name="confirmPassword" required>

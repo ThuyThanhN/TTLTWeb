@@ -1,3 +1,4 @@
+
 function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("show");
 }
@@ -27,19 +28,21 @@ $(document).ready(function () {
     function handleDeleteButton ( modalId, removeUrlPrefix) {
         $("#center").on("click", ".delete-btn", function (e) {
             e.currentTarget.blur();
-            let removeUrl = `${removeUrlPrefix}`;
+            let removeUrl = `./${removeUrlPrefix}`;
             let modalSelector = `${modalId}`;
             e.preventDefault();
             var itemId = $(this).data("id");
             var itemName = $(this).data("name");
             // alert(id);
-            console.log("id-name","vvnvnv"+modalSelector+ itemId + itemName);
+            console.log("id-name","admin-center"+modalSelector+ itemId + itemName);
             var modal = document.getElementById(modalSelector);
             modal.querySelector('.modal-body').textContent = 'Bạn có chắc chắn muốn xóa ' + itemName + '?';
 
             // Cập nhật link nút xác nhận
             var confirmDeleteButton = modal.querySelector('#confirmDelete');
+            console.log("removeurl",removeUrl);
             confirmDeleteButton.setAttribute('href', removeUrl + '?id=' + itemId);
+
         });
     }
 
