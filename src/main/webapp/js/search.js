@@ -2,7 +2,7 @@ let currentSearchPage = 1;
 let age = false;
 let disease = false;
 
-document.getElementById("searchQuery").addEventListener("input", function() {
+document.getElementById("searchQuery").addEventListener("input", function () {
     document.querySelector(".autocomplete-container").hidden = false;
     autoComplete();
 });
@@ -26,8 +26,6 @@ $(document).ready(function () {
         }
     });
 
-
-
     //chạy lần đầu sẽ gọi để load dữ liệu
     searchVaccine(currentSearchPage);
 });
@@ -36,8 +34,10 @@ $(document).ready(function () {
 function ageFilter() {
     age = !age;
     const ageButton = document.getElementById("ageButton");
+    const diseaseButton = document.getElementById("diseaseButton");
     if (age) {
         ageButton.classList.toggle("active");
+        diseaseButton.classList.remove("active");
     } else {
         ageButton.classList.remove("active");
     }
@@ -46,9 +46,11 @@ function ageFilter() {
 
 function diseaseFilter() {
     disease = !disease;
+    const ageButton = document.getElementById("ageButton");
     const diseaseButton = document.getElementById("diseaseButton");
     if (disease) {
         diseaseButton.classList.toggle("active");
+        ageButton.classList.remove("active");
     } else {
         diseaseButton.classList.remove("active");
     }
@@ -77,7 +79,7 @@ function searchVaccine(page) {
 function showVaccines(response) {
 // nếu không tìm thấy sản phẩm trả về
     if (response.vaccines === undefined) {
-        $("#vaccine-list").append("<p>Không tìm thấy kết quả.</p>");
+        $("#vaccine-list").append();
         return;
     }
 
@@ -88,10 +90,12 @@ function showVaccines(response) {
 
     // Xóa nội dung hiện tại trong thẻ div chứa danh sách sản phẩm
     $("#vaccine-list").empty();
-    if(vaccinesList.length == 0) {
+    if (vaccinesList.length == 0) {
         $("#vaccine-list").append(`<div class="vx_item">
-                    <div class="vaccine_name" title="Khong tim thay san pham nao"> khong tim thay san pham </div>
-                        </div>
+                    <div class="mt-3 alert text-center text-primary" role="alert">
+                    <strong>Không tìm thấy kết quả.</strong> Vui lòng thử lại với từ khóa khác!
+               </div>
+               </div>
         `);
     }
     vaccinesList.forEach(v => {
@@ -140,7 +144,7 @@ function autoComplete() {
     $.ajax({
         url: "/provide_vaccine_services_war/vaccine-information",
         type: "GET",
-        data: { action: "autoComplete", query: query },
+        data: {action: "autoComplete", query: query},
         success: (response) => {
             console.log(response.suggestions);
             let listHtml = "";

@@ -73,7 +73,6 @@ public class ListVaccineInfo extends HttpServlet {
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(jsonString);
 
-
         }
     }
 
@@ -122,9 +121,6 @@ public class ListVaccineInfo extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(jsonString);
-    }
-
-    private void SearchByAge(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     }
 
 
