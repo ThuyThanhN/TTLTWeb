@@ -57,6 +57,17 @@
             <artifactId>jakarta.mail</artifactId>
             <version>2.0.1</version> <!-- Thay bằng phiên bản mới nhất nếu cần -->
         </dependency>
+        <!-- Chuyển object sang file json -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.17.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.15.3</version> <!-- Kiểm tra phiên bản mới nhất nếu cần -->
+        </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>

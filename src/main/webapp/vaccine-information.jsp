@@ -8,14 +8,19 @@
     <title>Thông Tin Sản Phẩm Vắc Xin</title>
     <!-- Bootstrap, jquery   -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
     <!-- Font awesome-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<%--    <script src="https://kit.fontawesome.com/33ad855007.js" crossorigin="anonymous"></script>--%>
+    <script src="https://kit.fontawesome.com/4760c40adb.js" crossorigin="anonymous"></script>
     <!-- Font chữ   -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+          rel="stylesheet">
     <!-- Css   -->
     <link rel="stylesheet" href="css/vaccine-information.css">
 </head>
@@ -30,39 +35,51 @@
         <h1 class="title">Thông Tin Sản Phẩm Vắc Xin</h1>
         <div class="button-group">
             <!-- Nút "VẮC XIN THEO NHÓM ĐỘ TUỔI" -->
-            <button class="btn" onclick="location.href='/provide_vaccine_services_war/age'">VẮC XIN THEO NHÓM ĐỘ TUỔI</button>
+            <button id="ageButton" class="btn" onclick="ageFilter()">VẮC XIN THEO NHÓM ĐỘ TUỔI
+            </button>
 
             <!-- Nút "VẮC XIN THEO NHÓM BỆNH" -->
-            <button class="btn" onclick="location.href='/provide_vaccine_services_war/disase'">VẮC XIN THEO NHÓM BỆNH</button>
+            <button id="diseaseButton" class="btn" onclick="diseaseFilter()">VẮC XIN THEO NHÓM BỆNH
+            </button>
         </div>
         <div class="search-bar">
             <form action="/vaccine-information" method="get">
-                <input type="text" name="searchQuery" placeholder="Tìm kiếm..."
-                       value="${searchQuery != null ? searchQuery : ''}">
-                <button type="submit" class="search-btn">
-                    <i class="fa-solid fa-magnifying-glass"></i>
+                <input style="width: 500px" type="text" id="searchQuery" name="searchQuery" placeholder="Tìm kiếm..." value="${searchQuery != null ? searchQuery : ''}" >
+                <button type="button" id="searchBtn" class="search-btn">
+                    <i class="fa-solid fa-magnifying-glass" style="color: #000000;"></i>
                 </button>
             </form>
+            <div class="autocomplete-container" hidden>
+                <div id="autocomplete-list" class="autocomplete-items"  ></div>
+            </div>
         </div>
+
 
 
         <!-- Carousel -->
         <div id="vaccineCarousel" class="carousel slide" data-bs-ride="carousel">
             <!-- Indicators -->
             <div class="carousel-indicators">
-                <button type="button" data-bs-target="#vaccineCarousel" data-bs-slide-to="0" class="active" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#vaccineCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#vaccineCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                <button type="button" data-bs-target="#vaccineCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
-                <button type="button" data-bs-target="#vaccineCarousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
+                <button type="button" data-bs-target="#vaccineCarousel" data-bs-slide-to="0" class="active"
+                        aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#vaccineCarousel" data-bs-slide-to="1"
+                        aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#vaccineCarousel" data-bs-slide-to="2"
+                        aria-label="Slide 3"></button>
+                <button type="button" data-bs-target="#vaccineCarousel" data-bs-slide-to="3"
+                        aria-label="Slide 4"></button>
+                <button type="button" data-bs-target="#vaccineCarousel" data-bs-slide-to="4"
+                        aria-label="Slide 5"></button>
             </div>
 
             <!-- Carousel Items -->
             <div class="carousel-inner">
                 <!-- Slide 1 -->
                 <div class="carousel-item active">
-                    <div class="d-flex justify-content-center">   <!--flexbox layout, justify-content: center; cho phần tử-->
-                        <div class="vaccine-item mx-3 text-center">  <!--mx-3 sẽ thêm một khoảng cách margin ngang là 1rem (trái và phải) vào phần tử-->
+                    <div class="d-flex justify-content-center">
+                        <!--flexbox layout, justify-content: center; cho phần tử-->
+                        <div class="vaccine-item mx-3 text-center">
+                            <!--mx-3 sẽ thêm một khoảng cách margin ngang là 1rem (trái và phải) vào phần tử-->
                             <img src="image/iterm-2.png" alt="Vắc Xin 1">
                             <p>VẮC XIN 5IN1</p>
                         </div>
@@ -197,46 +214,16 @@
         </div>
 
     </div>
+
+    <%-- danh sách vaccine --%>
     <div class="main-content">
         <div class="container">
-            <div class="row">
-                <c:forEach var ="v" items="${vaccines}">
-                    <div class="col-12 col-md-4 mb-3">
-                        <div class="vx_item">
-                            <a href="detail_vaccines?id=${v.id}">
-                                <img src="${v.imageUrl}" alt="">
-                                <div class="vaccine_name" title="${v.name}">${v.name}</div>
-                            </a>
-                            <div class="vaccine-content">${v.description}</div>
-                        </div>
-                    </div>
-                </c:forEach>
+            <div id="vaccine-list" class="row">
+
             </div>
             <!-- Phân trang -->
-            <ul class="pagination justify-content-center mb-3">
-                <!-- Nút Previous -->
-                <c:if test="${currentPage > 1}">
-                    <li class="page-item">
-                        <a class="page-link" href="?page=${currentPage - 1}">
-                            <i class="fa-solid fa-arrow-left"></i>
-                        </a>
-                    </li>
-                </c:if>
-                <!-- Hiển thị số trang -->
-                <c:forEach begin="1" end="${totalPages}" var="i">
-                    <li class="page-item ${i == currentPage ? 'active' : ''}">
-                        <a class="page-link" href="?page=${i}">${i}</a>
-                    </li>
-                </c:forEach>
+            <ul id="pagination" class="pagination justify-content-center mb-3">
 
-                <!-- Nút Next -->
-                <c:if test="${currentPage < totalPages}">
-                    <li class="page-item">
-                        <a class="page-link" href="?page=${currentPage + 1}">
-                            <i class="fa-solid fa-arrow-right"></i>
-                        </a>
-                    </li>
-                </c:if>
             </ul>
         </div>
     </div>
@@ -244,5 +231,7 @@
 <!--    Phần footer -->
 <jsp:include page="footer.jsp"></jsp:include>
 </div>
+<script src="js/search.js"></script>
+
 </body>
 </html>

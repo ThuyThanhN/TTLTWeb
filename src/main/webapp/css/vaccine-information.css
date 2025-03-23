@@ -38,7 +38,7 @@ a {
     color: #6D6E70;
 }
 
-.vaccine-info-container {
+.vaccine-info-container  {
     text-align: center;
     /*background: linear-gradient(to bottom, #0b46a0, #2a388f);*/
     background: #2e3a92;
@@ -74,8 +74,13 @@ a {
     color: #fff;
 }
 
+.btn.active {
+    background-color: #ef5322;
+}
+
 /* Search Bar */
 .search-bar {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -101,6 +106,38 @@ a {
     cursor: pointer;
     color: #2a388f;
 }
+
+/* auto complete */
+.autocomplete-container {
+    top: 100%;
+    position: absolute;
+    margin-top: 5px; /* Space between input and autocomplete */
+    width: 100%;
+    max-width: 570px;
+    z-index: 3;
+}
+
+.autocomplete-items {
+    background: white;
+    color: #1a1a1a;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.autocomplete-items .autocomplete-item {
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 14px;
+    border-bottom: 1px solid #d6d2d2;
+    text-align: left;
+}
+
+.autocomplete-items .autocomplete-item:hover {
+    background: #858383;
+}
+
 
 /* Vaccine Icons */
 .vaccine-icons {
@@ -227,3 +264,4 @@ a {
         justify-content: space-around;
     }
 }
+

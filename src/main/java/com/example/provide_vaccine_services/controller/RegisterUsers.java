@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import java.io.Console;
 import java.io.IOException;
 import java.sql.Date;
 
@@ -54,6 +55,7 @@ public class RegisterUsers extends HttpServlet {
         HttpSession session = request.getSession();
         Users users = (Users) session.getAttribute("user");
 
+        //
         if (result > 0) {
             if (users != null) {
                 response.sendRedirect("table-data-user");
