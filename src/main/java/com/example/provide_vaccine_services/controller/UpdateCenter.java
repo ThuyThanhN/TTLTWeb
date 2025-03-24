@@ -20,8 +20,10 @@ public class UpdateCenter extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
-        String id = request.getParameter("center-id");
+        int centerId = Integer.parseInt(request.getParameter("id"));
         String name = request.getParameter("center-name");
         String address = request.getParameter("center-address");
         String province = request.getParameter("center-province");
@@ -29,12 +31,18 @@ public class UpdateCenter extends HttpServlet {
         String ward = request.getParameter("center-ward");
         String phone = request.getParameter("center-phone");
 
-        int centerId = Integer.parseInt(id);
 
         CenterDao centerDao = new CenterDao();
         Centers center = new Centers(centerId, name, address, province, district, ward, phone);
-        centerDao.update(center);
-        response.sendRedirect("table-data-center");
+        int result = centerDao.update(center);
+
+        response.getWriter().write("{\"status\": \"" + (result > 0 ? "success" : "error") + "\", " +
+                "\"name\": \"" + name + "\"," +
+                "\"address\": \"" + address + "\"," +
+                "\"province\": \"" + province + "\"," +
+                "\"district\": \"" + district + "\"," +
+                "\"ward\": \"" + ward + "\"," +
+                "\"phone\": \"" + phone + "\"}");
     }
 }
 
