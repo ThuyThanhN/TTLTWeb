@@ -94,7 +94,7 @@
                                     <!-- Nút đóng navbar-->
                                     <span class="close-btn" onclick="closeNav()"><i class="fa-solid fa-x"></i></span>
                                     <ul class="navbar-nav">
-                                        <li class="nav-item d-lg-none">
+                                        <li class="nav-item d-lg-none " >
                                             <a class="nav-link" href="index"> <img src="image/logo.png" alt="Logo"></a>
                                         </li>
                                         <li class="nav-item search-info d-lg-none">
@@ -108,14 +108,14 @@
 
 
 
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#">Trang chủ</a>
+                                        <li class="nav-item <%= (request.getRequestURI().contains("index")) ? "active" : "" %>">
+                                            <a class="nav-link " href="index.jsp">Trang chủ</a>
                                         </li>
-                                        <li class="nav-item">
+                                        <li class="nav-item <%= (request.getRequestURI().contains("introduction")) ? "active" : "" %>">
                                             <a class="nav-link" href="introduction.jsp">Giới thiệu</a>
                                         </li>
                                         <li class="nav-item position-relative d-none d-lg-block">
-                                            <a class="nav-link" href="#">Cẩm nang</a>
+                                            <a class="nav-link <%= (request.getRequestURI().contains("pre-vaccination") || request.getRequestURI().contains("after-vaccination")) ? "active" : "" %>" href="#">Cẩm nang</a>
                                             <ul class="menu-items">
                                                 <li><a href="pre-vaccination.jsp">Những điều cần biết trước khi tiêm
                                                     chủng</a></li>
@@ -150,10 +150,10 @@
                                                 </div>
                                             </div>
                                         </li>
-                                        <li class="nav-item">
+                                        <li class="nav-item <%= (request.getRequestURI().contains("price")) ? "active" : "" %>">
                                             <a class="nav-link" href="price">Bảng giá</a>
                                         </li>
-                                        <li class="nav-item">
+                                        <li class="nav-item <%= (request.getRequestURI().contains("information_vacxin")) ? "active" : "" %>">
                                             <a class="nav-link" href="information_vacxin.jsp">Bệnh học về vắc xin</a>
                                         </li>
                                         <li class="nav-item d-lg-none">
@@ -175,6 +175,5 @@
 </div>
 </body>
 <script src="js/header.js"></script>
-<script src="js/navbar.js"></script>
 
 </html>
