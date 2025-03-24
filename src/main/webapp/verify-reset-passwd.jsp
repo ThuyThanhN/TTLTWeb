@@ -28,7 +28,11 @@
                     <p style="margin-top: 15px; font-size: 14px; color: #333;">
                         <strong>Vui lòng nhập mã OTP:</strong>
                     </p>
-                    <input type="text" id="otp" name="otp" class="form-control" placeholder="Nhập mã OTP đã nhận được" required>
+                    <div class="input-container">
+                        <input type="text" id="otp" name="otp" class="form-control" placeholder="Nhập mã OTP đã nhận được" required>
+                        <button type="button" class="btn-resend" id="resend-otp">Lấy mã</button>
+                    </div>
+
 
                     <!-- Hiển thị thông báo khi người dùng nhập sai 3 lần -->
                     <p id="lock-message" style="color: red; font-size: 14px; margin-top: 5px; display: none;">
@@ -44,6 +48,7 @@
                 </div>
 
                 <button type="submit" class="btn-edit">Xác nhận</button>
+
             </div>
         </form>
 
