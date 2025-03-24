@@ -29,7 +29,8 @@
                             <div class="calendar-days">
                                 <% if (user == null) { %>
                                 <!-- Hien thi toast khi chua dang nhap -->
-                                <a href="#" onclick="showToast()"><i class="fa-regular fa-calendar-days"></i> Đặt lịch tiêm</a>
+                                <a href="#" onclick="showToast()"><i class="fa-regular fa-calendar-days"></i> Đặt lịch
+                                    tiêm</a>
                                 <% } else { %>
                                 <a href="dosing_schedule"><i class="fa-regular fa-calendar-days"></i> Đặt lịch tiêm</a>
                                 <% } %>
@@ -37,11 +38,15 @@
 
                             <!-- Toast thong bao khi chua dang nhap -->
                             <div class="toast-container position-fixed" style="z-index: 1050;">
-                                <div id="loginToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                                <div id="loginToast" class="toast" role="alert" aria-live="assertive"
+                                     aria-atomic="true">
                                     <div class="toast-body">
                                         <div class="d-flex justify-content-between">
                                             <div>Bạn cần đăng nhập để đặt lịch tiêm.</div>
-                                            <div><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button></div>
+                                            <div>
+                                                <button type="button" class="btn-close" data-bs-dismiss="toast"
+                                                        aria-label="Close"></button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -79,16 +84,17 @@
                     <div>
                         <nav class="navbar navbar-expand-lg navbar-light">
                             <div class="">
+                                <%-- Nút mở navbar --%>
                                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#navbarNav" aria-expanded="false"
                                         aria-label="Toggle navigation">
                                     <span class="navbar-toggler-icon"></span>
                                 </button>
                                 <div class="collapse navbar-collapse" id="navbarNav">
-                                    <!-- Nút đóng -->
+                                    <!-- Nút đóng navbar-->
                                     <span class="close-btn" onclick="closeNav()"><i class="fa-solid fa-x"></i></span>
                                     <ul class="navbar-nav">
-                                        <li class="nav-item d-lg-none">
+                                        <li class="nav-item d-lg-none " >
                                             <a class="nav-link" href="index"> <img src="image/logo.png" alt="Logo"></a>
                                         </li>
                                         <li class="nav-item search-info d-lg-none">
@@ -98,14 +104,18 @@
                                                 <i class="fa-solid fa-magnifying-glass"></i>
                                             </a>
                                         </li>
-                                        <li class="nav-item active">
-                                            <a class="nav-link" href="index">Trang chủ</a>
+
+
+
+
+                                        <li class="nav-item <%= (request.getRequestURI().contains("index")) ? "active" : "" %>">
+                                            <a class="nav-link " href="index.jsp">Trang chủ</a>
                                         </li>
-                                        <li class="nav-item">
+                                        <li class="nav-item <%= (request.getRequestURI().contains("introduction")) ? "active" : "" %>">
                                             <a class="nav-link" href="introduction.jsp">Giới thiệu</a>
                                         </li>
                                         <li class="nav-item position-relative d-none d-lg-block">
-                                            <a class="nav-link" href="#">Cẩm nang</a>
+                                            <a class="nav-link <%= (request.getRequestURI().contains("pre-vaccination") || request.getRequestURI().contains("after-vaccination")) ? "active" : "" %>" href="#">Cẩm nang</a>
                                             <ul class="menu-items">
                                                 <li><a href="pre-vaccination.jsp">Những điều cần biết trước khi tiêm
                                                     chủng</a></li>
@@ -140,10 +150,10 @@
                                                 </div>
                                             </div>
                                         </li>
-                                        <li class="nav-item">
+                                        <li class="nav-item <%= (request.getRequestURI().contains("price")) ? "active" : "" %>">
                                             <a class="nav-link" href="price">Bảng giá</a>
                                         </li>
-                                        <li class="nav-item">
+                                        <li class="nav-item <%= (request.getRequestURI().contains("information_vacxin")) ? "active" : "" %>">
                                             <a class="nav-link" href="information_vacxin.jsp">Bệnh học về vắc xin</a>
                                         </li>
                                         <li class="nav-item d-lg-none">
@@ -165,4 +175,5 @@
 </div>
 </body>
 <script src="js/header.js"></script>
+
 </html>
