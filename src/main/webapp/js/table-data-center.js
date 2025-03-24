@@ -1,3 +1,4 @@
+// Xu ly ten trung tam khi co khoang trang + bat dau bang so
 document.querySelectorAll("[data-validate]").forEach(input => {
     input.addEventListener("input", function () {
         let isInvalid = /^[\s\d]/.test(this.value);
@@ -6,11 +7,22 @@ document.querySelectorAll("[data-validate]").forEach(input => {
     });
 });
 
+// Xu ly so dien thoai gom 10 hoac 11 so
+document.querySelectorAll("[data-phone]").forEach(phoneInput => {
+    phoneInput.addEventListener("input", function () {
+        const valid = /^\d{10,11}$/.test(this.value);
+        phoneInput.classList.toggle("is-invalid", !valid);
+        this.nextElementSibling.style.display = !valid ? "block" : "none";
+    });
+});
+
 $(document).ready(function () {
     // Ham khoi tao DataTable
     function initializeDataTable(selector) {
         let table = $(selector).DataTable({
-            pagingType: "numbers", pageLength: 5, language: {
+            pagingType: "numbers",
+            pageLength: 5,
+            language: {
                 emptyTable: "Không có dữ liệu",
                 info: "Hiển thị _START_ đến _TOTAL_ mục",
                 infoEmpty: "Hiển thị 0 đến 0 của 0 mục",
@@ -20,11 +32,45 @@ $(document).ready(function () {
                 processing: "Đang xử lý...",
                 search: "Tìm kiếm:",
                 zeroRecords: "Không tìm thấy dữ liệu phù hợp"
-            }
+            },
+            buttons: [
+                {
+                    extend: "print",
+                    title: "Danh sách Trung Tâm",
+                    exportOptions: {columns: [0, 1, 2, 3]}
+                },
+                {
+                    extend: "pdfHtml5",
+                    title: "Danh sách Trung Tâm",
+                    exportOptions: {columns: [0, 1, 2, 3]},
+                    customize: function (doc) {
+                        doc.content[1].table.widths = ["auto", "*", "*", "*"];
+                    }
+                },
+                {
+                    extend: "excelHtml5",
+                    title: "Danh sách Trung Tâm",
+                    exportOptions: {columns: [0, 1, 2, 3]}
+                }
+            ]
         });
+
+        $("#print").on("click", function () {
+            table.button(0).trigger();
+        });
+
+        $("#exportPDF").on("click", function () {
+            table.button(1).trigger();
+        });
+
+        $("#exportExcel").on("click", function () {
+            table.button(2).trigger();
+        });
+
         return table;
     }
 
+    // modal chinh sua
     function generateEditModalHtml(id, name, address, province, district, ward, phone, provinceCode, districtCode, wardCode) {
         return `
             <div class="modal fade" id="editCenterModal-${id}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="editCenterModalLabel" aria-hidden="true">
@@ -108,6 +154,33 @@ $(document).ready(function () {
             </div>`;
     }
 
+    function generateCenterRowHtml(centerId, response) {
+        return `
+        <tr data-id="${centerId}">
+            <td>${centerId}</td>
+            <td>${response.name}</td>
+            <td>${response.address}, ${response.ward}, ${response.district}, ${response.province}</td>
+            <td>${response.phone}</td>
+            <td>
+                <a href="#" 
+                   class="text-decoration-none edit-btn" 
+                   data-bs-toggle="modal" 
+                   data-bs-target="#editCenterModal-${centerId}">
+                   <img src="../image/edit.png" alt="Sửa" width="22" height="22">
+                </a>
+                <a href="#" 
+                   class="text-decoration-none delete-btn" 
+                   data-bs-toggle="modal" 
+                   data-bs-target="#deleteCenter" 
+                   data-id="${centerId}" 
+                   data-name="${response.name}">
+                   <img src="../image/bin.png" alt="Xóa" width="24" height="24">
+                </a>
+            </td>
+        </tr>
+    `;
+    }
+
     // Ham xu ly chuc nang them
     function handleAddCenter() {
         $("#addCenterForm").submit(function (event) {
@@ -119,7 +192,6 @@ $(document).ready(function () {
             let district = $("#district").val();
             let ward = $("#ward").val();
             let phone = $("#center-phone").val();
-            let fullAddress = `${address}, ${ward}, ${district}, ${province}`;
 
             let provinceCode = $("#province").attr("data-code");
             let districtCode = $("#district").attr("data-code");
@@ -139,7 +211,7 @@ $(document).ready(function () {
                 }, dataType: "json", success: function (response) {
                     if (response.status === "success") {
                         console.log("ID moi:", response.id);
-                        // Xóa focus các thành phần bên trong modal trước khi ẩn
+                        // xoa focus truoc do
                         $("#addCenterModal").find("button, input, textarea, select").blur();
                         // an modal
                         $("#addCenterModal").modal("hide");
@@ -151,34 +223,21 @@ $(document).ready(function () {
                         $("#center-ward").val("");
                         $("#center-phone").val("");
 
-                        //them modal moi vao
+                        //them modal sua moi vao
                         $("body").append(generateEditModalHtml(response.id, name, address, province, district, ward, phone, provinceCode, districtCode, wardCode));
 
-                        let newRowHtml = `
-                            <tr data-id="${response.id}">
-                                <td>${response.id}</td>
-                                <td>${name}</td>
-                                <td>${fullAddress}</td>
-                                <td>${phone}</td>
-                                <td>
-                                    <a href="#" 
-                                       class="text-decoration-none edit-btn" 
-                                       data-bs-toggle="modal" 
-                                       data-bs-target="#editCenterModal-${response.id}">
-                                       <img src="../image/edit.png" alt="Sửa" width="22" height="22">
-                                    </a>
-                                    <a href="#" 
-                                       class="text-decoration-none delete-btn" 
-                                       data-bs-toggle="modal" 
-                                       data-bs-target="#deleteCenter" 
-                                       data-id="${response.id}" 
-                                       data-name="${name}">
-                                       <img src="../image/bin.png" alt="Xóa" width="24" height="24">
-                                    </a>
-                                </td>
-                            </tr>
-                        `;
+                        let responseData = {
+                            name: name,
+                            address: address,
+                            province: province,
+                            district: district,
+                            ward: ward,
+                            phone: phone
+                        };
 
+                        console.log("Response: ", responseData);
+
+                        let newRowHtml = generateCenterRowHtml(response.id, responseData);
                         $("#center").DataTable().row.add($(newRowHtml)).draw(false);
                     }
                 }, error: function () {
@@ -215,15 +274,17 @@ $(document).ready(function () {
                     "center-phone": phone
                 }, dataType: "json", success: function (response) {
                     if (response.status === "success") {
-                        // cập nhật dữ liệu trong bảng
+                        // xoa modal cu
+                        $(`#editCenterModal-${centerId}`).remove();
+                        // them modal moi
+                        $("body").append(generateEditModalHtml(centerId, response.name, response.address, response.province, response.district, response.ward, response.phone));
+                        // cap nhat input
+                        let newRowHtml = generateCenterRowHtml(centerId, response);
+                        let table = $("#center").DataTable();
                         let row = $(`#center tr[data-id='${centerId}']`);
-                        row.find("td:eq(1)").text(response.name);
-                        row.find("td:eq(2)").text(response.address + ", " + response.ward + ", " + response.district + ", " + response.province);
-                        row.find("td:eq(3)").text(response.phone);
-
-                        // xoa focus
+                        table.row(row).remove();
+                        table.row.add($(newRowHtml)).draw(false);
                         modal.find("button, input, textarea, select").blur();
-                        // an modal
                         const bsModal = bootstrap.Modal.getInstance(modal[0]);
                         bsModal.hide();
                     }

@@ -47,6 +47,18 @@
             <a href="#" class="btn btn-add btn-sm" data-bs-toggle="modal" data-bs-target="#addCenterModal">
                 <i class="fa-solid fa-plus"></i> Thêm trung tâm
             </a>
+
+            <button class="btn btn-common btn-sm" id="print">
+                <i class="fas fa-print"></i> In dữ liệu
+            </button>
+
+            <button class="btn btn-common btn-sm" id="exportPDF">
+                <i class="fas fa-file-pdf"></i> Xuất PDF
+            </button>
+
+            <button class="btn btn-common btn-sm" id="exportExcel">
+                <i class="fas fas fa-file-excel"></i> Xuất Excel
+            </button>
         </div>
         <table class="w-100 table table-striped" id="center">
             <thead>
@@ -103,7 +115,9 @@
                                                             tên trung tâm</label>
                                                         <input type="text" class="form-control"
                                                                id="center-name-${center.id}" name="center-name"
-                                                               value="${center.name}" maxlength="80" required>
+                                                               value="${center.name}" maxlength="80" required
+                                                               data-validate>
+                                                        <div class="error-message">Vui lòng nhập đúng.</div>
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
@@ -169,7 +183,8 @@
                                                             điện thoại</label>
                                                         <input type="tel" class="form-control"
                                                                id="center-phone-${center.id}" name="center-phone"
-                                                               value="${center.phone}" required>
+                                                               value="${center.phone}" required data-phone>
+                                                        <div class="error-message">Số điện thoại không hợp lệ.</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -205,7 +220,8 @@
                                     <div class="mb-3">
                                         <label for="center-name" class="form-label">Nhập tên trung tâm</label>
                                         <input type="text" class="form-control" id="center-name" name="center-name"
-                                               maxlength="80" required>
+                                               maxlength="80" required data-validate>
+                                        <div class="error-message">Vui lòng nhập đúng.</div>
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -257,7 +273,8 @@
                                     <div class="mb-3">
                                         <label for="center-phone" class="form-label">Số điện thoại</label>
                                         <input type="tel" class="form-control" id="center-phone" name="center-phone"
-                                               required>
+                                               required data-phone>
+                                        <div class="error-message">Số điện thoại không hợp lệ.</div>
                                     </div>
                                 </div>
                             </div>
