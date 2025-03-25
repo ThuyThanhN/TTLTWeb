@@ -30,7 +30,7 @@
                     </p>
                     <div class="input-container">
                         <input type="text" id="otp" name="otp" class="form-control" placeholder="Nhập mã OTP đã nhận được" required>
-                        <button type="button" class="btn-resend" id="resend-otp">Lấy mã</button>
+                        <button type="button" class="btn-resend" id="resend-otp">Lấy Mã</button>
                     </div>
 
 
@@ -56,6 +56,25 @@
     <!-- Footer -->
     <jsp:include page="footer.jsp"></jsp:include>
 </div>
-<%--<script src="js/verify-reset-passwd.js"></script>--%>
+<script>
+    $(document).ready(function() {
+        // Xử lý khi nhấn nút "Lấy mã"
+        $('#resend-otp').click(function() {
+            $.ajax({
+                url: 'verify-reset-passwd',  // Chuyển hướng đến servlet để gửi lại mã OTP
+                type: 'POST',
+                data: { resendOtp: true },   // Cần thêm tham số này để nhận diện yêu cầu gửi lại OTP
+                success: function(response) {
+                    alert(response);  // Hiển thị thông báo khi gửi thành công
+                },
+                error: function() {
+                    alert("Đã xảy ra lỗi khi gửi lại mã.");
+                }
+            });
+        });
+    });
+</script>
+
+<script src="js/verify-reset-passwd.js"></script>
 </body>
 </html>

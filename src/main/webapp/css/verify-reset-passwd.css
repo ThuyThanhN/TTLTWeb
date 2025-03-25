@@ -77,18 +77,19 @@ h1.welcome-message {
 /* Nút Lấy mã */
 .input-container .btn-resend {
     width: 18%;
-    padding: 15px; /* Tăng padding để tăng chiều cao */
-    background-color: #f0ad4e;
-    color: #fff;
+    padding: 15px;
+    background-color: #fff;
+    color: #1691E2;
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
     margin-left: 10px;
-    height: 50px; /* Đặt chiều cao trực tiếp cho nút */
+    height: 45px;
     display: flex;
     margin-bottom: 15px;
-    align-items: center; /* Căn giữa chữ trong nút */
-    justify-content: center; /* Căn giữa chữ trong nút */
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #1691E2; /* Chỉnh màu của border */
 }
 
 

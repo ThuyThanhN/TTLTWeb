@@ -22,6 +22,22 @@ function checkLock() {
     }
     return true; // Cho phép nhập OTP nếu không bị khóa
 }
+document.getElementById('resend-otp').addEventListener('click', function() {
+    var button = this;
+
+    // Đổi chữ thành "Đã Gửi"
+    button.textContent = "Đã Gửi";
+
+    // Vô hiệu hóa nút trong 60 giây
+    button.disabled = true;
+
+    // Sau 60 giây, phục hồi lại trạng thái ban đầu
+    setTimeout(function() {
+        button.textContent = "Lấy Mã"; // Đổi lại chữ "Lấy Mã"
+        button.disabled = false; // Kích hoạt lại nút
+    }, 60000); // 60000ms = 60 giây
+});
+
 
 // Kiểm tra OTP khi người dùng gửi form
 document.querySelector('form').addEventListener('submit', function(event) {
