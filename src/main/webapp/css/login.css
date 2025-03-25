@@ -16,8 +16,15 @@ a {
     background: #2a388f;
 }
 /*Content*/
+.authentication-group {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+
+
 .login-container {
-    background-color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -85,6 +92,54 @@ a {
 .login-container button:hover {
     background-color: #ef5322;
 }
+
+/* Nút Google */
+.authentication-button.google {
+    width: 40px; /* Chiều rộng */
+    height: 40px; /* Chiều cao */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #db4437; /* Màu đỏ Google */
+    border-radius: 50%;
+}
+
+.authentication-button.google:hover {
+    background-color: #c1351d; /* Màu đậm hơn khi hover */
+}
+
+/* Nút Facebook */
+.authentication-button.facebook {
+    width: 40px; /* Chiều rộng */
+    height: 40px; /* Chiều cao */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #1877f2; /* Màu xanh Facebook */
+    border-radius: 50%;
+
+}
+
+.authentication-button.facebook:hover {
+    background-color: #0d5bbf; /* Màu đậm hơn khi hover */
+}
+
+/* Đổi màu icon bên trong */
+.authentication-button i {
+    color: white; /* Đổi màu icon thành trắng */
+}
+
+
+.authentication-button:hover {
+    background-color: #e0e0e0; /* Màu nền tối hơn khi hover */
+}
+
+/* Thêm biểu tượng cho nút */
+.authentication-button i {
+    font-size: 20px; /* Kích thước biểu tượng */
+    color: #333; /* Màu sắc biểu tượng */
+}
+
 /* Responsive điều chỉnh */
 /*Khi màn hình < 768px( chiều rộng phổ biến của nhiều loại thiết bị)*/
 @media (max-width: 768px) {

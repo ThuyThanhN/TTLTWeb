@@ -1,5 +1,6 @@
 package com.example.provide_vaccine_services.controller;
 
+import com.example.provide_vaccine_services.Service.GoogleLogin;
 import com.example.provide_vaccine_services.dao.UserDao;
 import com.example.provide_vaccine_services.dao.model.Users;
 import jakarta.servlet.ServletException;
@@ -17,7 +18,36 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Khi truy cập GET, chuyển hướng người dùng đến trang login.jsp
-        request.getRequestDispatcher("login.jsp").forward(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        String code = request.getParameter("code");
+        if(code == null || code.isEmpty())
+            request.getRequestDispatcher("login.jsp").forward(request, response);
+        else {
+            GoogleLogin gg = new GoogleLogin();
+            String accessToken = gg.getToken(code);
+            System.out.println(accessToken);
+            Users GGuser = gg.getUserInfo(accessToken);
+            UserDao userDao = new UserDao();
+            Users user = userDao.getUserByEmail(GGuser.getEmail());
+            if(user == null) {
+                GGuser.setRole(0);
+                userDao.insertUser(GGuser);
+                user = GGuser;
+            }
+
+            HttpSession session = request.getSession();
+            session.setAttribute("user", user);
+
+            // Kiểm tra vai trò và chuyển hướng trang
+            if (user.getRole() == 1) {
+                // Vai trò admin
+                response.sendRedirect("admin/dashboard");
+            } else if (user.getRole() == 0) {
+                // Vai trò người dùng thường
+                response.sendRedirect("index");
+            }
+
+        }
     }
 
     @Override

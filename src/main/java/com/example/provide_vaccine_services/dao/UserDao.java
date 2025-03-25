@@ -218,8 +218,11 @@ public class UserDao {
             pst.setString(9, u.getPhone());
             pst.setString(10, u.getEmail());
 
-            String rawPassword = u.getPassword();
-            String hashedPassword = MD5Hash.hashPassword(rawPassword);
+            if(u.getPassword() != null) {
+                String rawPassword = u.getPassword();
+                String hashedPassword = MD5Hash.hashPassword(rawPassword);
+            }
+
 
             // Debug mật khẩu
 //            System.out.println("Password trước khi mã hóa: " + rawPassword);
@@ -326,6 +329,7 @@ public class UserDao {
 
         return userId; // Trả về ID của người dùng (hoặc -1 nếu không tìm thấy)
     }
+
     public int updateUserDetails(Users user) {
         // Cập nhật câu SQL để bao gồm province, district, ward
         String sql = "UPDATE users SET fullname = ?, identification = ?, phone = ?, gender = ?, dateOfBirth = ?, address = ?, province = ?, district = ?, ward = ? WHERE id = ?";
@@ -386,4 +390,36 @@ public class UserDao {
         }
         return false;
     }
+
+    public Users getUserByEmail(String email) {
+        String sql = "SELECT * FROM users WHERE email = ?";
+        try (PreparedStatement pst = DBConnect.get(sql)) {
+
+            pst.setString(1, email);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                Users user = new Users();
+                user.setId(rs.getInt("id"));
+                user.setFullname(rs.getString("fullname"));
+                user.setGender(rs.getString("gender"));
+                user.setIdentification(rs.getString("identification"));
+                user.setDateOfBirth(rs.getDate("dateOfBirth"));
+                user.setAddress(rs.getString("address"));
+                user.setProvince(rs.getString("province"));
+                user.setDistrict(rs.getString("district"));
+                user.setWard(rs.getString("ward"));
+                user.setPhone(rs.getString("phone"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(rs.getInt("role"));
+
+                return user;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // Trả về null nếu không tìm thấy
+    }
+
 }

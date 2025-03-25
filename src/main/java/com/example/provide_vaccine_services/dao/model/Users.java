@@ -18,6 +18,8 @@ public class Users implements Serializable {
     private String password;
     private int role;
 
+    public Users() { }
+
     public Users(int id, String fullname, String gender, String identification, Date dateOfBirth, String address, String province, String district, String ward, String phone, String email, String password, int role) {
         this.id = id;
         this.fullname = fullname;
@@ -152,4 +154,5 @@ public class Users implements Serializable {
     public void setRole(int role) {
         this.role = role;
     }
+
 }
