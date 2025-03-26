@@ -97,6 +97,7 @@
                                             </label>
                                             <input id="upload" class="hidden-image" type="file" name="file"
                                                    value="${v.imageUrl}">
+                                            <input type="hidden" name="existingImage" value="${v.imageUrl}">
                                         </div>
                                         <!-- Placeholder for displaying images -->
                                         <div id="image-preview" class="mt-3"></div>
@@ -358,82 +359,8 @@
 </div>
 </body>
 <script>
-    const imagePreview = document.getElementById('image-preview');
-    const uploadInput = document.getElementById('upload');
-    const existingImageUrl = "${v.imageUrl}"; // Ảnh từ server
-
-    function addImage(src) {
-        imagePreview.innerHTML = ''; // Xóa ảnh trước nếu có
-        const imgContainer = document.createElement('div');
-        imgContainer.classList.add('img-container');
-
-        const img = document.createElement('img');
-        img.src = src;
-        img.classList.add('img-fluid');
-        img.style.maxWidth = '100px';
-
-        // Nút xóa ảnh
-        const deleteBtn = document.createElement('span');
-        deleteBtn.classList.add('delete-btn');
-        deleteBtn.innerHTML = `<i class="fa-solid fa-x"></i>`;
-
-        deleteBtn.addEventListener('click', function () {
-            imgContainer.remove(); // Xóa ảnh hiển thị
-            uploadInput.value = ''; // Xóa file đã chọn
-        });
-
-        imgContainer.appendChild(img);
-        imgContainer.appendChild(deleteBtn);
-        imagePreview.appendChild(imgContainer);
-    }
-
-    // Nếu có ảnh cũ, hiển thị nó
-    if (existingImageUrl) {
-        addImage(existingImageUrl.startsWith("http") ? existingImageUrl : `${pageContext.request.contextPath}/${existingImageUrl}`);
-    }
-
-    // Khi chọn ảnh mới
-    uploadInput.addEventListener('change', function (event) {
-        const files = event.target.files;
-        if (files.length > 0) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                addImage(e.target.result);
-            };
-            reader.readAsDataURL(files[0]);
-        }
-    });
-
-    const editors = document.querySelectorAll('.ckeditor');
-
-    editors.forEach(editor => {
-        ClassicEditor
-            .create(editor)
-            .catch(error => {
-                console.error(error);
-            });
-    });
-
-    let navItems = document.querySelectorAll('.nav-item');
-    let contents = document.querySelectorAll('.content');
-
-    navItems.forEach(navItem => {
-        navItem.addEventListener('click', () => {
-            // Bỏ active khỏi tất cả nav-item
-            navItems.forEach(item => item.classList.remove('active'));
-
-            // Ẩn tất cả nội dung
-            contents.forEach(content => content.classList.add('d-none'));
-
-            // Kích hoạt nav-item hiện tại
-            navItem.classList.add('active');
-
-            // Hiển thị nội dung tương ứng
-            const target = document.querySelector(navItem.getAttribute('data-target'));
-            if (target) {
-                target.classList.remove('d-none');
-            }
-        });
-    });
+    const existingImageUrl = "${v.imageUrl}";
+    const contextPath = "<%= request.getContextPath() %>";
 </script>
+<script src="${pageContext.request.contextPath}/js/update-vaccine.js"></script>
 </html>
