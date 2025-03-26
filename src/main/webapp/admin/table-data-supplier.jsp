@@ -75,7 +75,7 @@
             </thead>
             <tbody>
             <c:forEach var="supplier" items="${suppliers}">
-                <tr>
+                <tr data-id="${supplier.id}">
                     <td>${supplier.id}</td>
                     <td>${supplier.name}</td>
                     <td>${supplier.countryOfOrigin}</td>
