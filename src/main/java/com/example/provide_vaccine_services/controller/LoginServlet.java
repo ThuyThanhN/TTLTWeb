@@ -25,13 +25,12 @@ public class LoginServlet extends HttpServlet {
         else {
             GoogleLogin gg = new GoogleLogin();
             String accessToken = gg.getToken(code);
-            System.out.println(accessToken);
             Users GGuser = gg.getUserInfo(accessToken);
             UserDao userDao = new UserDao();
             Users user = userDao.getUserByEmail(GGuser.getEmail());
             if(user == null) {
                 GGuser.setRole(0);
-                userDao.insertUser(GGuser);
+                userDao.insertGGUser(GGuser);
                 user = GGuser;
             }
 
@@ -46,7 +45,6 @@ public class LoginServlet extends HttpServlet {
                 // Vai trò người dùng thường
                 response.sendRedirect("index");
             }
-
         }
     }
 
@@ -58,6 +56,10 @@ public class LoginServlet extends HttpServlet {
         // Lấy thông tin đăng nhập từ form
         String email = request.getParameter("username");
         String password = request.getParameter("password");
+
+        if(password == null || password.isEmpty() || password.equals("GOOGLE_AUTH")) {
+            request.setAttribute("error", "Invalid password");
+        }
 
         // Gọi UserDao để kiểm tra thông tin đăng nhập
         UserDao userDao = new UserDao();

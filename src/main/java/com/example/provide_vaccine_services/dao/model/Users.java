@@ -155,4 +155,22 @@ public class Users implements Serializable {
         this.role = role;
     }
 
+    public String toString() {
+        return "Users{" +
+                "id=" + id +
+                ", fullname='" + fullname + '\'' +
+                ", gender='" + gender + '\'' +
+                ", identification='" + identification + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", address='" + address + '\'' +
+                ", province='" + province + '\'' +
+                ", district='" + district + '\'' +
+                ", ward='" + ward + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                '}';
+    }
+
 }

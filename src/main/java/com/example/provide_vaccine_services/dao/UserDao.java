@@ -218,21 +218,67 @@ public class UserDao {
             pst.setString(9, u.getPhone());
             pst.setString(10, u.getEmail());
 
-            if(u.getPassword() != null) {
-                String rawPassword = u.getPassword();
-                String hashedPassword = MD5Hash.hashPassword(rawPassword);
-            }
+            String rawPassword = u.getPassword();
+            String hashedPassword = MD5Hash.hashPassword(rawPassword);
 
 
             // Debug mật khẩu
 //            System.out.println("Password trước khi mã hóa: " + rawPassword);
 //            System.out.println("Password sau khi mã hóa: " + hashedPassword);
 
-            pst.setString(11,u.getPassword());
+            pst.setString(11, u.getPassword());
 
             pst.setInt(12, u.getRole());
 
             pst.setInt(12, u.getRole());
+
+            System.out.println("sql: " + sql);
+            System.out.println("pst: " + pst);
+
+
+            // Thực hiện câu lệnh và kiểm tra kết quả
+            re = pst.executeUpdate();
+
+
+            if (re > 0) {
+                System.out.println("Them du lieu thanh cong");
+
+            } else {
+                System.out.println("Them du lieu that bai!");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return re; // Trả về kết quả (số bản ghi đã được thêm)
+    }
+
+    public int insertGGUser(Users u) {
+        int re = 0;
+
+        try {
+            // Câu lệnh SQL để chèn dữ liệu vào bảng users
+            String sql = "INSERT INTO users(fullname, gender, identification, dateOfBirth, address, province, district, ward, phone, email, password, role)" +
+                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement pst = DBConnect.get(sql);
+
+            String s = u.toString();
+            System.out.println("user: " + s);
+
+            // Gán các giá trị từ đối tượng `Users`
+            pst.setString(1, u.getFullname());
+            pst.setString(2, "");
+            pst.setString(3, "");
+            pst.setDate(4, new Date(System.currentTimeMillis())); // thơi gian hiện tại
+            pst.setString(5, "");
+            pst.setString(6, "");
+            pst.setString(7, "");
+            pst.setString(8, "");
+            pst.setString(9, "");
+            pst.setString(10, u.getEmail());
+            pst.setString(11, "GOOGLE_AUTH");
+            pst.setInt(12, u.getRole());
+
 
             // Thực hiện câu lệnh và kiểm tra kết quả
             re = pst.executeUpdate();
@@ -249,6 +295,7 @@ public class UserDao {
 
         return re; // Trả về kết quả (số bản ghi đã được thêm)
     }
+
     public Users checkLogin(String phone, String password) {
         Users user = null;
         try {
@@ -297,6 +344,7 @@ public class UserDao {
         }
         return user;
     }
+
     public boolean updatePassword(int userId, String newPassword) {
         boolean isUpdated = false;
         try {
@@ -312,6 +360,7 @@ public class UserDao {
         }
         return isUpdated;
     }
+
     public int getUserIdByEmail(String email) {
         int userId = -1; // Giá trị mặc định nếu không tìm thấy
         String sql = "SELECT id FROM users WHERE email = ?";
@@ -377,6 +426,7 @@ public class UserDao {
         }
         return 0; // Trả về 0 nếu có lỗi xảy ra
     }
+
     public boolean isEmailExists(String email) {
         String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
         try (PreparedStatement pst = DBConnect.get(sql)) {
