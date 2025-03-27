@@ -1,4 +1,3 @@
-
 <%@ page import="com.example.provide_vaccine_services.dao.model.Users" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -67,7 +66,8 @@
                             <c:choose>
                                 <c:when test="${v.imageUrl.startsWith('/uploads')}">
                                     <!-- Neu co, hien thi anh tu thu muc uploads -->
-                                    <img src="${pageContext.request.contextPath}${v.imageUrl}" alt="Vaccine Image" width="150" height="50">
+                                    <img src="${pageContext.request.contextPath}${v.imageUrl}" alt="Vaccine Image"
+                                         width="150" height="50">
                                 </c:when>
                                 <c:otherwise>
                                     <!-- Neu khong, hien thi anh tu duong dan mac dinh -->

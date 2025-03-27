@@ -6,7 +6,9 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -63,21 +65,43 @@ public class UpdateVaccine extends HttpServlet {
         String idv = request.getParameter("idVaccine");
         int id = Integer.parseInt(idv);
 
+//        Duong dan luu o dia D
+        String uploadPath = "D:" + File.separator + "uploads";
+
+//        Tao thu muc uploads neu chua ton tai
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) uploadDir.mkdirs();
+
+        Part filePart = request.getPart("file");
+        String fileName = filePart.getSubmittedFileName();
+        String filePath = uploadPath + File.separator + fileName;
+        String imagePath;
+
+        if (fileName != null && !fileName.isEmpty()) {
+            filePart.write(filePath);
+
+            //        Luu duong dan anh vao database
+            imagePath = "/uploads/" + fileName;
+        } else {
+            imagePath = request.getParameter("existingImage");
+        }
+
+
         // Vaccines update
         String name = request.getParameter("vaccineName");
         String quantity = request.getParameter("quantity");
         String price = request.getParameter("price");
         String status = request.getParameter("status");
-        String image = request.getParameter("image");
         String description = request.getParameter("description");
         String prevention = request.getParameter("prevention");
+
         LocalDateTime createdAt = LocalDateTime.now();
         int quantityI = Integer.parseInt(quantity);
         float priceF = Float.parseFloat(price);
         int supplierId = Integer.parseInt(request.getParameter("supplierName"));
         String statusText = (Integer.parseInt(status) == 1) ? "Còn hàng" : "Hết hàng";
 
-        Vaccines vaccines = new Vaccines(id, supplierId, name, description, quantityI, priceF, image,  statusText, createdAt, prevention);
+        Vaccines vaccines = new Vaccines(id, supplierId, name, description, quantityI, priceF, imagePath, statusText, createdAt, prevention);
         VaccineDao vaccineDao = new VaccineDao();
         vaccineDao.updateVaccine(vaccines);
 
@@ -91,7 +115,7 @@ public class UpdateVaccine extends HttpServlet {
 //      VaccineDetails update
         String target = request.getParameter("editor-dt");
         String immunization = request.getParameter("editor-pdt");
-        String  adverseReactions = request.getParameter("editor-pu");
+        String adverseReactions = request.getParameter("editor-pu");
 
         VacccineDetailDao vdDao = new VacccineDetailDao();
         VacccineDetails vd = new VacccineDetails(id, target, immunization, adverseReactions);
