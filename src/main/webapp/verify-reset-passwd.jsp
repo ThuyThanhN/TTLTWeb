@@ -28,15 +28,27 @@
                     <p style="margin-top: 15px; font-size: 14px; color: #333;">
                         <strong>Vui lòng nhập mã OTP:</strong>
                     </p>
-                    <input type="text" id="otp" name="otp" class="form-control" placeholder="Nhập mã OTP đã nhận được" required>
+                    <div class="input-container">
+                        <input type="text" id="otp" name="otp" class="form-control" placeholder="Nhập mã OTP đã nhận được" required>
+                        <button type="button" class="btn-resend" id="resend-otp">Lấy Mã</button>
+                    </div>
 
+
+                    <!-- Hiển thị thông báo khi người dùng nhập sai 3 lần -->
+                    <p id="lock-message" style="color: red; font-size: 14px; margin-top: 5px; display: none;">
+                        Bạn đã nhập sai 3 lần. Vui lòng đợi 1 phút để thử lại.
+                    </p>
+
+                    <!-- Thông báo lỗi từ server -->
                     <% if (request.getAttribute("error") != null) { %>
                     <p id="error-message" style="color: red; font-size: 14px; margin-top: 5px;">
                         <%= request.getAttribute("error") %>
                     </p>
                     <% } %>
                 </div>
+
                 <button type="submit" class="btn-edit">Xác nhận</button>
+
             </div>
         </form>
 
@@ -44,6 +56,25 @@
     <!-- Footer -->
     <jsp:include page="footer.jsp"></jsp:include>
 </div>
-<%--<script src="js/verify-reset-passwd.js"></script>--%>
+<script>
+    $(document).ready(function() {
+        // Xử lý khi nhấn nút "Lấy mã"
+        $('#resend-otp').click(function() {
+            $.ajax({
+                url: 'verify-reset-passwd',  // Chuyển hướng đến servlet để gửi lại mã OTP
+                type: 'POST',
+                data: { resendOtp: true },   // Cần thêm tham số này để nhận diện yêu cầu gửi lại OTP
+                success: function(response) {
+                    alert(response);  // Hiển thị thông báo khi gửi thành công
+                },
+                error: function() {
+                    alert("Đã xảy ra lỗi khi gửi lại mã.");
+                }
+            });
+        });
+    });
+</script>
+
+<script src="js/verify-reset-passwd.js"></script>
 </body>
 </html>

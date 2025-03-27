@@ -58,6 +58,45 @@ h1.welcome-message {
     padding: 3px 0;
     background: #2a388f;
 }
+/* Container chứa input và nút gửi lại mã */
+.input-container {
+    display: flex;
+    justify-content: space-between; /* Giãn cách đều các phần tử */
+    align-items: center; /* Căn giữa theo chiều dọc */
+}
+
+/* Trường nhập OTP */
+.input-container .form-control {
+    width: 80%; /* Đặt chiều rộng của input chiếm 80% */
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+}
+
+/* Nút Lấy mã */
+.input-container .btn-resend {
+    width: 18%;
+    padding: 15px;
+    background-color: #fff;
+    color: #1691E2;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 10px;
+    height: 45px;
+    display: flex;
+    margin-bottom: 15px;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #1691E2; /* Chỉnh màu của border */
+}
+
+
+.input-container .btn-resend:hover {
+    background-color: #e09e37; /* Màu sắc thay đổi khi hover */
+}
+
 /* Responsive cho màn hình nhỏ hơn 992px */
 @media (max-width: 992px) {
     .main-content {
