@@ -18,16 +18,13 @@ public class RegisterUsers extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Hiển thị form đăng ký
         request.getRequestDispatcher("register.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Đảm bảo dữ liệu từ form được mã hóa UTF-8
         request.setCharacterEncoding("UTF-8");
 
-        // Lấy dữ liệu từ form
         String fullname = request.getParameter("fullname");
         String gender = request.getParameter("gender");
         String identification = request.getParameter("identification");
@@ -36,26 +33,31 @@ public class RegisterUsers extends HttpServlet {
         String district = request.getParameter("district");
         String ward = request.getParameter("ward");
         String address = request.getParameter("address");
-        String phone = request.getParameter("phone");  // Thêm SĐT
+        String phone = request.getParameter("phone");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirmPassword");
 
-        // Mã hóa mật khẩu
+        if (!password.equals(confirmPassword)) {
+            request.setAttribute("error", "Mật khẩu xác nhận không khớp!");
+            request.getRequestDispatcher("register.jsp").forward(request, response);
+            return;
+        }
+
         String hashedPassword = MD5Hash.hashPassword(password);
 
-        // Tạo đối tượng user
-        Users user = new Users(fullname, gender, identification, Date.valueOf(dob), address, province, district, ward, phone, email, hashedPassword, 0);
+        // role = 0 (người dùng), status = 0 (mặc định chưa kích hoạt)
+        Users user = new Users(fullname, gender, identification, Date.valueOf(dob), address,
+                province, district, ward, phone, email, hashedPassword, 0, 0);
 
-        // Lưu dữ liệu vào cơ sở dữ liệu
         UserDao userDao = new UserDao();
-        int result = userDao.insertUser(user);
+        int result = userDao.insert(user);
 
         HttpSession session = request.getSession();
-        Users users = (Users) session.getAttribute("user");
+        Users currentUser = (Users) session.getAttribute("user");
 
         if (result > 0) {
-            if (users != null) {
+            if (currentUser != null) {
                 response.sendRedirect("table-data-user");
             } else {
                 response.sendRedirect("login");

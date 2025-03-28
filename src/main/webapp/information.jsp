@@ -75,6 +75,10 @@
                             <span class="value"><%= user.getIdentification() %></span>
                         </div>
                         <div class="item-info">
+                            <span class="label">Email:</span>
+                            <span class="value"><%= user.getEmail() %></span>
+                        </div>
+                        <div class="item-info">
                             <span class="label">Số điện thoại:</span>
                             <span class="value"><%= user.getPhone() %></span>
                         </div>
@@ -132,15 +136,16 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <!-- Ngày sinh -->
                                 <div class="col-md-6">
                                     <label for="dateOfBirth" class="form-label"><strong>Ngày sinh:</strong></label>
                                     <input type="date" id="dateOfBirth" name="dateOfBirth" value="<%= user.getDateOfBirth() %>" class="form-control">
                                 </div>
                             </div>
-
-
+                            <div class="mb-3">
+                                <label for="email" class="form-label"><strong>Email:</strong></label>
+                                <input type="text" id="email" name="email" value="<%= user.getEmail() %>" class="form-control" placeholder="Nhập email cần thay đổi">
+                            </div>
                             <div class="mb-3">
                                 <label for="address" class="form-label"><strong>Số nhà/Đường:</strong></label>
                                 <input type="text" id="address" name="address" value="<%= user.getAddress() %>" class="form-control" placeholder="Nhập địa chỉ chi tiết">
