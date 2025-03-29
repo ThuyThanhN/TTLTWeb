@@ -75,3 +75,33 @@ navItems.forEach(navItem => {
         }
     });
 });
+
+$(document).ready(function () {
+    // Xu ly chuc nang cap nhat vac xin
+    $("#updateVaccine").submit(function (event) {
+        event.preventDefault();
+
+        let formData = new FormData(this);
+
+        $.ajax({
+            url: "/provide_vaccine_services_war/admin/updateVaccine",
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            dataType: "json",
+            success: function (response) {
+                if (response.status === "success") {
+                    window.location.href = "/provide_vaccine_services_war/admin/table-data-vacxin";
+                } else {
+                    alert("Loi: " + response.message);
+                }
+            },
+            error: function (xhr) {
+                alert("Loi khi cap nhat vac xin!");
+                console.log("Lỗi: " + xhr.responseText);
+            }
+        });
+    });
+});
+

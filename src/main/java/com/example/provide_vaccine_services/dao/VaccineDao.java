@@ -130,7 +130,7 @@ public class VaccineDao {
 
 
     public int insert(Vaccines v) {
-        int id = -1;
+        int newId = -1;
 
         try {
             String sql = "insert into vaccines(idSupplier, name, description, stockQuantity, price, imageUrl, status, createdAt, prevention) " +
@@ -145,22 +145,21 @@ public class VaccineDao {
             pst.setString(7, v.getStatus());
             pst.setTimestamp(8, Timestamp.valueOf(v.getCreatedAt()));
             pst.setString(9, v.getPrevention());
+            int affectedRows = pst.executeUpdate();
 
-            int rows = pst.executeUpdate();
-
-            if (rows > 0) {
-                ResultSet rs = pst.getGeneratedKeys();
+            if (affectedRows > 0) {
+                // lay id moi nhat
+                String getIdSql = "SELECT MAX(id) FROM vaccines";
+                PreparedStatement getIdStmt = DBConnect.get(getIdSql);
+                ResultSet rs = getIdStmt.executeQuery();
                 if (rs.next()) {
-                    id = rs.getInt(1);
+                    newId = rs.getInt(1);
                 }
-                System.out.println("Them du lieu thanh cong");
-            } else {
-                System.out.println("Them du lieu that bai!");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return id;
+        return newId;
     }
 
     public Vaccines getVaccineById(int id) {
@@ -387,7 +386,7 @@ public class VaccineDao {
         return 0;
     }
 
-    public int getTotalCount( boolean age, boolean disease) {
+    public int getTotalCount(boolean age, boolean disease) {
         StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM vaccines v");
 
         if (age) {
@@ -653,7 +652,7 @@ public class VaccineDao {
         String sql = "SELECT v.* FROM vaccines v " +
                 "JOIN vaccinetypes vt ON v.id = vt.idVaccine " +
                 "JOIN agegroups ag ON vt.idAgeGroup = ag.id " +
-                "WHERE v.name LIKE ? "+
+                "WHERE v.name LIKE ? " +
                 "LIMIT 12 OFFSET ?";
 
         try (PreparedStatement stmt = DBConnect.get(sql)) {

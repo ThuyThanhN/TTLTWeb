@@ -14,7 +14,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
-
     <!-- Font awesome-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <!-- Font chữ   -->
@@ -22,6 +21,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
           rel="stylesheet">
+    <%-- Ajax --%>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- DataTable -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -57,7 +58,7 @@
             </thead>
             <tbody>
             <c:forEach var="v" items="${vaccines}">
-                <tr>
+                <tr data-id="${v.id}">
                     <td>${v.id}</td>
                     <td>${v.name}</td>
                     <td>
@@ -80,10 +81,11 @@
                     <td>
                         <span class="status light-green color-green">${v.status}</span>
                     </td>
-                    <td>${v.price}đ</td>
+                    <td><f:formatNumber value="${v.price}" type="number" pattern="#,##0"/>đ</td>
                     <td>
                         <!-- Nut sua -->
-                        <a href="updateVaccine?id=${v.id}" class="text-decoration-none edit-btn">
+                        <a href="updateVaccine?id=${v.id}"
+                           class="text-decoration-none edit-btn">
                             <img src="../image/edit.png" alt="Sửa" width="22" height="22">
                         </a>
                         <!-- Nut xoa -->
