@@ -3,6 +3,86 @@ function toggleSidebar() {
 }
 
 $(document).ready(function () {
+    // xuat pdf
+    $("#exportPDF").on("click", function () {
+        $.ajax({
+            url: "/provide_vaccine_services_war/admin/exportVaccine", // API lấy danh sách vaccine
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                let docDefinition = {
+                    content: [
+                        {text: "Danh sách Vắc Xin", style: "header"},
+                        {
+                            table: {
+                                headerRows: 1,
+                                widths: ["5%", "20%", "15%", "15%", "15%", "30%"], // Định dạng cột
+                                body: [
+                                    ["ID", "Tên", "Nước sản xuất", "Trạng thái", "Giá (VNĐ)", "Mô tả"], // Tiêu đề bảng
+                                    ...data.map(v => [
+                                        v.id,
+                                        v.name,
+                                        v.countryOfOrigin, // Kiểm tra giá trị null
+                                        v.status,
+                                        v.price.toLocaleString("vi-VN") + " đ",
+                                        v.description
+                                    ])
+                                ]
+                            }
+                        }
+                    ],
+                    styles: {
+                        header: {fontSize: 14, bold: true, alignment: "center", margin: [0, 10, 0, 10]},
+                        tableHeader: {bold: true, fontSize: 12, color: "white", fillColor: "#4CAF50"}
+                    }
+                };
+                pdfMake.createPdf(docDefinition).download("Danh_sach_VacXin.pdf");
+            },
+            error: function () {
+                alert("Loi du lieu!");
+            }
+        });
+    });
+
+    // xuat excel
+    $("#exportExcel").on("click", function () {
+        $.ajax({
+            url: "/provide_vaccine_services_war/admin/exportVaccine",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                let vaccineArray = Object.keys(data).map(key => ({
+                    id: key,
+                    ...data[key]
+                }));
+
+                let worksheetData = [
+                    ["ID", "Tên", "Nước sản xuất", "Trạng thái", "Giá (VNĐ)", "Mô tả"]
+                ];
+
+                vaccineArray.forEach(v => {
+                    worksheetData.push([
+                        v.id,
+                        v.name,
+                        v.countryOfOrigin || "Không có dữ liệu",
+                        v.status,
+                        v.price.toLocaleString("vi-VN") + " đ",
+                        v.description
+                    ]);
+                });
+
+                let wb = XLSX.utils.book_new();
+                let ws = XLSX.utils.aoa_to_sheet(worksheetData);
+                XLSX.utils.book_append_sheet(wb, ws, "Danh sách Vaccine");
+
+                XLSX.writeFile(wb, "Danh_sach_VacXin.xlsx");
+            },
+            error: function () {
+                alert("Loi du lieu!");
+            }
+        });
+    });
+
     // Ham khoi tao DataTable
     function initializeDataTable(selector) {
         let table = $(selector).DataTable({

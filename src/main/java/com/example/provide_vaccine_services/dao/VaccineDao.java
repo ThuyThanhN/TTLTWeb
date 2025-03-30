@@ -787,7 +787,7 @@ public class VaccineDao {
         VaccineContents vaccineContents = null;
         VaccineDetails vaccineDetails = null;
 
-        // ✅ Cập nhật SQL để lấy imageUrl từ bảng vaccines
+        // Cập nhật SQL để lấy imageUrl từ bảng vaccines
         String sql = "SELECT vc.*, v.name, v.description, v.imageUrl, " +
                 "vd.targetGroup, vd.immunization, vd.adverseReactions " +
                 "FROM vaccinecontents vc " +
@@ -799,7 +799,7 @@ public class VaccineDao {
             pst.setInt(1, id);
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
-                    // ✅ Lấy thêm imageUrl từ database
+                    // Lấy thêm imageUrl từ database
                     vaccineContents = new VaccineContents(
                             rs.getInt("id"),
                             rs.getInt("idDetail"),
@@ -822,18 +822,49 @@ public class VaccineDao {
                             rs.getString("adverseReactions")
                     );
 
-                    // ✅ Debug kiểm tra giá trị imageUrl
-                    System.out.println("✅ Image URL from DB: " + vaccineContents.getImageUrl());
+                    // Debug kiểm tra giá trị imageUrl
+                    System.out.println("Image URL from DB: " + vaccineContents.getImageUrl());
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        // ✅ Trả về cả hai đối tượng bằng Map
+        // Trả về cả hai đối tượng bằng Map
         Map<String, Object> result = new HashMap<>();
         result.put("vaccineContents", vaccineContents);
         result.put("vaccineDetails", vaccineDetails);
         return result;
     }
+
+    public List<Map<String, Object>> export() {
+        List<Map<String, Object>> vaccineList = new ArrayList<>();
+
+        try {
+            String sql = "SELECT v.id, v.name, s.countryOfOrigin, v.status, v.price, v.description " +
+                    "FROM vaccines v " +
+                    "JOIN suppliers s ON v.idSupplier = s.id " +
+                    "ORDER BY v.id";
+
+            PreparedStatement pst = DBConnect.get(sql);
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                Map<String, Object> vaccineData = new HashMap<>();
+                vaccineData.put("id", rs.getInt("id")); // Bổ sung ID để có thể sử dụng map() trong JS
+                vaccineData.put("name", rs.getString("name"));
+                vaccineData.put("countryOfOrigin", rs.getString("countryOfOrigin"));
+                vaccineData.put("status", rs.getString("status"));
+                vaccineData.put("price", rs.getFloat("price"));
+                vaccineData.put("description", rs.getString("description"));
+
+                vaccineList.add(vaccineData);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return vaccineList;
+    }
+
+
 }

@@ -27,6 +27,10 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <!-- pdfMake (xuat PDF) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <!-- Css   -->
     <link rel="stylesheet" href="../css/main_admin.css">
 </head>
@@ -43,6 +47,13 @@
             <a href="form-add-vacxin" class="btn btn-add btn-sm">
                 <i class="fa-solid fa-plus"></i> Thêm vắc xin
             </a>
+            <button class="btn btn-common btn-sm" id="exportPDF">
+                <i class="fas fa-file-pdf"></i> Xuất PDF
+            </button>
+
+            <button class="btn btn-common btn-sm" id="exportExcel">
+                <i class="fas fas fa-file-excel"></i> Xuất Excel
+            </button>
         </div>
         <table class="w-100 table table-striped" id="vaccine">
             <thead>
