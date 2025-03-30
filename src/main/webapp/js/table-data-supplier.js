@@ -267,5 +267,4 @@ $(document).ready(function () {
     handleAddSupplier();
     handleUpdateSupplier()
     handleDeleteButton('deleteSupplier', 'removeSupplier', supplierTable);
-
 });

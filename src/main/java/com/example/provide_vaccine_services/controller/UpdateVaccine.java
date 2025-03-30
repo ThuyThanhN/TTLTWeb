@@ -10,7 +10,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet(name = "UpdateVaccine", value = "/admin/updateVaccine")
 @MultipartConfig(
@@ -56,72 +58,64 @@ public class UpdateVaccine extends HttpServlet {
         request.setAttribute("vdetail", vdetail);
         request.setAttribute("vcontent", vcontent);
 
-        request.getRequestDispatcher("update-add-vacxin.jsp").forward(request, response);
+        request.getRequestDispatcher("update-vacxin.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        String idv = request.getParameter("idVaccine");
-        int id = Integer.parseInt(idv);
 
-//        Duong dan luu o dia D
+        // Lay id cua vac xin
+        int id = Integer.parseInt(request.getParameter("idVaccine"));
+
+        // Duong dan luu anh
         String uploadPath = "D:" + File.separator + "uploads";
-
-//        Tao thu muc uploads neu chua ton tai
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) uploadDir.mkdirs();
 
+        // Xu ly anh
         Part filePart = request.getPart("file");
         String fileName = filePart.getSubmittedFileName();
-        String filePath = uploadPath + File.separator + fileName;
-        String imagePath;
+        String imagePath = request.getParameter("existingImage");
 
         if (fileName != null && !fileName.isEmpty()) {
+            String filePath = uploadPath + File.separator + fileName;
             filePart.write(filePath);
-
-            //        Luu duong dan anh vao database
             imagePath = "/uploads/" + fileName;
-        } else {
-            imagePath = request.getParameter("existingImage");
         }
 
 
-        // Vaccines update
         String name = request.getParameter("vaccineName");
-        String quantity = request.getParameter("quantity");
-        String price = request.getParameter("price");
-        String status = request.getParameter("status");
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
+        float price = Float.parseFloat(request.getParameter("price"));
+        String statusText = (Integer.parseInt(request.getParameter("status")) == 1) ? "Còn hàng" : "Hết hàng";
         String description = request.getParameter("description");
         String prevention = request.getParameter("prevention");
-
-        LocalDateTime createdAt = LocalDateTime.now();
-        int quantityI = Integer.parseInt(quantity);
-        float priceF = Float.parseFloat(price);
         int supplierId = Integer.parseInt(request.getParameter("supplierName"));
-        String statusText = (Integer.parseInt(status) == 1) ? "Còn hàng" : "Hết hàng";
+        LocalDateTime createdAt = LocalDateTime.now();
 
-        Vaccines vaccines = new Vaccines(id, supplierId, name, description, quantityI, priceF, imagePath, statusText, createdAt, prevention);
+        // Cap nhat Vaccines
+        Vaccines vaccines = new Vaccines(id, supplierId, name, description, quantity, price, imagePath, statusText, createdAt, prevention);
         VaccineDao vaccineDao = new VaccineDao();
-        vaccineDao.updateVaccine(vaccines);
+        boolean vaccineUpdated = vaccineDao.updateVaccine(vaccines);
 
-//       AgeGroups + DisaseGroups update
+        // Cap nhat VaccineTypes (AgeGroups + DiseaseGroups)
         int age = Integer.parseInt(request.getParameter("age-name"));
-        int disase = Integer.parseInt(request.getParameter("disase-name"));
-        VaccineTypes vt = new VaccineTypes(id, age, disase);
+        int disease = Integer.parseInt(request.getParameter("disase-name"));
+        VaccineTypes vt = new VaccineTypes(id, age, disease);
         VaccineTypeDao vtDao = new VaccineTypeDao();
-        vtDao.updateType(vt);
+        boolean typeUpdated = vtDao.updateType(vt);
 
-//      VaccineDetails update
+        // Cap nhat VaccineDetails
         String target = request.getParameter("editor-dt");
         String immunization = request.getParameter("editor-pdt");
         String adverseReactions = request.getParameter("editor-pu");
 
         VacccineDetailDao vdDao = new VacccineDetailDao();
         VacccineDetails vd = new VacccineDetails(id, target, immunization, adverseReactions);
-        vdDao.updateVaccineDetail(vd);
+        boolean detailUpdated = vdDao.updateVaccineDetail(vd);
 
-//      VaccineContents update
+        // Cap nhat VaccineContents
         String origin = request.getParameter("editor-ng");
         String administrationRoute = request.getParameter("editor-dt");
         String contraindications = request.getParameter("editor-ccd");
@@ -132,8 +126,26 @@ public class UpdateVaccine extends HttpServlet {
         VaccineContentDao vcDao = new VaccineContentDao();
         int idDetail = vdDao.getIdDetail(id);
         VaccineContents vc = new VaccineContents(idDetail, origin, administrationRoute, contraindications, precaution, drugInteractions, sideEffects);
-        vcDao.updateVaccineContent(vc);
+        boolean contentUpdated = vcDao.updateVaccineContent(vc);
 
-        response.sendRedirect("table-data-vacxin");
+
+        Map<String, Object> jsonResponse = new HashMap<>();
+        if (vaccineUpdated && typeUpdated && detailUpdated && contentUpdated) {
+            jsonResponse.put("status", "success");
+            jsonResponse.put("id", id);
+            jsonResponse.put("name", name);
+            jsonResponse.put("stockQuantity", quantity);
+            jsonResponse.put("price", price);
+            jsonResponse.put("statusText", statusText);
+            jsonResponse.put("imageUrl", imagePath);
+        } else {
+            jsonResponse.put("status", "error");
+            jsonResponse.put("message", "Loi khi cap nhat vac xin");
+        }
+
+        // json respone
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(new com.google.gson.Gson().toJson(jsonResponse));
     }
 }
