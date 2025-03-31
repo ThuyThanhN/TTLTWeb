@@ -18,7 +18,50 @@ $(document).ready(function () {
         });
     }
 
+    initializeDataTable('#orderDetail');
     initializeDataTable('#order');
+
+    $(".view-detail").click(function () {
+        var orderId = $(this).data("id");
+        console.log(orderId)
+        $.ajax({
+            url: "/provide_vaccine_services_war/admin/displayDetailOrder",
+            type: "GET",
+            data: { id: orderId },
+            dataType: "json",
+            success: function (data) {
+                if (data.length === 0) {
+                    $("#modalBody").html("<p class='text-danger'>Không tìm thấy chi tiết đơn hàng!</p>");
+                    return;
+                }
+
+                var html = "";
+                data.forEach(function (od) {
+                    console.log("Dữ liệu nhận về:", data);
+                    const formattedPrice = new Intl.NumberFormat('vi-VN').format(od.total_price);
+
+                    html += "<div class='row g-0'>";
+                    html += "    <div class='col-12 detail-bottom'>";
+                    html += "        <h3>Đơn hàng #" + od.order_id + "</h3>";
+                    html += "        <p><strong>Loại vắc xin: </strong>" + od.vaccine_or_package_names + "</p>";
+                    html += "        <p><strong>Tổng tiền: </strong>" + formattedPrice + "đ</p>";
+                    html += "    </div>";
+                    html += "    <div class='col-12 detail-top'>";
+                    html += "        <p><strong>Tên người liên hệ: </strong>" + od.contact_name + "</p>";
+                    html += "        <p><strong>Mối quan hệ với người tiêm: </strong>" + od.relationship + "</p>";
+                    html += "        <p><strong>Số điện thoại: </strong>" + od.phone + "</p>";
+                    html += "    </div>";
+                    html += "</div>";
+                });
+
+                $("#modalBody").html(html);
+                $("#displayDetail").modal("show");
+            },
+            error: function () {
+                $("#modalBody").html("<p class='text-danger'>Lỗi tải dữ liệu!</p>");
+            }
+        });
+    });
 });
 
 function toggleSidebar() {
@@ -46,5 +89,4 @@ statusSelects.forEach(select => {
         }
     });
 });
-
 
