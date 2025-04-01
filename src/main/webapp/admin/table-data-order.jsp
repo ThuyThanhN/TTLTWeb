@@ -18,10 +18,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
           rel="stylesheet">
+    <%-- Ajax --%>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- DataTable -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <!-- pdfMake (xuat PDF) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <!-- Css   -->
     <link rel="stylesheet" href="../css/main_admin.css">
 </head>
@@ -37,6 +43,13 @@
             <a href="dosing_schedule" class="btn btn-add btn-sm">
                 <i class="fa-solid fa-plus"></i> Thêm đơn hàng
             </a>
+            <button class="btn btn-common btn-sm" id="exportPDF">
+                <i class="fas fa-file-pdf"></i> Xuất PDF
+            </button>
+
+            <button class="btn btn-common btn-sm" id="exportExcel">
+                <i class="fas fas fa-file-excel"></i> Xuất Excel
+            </button>
         </div>
         <table class="w-100 table table-striped" id="order">
             <thead>
@@ -62,9 +75,8 @@
                     <td>${o.appointment_time}</td>
                     <td>${o.center_name}</td>
                     <td>
-                        <form action="updateOrderStatus" method="post">
-                            <input type="hidden" name="order_id" value="${o.order_id}">
-                            <select class="status" name="status" onchange="this.form.submit()">
+                        <form id="updateOrderStatus" method="post">
+                            <select class="status" name="status" data-order-id="${o.order_id}">
                                 <option value="Chưa được duyệt"
                                         class="status-select" ${o.order_status == 'Chưa được duyệt' ? 'selected' : ''}>
                                     Chưa được duyệt
