@@ -8,9 +8,10 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Form;
 import org.apache.http.client.fluent.Request;
 import java.io.IOException;
+import java.util.Random;
 
 public class GoogleLogin {
-    public static String getGGToken(String code) throws ClientProtocolException, IOException {
+    public static String getGGToken(String code) throws IOException {
         String response = Request.Post(Iconstant.GOOGLE_LINK_GET_TOKEN)
                 .bodyForm(
                         Form.form()
@@ -30,6 +31,7 @@ public class GoogleLogin {
 
     public static String getFBToken(String code) throws ClientProtocolException, IOException
     {
+
         String response = Request.Post(Iconstant.FACEBOOK_LINK_GET_TOKEN)
                 .bodyForm(
                         Form.form()
@@ -72,6 +74,8 @@ public class GoogleLogin {
 
         String link = Iconstant.FACEBOOK_LINK_GET_USER_INFO + accessToken;
 
+        System.out.println(link);
+
         String response = Request.Get(link).execute().returnContent().asString();
 
         JsonObject jsonObject = JsonParser.parseString(response).getAsJsonObject();
@@ -84,11 +88,18 @@ public class GoogleLogin {
         user.setDateOfBirth(null); // Google không trả về ngày sinh, cần cập nhật thủ công
         user.setAddress(null); // Google không cung cấp địa chỉ trực tiếp
         user.setPhone(jsonObject.has("phone") ? jsonObject.get("phone").getAsString() : null);
-        user.setPassword(null); // Không lấy password từ Google OAuth
+        user.setPassword(getRandom()); // Không lấy password từ Google OAuth
         user.setRole(0); // Mặc định 0, có thể cập nhật theo logic ứng dụng
 
         return user;
 
+    }
+
+
+    // tao mat khau la so random cho cac tai khoan Oauth
+    private static String getRandom() {
+        Random rand = new Random();
+        return Integer.toString(rand.nextInt(100000, 999999));
     }
 
 

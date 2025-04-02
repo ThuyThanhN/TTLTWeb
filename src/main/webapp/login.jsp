@@ -57,10 +57,10 @@
             <div style=" justify-content: center; align-items: center; text-align: center">
                 <span class="p3"> OR </span>
                 <div class="authentication-group">
-                    <a class="authentication-button google" href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid&redirect_uri=http://localhost:8080/provide_vaccine_services_war/login&response_type=code&client_id=737894268831-9ab6vfskfnv7pfoh1i7nnagpmmau67oi.apps.googleusercontent.com&approval_prompt=force">
+                    <a class="authentication-button google" href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid&redirect_uri=http://localhost:8080/provide_vaccine_services_war/login?provider=google&response_type=code&client_id=737894268831-9ab6vfskfnv7pfoh1i7nnagpmmau67oi.apps.googleusercontent.com&approval_prompt=force">
                         <i class="fa fa-google" aria-hidden="true"></i>
                     </a>
-                    <a class="authentication-button facebook" href="https://www.facebook.com/v22.0/dialog/oauth?client_id=1610596812975790&redirect_uri=http://localhost:8080/provide_vaccine_services_war/login">
+                    <a class="authentication-button facebook" href="https://www.facebook.com/v22.0/dialog/oauth?client_id=1610596812975790&redirect_uri=http://localhost:8080/provide_vaccine_services_war/login?provider=facebook">
                         <i class="fa fa-facebook-official" aria-hidden="true"></i>
                     </a>
                 </div>

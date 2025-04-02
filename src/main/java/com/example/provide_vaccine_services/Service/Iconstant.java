@@ -6,7 +6,7 @@ public class Iconstant {
 
     public static final String GOOGLE_CLIENT_SECRET = "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";
 
-    public static final String GOOGLE_REDIRECT_URI = "http://localhost:8080/provide_vaccine_services_war/login";
+    public static final String GOOGLE_REDIRECT_URI = "http://localhost:8080/provide_vaccine_services_war/login?provider=google";
 
     public static final String GOOGLE_GRANT_TYPE = "authorization_code";
 
@@ -20,12 +20,12 @@ public class Iconstant {
             "718e0f67c798d7d919b1bb603ace4fae";
 
     public static final String FACEBOOK_REDIRECT_URI =
-            "http://localhost:8080/provide_vaccine_services_war/login";
+            "http://localhost:8080/provide_vaccine_services_war/login?provider=facebook";
 
     public static final String FACEBOOK_LINK_GET_TOKEN =
             "https://graph.facebook.com/v19.0/oauth/access_token";
 
     public static final String FACEBOOK_LINK_GET_USER_INFO =
-            "https://www.facebook.com/v19.0/dialog/oauth?fields=id,name,email&client_id=1610596812975790&redirect_uri=http://localhost:8080/provide_vaccine_services_war/login";
+            "https://www.facebook.com/v19.0/dialog/oauth?fields=id,name,email&client_id=1610596812975790&redirect_uri=http://localhost:8080/provide_vaccine_services_war/login?provider=facebook";
 
 }

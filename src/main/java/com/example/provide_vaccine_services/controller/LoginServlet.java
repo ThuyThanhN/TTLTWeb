@@ -21,8 +21,11 @@ public class LoginServlet extends HttpServlet {
 
         // Khi truy cập GET, chuyển hướng người dùng đến trang login.jsp
         response.setContentType("text/html;charset=UTF-8");
+
         String code = request.getParameter("code");
         String provider = request.getParameter("provider");
+
+        System.out.println(provider);
 
         if (code == null || code.isEmpty()) {
             request.getRequestDispatcher("login.jsp").forward(request, response);
@@ -111,6 +114,9 @@ public class LoginServlet extends HttpServlet {
             }
         } else if ("facebook".equalsIgnoreCase(provider)) {
             accessToken = gg.getFBToken(code);
+
+
+
             if (accessToken != null && !accessToken.isEmpty()) {
                 authUser = gg.getFBUserInfo(accessToken);
             }
