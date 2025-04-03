@@ -546,7 +546,47 @@ select:focus {
     color: #ef5350;
     display: none;
 }
+/*Detail Order*/
+.btn-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    transition: 0.3s ease-in-out;
+    background-color: white;
+    border: 1px solid #007bff;
+    color: #007bff;
+    font-size: 12px;
+}
 
+.btn-circle:hover {
+    background-color: #007bff;
+    color: white;
+    transform: scale(1.1);
+}
+
+.btn-circle i {
+    font-size: 14px;
+}
+
+.detail-bottom {
+    background: linear-gradient(90deg, #052065 100%, #0780CB 44.77%);
+    color: #fff;
+    padding: 20px;
+}
+
+.detail-top {
+    padding: 20px;
+}
+
+#displayDetail .modal-body strong,
+#displayDetail .modal-body p {
+    max-height: 80%;
+    font-size: 14px;
+}
 @media (max-width: 786px) {
     body {
         flex-direction: column;

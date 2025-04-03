@@ -201,14 +201,18 @@ $(document).ready(function () {
             });
 
             $.ajax({
-                url: "/provide_vaccine_services_war/admin/addCenter", type: "POST", data: {
+                url: "/provide_vaccine_services_war/admin/addCenter",
+                type: "POST",
+                data: {
                     "center-name": name,
                     "center-address": address,
                     "center-province": province,
                     "center-district": district,
                     "center-ward": ward,
                     "center-phone": phone
-                }, dataType: "json", success: function (response) {
+                },
+                dataType: "json",
+                success: function (response) {
                     if (response.status === "success") {
                         console.log("ID moi:", response.id);
                         // xoa focus truoc do
@@ -264,7 +268,9 @@ $(document).ready(function () {
             console.log("ID lấy được từ modal:", centerId);
 
             $.ajax({
-                url: "/provide_vaccine_services_war/admin/updateCenter", type: "POST", data: {
+                url: "/provide_vaccine_services_war/admin/updateCenter",
+                type: "POST",
+                data: {
                     id: centerId,
                     "center-name": name,
                     "center-address": address,

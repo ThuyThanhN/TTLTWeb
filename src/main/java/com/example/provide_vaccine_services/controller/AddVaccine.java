@@ -8,7 +8,6 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
 import java.io.File;
-import java.sql.PreparedStatement;
 import java.time.LocalDateTime;
 import java.io.IOException;
 
@@ -16,7 +15,7 @@ import java.io.IOException;
 @MultipartConfig(
         fileSizeThreshold = 1024 * 100,  // 100 KB
         maxFileSize = 1024 * 500,       // 500 KB
-        maxRequestSize = 1024 * 1024   * 10 // 10 MB
+        maxRequestSize = 1024 * 1024 * 10 // 10 MB
 )
 public class AddVaccine extends HttpServlet {
 
@@ -64,7 +63,7 @@ public class AddVaccine extends HttpServlet {
 //      Phan thong tin chi tiet + content
         String target = request.getParameter("editor-dt");
         String immunization = request.getParameter("editor-pdt");
-        String  adverseReactions = request.getParameter("editor-pu");
+        String adverseReactions = request.getParameter("editor-pu");
 
         String origin = request.getParameter("editor-ng");
         String administrationRoute = request.getParameter("editor-dt");
@@ -93,6 +92,10 @@ public class AddVaccine extends HttpServlet {
         VaccineTypeDao vtDao = new VaccineTypeDao();
         vtDao.insert(vt);
 
-        response.sendRedirect("table-data-vacxin");
+        if (idVaccine > 0) {
+            response.getWriter().write("{\"status\":\"success\", \"id\":" + idVaccine + "}");
+        } else {
+            response.getWriter().write("{\"status\":\"error\"}");
+        }
     }
 }

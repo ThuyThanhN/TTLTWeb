@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -10,12 +9,29 @@
     <title>Thêm vắc xin | Quản trị Admin </title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+          rel="stylesheet">
     <script src="https://cdn.ckeditor.com/ckeditor5/37.0.1/classic/ckeditor.js"></script>
+    <%-- Ajax --%>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- Bootstrap, jquery   -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <!-- DataTable -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <link rel="stylesheet" href="../css/main_admin.css">
 </head>
 <body>
@@ -26,7 +42,7 @@
     <jsp:include page="headerAdmin.jsp"></jsp:include>
 
     <div class="info-vaccine-wrapper">
-        <form action="addVaccine" method="post" enctype="multipart/form-data">
+        <form id="addVaccine" method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-12 col-md-7">
                     <div class="vaccine-info-form">
@@ -42,7 +58,8 @@
                                 <div class="col-6">
                                     <div class="mb-3">
                                         <label for="quantity-vaccine" class="form-label">Số lượng</label>
-                                        <input type="number" class="form-control" id="quantity-vaccine" name="quantityVaccine">
+                                        <input type="number" class="form-control" id="quantity-vaccine"
+                                               name="quantityVaccine">
                                     </div>
                                 </div>
                                 <div class="col-4">
@@ -76,9 +93,13 @@
                                 <div class="col-12">
                                     <div class="form-label">Ảnh vắc xin</div>
                                     <div class="mb-3">
-                                        <div class="w-100 border-black border-dotted position-relative pt-3" style="height: 96px">
-                                            <label for="upload" class="position-absolute w-100 h-100 text-center d-flex flex-column  align-items-center justify-content-center">
-                                                <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" height="24px" width="24px" xmlns="http://www.w3.org/2000/svg">
+                                        <div class="w-100 border-black border-dotted position-relative pt-3"
+                                             style="height: 96px">
+                                            <label for="upload"
+                                                   class="position-absolute w-100 h-100 text-center d-flex flex-column  align-items-center justify-content-center">
+                                                <svg stroke="currentColor" fill="currentColor" stroke-width="0"
+                                                     viewBox="0 0 448 512" height="24px" width="24px"
+                                                     xmlns="http://www.w3.org/2000/svg">
                                                     <path d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"></path>
                                                 </svg>
                                                 <div>Click to upload images</div>
@@ -120,75 +141,99 @@
                                     <div class="accordion" id="accordionExample">
                                         <div class="accordion-item">
                                             <h2 class="accordion-header" id="headingOne">
-                                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                                        data-bs-target="#collapseOne" aria-expanded="false"
+                                                        aria-controls="collapseOne">
                                                     Nguồn gốc
                                                 </button>
                                             </h2>
-                                            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                            <div id="collapseOne" class="accordion-collapse collapse"
+                                                 aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                                                 <div class="col-12">
                                                     <div class="mb-3">
-                                                        <textarea class="ckeditor" name="editor-ng"></textarea>
+                                                        <textarea id="editor-ng" class="ckeditor"
+                                                                  name="editor-ng"></textarea>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="accordion-item">
                                             <h2 class="accordion-header" id="headingTwo">
-                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                <button class="accordion-button collapsed" type="button"
+                                                        data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                                                        aria-expanded="false" aria-controls="collapseTwo">
                                                     Đường tiêm
                                                 </button>
                                             </h2>
-                                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                            <div id="collapseTwo" class="accordion-collapse collapse"
+                                                 aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                                 <div class="form-floating p-3">
-                                                    <textarea class="ckeditor" name="editor-dt"></textarea>
+                                                    <textarea id="editor-dut" class="ckeditor"
+                                                              name="editor-dut"></textarea>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="accordion-item">
                                             <h2 class="accordion-header" id="headingThree">
-                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                                <button class="accordion-button collapsed" type="button"
+                                                        data-bs-toggle="collapse" data-bs-target="#collapseThree"
+                                                        aria-expanded="false" aria-controls="collapseThree">
                                                     Chống chỉ định
                                                 </button>
                                             </h2>
-                                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                            <div id="collapseThree" class="accordion-collapse collapse"
+                                                 aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                                                 <div class="form-floating p-3">
-                                                    <textarea class="ckeditor" name="editor-ccd"></textarea>
+                                                    <textarea id="editor-ccd" class="ckeditor"
+                                                              name="editor-ccd"></textarea>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="accordion-item">
                                             <h2 class="accordion-header" id="headingFour">
-                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                                <button class="accordion-button collapsed" type="button"
+                                                        data-bs-toggle="collapse" data-bs-target="#collapseFour"
+                                                        aria-expanded="false" aria-controls="collapseFour">
                                                     Thận trọng
                                                 </button>
                                             </h2>
-                                            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                                            <div id="collapseFour" class="accordion-collapse collapse"
+                                                 aria-labelledby="headingFour" data-bs-parent="#accordionExample">
                                                 <div class="form-floating p-3">
-                                                    <textarea class="ckeditor" name="editor-tt"></textarea>
+                                                    <textarea id="editor-tt" class="ckeditor"
+                                                              name="editor-tt"></textarea>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="accordion-item">
                                             <h2 class="accordion-header" id="headingFive">
-                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                                <button class="accordion-button collapsed" type="button"
+                                                        data-bs-toggle="collapse" data-bs-target="#collapseFive"
+                                                        aria-expanded="false" aria-controls="collapseFive">
                                                     Tương tác thuốc
                                                 </button>
                                             </h2>
-                                            <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+                                            <div id="collapseFive" class="accordion-collapse collapse"
+                                                 aria-labelledby="headingFive" data-bs-parent="#accordionExample">
                                                 <div class="form-floating p-3">
-                                                    <textarea class="ckeditor" name="editor-ttt"></textarea>
+                                                    <textarea id="editor-ttt" class="ckeditor"
+                                                              name="editor-ttt"></textarea>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="accordion-item">
                                             <h2 class="accordion-header" id="headingSix">
-                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseFive">
+                                                <button class="accordion-button collapsed" type="button"
+                                                        data-bs-toggle="collapse" data-bs-target="#collapseSix"
+                                                        aria-expanded="false" aria-controls="collapseFive">
                                                     Tác dụng phụ
                                                 </button>
                                             </h2>
-                                            <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#accordionExample">
+                                            <div id="collapseSix" class="accordion-collapse collapse"
+                                                 aria-labelledby="headingSix" data-bs-parent="#accordionExample">
                                                 <div class="form-floating p-3">
-                                                    <textarea class="ckeditor" name="editor-tdp"></textarea>
+                                                    <textarea id="editor-tdp" class="ckeditor"
+                                                              name="editor-tdp"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -198,19 +243,19 @@
                             <div class="my-3 content d-none" id="object-content">
                                 <div class="form-floating">
                                     <div>Đối tượng</div>
-                                    <textarea class="ckeditor" name="editor-dt"></textarea>
+                                    <textarea id="editor-dot" class="ckeditor" name="editor-dot"></textarea>
                                 </div>
                             </div>
                             <div class="my-3 content d-none" id="schedule-content">
                                 <div class="form-floating">
                                     <div>Phác đồ tiêm</div>
-                                    <textarea class="ckeditor" name="editor-pdt"></textarea>
+                                    <textarea id="editor-pdt" class="ckeditor" name="editor-pdt"></textarea>
                                 </div>
                             </div>
                             <div class="my-3 content d-none" id="reaction-content">
                                 <div class="form-floating">
                                     <div>Phản ứng</div>
-                                    <textarea class="ckeditor" name="editor-pu"></textarea>
+                                    <textarea id="editor-pu" class="ckeditor" name="editor-pu"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -219,7 +264,8 @@
                         <div class="vaccine-info-form">
                             <div class="section-title border-bottom p-3">Phân loại</div>
                             <div class="p-3">
-                                <a href="" class="btn btn-add btn-sm" data-bs-toggle="modal" data-bs-target="#addDisase">
+                                <a href="" class="btn btn-add btn-sm" data-bs-toggle="modal"
+                                   data-bs-target="#addDisase">
                                     <i class="fa-solid fa-plus"></i> Thêm nhóm bệnh
                                 </a>
                                 <a href="" class="btn btn-add btn-sm" data-bs-toggle="modal" data-bs-target="#addAge">
@@ -229,8 +275,10 @@
                                     <div class="col-6">
                                         <div class="mb-3">
                                             <div class="mb-3">
-                                                <label for="form-select-vaccine1" class="form-label">Vắc xin theo nhóm bệnh</label>
-                                                <select class="form-select form-control" id="form-select-vaccine1" name="disage-name">
+                                                <label for="form-select-vaccine1" class="form-label">Vắc xin theo nhóm
+                                                    bệnh</label>
+                                                <select class="form-select form-control" id="form-select-vaccine1"
+                                                        name="disage-name">
                                                     <option value="0">---Chọn vắc xin---</option>
                                                     <c:forEach var="d" items="${disases}">
                                                         <option value="${d.id}">${d.name}</option>
@@ -241,8 +289,10 @@
                                     </div>
                                     <div class="col-6">
                                         <div class="mb-3">
-                                            <label for="form-select-vaccine2" class="form-label">Vắc xin theo độ tuổi</label>
-                                            <select class="form-select form-control" id="form-select-vaccine2" name="age-name">
+                                            <label for="form-select-vaccine2" class="form-label">Vắc xin theo độ
+                                                tuổi</label>
+                                            <select class="form-select form-control" id="form-select-vaccine2"
+                                                    name="age-name">
                                                 <option value="0">---Chọn vắc xin---</option>
                                                 <c:forEach var="a" items="${ages}">
                                                     <option value="${a.id}">${a.name}</option>

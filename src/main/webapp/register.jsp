@@ -104,7 +104,6 @@
                         <input type="password" id="password" name="password" required>
                         <span id="password-error" style="color: red; display: none;"></span>
                     </div>
-
                     <div>
                         <label for="confirm-password"><strong>Xác nhận mật khẩu <span class="required">*</span></strong></label>
                         <input type="password" id="confirm-password" name="confirmPassword" required>

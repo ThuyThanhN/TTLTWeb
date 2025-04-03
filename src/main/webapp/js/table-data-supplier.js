@@ -31,12 +31,12 @@ $(document).ready(function () {
                 {
                     extend: "print",
                     title: "Danh sách Nhà Cung Cấp",
-                    exportOptions: { columns: [0, 1, 2] }
+                    exportOptions: {columns: [0, 1, 2]}
                 },
                 {
                     extend: "pdfHtml5",
                     title: "Danh sách Nhà Cung Cấp",
-                    exportOptions: { columns: [0, 1, 2] },
+                    exportOptions: {columns: [0, 1, 2]},
                     customize: function (doc) {
                         doc.content[1].table.widths = ["auto", "*", "*"];
                     }
@@ -44,7 +44,7 @@ $(document).ready(function () {
                 {
                     extend: "excelHtml5",
                     title: "Danh sách Nhà Cung Cấp",
-                    exportOptions: { columns: [0, 1, 2] }
+                    exportOptions: {columns: [0, 1, 2]}
                 }
             ]
         });
@@ -95,6 +95,32 @@ $(document).ready(function () {
             </div>`;
     }
 
+    function generateSupplierRowHtml(supplierId, response) {
+        return `
+        <tr data-id="${supplierId}">
+            <td>${supplierId}</td>
+            <td>${response.name}</td>
+            <td>${response.country}</td>
+            <td>
+                <a href="#" 
+                   class="text-decoration-none edit-btn" 
+                   data-bs-toggle="modal" 
+                   data-bs-target="#editSupplierModal-${supplierId}">
+                   <img src="../image/edit.png" alt="Sửa" width="22" height="22">
+                </a>
+                <a href="#" 
+                   class="text-decoration-none delete-btn" 
+                   data-bs-toggle="modal" 
+                   data-bs-target="#deleteSupplier" 
+                   data-id="${supplierId}" 
+                   data-name="${response.name}">
+                   <img src="../image/bin.png" alt="Xóa" width="24" height="24">
+                </a>
+            </td>
+        </tr>
+    `;
+    }
+
     // Ham xu ly chuc nang them
     function handleAddSupplier() {
         $("#addSupplierForm").submit(function (event) {
@@ -106,7 +132,10 @@ $(document).ready(function () {
             $.ajax({
                 url: "/provide_vaccine_services_war/admin/addSupplier",
                 type: "POST",
-                data: { "supplier-name": name, "supplier-country": country },
+                data: {
+                    "supplier-name": name,
+                    "supplier-country": country
+                },
                 dataType: "json",
                 success: function (response) {
                     if (response.status === "success") {
@@ -118,22 +147,19 @@ $(document).ready(function () {
                         // xoa nd input
                         $("#supplier-name").val("");
                         $("#supplier-country").val("");
+
                         // them modal moi vao
                         $("body").append(generateEditModalHtml(response.id, name, country));
 
-                        let newRow = [
-                            response.id,
-                            name,
-                            country,
-                            `<a href="updateSupplier?id=${response.id}" class="text-decoration-none edit-btn" data-bs-toggle="modal" data-bs-target="#editSupplierModal-${response.id}">
-                                <img src="../image/edit.png" alt="Sua" width="22" height="22">
-                            </a>
-                            <a href="#" class="text-decoration-none delete-btn" data-bs-toggle="modal" data-bs-target="#deleteSupplier" data-id="${response.id}" data-name="${name}">
-                                <img src="../image/bin.png" alt="Xoa" width="24" height="24">
-                            </a>`
-                        ];
+                        let responseData = {
+                            name: name,
+                            country: country
+                        };
 
-                        $("#supplier").DataTable().row.add(newRow).draw(false);
+                        console.log("Response: ", responseData);
+
+                        let newRowHtml = generateSupplierRowHtml(response.id, responseData);
+                        $("#supplier").DataTable().row.add($(newRowHtml)).draw(false);
                     }
                 },
                 error: function () {
@@ -156,18 +182,25 @@ $(document).ready(function () {
             $.ajax({
                 url: "/provide_vaccine_services_war/admin/updateSupplier",
                 type: "POST",
-                data: { id: supplierId, "supplier-name": name, "supplier-country": country },
+                data: {
+                    id: supplierId,
+                    "supplier-name": name,
+                    "supplier-country": country
+                },
                 dataType: "json",
                 success: function (response) {
                     if (response.status === "success") {
-                        // cập nhật dữ liệu trong bảng
-                        let row = $(`#supplier tr:has(td:contains('${supplierId}'))`);
-                        row.find("td:eq(1)").text(response.name);
-                        row.find("td:eq(2)").text(response.country);
-
-                        // xoa focus
+                        // xoa modal cu
+                        $(`#editSupplierModal-${supplierId}`).remove();
+                        // them modal moi
+                        $("body").append(generateEditModalHtml(supplierId, response.name, response.country));
+                        // cap nhat input
+                        let newRowHtml = generateSupplierRowHtml(supplierId, response);
+                        let table = $("#supplier").DataTable();
+                        let row = $(`#supplier tr[data-id='${supplierId}']`);
+                        table.row(row).remove();
+                        table.row.add($(newRowHtml)).draw(false);
                         modal.find("button, input, textarea, select").blur();
-                        // an modal
                         const bsModal = bootstrap.Modal.getInstance(modal[0]);
                         bsModal.hide();
                     }
@@ -203,7 +236,7 @@ $(document).ready(function () {
             $.ajax({
                 url: `./${removeUrlPrefix}`,
                 type: "POST",
-                data: { id: deleteId },
+                data: {id: deleteId},
                 dataType: "json",
                 success: function (response) {
                     if (response.status === "success") {
@@ -234,5 +267,4 @@ $(document).ready(function () {
     handleAddSupplier();
     handleUpdateSupplier()
     handleDeleteButton('deleteSupplier', 'removeSupplier', supplierTable);
-
 });
