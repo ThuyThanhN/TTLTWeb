@@ -251,23 +251,30 @@ public class UserDao {
 
         return re; // Trả về kết quả (số bản ghi đã được thêm)
     }
-    public Users checkLogin(String phone, String password) {
+    public Users checkLogin(String username, String password) {
         Users user = null;
         try {
-            String sql = "SELECT * FROM users WHERE phone = ? AND password = ? ";
+            // Kiểm tra xem username là số điện thoại hay email
+            String sql = "";
+            if (username.contains("@")) {
+                // Nếu username chứa dấu "@" thì coi như email
+                sql = "SELECT * FROM users WHERE email = ? AND password = ?";
+            } else {
+                // Nếu không có dấu "@" thì coi như số điện thoại
+                sql = "SELECT * FROM users WHERE phone = ? AND password = ?";
+            }
+
             PreparedStatement pst = DBConnect.get(sql);
 
             // Mã hóa mật khẩu trước khi so sánh
-
-            pst.setString(1, phone);
+            pst.setString(1, username); // email hoặc số điện thoại
             String hashedPassword = MD5Hash.hashPassword(password.trim());
             pst.setString(2, hashedPassword);
 
             // Debug kiểm tra giá trị đầu vào
-            System.out.println("Phone: " + phone);
-            System.out.println("Password truoc khi ma hoa: " + password);
-            System.out.println("Password ma hoa: " + hashedPassword);
-
+            System.out.println("Username: " + username);
+            System.out.println("Password trước khi mã hóa: " + password);
+            System.out.println("Password mã hóa: " + hashedPassword);
 
             ResultSet rs = pst.executeQuery();
 
@@ -289,16 +296,17 @@ public class UserDao {
                 );
 
                 // Debug khi đăng nhập thành công
-                System.out.println("Dang nhap thanh cong cho ID: " + user.getId());
+                System.out.println("Đăng nhập thành công cho ID: " + user.getId());
             } else {
                 // Debug khi đăng nhập thất bại
-                System.out.println("Dang nhap that bai. Khong tim thay tai khoan phu hop.");
+                System.out.println("Đăng nhập thất bại. Không tìm thấy tài khoản phù hợp.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return user;
     }
+
     public boolean updatePassword(int userId, String newPassword) {
         boolean isUpdated = false;
         try {
