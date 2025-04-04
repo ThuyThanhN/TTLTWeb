@@ -115,8 +115,6 @@ public class LoginServlet extends HttpServlet {
         } else if ("facebook".equalsIgnoreCase(provider)) {
             accessToken = gg.getFBToken(code);
 
-
-
             if (accessToken != null && !accessToken.isEmpty()) {
                 authUser = gg.getFBUserInfo(accessToken);
             }

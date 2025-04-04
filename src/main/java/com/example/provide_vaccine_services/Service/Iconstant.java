@@ -26,6 +26,6 @@ public class Iconstant {
             "https://graph.facebook.com/v19.0/oauth/access_token";
 
     public static final String FACEBOOK_LINK_GET_USER_INFO =
-            "https://www.facebook.com/v19.0/dialog/oauth?fields=id,name,email&client_id=1610596812975790&redirect_uri=http://localhost:8080/provide_vaccine_services_war/login?provider=facebook";
+            "https://graph.facebook.com/me?fields=id,name,email,picture&access_token=";
 
 }
