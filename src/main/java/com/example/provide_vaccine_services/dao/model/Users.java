@@ -17,7 +17,26 @@ public class Users implements Serializable {
     private String email;
     private String password;
     private int role;
+    private int status;
 
+    // Constructor không có id (dùng khi chèn người dùng mới và id được tự động tạo)
+    public Users(String fullname, String gender, String identification, Date dateOfBirth,
+                 String address, String province, String district, String ward, String phone,
+                 String email, String password, int role, int status) {
+        this.fullname = fullname;
+        this.gender = gender;
+        this.identification = identification;
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
+        this.province = province;
+        this.district = district;
+        this.ward = ward;
+        this.phone = phone;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.status = status;
+    }
     public Users(int id, String fullname, String gender, String identification, Date dateOfBirth, String address, String province, String district, String ward, String phone, String email, String password, int role) {
         this.id = id;
         this.fullname = fullname;
@@ -151,5 +170,12 @@ public class Users implements Serializable {
 
     public void setRole(int role) {
         this.role = role;
+    }
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

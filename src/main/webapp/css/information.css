@@ -60,6 +60,51 @@ h1 {
     background-color: #2a388f;
     border-color: #0d6efd;
 }
+/* Đảm bảo container của dropdown có position: relative để căn chỉnh dropdown menu đúng */
+.dropdown {
+    position: relative; /* Để có thể căn chỉnh mũi tên bên trong input */
+}
+
+/* Đảm bảo input có thể hiển thị mũi tên */
+.dropdown input {
+    cursor: pointer;
+    padding-right: 30px; /* Đảm bảo có khoảng trống cho mũi tên */
+    width: 100%; /* Đảm bảo input chiếm toàn bộ chiều rộng */
+}
+
+/* Đảm bảo dropdown menu hiển thị đúng và không bị tràn */
+.dropdown-menu {
+    display: none; /* Ẩn dropdown mặc định */
+    position: absolute;
+    z-index: 1000;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    width: 100%; /* Đảm bảo dropdown không tràn ra ngoài */
+    max-height: 300px;
+    overflow-y: auto;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Thêm bóng cho dropdown */
+}
+
+/* Hiển thị dropdown khi click vào input */
+.dropdown.open .dropdown-menu {
+    display: block; /* Hiển thị dropdown khi class open được thêm */
+}
+
+/* Thiết lập cho mũi tên */
+.dropdown i {
+    position: absolute;
+    top: 50%;
+    right: 10px; /* Đặt mũi tên sát bên phải của input */
+    transform: translateY(-50%); /* Căn giữa mũi tên theo chiều dọc */
+    font-size: 1.2em; /* Tùy chỉnh kích thước của mũi tên */
+    color: #000; /* Tùy chỉnh màu sắc của mũi tên */
+}
+
+/* Dropdown item khi hover */
+.dropdown-menu .dropdown-item:hover {
+    background-color: #f8f9fa; /* Thêm màu nền khi hover */
+}
+
 
 /* Responsive styles */
 .profile-card {
@@ -261,11 +306,6 @@ form.bg-light {
     cursor: pointer;
 }
 
-.dropdown-menu {
-    width: 100%;
-    max-height: 150px;
-    overflow-y: auto;
-}
 
 @media (max-width: 1024px) {
     .main-content {
