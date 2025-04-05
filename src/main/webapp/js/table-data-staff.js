@@ -3,45 +3,408 @@ function toggleSidebar() {
 }
 
 $(document).ready(function () {
-    // Hàm khởi tạo DataTable
+    // Ham khoi tao DataTable
     function initializeDataTable(selector) {
-        $(selector).DataTable({
-            "pagingType": "numbers",
-            "pageLength": 5,
-            "language": {
-                "emptyTable": "Không có dữ liệu",
-                "info": "Hiển thị _START_ đến _TOTAL_ mục",
-                "infoEmpty": "Hiển thị 0 đến 0 của 0 mục",
-                "infoFiltered": "(được lọc từ _MAX_ mục)",
-                "lengthMenu": "Hiển thị _MENU_ mục",
-                "loadingRecords": "Đang tải...",
-                "processing": "Đang xử lý...",
-                "search": "Tìm kiếm:",
-                "zeroRecords": "Không tìm thấy dữ liệu phù hợp"
+        let table = $(selector).DataTable({
+            pagingType: "numbers",
+            pageLength: 5,
+            language: {
+                emptyTable: "Không có dữ liệu",
+                info: "Hiển thị _START_ đến _TOTAL_ mục",
+                infoEmpty: "Hiển thị 0 đến 0 của 0 mục",
+                infoFiltered: "(được lọc từ _MAX_ mục)",
+                lengthMenu: "Hiển thị _MENU_ mục",
+                loadingRecords: "Đang tải...",
+                processing: "Đang xử lý...",
+                search: "Tìm kiếm:",
+                zeroRecords: "Không tìm thấy dữ liệu phù hợp"
+            },
+            buttons: [
+                {
+                    extend: "print",
+                    title: "Danh sách Nhân Viên",
+                    exportOptions: {columns: [0, 1, 2, 3, 4, 5]}
+                },
+                {
+                    extend: "pdfHtml5",
+                    title: "Danh sách Nhân Viên",
+                    exportOptions: {columns: [0, 1, 2, 3, 4, 5]},
+                    customize: function (doc) {
+                        doc.content[1].table.widths = ["auto", "*", "*", "*", "*", "*"];
+                    }
+                },
+                {
+                    extend: "excelHtml5",
+                    title: "Danh sách Nhân Viên",
+                    exportOptions: {columns: [0, 1, 2, 3, 4, 5]}
+                }
+            ]
+        });
+
+        $("#print").on("click", function () {
+            table.button(0).trigger();
+        });
+
+        $("#exportPDF").on("click", function () {
+            table.button(1).trigger();
+        });
+
+        $("#exportExcel").on("click", function () {
+            table.button(2).trigger();
+        });
+
+        return table;
+    }
+
+    function generateEditModalHtml(id, fullname, gender, ident, date, email, address, province, district, ward, provinceCode, districtCode, wardCode, phone, role, password) {
+        return `
+            <div class="modal fade" id="editStaff-${id}" data-bs-backdrop="static" 
+                data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="editLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                       <div class="modal-header">
+                            <h5 class="modal-title" id="editLabel">Cập nhật nhân viên</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                       </div>
+                       <div class="modal-body">
+                          <form class="editStaffForm" method="post">
+                             <input type="hidden" name="id" value="${id}">
+                             <div class="row">
+                                  <div class="col-4">
+                                      <div class="mb-3">
+                                         <label for="fullname-${id}" class="form-label">Họ và tên</label>
+                                         <input type="text" class="form-control" id="fullname-${id}" name="fullname" value="${fullname}" required>
+                                      </div>
+                                  </div>
+                                  <div class="col-4">
+                                      <div class="mb-3 position-relative">
+                                          <label for="gender${id}" class="form-label">Giới tính</label>
+                                          <select class="form-select" id="gender${id}" name="gender">
+                                              <option value="" selected>--Chọn giới tính--</option>
+                                              <option value="Nam" ${gender === 'Nam' ? 'selected' : ''}>Nam</option>
+                                              <option value="Nữ" ${gender === 'Nữ' ? 'selected' : ''}>Nữ</option>
+                                              <option value="Khác" ${gender === 'Khác' ? 'selected' : ''}>Khác</option>
+                                          </select>
+                                          <i class="fa-solid fa-angle-down position-absolute end-0 translate-middle" style="top: 72%"></i>
+                                      </div>
+                                  </div>
+                                  <div class="col-4">
+                                      <div class="mb-3">
+                                          <label for="ident-${id}" class="form-label">Mã định danh </label>
+                                          <input type="text" class="form-control" id="ident-${id}" name="ident" value="${ident}">
+                                      </div>
+                                  </div>
+                                  <div class="col-4">
+                                       <div class="mb-3">
+                                           <label for="date-${id}" class="form-label">Ngày sinh </label> <br>
+                                           <input type="date" class="form-control" name="date" id="date-${id}" value="${date}">
+                                       </div>
+                                  </div>
+                                  <div class="col-4">
+                                       <div class="mb-3">
+                                            <label for="email-${id}" class="form-label">Email </label> <br>
+                                            <input type="email" class="form-control" name="email" id="email-${id}" value="${email}">
+                                       </div>
+                                  </div>
+                                  <div class="col-12">
+                                       <div class="mb-3">
+                                            <label for="address-${id}" class="form-label">Địa chỉ</label>
+                                            <input type="text" class="form-control" id="address-${id}" value="${address}" name="address" maxlength="80" required>
+                                       </div>
+                                  </div>
+                                  <div class="col-4">
+                                      <div class="mb-3">
+                                           <label class="form-label">Tỉnh thành</label>
+                                            <div class="dropdown">
+                                                <input type="text" placeholder="Chọn tỉnh thành" name="province"
+                                                       value="${province}" class="form-control dropdown-toggle province-select"
+                                                       id="province-select-${id}" data-code="${provinceCode}" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fa-solid fa-angle-down"></i>
+                                            <ul class="dropdown-menu province-menu"></ul>
+                                      </div>
+                                  </div>
+                                  <div class="col-4">
+                                       <div class="mb-3">
+                                          <label class="form-label">Quận huyện</label>
+                                          <div class="dropdown">
+                                              <input type="text" placeholder="Chọn quận huyện" name="district"
+                                                      value="${district}"
+                                                      class="form-control dropdown-toggle district-select" id="district-select-${id}"
+                                                      data-code="${districtCode}" data-bs-toggle="dropdown" aria-expanded="false">
+                                              <ul class="dropdown-menu district-menu"></ul>
+                                          </div>
+                                       </div>
+                                    </div>
+                                  <div class="col-4">
+                                        <label class="form-label">Phường xã</label>
+                                        <div class="dropdown">
+                                            <input type="text" placeholder="Chọn phường xã" name="ward"  value="${ward}"
+                                                    class="form-control dropdown-toggle ward-select" id="ward-select-${id}"
+                                                    data-code="${wardCode}" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <ul class="dropdown-menu ward-menu"></ul>
+                                        </div>
+                                  </div>
+                                  <div class="col-4">
+                                        <div class="mb-3">
+                                             <label for="phone-${id}" class="form-label">Số điện thoại</label>
+                                             <input type="tel" class="form-control" id="phone-${id}" name="phone" value="${phone}" required>
+                                        </div>
+                                  </div>
+                                  <div class="col-4">
+                                        <div class="mb-3 position-relative">
+                                               <label for="role-${id}" class="form-label">Chức vụ</label>
+                                               <select class="form-select" id="role-${id}" name="role" required>
+                                                    <option value="" selected>--Chọn chức vụ--</option>
+                                                    <option value="Admin" ${role == 1 ? 'selected' : ''}>Admin</option>
+                                                    <option value="Nhân viên" ${role == 2 ? 'selected' : ''}>Nhân viên</option>
+                                               </select>
+                                               <i class="fa-solid fa-angle-down position-absolute end-0 translate-middle" style="top: 72%"></i>
+                                        </div>
+                                  </div>
+                                  <div class="col-4">
+                                         <div class="mb-3">
+                                                <label for="pass-${id}" class="form-label">Mật khẩu</label>
+                                                input type="password" class="form-control" id="pass-${id}" name="password" value="${password}" required>
+                                         </div>
+                                  </div>
+                             </div>
+                             <div class="modal-footer">
+                                 <button type="submit" class="btn btn-save">Lưu lại</button>
+                                 <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Hủy bỏ</button>
+                             </div>
+                          </form>
+                       </div>
+                    </div>
+                </div>
+           </div>`;
+    }
+
+    function generateStaffRowHtml(staffId, response) {
+        return `
+        <tr data-id="${staffId}">
+            <td>${staffId}</td>
+            <td>${response.fullname}</td>
+            <td>${response.address}, ${response.ward}, ${response.district}, ${response.province}</td>
+            <td>${response.gender}</td>
+             <td>
+                        <f:formatDate value="${response.dateOfBirth}" pattern="dd-MM-yyyy" />
+                    </td>
+                    <td>${response.phone}</td>
+            <td>
+                <a href="#" 
+                   class="text-decoration-none edit-btn" 
+                   data-bs-toggle="modal" 
+                   data-bs-target="#editStaff-${staffId}">
+                   <img src="../image/edit.png" alt="Sửa" width="22" height="22">
+                </a>
+                <a href="#" 
+                   class="text-decoration-none delete-btn" 
+                   data-bs-toggle="modal" 
+                   data-bs-target="#deleteStaff" 
+                   data-id="${staffId}" 
+                   data-name="${response.fullname}">
+                   <img src="../image/bin.png" alt="Xóa" width="24" height="24">
+                </a>
+            </td>
+        </tr>
+    `;
+    }
+
+    $("#addStaffForm").submit(function (event) {
+        event.preventDefault();
+
+        let fullname = $("#fullname").val();
+        let gender = $("#gender").val();
+        let ident = $("#ident").val();
+        let date = $("#date").val();
+        let email = $("#email").val();
+        let address = $("#staff-address").val();
+        let province = $("#province").val();
+        let district = $("#district").val();
+        let ward = $("#ward").val();
+        let phone = $("#staff-phone").val();
+        let role = $("#role").val();
+        let password = $("#password").val();
+
+
+        let provinceCode = $("#province").attr("data-code");
+        let districtCode = $("#district").attr("data-code");
+        let wardCode = $("#ward").attr("data-code");
+        console.log({
+            name, address, province, district, ward, phone
+        });
+
+        $.ajax({
+            url: "/provide_vaccine_services_war/admin/addStaff",
+            type: "POST",
+            data: {
+                "fullname": fullname,
+                "gender": gender,
+                "ident": ident,
+                "date": date,
+                "email": email,
+                "address": address,
+                "province": province,
+                "district": district,
+                "ward": ward,
+                "phone": phone,
+                "role": role,
+                "password": password
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response.status === "success") {
+                    console.log("ID moi:", response.id);
+                    // Xóa focus các thành phần bên trong modal trước khi ẩn
+                    $("#addModal").find("button, input, textarea, select").blur();
+                    // an modal
+                    $("#addModal").modal("hide");
+                    // xoa nd input
+                    $("#addStaffForm")[0].reset();
+
+                    // them modal moi vao
+                    $("body").append(generateEditModalHtml(fullname, gender, ident, date, email, address, province, district, ward, provinceCode, districtCode, wardCode, phone, role, password));
+
+                    let responseData = {
+                        fullname: fullname,
+                        address: address,
+                        province: province,
+                        district: district,
+                        ward: ward,
+                        gender: gender,
+                        phone: phone
+                    };
+
+                    console.log("Response: ", responseData);
+
+                    let newRowHtml = generateStaffRowHtml(response.id, responseData);
+                    $("#staff").DataTable().row.add($(newRowHtml)).draw(false);
+                }
+            },
+            error: function () {
+                alert("Loi khi them nhan vien!");
             }
         });
-    }
+    });
 
-    function handleDeleteButton ( modalId, removeUrlPrefix) {
+    $(document).on("submit", ".editStaffForm", function (e) {
+        e.preventDefault(); // ngăn hành động mặc định
+
+        let modal = $(this).closest(".modal");
+        let staffId = modal.find("input[name='id']").val();
+        let fullname = modal.find("input[name='fullname']").val();
+        let gender = modal.find("select[name='gender']").val();
+        let ident = modal.find("input[name='ident']").val();
+        let date = modal.find("input[name='date']").val();
+        let email = modal.find("input[name='email']").val();
+        let address = modal.find("input[name='address']").val();
+        let province = modal.find("input[name='province']").val();
+        let district = modal.find("input[name='district']").val();
+        let ward = modal.find("input[name='ward']").val();
+        let phone = modal.find("input[name='phone']").val();
+        let role = modal.find("select[name='role']").val();
+        let password = modal.find("input[name='password']").val();
+
+
+        let provinceCode = $("#province").attr("data-code");
+        let districtCode = $("#district").attr("data-code");
+        let wardCode = $("#ward").attr("data-code");
+
+        $.ajax({
+            url: "/provide_vaccine_services_war/admin/updateStaff",
+            type: "POST",
+            data: {
+                id: staffId,
+                "fullname": fullname,
+                "gender": gender,
+                "ident": ident,
+                "date": date,
+                "email": email,
+                "address": address,
+                "province": province,
+                "district": district,
+                "ward": ward,
+                "phone": phone,
+                "role": role,
+                "password": password
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response.status === "success") {
+                    // xoa modal cu
+                    $(`#editStaff-${staffId}`).remove();
+                    // them modal moi
+                    $("body").append(generateEditModalHtml(staffId, response.fullname, response.gender, response.ident, response.date, response.email,
+                        response.address, response.province, response.district, response.ward, response.provinceCode,
+                        response.districtCode, response.wardCode, response.phone, response.role, response.password));
+                    // cap nhat input
+                    let newRowHtml = generateStaffRowHtml(staffId, response);
+                    let table = $("#staff").DataTable();
+                    let row = $(`#staff tr[data-id='${staffId}']`);
+                    table.row(row).remove();
+                    table.row.add($(newRowHtml)).draw(false);
+                    modal.find("button, input, textarea, select").blur();
+                    const bsModal = bootstrap.Modal.getInstance(modal[0]);
+                    bsModal.hide();
+                }
+            },
+            error: function (xhr) {
+                console.log("Lỗi: " + xhr.responseText);
+            }
+        });
+    });
+
+    // bo focus khoi cac phan tu trong modal tranh loi aria-hidden
+    $(document).on("click", "[data-bs-dismiss='modal']", function () {
+        $(this).closest(".modal").find("button, input, textarea, select").blur();
+    });
+
+    // Ham xu ly chuc nang xoa
+    function handleDeleteButton(modalId, removeUrlPrefix, table) {
+        let deleteRow = null;
+        let deleteId = null;
+
         $("#staff").on("click", ".delete-btn", function (e) {
-            // fix lỗi arial-hidden
-            e.currentTarget.blur();
-            let removeUrl = `./${removeUrlPrefix}`;
-            let modalSelector = `${modalId}`;
             e.preventDefault();
-            var itemId = $(this).data("id");
-            var itemName = $(this).data("name");
-            // alert(id);
-            console.log("id-name","data-staff"+modalSelector+ itemId + itemName);
-            var modal = document.getElementById(modalSelector);
-            modal.querySelector('.modal-body').textContent = 'Bạn có chắc chắn muốn xóa ' + itemName + '?';
 
-            // Cập nhật link nút xác nhận
-            var confirmDeleteButton = modal.querySelector('#confirmDelete');
-            confirmDeleteButton.setAttribute('href', removeUrl + '?id=' + itemId);
+            deleteId = $(this).data("id");
+            let itemName = $(this).data("name");
+            deleteRow = table.row($(this).closest("tr"));
+
+            let modalSelector = `#${modalId}`;
+            document.querySelector(modalSelector).querySelector('.modal-body').textContent = `Bạn có chắc chắn muốn xóa ${itemName}?`;
+
+            $(modalSelector).modal("show");
+        });
+
+        $("#confirmDelete").on("click", function () {
+            if (!deleteId || !deleteRow) return;
+
+            $.ajax({
+                url: `./${removeUrlPrefix}`,
+                type: "POST",
+                data: {id: deleteId},
+                dataType: "json",
+                success: function (response) {
+                    if (response.status === "success") {
+                        deleteRow.remove().draw();
+                        // xoa focus
+                        $(`#${modalId}`).find("button, input, textarea, select").blur();
+                        // an modal
+                        const bsModal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+                        bsModal.hide();
+                    } else {
+                        alert("Xóa thất bại");
+                    }
+                },
+                error: function (xhr) {
+                    alert("Lỗi: " + xhr.responseText);
+                }
+            });
         });
     }
 
-    initializeDataTable('#staff');
-    handleDeleteButton( 'deleteStaff', 'removeStaff');
+    const staffTable = initializeDataTable("#staff");
+    handleDeleteButton('deleteStaff', 'removeStaff', staffTable);
 });
