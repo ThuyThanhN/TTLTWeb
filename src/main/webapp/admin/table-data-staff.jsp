@@ -150,6 +150,7 @@
                                                     <div class="mb-3">
                                                         <label for="email-${staff.id}" class="form-label">Email </label> <br>
                                                         <input type="email" class="form-control" name="email" id="email-${staff.id}" value="${staff.email}">
+                                                        <div class="error-message">Vui lòng nhập một địa chỉ email hợp lệ.</div>
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
@@ -209,7 +210,8 @@
                                                 <div class="col-4">
                                                     <div class="mb-3">
                                                         <label for="phone-${staff.id}" class="form-label">Số điện thoại</label>
-                                                        <input type="tel" class="form-control" id="phone-${staff.id}" name="phone" value="${staff.phone}" required>
+                                                        <input type="tel" class="form-control" id="phone-${staff.id}" name="phone" value="${staff.phone}" required data-phone>
+                                                        <div class="error-message">Số điện thoại không hợp lệ.</div>
                                                     </div>
                                                 </div>
                                                 <div class="col-4">
@@ -226,7 +228,8 @@
                                                 <div class="col-4">
                                                     <div class="mb-3">
                                                         <label for="pass-${staff.id}" class="form-label">Mật khẩu</label>
-                                                        <input type="password" class="form-control" id="pass-${staff.id}" name="password" value="${staff.password}" required>
+                                                        <input type="password" class="form-control" id="pass-${staff.id}" name="password" value="${staff.password}" required data-password>
+                                                        <div class="error-message">Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, chữ số và ký tự đặc biệt.</div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -308,7 +311,8 @@
                             <div class="col-4">
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email: </label> <br>
-                                    <input type="email" class="form-control" name="email" id="email">
+                                    <input type="email" class="form-control" name="email" id="email" data-email>
+                                    <div class="error-message">Vui lòng nhập một địa chỉ email hợp lệ.</div>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -358,7 +362,8 @@
                             <div class="col-4">
                                 <div class="mb-3">
                                     <label for="staff-phone" class="form-label">Số điện thoại</label>
-                                    <input type="tel" class="form-control" id="staff-phone" name="phone" required>
+                                    <input type="tel" class="form-control" id="staff-phone" name="phone" required data-phone>
+                                    <div class="error-message">Số điện thoại không hợp lệ.</div>
                                 </div>
                             </div>
                             <div class="col-4">
@@ -375,7 +380,8 @@
                             <div class="col-4">
                                 <div class="mb-3">
                                     <label for="password" class="form-label">Mật khẩu</label>
-                                    <input type="password" class="form-control" id="password" name="password" required>
+                                    <input type="password" class="form-control" id="password" name="password" required data-password>
+                                    <div class="error-message">Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, chữ số và ký tự đặc biệt.</div>
                                 </div>
                             </div>
                         </div>

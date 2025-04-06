@@ -2,6 +2,49 @@ function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("show");
 }
 
+document.querySelectorAll("[data-email]").forEach(emailInput => {
+    emailInput.addEventListener("input", function () {
+        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        const valid = emailPattern.test(this.value);
+        emailInput.classList.toggle("is-invalid", !valid);
+        this.nextElementSibling.style.display = !valid ? "block" : "none";
+    });
+});
+
+document.querySelectorAll("[data-phone]").forEach(phoneInput => {
+    phoneInput.addEventListener("input", function () {
+        const valid = /^\d{10,11}$/.test(this.value);
+        phoneInput.classList.toggle("is-invalid", !valid);
+        this.nextElementSibling.style.display = !valid ? "block" : "none";
+    });
+});
+
+document.querySelectorAll("[data-password]").forEach(pass => {
+    pass.addEventListener("input", function () {
+        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        const valid = passwordPattern.test(this.value);
+        pass.classList.toggle("is-invalid", !valid);
+        this.nextElementSibling.style.display = !valid ? "block" : "none";
+    });
+});
+// Kiểm tra mật khẩu
+document.getElementById("password").addEventListener("input", function () {
+    const passwordInput = this.value;
+    const errorMessage = document.getElementById("password-error");
+
+    // Biểu thức chính quy để kiểm tra mật khẩu (ít nhất 8 ký tự, có chữ hoa, chữ thường, số và ký tự đặc biệt)
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    // Kiểm tra nếu mật khẩu không hợp lệ
+    if (!passwordPattern.test(passwordInput)) {
+        errorMessage.style.display = "block";
+        errorMessage.textContent = "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, chữ số và ký tự đặc biệt.";
+    } else {
+        errorMessage.style.display = "none"; // Ẩn thông báo lỗi nếu mật khẩu hợp lệ
+    }
+});
+
+
 $(document).ready(function () {
     // Ham khoi tao DataTable
     function initializeDataTable(selector) {
@@ -408,3 +451,5 @@ $(document).ready(function () {
     const staffTable = initializeDataTable("#staff");
     handleDeleteButton('deleteStaff', 'removeStaff', staffTable);
 });
+
+
