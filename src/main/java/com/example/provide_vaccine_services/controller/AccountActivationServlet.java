@@ -1,7 +1,7 @@
 package com.example.provide_vaccine_services.controller;
 
 import com.example.provide_vaccine_services.Service.EmailSender;
-import com.example.provide_vaccine_services.Service.AccountActivationTokenGenerator;
+import com.example.provide_vaccine_services.Service.TokenGenerator;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -32,7 +32,7 @@ public class AccountActivationServlet extends HttpServlet {
         }
 
         // Tạo mã token kích hoạt tài khoản bằng lớp AccountActivationTokenGenerator
-        String token = AccountActivationTokenGenerator.generateActivationToken();
+        String token = TokenGenerator.generateActivationToken();
 
         // Tạo URL kích hoạt tài khoản chứa mã token
         String activationLink = generateActivationLink(token);
