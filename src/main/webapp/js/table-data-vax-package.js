@@ -3,7 +3,6 @@ function toggleSidebar() {
 }
 
 $(document).ready(function () {
-    // Hàm khởi tạo DataTable
     function initializeDataTable(selector) {
         $(selector).DataTable({
             "pagingType": "numbers",
@@ -43,6 +42,102 @@ $(document).ready(function () {
 
     initializeDataTable('#package');
     handleDeleteButton('deleteModal', 'removePackage');
+
+    function generatePackageRowHtml(packageId, response) {
+        return `
+        <tr data-id="${packageId}">
+            <td>${packageId}</td>
+            <td>${response.name}</td>
+            <<td>${response.totalPrice}đ</td>
+            <td>
+                <a href="#" 
+                   class="text-decoration-none edit-btn" 
+                   data-bs-toggle="modal" 
+                   data-bs-target="#editModal-${packageId}">
+                   <img src="../image/edit.png" alt="Sửa" width="22" height="22">
+                </a>
+                <a href="#" 
+                   class="text-decoration-none delete-btn" 
+                   data-bs-toggle="modal" 
+                   data-bs-target="#deleteStaff" 
+                   data-id="${packageId}" 
+                   data-name="${response.name}">
+                   <img src="../image/bin.png" alt="Xóa" width="24" height="24">
+                </a>
+            </td>
+        </tr>
+    `;
+    }
+
+    $("#addPMappingForm").submit(function (event) {
+        event.preventDefault();
+
+        const modal = document.querySelector('#addModal');
+        updateTotalPrice(modal); // tinh lai tong gia goi
+        const totalPriceStr = modal.querySelector('.totalPriceDisplay').value.replace('đ', '').replace(/\./g, '').replace(/,/g, '');
+        const totalPrice = parseFloat(totalPriceStr);
+
+        let name = $("#package-select").val();
+        let age = $("#age-select").val();
+        let description = $("#description-packag").val();
+
+        let vaccineIds = [];
+        let dosages = [];
+
+
+        $(".list-packages .selected-vaccine").each(function () {
+            let id = $(this).attr('data-id');
+            let dosage = parseInt($(this).find('.dosage').val()) || 1
+
+            vaccineIds.push(id);
+            dosages.push(dosage);
+        });
+
+        console.log("Selected vaccine IDs:", vaccineIds);
+        console.log("Dosages:", dosages);
+
+        $.ajax({
+            url: "/provide_vaccine_services_war/admin/addPMapping",
+            type: "POST",
+            data: {
+                "package-name": name,
+                "age-select": age,
+                "description-name": description,
+                "vaccineId": vaccineIds,
+                "dosage": dosages,
+                "totalPrice": totalPrice
+            },
+            traditional: true,
+            dataType: "json",
+            success: function (response) {
+                if (response.status === "success") {
+                    $("#addModal").find("button, input, textarea, select").blur();
+                    $("#addModal").modal("hide");
+                    $("#addPMappingForm")[0].reset();
+                    $("#selected-vaccines").empty();
+
+                    let responseData = {
+                        name: name,
+                        totalPrice:totalPrice
+                    };
+                    console.log("Response: ", responseData);
+                    let newRowHtml = generatePackageRowHtml(response.id, responseData);
+                    $("#package").DataTable().row.add($(newRowHtml)).draw(false);
+                } else {
+                    alert("Có lỗi xảy ra: " + response.message);
+                }
+            },
+            error: function () {
+                alert("Loi khi them goi!");
+            }
+        });
+    });
+
+
+    // bo focus khoi cac phan tu trong modal tranh loi aria-hidden
+    $(document).on("click", "[data-bs-dismiss='modal']", function () {
+        $(this).closest(".modal").find("button, input, textarea, select").blur();
+    });
 });
 
 // Lưu trữ số liều cho các vắc xin

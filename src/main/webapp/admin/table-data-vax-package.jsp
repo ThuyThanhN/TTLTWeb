@@ -57,7 +57,7 @@
             </thead>
             <tbody>
             <c:forEach var="pkg" items="${packageList}">
-                <tr>
+                <tr data-id="${pkg.package_id}">
                     <td>${pkg.package_id}</td>
                     <td>${pkg.package_name}</td>
                     <td><f:formatNumber value="${pkg.total_price}" type="number" pattern="#,##0" />đ</td>
@@ -195,7 +195,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="addPMapping" method="post">
+                    <form id="addPMappingForm" method="post">
                         <div class="row">
                             <div class="col-12">
                                 <div class="mb-3">
