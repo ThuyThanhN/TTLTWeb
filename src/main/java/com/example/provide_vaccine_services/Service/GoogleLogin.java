@@ -83,6 +83,8 @@ public class GoogleLogin {
 
         JsonObject jsonObject = JsonParser.parseString(response).getAsJsonObject();
 
+        System.out.println("jsonObject: " + jsonObject);
+
         Users user = new Users();
         user.setFullname(jsonObject.has("name") ? jsonObject.get("name").getAsString() : null);
         user.setEmail(jsonObject.has("email") ? jsonObject.get("email").getAsString() : null);

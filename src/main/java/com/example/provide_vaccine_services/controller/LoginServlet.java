@@ -69,7 +69,7 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
 
         // nếu khng có ật khẩu hoặc dùng mật khẩu set cho các tài khoản google_auth
-        if (password == null || password.isEmpty() || password.equals("GOOGLE_AUTH")) {
+        if (password == null || password.isEmpty()) {
             request.setAttribute("error", "Invalid password");
         }
 
@@ -118,6 +118,7 @@ public class LoginServlet extends HttpServlet {
             if (accessToken != null && !accessToken.isEmpty()) {
                 authUser = gg.getFBUserInfo(accessToken);
             }
+
         }
 
         return authUser;

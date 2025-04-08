@@ -108,14 +108,14 @@ a {
     background-color: #c1351d; /* Màu đậm hơn khi hover */
 }
 
-/* Nút Facebook */
-.authentication-button.facebook {
+/* Nút Zalo */
+.authentication-button.zalo {
     width: 40px; /* Chiều rộng */
     height: 40px; /* Chiều cao */
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #1877f2; /* Màu xanh Facebook */
+    background-color: #1877f2; /* Màu xanh Zalo */
     border-radius: 50%;
 
 }

@@ -16,6 +16,9 @@ public class Iconstant {
 
     public static final String FACEBOOK_CLIENT_ID = "1610596812975790";
 
+
+
+    // zalo
     public static final String FACEBOOK_CLIENT_SECRET =
             "718e0f67c798d7d919b1bb603ace4fae";
 

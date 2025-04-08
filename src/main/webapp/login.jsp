@@ -28,44 +28,48 @@
     </div>
     <!--    Phần content -->
     <div class="login-container">
-        <form class="login-form" action="login" method="POST">
-            <h2>Đăng Nhập</h2>
+        <div class="login-form">
 
-            <div class="input-group">
-                <label for="username">SDT đăng nhập</label>
-                <input type="text" id="username" name="username" required autocomplete="off"
-                       placeholder="Nhập số điện thoại">
-            </div>
-            <div class="input-group password-group">
-                <label for="password">Mật khẩu</label>
-                <input type="password" id="password" name="password" required autocomplete="off"
-                       placeholder="Nhập mật khẩu">
-            </div>
-            <% if (request.getAttribute("error") != null) { %>
-            <div class="alert alert-danger">
-                <%= request.getAttribute("error") %>
-            </div>
-            <% } %>
-            <div class="login-options">
-                <div class="forgot-password">
-                    <a href="reset-password" class="link-primary">Quên mật khẩu?</a></div>
-                <div class="register-link">
-                    <a href="registerUsers" class="link-primary">Đăng ký</a>
+            <form action="login" method="POST">
+                <h2>Đăng Nhập</h2>
+
+                <div class="input-group">
+                    <label for="username">SDT đăng nhập</label>
+                    <input type="text" id="username" name="username" required autocomplete="off"
+                           placeholder="Nhập số điện thoại">
                 </div>
-            </div>
-            <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
-            <div style=" justify-content: center; align-items: center; text-align: center">
-                <span class="p3"> OR </span>
-                <div class="authentication-group">
-                    <a class="authentication-button google" href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid&redirect_uri=http://localhost:8080/provide_vaccine_services_war/login?provider=google&response_type=code&client_id=737894268831-9ab6vfskfnv7pfoh1i7nnagpmmau67oi.apps.googleusercontent.com&approval_prompt=force">
-                        <i class="fa fa-google" aria-hidden="true"></i>
-                    </a>
-                    <a class="authentication-button facebook" href="https://www.facebook.com/v19.0/dialog/oauth?fields=id,name,email&client_id=1610596812975790&redirect_uri=http://localhost:8080/provide_vaccine_services_war/login?provider=facebook">
-                        <i class="fa fa-facebook-official" aria-hidden="true"></i>
-                    </a>
+                <div class="input-group password-group">
+                    <label for="password">Mật khẩu</label>
+                    <input type="password" id="password" name="password" required autocomplete="off"
+                           placeholder="Nhập mật khẩu">
                 </div>
+                <% if (request.getAttribute("error") != null) { %>
+                <div class="alert alert-danger">
+                    <%= request.getAttribute("error") %>
+                </div>
+                <% } %>
+                <div class="login-options">
+                    <div class="forgot-password">
+                        <a href="reset-password" class="link-primary">Quên mật khẩu?</a></div>
+                    <div class="register-link">
+                        <a href="registerUsers" class="link-primary">Đăng ký</a>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
+                <div style=" justify-content: center; align-items: center; text-align: center">
+                    <span class="p3"> OR </span>
+                </div>
+            </form>
+            <div class="authentication-group">
+                <a class="authentication-button google" href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid&redirect_uri=http://localhost:8080/provide_vaccine_services_war/login?provider=google&response_type=code&client_id=737894268831-9ab6vfskfnv7pfoh1i7nnagpmmau67oi.apps.googleusercontent.com&approval_prompt=force">
+                    <i class="fa fa-google" aria-hidden="true"></i>
+                </a>
+                <a class="authentication-button facebook" href="https://www.facebook.com/v19.0/dialog/oauth?fields=id,name,email&client_id=1610596812975790&redirect_uri=http://localhost:8080/provide_vaccine_services_war/login?provider=facebook&scope=email">
+                    <i class="fa fa-facebook-official" aria-hidden="true"></i>
+                </a>
             </div>
-        </form>
+        </div>
+
     </div>
     <!--    Phần footer -->
     <jsp:include page="footer.jsp"></jsp:include>

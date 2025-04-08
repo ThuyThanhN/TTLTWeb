@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class UserDao {
     private Users u;
@@ -258,11 +259,12 @@ public class UserDao {
 
         try {
             // Câu lệnh SQL để chèn dữ liệu vào bảng users
-            String sql = "INSERT INTO users(fullname, gender, identification, dateOfBirth, address, province, district, ward, phone, email, password, role)" +
-                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO users(fullname, gender, identification, dateOfBirth, address, province, district, ward, phone, email, password, role, status)" +
+                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pst = DBConnect.get(sql);
 
             String s = u.toString();
+
             System.out.println("user: " + s);
 
             // Gán các giá trị từ đối tượng `Users`
@@ -276,8 +278,9 @@ public class UserDao {
             pst.setString(8, "");
             pst.setString(9, "");
             pst.setString(10, u.getEmail());
-            pst.setString(11, "GOOGLE_AUTH");
+            pst.setString(11, genPassword());
             pst.setInt(12, u.getRole());
+            pst.setInt(13, 1);
 
 
             // Thực hiện câu lệnh và kiểm tra kết quả
@@ -470,6 +473,15 @@ public class UserDao {
             e.printStackTrace();
         }
         return null; // Trả về null nếu không tìm thấy
+    }
+
+
+    // tạo mật khẩu ngẫu nhiên
+    private String genPassword() {
+        Random rand = new Random();
+        int randomNum = rand.nextInt(100000, 999999);
+        String password = String.valueOf(randomNum);
+        return MD5Hash.hashPassword(password);
     }
 
 }
