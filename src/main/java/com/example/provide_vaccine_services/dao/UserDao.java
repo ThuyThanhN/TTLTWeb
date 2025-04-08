@@ -19,11 +19,12 @@ public class UserDao {
     public int insert(Users u) {
         int re = 0;
 
-        try {
-            String sql = "insert into users(fullname, gender, identification, dateOfBirth, " +
-                    "address, province, district, ward, phone, email, password, role) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement pst = DBConnect.get(sql);
+        // Sử dụng try-with-resources để đảm bảo tài nguyên được đóng đúng cách
+        try (PreparedStatement pst = DBConnect.get("INSERT INTO users (fullname, gender, identification, dateOfBirth, " +
+                "address, province, district, ward, phone, email, password, role, status) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
 
+            // Set các tham số
             pst.setString(1, u.getFullname());
             pst.setString(2, u.getGender());
             pst.setString(3, u.getIdentification());
@@ -35,21 +36,25 @@ public class UserDao {
             pst.setString(9, u.getPhone());
             pst.setString(10, u.getEmail());
             pst.setString(11, u.getPassword());
-            pst.setInt(12, u.getRole());
+            pst.setInt(12, u.getRole());  // Gán giá trị cho cột role
+            pst.setInt(13, u.getStatus());  // Gán giá trị cho cột status
 
+            // Thực thi câu lệnh SQL
             re = pst.executeUpdate();
 
+            // Kiểm tra kết quả và thông báo
             if (re > 0) {
-                System.out.println("Them du lieu thanh cong");
+                System.out.println("Thêm dữ liệu thành công");
             } else {
-                System.out.println("Them du lieu that bai!");
+                System.out.println("Thêm dữ liệu thất bại!");
             }
-            return re;
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return re;
     }
+
 
     // Cap nhat thong tin
     public int update(Users u) {
