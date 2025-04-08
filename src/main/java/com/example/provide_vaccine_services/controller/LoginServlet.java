@@ -18,34 +18,56 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-
-        // Khi truy cập GET, chuyển hướng người dùng đến trang login.jsp
         response.setContentType("text/html;charset=UTF-8");
+        UserDao userDao = new UserDao();
 
+
+        /**
+         *
+         * cách hoạt động của Oauth
+         *
+         * sau khi đăng nhập bên thứ 3 sẽ trả về code & provider đăng nhập ghi người dùng đăng nhập Oauth ( sẽ là null nếu không đăng nhạp oauth )
+         * ví dụ: code = FNAFJKS... provider = "google", "facebook"
+         *
+         * sử dụng code đó để lấy được
+         *  + ACCESS_TOKEN: truy cập vào dữ liệu người dùng của bên thứ 3
+         *
+         * bên thứ 3 sẽ kiểm tra ACCESS_TOKEN có hợp lệ hay không. nếu có thì trả về dữ liệu người dùng
+         *
+         */
         String code = request.getParameter("code");
         String provider = request.getParameter("provider");
 
-        System.out.println(provider);
 
+        // nếu không có code => trả về trang login và kết thúc.
         if (code == null || code.isEmpty()) {
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
 
+        // lấy dữ liệu người dùng bằng code và provider tương ứng
         Users authUser = authenticateUser(code, provider);
         if (authUser == null) {
             session.setAttribute("error", "login.jsp?error=invalid_auth");
             return;
         }
 
-        UserDao userDao = new UserDao();
+        /**
+         *  kiểm tra xem user có tồn tại trong DB chưa
+         *
+         *  + nếu có => lấy thông tin người dùng đó và đăng nhập
+         *  + nếu chưa => tạo người dùng mới lưu vào database
+         *
+         */
         Users user = userDao.getUserByEmail(authUser.getEmail());
-                if (user == null) {
-                    authUser.setRole(0);
-                    userDao.insertGGUser(authUser);
-                    user = authUser;
-                }
+        if (user == null) {
+            authUser.setRole(0);
+            userDao.insertGGUser(authUser);
+            user = authUser;
+        }
 
+
+        // lưu ngươi dùng vào session
         session.setAttribute("user", user);
 
         // Kiểm tra vai trò và chuyển hướng trang
@@ -100,12 +122,41 @@ public class LoginServlet extends HttpServlet {
         }
     }
 
+
+    //  lấy người dùng từ code và provider
     private Users authenticateUser(String code, String provider) throws IOException {
 
         GoogleLogin gg = new GoogleLogin();
-
         String accessToken = null;
         Users authUser = null;
+
+        /**
+         *
+         *  1) sử dụng switch case để kiểm tra xem provider là gì để gọi phương thức phù hợp ( ví dụ: google, facebook )
+         *
+         *  2) lấy access_token từ code
+         *      accessToken = gg.getGGToken(code);
+         *
+         *  3) Lấy dữ liệu người dùng
+         *
+         *   + nếu lấy được thành công access_token
+         *            if (accessToken != null && !accessToken.isEmpty()) {
+         *              authUser = gg.getGGUserInfo(accessToken);
+         *            }
+         *
+         *   + nếu không thì authUser là null;
+         *
+         * ví dụ:
+         *  switch (provider) {
+         *      case "google":
+         *          accessToken = gg.getGGToken(code);
+         *          if (accessToken != null && !accessToken.isEmpty()) {
+         *              authUser = gg.getGGUserInfo(accessToken);
+         *          }
+         *          break;
+         *  }
+         */
+
 
         switch (provider) {
             case "google":
@@ -120,6 +171,8 @@ public class LoginServlet extends HttpServlet {
 //                    authUser = gg.getFBUserInfo(accessToken);
 //                }
 //                break;
+
+            // provider không hợp lệ
             default:
                 System.out.println(provider + " invalid!!");
                 break;
