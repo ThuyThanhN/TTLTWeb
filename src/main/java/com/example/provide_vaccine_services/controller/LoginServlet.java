@@ -40,11 +40,11 @@ public class LoginServlet extends HttpServlet {
 
         UserDao userDao = new UserDao();
         Users user = userDao.getUserByEmail(authUser.getEmail());
-        if (user == null) {
-            authUser.setRole(0);
-            userDao.insertGGUser(authUser);
-            user = authUser;
-        }
+                if (user == null) {
+                    authUser.setRole(0);
+                    userDao.insertGGUser(authUser);
+                    user = authUser;
+                }
 
         session.setAttribute("user", user);
 
@@ -107,18 +107,22 @@ public class LoginServlet extends HttpServlet {
         String accessToken = null;
         Users authUser = null;
 
-        if ("google".equalsIgnoreCase(provider)) {
-            accessToken = gg.getGGToken(code);
-            if (accessToken != null && !accessToken.isEmpty()) {
-                authUser = gg.getGGUserInfo(accessToken);
-            }
-        } else if ("facebook".equalsIgnoreCase(provider)) {
-            accessToken = gg.getFBToken(code);
-
-            if (accessToken != null && !accessToken.isEmpty()) {
-                authUser = gg.getFBUserInfo(accessToken);
-            }
-
+        switch (provider) {
+            case "google":
+                accessToken = gg.getGGToken(code);
+                if (accessToken != null && !accessToken.isEmpty()) {
+                    authUser = gg.getGGUserInfo(accessToken);
+                }
+                break;
+//            case "facebook":
+//                accessToken = gg.getFBToken(code);
+//                if (accessToken != null && !accessToken.isEmpty()) {
+//                    authUser = gg.getFBUserInfo(accessToken);
+//                }
+//                break;
+            default:
+                System.out.println(provider + " invalid!!");
+                break;
         }
 
         return authUser;
