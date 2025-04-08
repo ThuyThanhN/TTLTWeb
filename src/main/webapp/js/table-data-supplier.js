@@ -257,7 +257,6 @@ $(document).ready(function () {
         });
     }
 
-
     // bo focus khoi cac phan tu trong modal tranh loi aria-hidden
     $(document).on("click", "[data-bs-dismiss='modal']", function () {
         $(this).closest(".modal").find("button, input, textarea, select").blur();

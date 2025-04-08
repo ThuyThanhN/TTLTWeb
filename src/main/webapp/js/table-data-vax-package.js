@@ -3,45 +3,33 @@ function toggleSidebar() {
 }
 
 $(document).ready(function () {
+    // bo focus khoi cac phan tu trong modal tranh loi aria-hidden
+    $(document).on("click", "[data-bs-dismiss='modal']", function () {
+        $(this).closest(".modal").find("button, input, textarea, select").blur();
+    });
+
+    // Ham khoi tao DataTable
     function initializeDataTable(selector) {
-        $(selector).DataTable({
-            "pagingType": "numbers",
-            "pageLength": 5,
-            "language": {
-                "emptyTable": "Không có dữ liệu",
-                "info": "Hiển thị _START_ đến _TOTAL_ mục",
-                "infoEmpty": "Hiển thị 0 đến 0 của 0 mục",
-                "infoFiltered": "(được lọc từ _MAX_ mục)",
-                "lengthMenu": "Hiển thị _MENU_ mục",
-                "loadingRecords": "Đang tải...",
-                "processing": "Đang xử lý...",
-                "search": "Tìm kiếm:",
-                "zeroRecords": "Không tìm thấy dữ liệu phù hợp"
+        let table = $(selector).DataTable({
+            pagingType: "numbers",
+            pageLength: 5,
+            language: {
+                emptyTable: "Không có dữ liệu",
+                info: "Hiển thị _START_ đến _TOTAL_ mục",
+                infoEmpty: "Hiển thị 0 đến 0 của 0 mục",
+                infoFiltered: "(được lọc từ _MAX_ mục)",
+                lengthMenu: "Hiển thị _MENU_ mục",
+                loadingRecords: "Đang tải...",
+                processing: "Đang xử lý...",
+                search: "Tìm kiếm:",
+                zeroRecords: "Không tìm thấy dữ liệu phù hợp"
             }
         });
+
+        return table;
     }
 
-    function handleDeleteButton(modalId, removeUrlPrefix) {
-        $("#package").on("click", ".delete-btn", function (e) {
-            e.currentTarget.blur();
-            let removeUrl = `./${removeUrlPrefix}`;
-            let modalSelector = `${modalId}`;
-            e.preventDefault();
-            var itemId = $(this).data("id");
-            var itemName = $(this).data("name");
-            // alert(id);
-            console.log("id-name", "vax-package" + modalSelector + itemId + itemName);
-            var modal = document.getElementById(modalSelector);
-            modal.querySelector('.modal-body').textContent = 'Bạn có chắc chắn muốn xóa ' + itemName + '?';
-
-            // Cập nhật link nút xác nhận
-            var confirmDeleteButton = modal.querySelector('#confirmDelete');
-            confirmDeleteButton.setAttribute('href', removeUrl + '?id=' + itemId);
-        });
-    }
-
-    initializeDataTable('#package');
-    handleDeleteButton('deleteModal', 'removePackage');
+    const packageTable = initializeDataTable('#package');
 
     function generatePackageRowHtml(packageId, response) {
         return `
@@ -115,10 +103,9 @@ $(document).ready(function () {
                     $("#addModal").modal("hide");
                     $("#addPMappingForm")[0].reset();
                     $("#selected-vaccines").empty();
-
                     let responseData = {
                         name: name,
-                        totalPrice:totalPrice
+                        totalPrice: totalPrice
                     };
                     console.log("Response: ", responseData);
                     let newRowHtml = generatePackageRowHtml(response.id, responseData);
@@ -133,17 +120,122 @@ $(document).ready(function () {
         });
     });
 
+    // Ham xu ly chuc nang cap nhat
+    $(document).on("submit", ".editPackageForm", function (e) {
+        e.preventDefault();
 
-    // bo focus khoi cac phan tu trong modal tranh loi aria-hidden
-    $(document).on("click", "[data-bs-dismiss='modal']", function () {
-        $(this).closest(".modal").find("button, input, textarea, select").blur();
+        const form = $(this);
+        const modal = form.closest(".modal");
+        const packageId = modal.find("input[name='id']").val();
+        const name = modal.find("input[name='package-name']").val();
+        const ageId = modal.find(".age-select").val();
+        const description = modal.find(".description-name").val();
+
+        let totalPriceStr = modal.find(".totalPriceDisplay").val()
+            .replace('đ', '')
+            .replace(/\./g, '')
+            .replace(/,/g, '');
+        let totalPrice = parseFloat(totalPriceStr);
+
+        let vaccineIds = [];
+        let dosages = [];
+
+        $(".list-packages .selected-vaccine").each(function () {
+            let id = $(this).attr('data-id');
+            let dosage = parseInt($(this).find('.dosage').val()) || 1;
+
+            vaccineIds.push(id);
+            dosages.push(dosage);
+        });
+
+        $.ajax({
+            url: `/provide_vaccine_services_war/admin/updatePackage`,
+            type: "POST",
+            traditional: true, // Cho phép gửi mảng như vaccineId=1&vaccineId=2
+            dataType: "json",
+            data: {
+                id: packageId,
+                "package-name": name,
+                "ageId": ageId,
+                "description-name": description,
+                "totalPrice": totalPrice,
+                "vaccineId": vaccineIds,
+                "dosage": dosages
+            },
+            success: function (response) {
+                if (response.status === "success") {
+                    const bsModal = bootstrap.Modal.getInstance(modal[0]);
+                    bsModal.hide();
+
+                    let row = $(`#package tr[data-id='${packageId}']`);
+                    row.find(".package-name").text(name);
+                    row.find(".package-age").text(modal.find(".age-select option:selected").text());
+                    row.find(".package-price").text(totalPrice.toLocaleString("vi-VN") + "đ");
+
+                    $("#package").DataTable().row(row).invalidate().draw(false);
+                } else {
+                    alert("Cập nhật thất bại!");
+                }
+            },
+            error: function (xhr) {
+                console.error("Lỗi:", xhr.responseText);
+            }
+        });
     });
+
+    function handleDeleteButton(modalId, removeUrlPrefix, table) {
+        let deleteRow = null;
+        let deleteId = null;
+
+        $("#package").on("click", ".delete-btn", function (e) {
+            e.preventDefault();
+
+            deleteId = $(this).data("id");
+            let itemName = $(this).data("name");
+            deleteRow = table.row($(this).closest("tr"));
+
+            let modalSelector = `#${modalId}`;
+            document.querySelector(modalSelector).querySelector('.modal-body').textContent = `Bạn có chắc chắn muốn xóa ${itemName}?`;
+
+            $(modalSelector).modal("show");
+        });
+
+        $("#confirmDelete").on("click", function () {
+            if (!deleteId || !deleteRow) return;
+
+            $.ajax({
+                url: `./${removeUrlPrefix}`,
+                type: "POST",
+                data: {id: deleteId},
+                dataType: "json",
+                success: function (response) {
+                    if (response.status === "success") {
+                        deleteRow.remove().draw();
+                        // xoa focus
+                        $(`#${modalId}`).find("button, input, textarea, select").blur();
+                        // an modal
+                        const bsModal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+                        bsModal.hide();
+                    } else {
+                        alert("Xóa thất bại");
+                    }
+                },
+                error: function (xhr) {
+                    alert("Lỗi: " + xhr.responseText);
+                }
+            });
+        });
+    }
+
+    handleDeleteButton('deleteModal', 'removePackage', packageTable);
 });
 
 // Lưu trữ số liều cho các vắc xin
 const vaccineDosages = {};
 
 function renderSelectedVaccines(modal) {
+    if (!modal) return;
+
     const listPackages = modal.querySelector('.list-packages');
     const checkInput = modal.querySelectorAll('.vaccine-checkbox');
     const totalPriceDisplays = modal.querySelectorAll('.totalPriceDisplay'); // Lấy tất cả input tổng giá
@@ -232,6 +324,8 @@ function renderSelectedVaccines(modal) {
 
 // Hàm cập nhật lại tổng giá
 function updateTotalPrice(modal) {
+    if (!modal) return;
+
     let totalPrice = 0;
     const selectedVaccines = modal.querySelectorAll('.selected-vaccine');
     selectedVaccines.forEach(div => {
@@ -247,14 +341,12 @@ function updateTotalPrice(modal) {
 }
 
 // Gắn sự kiện tự động sau khi DOM tải
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.vaccine-checkbox').forEach(input => {
-        input.addEventListener('click', (event) => {
-            // fix lỗi arial-hidden
-            event.currentTarget.blur();
-            const modal = event.target.closest('.modal');
-            renderSelectedVaccines(modal);
-        });
+document.querySelectorAll('.vaccine-checkbox').forEach(input => {
+    input.addEventListener('click', (event) => {
+        // fix lỗi arial-hidden
+        event.currentTarget.blur();
+        const modal = event.target.closest('.modal');
+        renderSelectedVaccines(modal);
     });
 });
 

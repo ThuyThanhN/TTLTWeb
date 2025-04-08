@@ -92,7 +92,7 @@
                                                 aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="updatePackage" method="post">
+                                        <form class="editPackageForm" method="post">
                                             <input type="hidden" name="id" value="${pkg.package_id}">
                                             <div class="row">
                                                 <div class="col-12">
@@ -148,9 +148,8 @@
                                                 <div class="col-12">
                                                     <div class="mb-3">
                                                         <label for="age-select-${pkg.package_id}" class="form-label">Độ tuổi</label>
-                                                        <select class="form-select form-control"
-                                                                id="age-select-${pkg.package_id}" name="ageId"
-                                                                onchange="updatePackageName(this)" required>
+                                                        <select class="form-select form-control age-select"
+                                                                id="age-select-${pkg.package_id}" name="ageId" required>
                                                             <option value="">---Chọn độ tuổi ---</option>
                                                             <c:forEach var="a" items="${ages}">
                                                                 <option value="${a.id}" ${a.id == pkg.age_id ? 'selected' : ''}>${a.name}</option>
@@ -161,7 +160,7 @@
                                                 <div class="col-12">
                                                     <div class="mb-3">
                                                         <label for="description-name-${pkg.package_id}">Mô tả</label>
-                                                        <textarea class="form-control"
+                                                        <textarea class="form-control description-name"
                                                                   id="description-name-${pkg.package_id}"
                                                                   name="description-name" rows="5" style="margin-top: .5rem">
                                                                 ${pkg.package_description}

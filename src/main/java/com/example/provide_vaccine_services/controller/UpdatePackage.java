@@ -6,6 +6,7 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,42 +15,54 @@ import java.util.stream.Collectors;
 public class UpdatePackage extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    }
-
-    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        Xử lý cập nhật gói vắc xin
-        int packageId = Integer.parseInt(request.getParameter("id"));
-        int ageId = Integer.parseInt(request.getParameter("ageId"));
-        String packageName = request.getParameter("package-name");
-        String totalPrice = request.getParameter("totalPrice");
-        String description = request.getParameter("description-name");
-        totalPrice = totalPrice.replaceAll("[^0-9]", ""); // Loại bỏ các ký tự không phải số
-        float totalPriceFloat = Float.parseFloat(totalPrice);
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
-        String[] vaccineIdArray = request.getParameterValues("vaccineId");  // Vaccine IDs
-        String[] dosageArray = request.getParameterValues("dosage");  // Dosages
+        try {
+            int packageId = Integer.parseInt(request.getParameter("id"));
+            int ageId = Integer.parseInt(request.getParameter("ageId"));
+            String packageName = request.getParameter("package-name");
+            String totalPrice = request.getParameter("totalPrice");
+            String description = request.getParameter("description-name");
 
-        // Chuyển đổi mảng vaccineId và dosage sang danh sách Integer
-        List<Integer> vaccineIds = Arrays.stream(vaccineIdArray)
-                .map(Integer::parseInt)
-                .collect(Collectors.toList());
+            totalPrice = totalPrice.replaceAll("[^0-9]", "");
+            float totalPriceFloat = Float.parseFloat(totalPrice);
 
-        List<Integer> dosages = Arrays.stream(dosageArray)
-                .map(Integer::parseInt)
-                .collect(Collectors.toList());
+            String[] vaccineIdArray = request.getParameterValues("vaccineId");
+            String[] dosageArray = request.getParameterValues("dosage");
 
-        VaccinePackageDao dao = new VaccinePackageDao();
-        int result = dao.update(packageId, packageName, vaccineIds, dosages, ageId, totalPriceFloat, description);
+            List<Integer> vaccineIds = new ArrayList<>();
+            List<Integer> dosages = new ArrayList<>();
 
-        if (result > 0) {
-            response.getWriter().write("Cap nhat thanh cong");
-        } else {
-            response.getWriter().write("Cap nhat that bai");
+            if (vaccineIdArray != null && dosageArray != null) {
+                vaccineIds = Arrays.stream(vaccineIdArray)
+                        .map(Integer::parseInt)
+                        .collect(Collectors.toList());
+
+                dosages = Arrays.stream(dosageArray)
+                        .map(d -> {
+                            try {
+                                return Integer.parseInt(d);
+                            } catch (NumberFormatException e) {
+                                return 1;
+                            }
+                        }).collect(Collectors.toList());
+            }
+
+            VaccinePackageDao dao = new VaccinePackageDao();
+            int result = dao.update(packageId, packageName, vaccineIds, dosages, ageId, totalPriceFloat, description);
+
+            if (result > 0) {
+                response.getWriter().write("{\"status\": \"success\", \"message\": \"Cập nhật thành công\"}");
+            } else {
+                response.getWriter().write("{\"status\": \"fail\", \"message\": \"Cập nhật thất bại\"}");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.getWriter().write("{\"status\": \"error\", \"message\": \"Có lỗi xảy ra khi cập nhật\"}");
         }
-
-        response.sendRedirect("table-data-vax-package");
     }
 }
-
