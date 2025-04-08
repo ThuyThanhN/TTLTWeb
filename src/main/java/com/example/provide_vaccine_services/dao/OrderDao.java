@@ -219,40 +219,41 @@ public class OrderDao {
         Map<String, Object> result = new HashMap<>();
 
         String sql = """
-        SELECT 
-            o.id AS order_id, 
-            o.appointmentDate, 
-            o.appointmentTime, 
-            o.status AS order_status, 
-            o.paymentSatus, 
-            p.id AS patient_id, 
-            p.fullname AS patient_name, 
-            p.dateOfBirth, 
-            p.gender, 
-            p.identification, 
-            p.address AS patient_address, 
-            p.province AS patient_province, 
-            p.district AS patient_district, 
-            p.ward AS patient_ward, 
-            c.id AS center_id,
-            c.name AS center_name, 
-            c.address AS center_address, 
-            c.phone AS center_phone, 
-            v.id AS vaccine_id, 
-            v.name AS vaccine_name, 
-            v.description AS vaccine_description, 
-            v.price AS vaccine_price, 
-            v.imageUrl AS vaccine_image_url,
-            u.fullname AS contact_fullname,
-            u.phone AS contact_phone
-        FROM orders o 
-        JOIN patients p ON o.idPatient = p.id 
-        JOIN centers c ON o.idCenter = c.id 
-        JOIN orderdetails od ON o.id = od.idOrder
-        JOIN vaccines v ON od.idVaccine = v.id
-        LEFT JOIN contactpersons cp ON p.id = cp.idPatient
-        LEFT JOIN users u ON cp.idUser = u.id
-        WHERE o.id = ?
+    SELECT 
+        o.id AS order_id, 
+        o.appointmentDate, 
+        o.appointmentTime, 
+        o.status AS order_status, 
+        o.paymentStatus,  -- Đã sửa chính tả từ paymentSatus thành paymentStatus
+        p.id AS patient_id, 
+        p.fullname AS patient_name, 
+        p.dateOfBirth, 
+        p.gender, 
+        p.identification, 
+        p.address AS patient_address, 
+        p.province AS patient_province, 
+        p.district AS patient_district, 
+        p.ward AS patient_ward, 
+        c.id AS center_id,
+        c.name AS center_name, 
+        c.address AS center_address, 
+        c.phone AS center_phone, 
+        v.id AS vaccine_id, 
+        v.name AS vaccine_name, 
+        v.description AS vaccine_description, 
+        v.price AS vaccine_price, 
+        v.imageUrl AS vaccine_image_url,
+        u.fullname AS contact_fullname,
+        u.phone AS contact_phone,
+        cp.relationship AS contact_relationship 
+    FROM orders o 
+    JOIN patients p ON o.idPatient = p.id 
+    JOIN centers c ON o.idCenter = c.id 
+    JOIN orderdetails od ON o.id = od.idOrder
+    JOIN vaccines v ON od.idVaccine = v.id
+    LEFT JOIN contactpersons cp ON p.id = cp.idPatient
+    LEFT JOIN users u ON cp.idUser = u.id
+    WHERE o.id = ?
     """;
 
         try (PreparedStatement pst = DBConnect.get(sql)) {
@@ -301,13 +302,15 @@ public class OrderDao {
                     // Thêm thông tin người liên hệ
                     String contactFullname = rs.getString("contact_fullname");
                     String contactPhone = rs.getString("contact_phone");
+                    String contactRelationship = rs.getString("contact_relationship"); // Lấy mối quan hệ với người liên hệ
+
                     result.put("contactFullname", contactFullname);
                     result.put("contactPhone", contactPhone);
+                    result.put("contactRelationship", contactRelationship);  // Thêm mối quan hệ với người liên hệ
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return result;
-    }
-}
+}    }

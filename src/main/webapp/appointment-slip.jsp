@@ -28,7 +28,7 @@
         </div>
         <div class="appointmentSlip-details">
             <h4>Trạm Y Tế ${center.name != null ? center.name : "Chưa có thông tin"}</h4>
-            <p>${center.address != null ? center.address : "Chưa có thông tin"}</p>
+            <p>Địa Chỉ: ${center.address != null ? center.address : "Chưa có thông tin"}</p>
             <form>
                 <div class="info-row">
                     Họ và tên người tiêm: <span class="value">${patient.fullname != null ? patient.fullname : "Chưa có thông tin"}</span>
@@ -50,9 +50,6 @@
                 <div class="info-row">
                     Số điện thoại:
                     <span class="value">${contactPhone != null ? contactPhone : "Chưa có thông tin"}</span>
-                </div>
-                <div class="info-row">
-                    Mã tiêm chủng: <span class="value">123456789</span>
                 </div>
                 <p class="note">Vui lòng chụp lại thông tin phiếu hẹn hoặc ghi nhớ mã phiếu hẹn!</p>
             </form>
