@@ -1,67 +1,78 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Lấy các phần tử cho mật khẩu hiện tại, mật khẩu mới và xác nhận mật khẩu
     const toggleCurrentPassword = document.querySelector('#toggleCurrentPassword');
     const currentPasswordInput = document.querySelector('#currentPassword');
 
     const toggleNewPassword = document.querySelector('#toggleNewPassword');
     const newPasswordInput = document.querySelector('#newPassword');
+    const newPasswordError = document.querySelector('#newPassword-error');
 
     const toggleConfirmNewPassword = document.querySelector('#toggleConfirmNewPassword');
     const confirmNewPasswordInput = document.querySelector('#confirmNewPassword');
-
     const submitButton = document.querySelector('#submitButton');
 
-    // toggle mật khẩu(tắt và hiện pass)
+    const form = document.querySelector('#changePasswordForm'); // Lấy phần tử form
+
     const togglePasswordVisibility = (toggleButton, passwordInput) => {
-        toggleButton.addEventListener('click', function () {
-            // Toggle giữa "password" và "text"
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            // Thay đổi biểu tượng
-            this.classList.toggle('fa-eye');
-            this.classList.toggle('fa-eye-slash');
-        });
+        if (toggleButton && passwordInput) {
+            toggleButton.addEventListener('click', function () {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            });
+        }
     };
 
-    // Gọi cho từng trường mật khẩu
-    togglePasswordVisibility(toggleCurrentPassword, currentPasswordInput);
-    togglePasswordVisibility(toggleNewPassword, newPasswordInput);
-    togglePasswordVisibility(toggleConfirmNewPassword, confirmNewPasswordInput);
-
-    // kiểm tra điều kiện
+    // Kiểm tra điều kiện mật khẩu
     const validatePasswords = () => {
         const currentPassword = currentPasswordInput.value;
         const newPassword = newPasswordInput.value;
-        const confirmNewPassword = confirmNewPasswordInput.value
+        const confirmNewPassword = confirmNewPasswordInput.value;
 
-        // Kiểm tra mật khẩu mới khác mật khẩu hiện tại
         if (newPassword === currentPassword) {
             alert("Mật khẩu mới phải khác mật khẩu hiện tại. Vui lòng nhập lại mật khẩu mới.");
-            newPasswordInput.value = ""; // Xóa mật khẩu mới đã nhập
-            confirmNewPasswordInput.value = ""; // Xóa xác nhận mật khẩu mới
+            newPasswordInput.value = "";
+            confirmNewPasswordInput.value = "";
             return false;
         }
 
-        // Kiểm tra mật khẩu mới và xác nhận mật khẩu phải giống nhau
         if (newPassword !== confirmNewPassword) {
             alert("Mật khẩu mới và xác nhận mật khẩu không khớp. Vui lòng nhập lại.");
-            confirmNewPasswordInput.value = ""; // Xóa xác nhận mật khẩu mới
+            confirmNewPasswordInput.value = "";
             return false;
         }
-        alert('Đổi mật khẩu thành công!');
-        return true;
 
-    };
-
-    // Xử lý khi người dùng nhấn nút Xác nhận
-    submitButton.addEventListener('click', function (e) {
-        if (!validatePasswords()) {
-            e.preventDefault(); // Ngăn chặn nếu không thỏa mãn điều kiện
+        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        if (!passwordPattern.test(newPassword)) {
+            newPasswordError.style.display = "block";
+            newPasswordInput.value = "";
+            confirmNewPasswordInput.value = "";
+            return false;
+        } else {
+            newPasswordError.style.display = "none";
         }
 
-    });
+        alert('Đổi mật khẩu thành công!');
+        return true;
+    };
+
+    // Ngăn chặn gửi form nếu mật khẩu không hợp lệ
+    if (submitButton) {
+        submitButton.addEventListener('click', function (e) {
+            // Ngăn chặn hành động mặc định của nút submit
+            e.preventDefault();
+
+            // Kiểm tra mật khẩu và gửi form nếu hợp lệ
+            if (validatePasswords()) {
+                form.submit(); // Gửi form nếu tất cả kiểm tra thành công
+            }
+        });
+    }
 
     function closeNav() {
-        document.querySelector('.navbar-collapse').classList.remove('show');
+        const navbarCollapse = document.querySelector('.navbar-collapse');
+        if (navbarCollapse) {
+            navbarCollapse.classList.remove('show');
+        }
     }
 });

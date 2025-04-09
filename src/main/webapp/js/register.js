@@ -26,7 +26,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const fullNameInput = this.value;
     const errorMessage = document.getElementById("full-name-error");
 
-    // Kiểm tra nếu trường họ và tên trống
     if (fullNameInput.trim() === "") {
       errorMessage.style.display = "block";
       errorMessage.textContent = "Vui lòng điền họ và tên.";
@@ -40,10 +39,21 @@ document.addEventListener("DOMContentLoaded", function() {
     const fullNameInput = document.getElementById('full-name');
     const errorMessage = document.getElementById('full-name-error');
 
+    // Kiểm tra họ và tên
     if (fullNameInput.validity.valueMissing) {
       event.preventDefault(); // Ngừng gửi form nếu trường trống
       errorMessage.style.display = "block"; // Hiển thị thông báo lỗi tùy chỉnh
       errorMessage.textContent = "Vui lòng điền họ và tên.";
+    }
+
+    // Kiểm tra checkbox đồng ý với Điều khoản và Chính sách bảo mật
+    const checkbox = document.getElementById("checkbox");
+    const checkboxError = document.getElementById("checkbox-error"); // Lấy thẻ span lỗi checkbox
+    if (!checkbox.checked) {
+      event.preventDefault(); // Ngừng gửi form nếu checkbox không được tích
+      checkboxError.style.display = "block"; // Hiển thị thông báo lỗi khi checkbox chưa được tích
+    } else {
+      checkboxError.style.display = "none"; // Ẩn thông báo lỗi khi checkbox được tích
     }
   });
 
@@ -52,15 +62,13 @@ document.addEventListener("DOMContentLoaded", function() {
     const emailInput = this.value;
     const errorMessage = document.getElementById("email-error");
 
-    // Biểu thức chính quy để kiểm tra tính hợp lệ của email
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
-    // Kiểm tra nếu email không hợp lệ
     if (!emailPattern.test(emailInput)) {
       errorMessage.style.display = "block";
       errorMessage.textContent = "Vui lòng nhập một địa chỉ email hợp lệ.";
     } else {
-      errorMessage.style.display = "none"; // Ẩn thông báo lỗi nếu email hợp lệ
+      errorMessage.style.display = "none";
     }
   });
 
@@ -69,15 +77,13 @@ document.addEventListener("DOMContentLoaded", function() {
     const phoneInput = this.value;
     const errorMessage = document.getElementById("phone-error");
 
-    // Biểu thức chính quy để kiểm tra số điện thoại có 10 hoặc 11 chữ số
     const phonePattern = /^\d{10,11}$/;
 
-    // Kiểm tra nếu số điện thoại không hợp lệ
     if (!phonePattern.test(phoneInput)) {
       errorMessage.style.display = "block";
       errorMessage.textContent = "Số điện thoại phải có 10 hoặc 11 chữ số.";
     } else {
-      errorMessage.style.display = "none"; // Ẩn thông báo lỗi nếu số điện thoại hợp lệ
+      errorMessage.style.display = "none";
     }
   });
 
@@ -86,18 +92,15 @@ document.addEventListener("DOMContentLoaded", function() {
     const passwordInput = this.value;
     const errorMessage = document.getElementById("password-error");
 
-    // Biểu thức chính quy để kiểm tra mật khẩu (ít nhất 8 ký tự, có chữ hoa, chữ thường, số và ký tự đặc biệt)
     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-    // Kiểm tra nếu mật khẩu không hợp lệ
     if (!passwordPattern.test(passwordInput)) {
       errorMessage.style.display = "block";
       errorMessage.textContent = "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, chữ số và ký tự đặc biệt.";
     } else {
-      errorMessage.style.display = "none"; // Ẩn thông báo lỗi nếu mật khẩu hợp lệ
+      errorMessage.style.display = "none";
     }
   });
-
 
   // Kiểm tra mật khẩu và xác nhận mật khẩu
   const password = document.getElementById('password');

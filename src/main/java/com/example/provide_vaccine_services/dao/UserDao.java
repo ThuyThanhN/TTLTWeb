@@ -14,7 +14,7 @@ import java.util.List;
 public class UserDao {
     private Users u;
 
-    // Them nhan vien trong Admin
+     // Them nhan vien trong Admin
     public int insertStaff(Users u) {
         int newId = -1;
 

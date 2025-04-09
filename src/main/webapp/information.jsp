@@ -7,6 +7,8 @@
     <title>Thông tin cá nhân</title>
     <!-- Thêm Bootstrap và Font Awesome -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <!-- Font chữ   -->
@@ -46,6 +48,16 @@
             <div class="sidebar">
                 <div class="profile-card">
                     <img src="image/avatar1.png" alt="Avatar" class="profile-image">
+                    <%
+                        // Kiểm tra trạng thái tài khoản của người dùng
+                        int status = user.getStatus();  // Lấy giá trị status từ đối tượng user
+                    %>
+
+                    <!-- Hiển thị thông báo về trạng thái xác thực tài khoản -->
+                    <div class="status-message">
+                        <%= (status == 0) ? "Tài khoản chưa xác thực" : "Tài khoản đã xác minh" %>
+                    </div>
+
                     <h2 class="sidebar-username"><%= user.getFullname() %></h2>
                     <p><%= user.getPhone() %></p>
                 </div>
@@ -65,6 +77,7 @@
                     <div class="info-header">
                         <img src="image/avatar1.png" alt="Avatar" class="info-profile-image">
                     </div>
+
                     <div id="personal-info" class="info-details">
                         <div class="item-info">
                             <span class="label">Họ và tên:</span>
@@ -73,6 +86,10 @@
                         <div class="item-info">
                             <span class="label">Mã định danh:</span>
                             <span class="value"><%= user.getIdentification() %></span>
+                        </div>
+                        <div class="item-info">
+                            <span class="label">Email:</span>
+                            <span class="value"><%= user.getEmail() %></span>
                         </div>
                         <div class="item-info">
                             <span class="label">Số điện thoại:</span>
@@ -92,7 +109,7 @@
                         </div>
                         <button id="edit-btn" class="btn-edit">Chỉnh sửa thông tin</button>
                     </div>
-                    <%--                    <button id="edit-btn" class="btn-edit">Chỉnh sửa thông tin</button>--%>
+
                     <!-- Form chỉnh sửa thông tin -->
                     <div id="edit-form" style="display: none;">
                         <form action="updateInformation" method="post" class="p-4 rounded shadow-lg bg-light">
@@ -132,15 +149,16 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <!-- Ngày sinh -->
                                 <div class="col-md-6">
                                     <label for="dateOfBirth" class="form-label"><strong>Ngày sinh:</strong></label>
                                     <input type="date" id="dateOfBirth" name="dateOfBirth" value="<%= user.getDateOfBirth() %>" class="form-control">
                                 </div>
                             </div>
-
-
+                            <div class="mb-3">
+                                <label for="email" class="form-label"><strong>Email:</strong></label>
+                                <input type="text" id="email" name="email" value="<%= user.getEmail() %>" class="form-control" placeholder="Nhập email cần thay đổi">
+                            </div>
                             <div class="mb-3">
                                 <label for="address" class="form-label"><strong>Số nhà/Đường:</strong></label>
                                 <input type="text" id="address" name="address" value="<%= user.getAddress() %>" class="form-control" placeholder="Nhập địa chỉ chi tiết">
@@ -149,8 +167,9 @@
                             <div class="mb-3">
                                 <label for="province-select" class="form-label"><strong>Tỉnh/Thành:</strong></label>
                                 <div class="dropdown">
-                                    <input type="text" id="province-select" name="province" class="form-control dropdown-toggle"
+                                    <input type="text" id="province-select" name="province" class="form-control dropdown-toggle province-select"
                                            data-bs-toggle="dropdown" aria-expanded="false" value="<%= user.getProvince() %>" placeholder="Chọn tỉnh/thành">
+                                    <i class="fa-solid fa-angle-down"></i>
                                     <ul class="dropdown-menu province-menu"></ul>
                                 </div>
                             </div>
@@ -158,8 +177,9 @@
                             <div class="mb-3">
                                 <label for="district-select" class="form-label"><strong>Quận/Huyện:</strong></label>
                                 <div class="dropdown">
-                                    <input type="text" id="district-select" name="district" class="form-control dropdown-toggle"
+                                    <input type="text" id="district-select" name="district" class="form-control dropdown-toggle district-select"
                                            data-bs-toggle="dropdown" aria-expanded="false" placeholder="Chọn tỉnh/thành trước" value="<%= user.getDistrict() %>">
+                                    <i class="fa-solid fa-angle-down"></i>
                                     <ul class="dropdown-menu district-menu"></ul>
                                 </div>
                             </div>
@@ -167,12 +187,12 @@
                             <div class="mb-3">
                                 <label for="ward-select" class="form-label"><strong>Phường/Xã:</strong></label>
                                 <div class="dropdown">
-                                    <input type="text" id="ward-select" name="ward" class="form-control dropdown-toggle"
+                                    <input type="text" id="ward-select" name="ward" class="form-control dropdown-toggle ward-select"
                                            data-bs-toggle="dropdown" aria-expanded="false" placeholder="Chọn quận/huyện trước" value="<%= user.getWard() %>">
+                                    <i class="fa-solid fa-angle-down"></i>
                                     <ul class="dropdown-menu ward-menu"></ul>
                                 </div>
                             </div>
-
 
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary px-4 py-2 rounded-pill shadow-sm">Lưu thông tin</button>
@@ -184,25 +204,9 @@
         </div>
     </div>
 </div>
-
 <!-- Footer -->
 <jsp:include page="footer.jsp"></jsp:include>
-</div>
-
-<!-- JavaScript để điều khiển việc chỉnh sửa -->
-<script src="js/show_navbarNav.js"></script>
-<script>
-    document.getElementById('edit-btn').addEventListener('click', function() {
-        document.getElementById('personal-info').style.display = 'none';
-        document.getElementById('edit-form').style.display = 'block';
-    });
-</script>
-<script>
-    document.getElementById('edit-btn').addEventListener('click', function() {
-        document.getElementById('personal-info').style.display = 'none';
-        document.getElementById('edit-form').style.display = 'block';
-    });
-</script>
 <script src="js/api_address.js"></script>
+<script src="js/information.js"></script>
 </body>
 </html>
