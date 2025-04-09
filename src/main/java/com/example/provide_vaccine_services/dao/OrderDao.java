@@ -11,39 +11,12 @@ import java.util.List;
 import java.util.Map;
 
 public class OrderDao {
-//    public Orders getOrderlById(int id) {
-//        Orders o = null;
-//
-//        try {
-//            String sql = "SELECT * FROM orders WHERE id = ?";
-//            PreparedStatement pst = DBConnect.get(sql);
-//            pst.setInt(1, id);
-//            ResultSet rs = pst.executeQuery();
-//
-//            if (rs.next()) {
-//                int idPatient = rs.getInt("idPatient");
-//                int idCenter = rs.getInt("idCenter");
-//                // Chuyển đổi trường createdAt từ Timestamp thành LocalDateTime
-//                LocalDateTime createdAt = rs.getTimestamp("createdAt").toLocalDateTime();
-//                Date appointmentDate = rs.getDate("appointmentDate");
-//                String appointmentTime = rs.getString("appointmentTime");
-//                String status = rs.getString("status");
-//                String paymentStatus = rs.getString("paymentStatus");
-//
-//                o = new Orders(idPatient, idCenter, createdAt, appointmentDate, appointmentTime, status, paymentStatus);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace(); //
-//        }
-//
-//        return o;
-//    }
 
     public int insertOrder(Orders o) {
         int id = -1;
 
         try {
-            String sql = "INSERT INTO orders(idPatient, idCenter, createdAt, appointmentDate, appointmentTime, status, paymentSatus) "
+            String sql = "INSERT INTO orders(idPatient, idCenter, createdAt, appointmentDate, appointmentTime, status, paymentStatus) "
                     + "VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pst = DBConnect.getAuto(sql);
 
@@ -53,7 +26,7 @@ public class OrderDao {
             pst.setObject(4, o.getAppointmentDate());
             pst.setString(5, o.getAppointmentTime());
             pst.setString(6, o.getStatus());
-            pst.setString(7, o.getPaymentSatus());
+            pst.setString(7, o.getPaymentStatus());
 
             // Thực thi câu lệnh
             int rows = pst.executeUpdate();
@@ -224,7 +197,6 @@ public class OrderDao {
         o.appointmentDate, 
         o.appointmentTime, 
         o.status AS order_status, 
-        o.paymentStatus,  -- Đã sửa chính tả từ paymentSatus thành paymentStatus
         p.id AS patient_id, 
         p.fullname AS patient_name, 
         p.dateOfBirth, 
@@ -313,4 +285,4 @@ public class OrderDao {
             e.printStackTrace();
         }
         return result;
-}    }
+    }    }

@@ -135,7 +135,7 @@ public class ShoppingCart extends HttpServlet {
                 Orders foundOrder = order.get();
                 int idOrder = orderDao.insertOrder(new Orders(listCart.get(i), idPatient, foundOrder.getIdCenter(), foundOrder.getCreatedAt(),
                         foundOrder.getAppointmentDate(), foundOrder.getAppointmentTime(), foundOrder.getStatus(),
-                        foundOrder.getPaymentSatus()));
+                        foundOrder.getPaymentStatus()));
                 System.out.println("idOrder" + idOrder);
                 // them orderdetail
                 OrderDetailDao odd = new OrderDetailDao();
