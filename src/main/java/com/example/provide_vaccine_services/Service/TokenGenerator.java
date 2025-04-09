@@ -2,7 +2,7 @@ package com.example.provide_vaccine_services.Service;
 
 import java.security.SecureRandom;
 
-public class AccountActivationTokenGenerator {
+public class TokenGenerator {
 
     // Phương thức tạo mã token ngẫu nhiên cho việc kích hoạt tài khoản
     public static String generateActivationToken() {
@@ -24,4 +24,5 @@ public class AccountActivationTokenGenerator {
 
         return token.toString(); // Trả về mã token
     }
+
 }
