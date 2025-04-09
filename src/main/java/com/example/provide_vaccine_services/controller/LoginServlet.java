@@ -26,12 +26,12 @@ public class LoginServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         // Lấy thông tin đăng nhập từ form
-        String email = request.getParameter("username");
+        String username = request.getParameter("username"); // email hoặc số điện thoại
         String password = request.getParameter("password");
 
         // Gọi UserDao để kiểm tra thông tin đăng nhập
         UserDao userDao = new UserDao();
-        Users user = userDao.checkLogin(email, password);
+        Users user = userDao.checkLogin(username, password);
 
         if (user != null) {
             // Đăng nhập thành công, tạo session

@@ -33,17 +33,23 @@ public class OrderDetailServlet extends HttpServlet {
             int id = Integer.parseInt(idParam);
             Map<String, Object> orderData = orderDao.getAppointmentDetails(id);
 
+            // Kiểm tra contactFullname và contactRelationship trong console
+            System.out.println("contactFullname: " + orderData.get("contactFullname"));
+            System.out.println("contactRelationship: " + orderData.get("contactRelationship"));
+
             if (orderData == null || orderData.isEmpty()) {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "Appointment details not found");
                 return;
             }
 
+            // Truyền dữ liệu vào request
             request.setAttribute("order", orderData.get("order"));
             request.setAttribute("patient", orderData.get("patient"));
             request.setAttribute("center", orderData.get("center"));
             request.setAttribute("vaccine", orderData.get("vaccine"));
             request.setAttribute("contactFullname", orderData.get("contactFullname"));
             request.setAttribute("contactPhone", orderData.get("contactPhone"));
+            request.setAttribute("contactRelationship", orderData.get("contactRelationship")); // Thêm contactRelationship
 
             request.getRequestDispatcher("appointment-slip.jsp").forward(request, response);
         } catch (NumberFormatException e) {
