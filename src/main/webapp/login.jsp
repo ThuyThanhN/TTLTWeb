@@ -31,8 +31,8 @@
       </div>
       <% } %>
       <div class="input-group">
-        <label for="username">SDT đăng nhập</label>
-        <input type="text" id="username" name="username" required autocomplete="off" placeholder="Nhập số điện thoại">
+        <label for="username">Tài khoản đăng nhập</label>
+        <input type="text" id="username" name="username" required autocomplete="off" placeholder="Nhập số điện thoại hoặc email">
       </div>
       <div class="input-group password-group">
         <label for="password">Mật khẩu</label>
