@@ -52,9 +52,9 @@ public class VaccineDao {
         try {
             // Xoa orderdeatail lien quan toi nha cung cap
             String deleteOrderDetailsSql = "DELETE FROM orderdetails " +
-                                            "WHERE idVaccine IN (" +
-                                            "SELECT id FROM vaccines " +
-                                            "WHERE idSupplier = ?)";
+                    "WHERE idVaccine IN (" +
+                    "SELECT id FROM vaccines " +
+                    "WHERE idSupplier = ?)";
             PreparedStatement pstOrderDetails = DBConnect.get(deleteOrderDetailsSql);
             pstOrderDetails.setInt(1, idS);
             pstOrderDetails.executeUpdate();
@@ -130,7 +130,7 @@ public class VaccineDao {
 
 
     public int insert(Vaccines v) {
-        int id = -1;
+        int newId = -1;
 
         try {
             String sql = "insert into vaccines(idSupplier, name, description, stockQuantity, price, imageUrl, status, createdAt, prevention) " +
@@ -145,22 +145,21 @@ public class VaccineDao {
             pst.setString(7, v.getStatus());
             pst.setTimestamp(8, Timestamp.valueOf(v.getCreatedAt()));
             pst.setString(9, v.getPrevention());
+            int affectedRows = pst.executeUpdate();
 
-            int rows = pst.executeUpdate();
-
-            if (rows > 0) {
-                ResultSet rs = pst.getGeneratedKeys();
+            if (affectedRows > 0) {
+                // lay id moi nhat
+                String getIdSql = "SELECT MAX(id) FROM vaccines";
+                PreparedStatement getIdStmt = DBConnect.get(getIdSql);
+                ResultSet rs = getIdStmt.executeQuery();
                 if (rs.next()) {
-                    id = rs.getInt(1);
+                    newId = rs.getInt(1);
                 }
-                System.out.println("Them du lieu thanh cong");
-            } else {
-                System.out.println("Them du lieu that bai!");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return id;
+        return newId;
     }
 
     public Vaccines getVaccineById(int id) {
@@ -321,6 +320,56 @@ public class VaccineDao {
 
     }
 
+
+    public List<Vaccines> getVaccinesByPage(int page, boolean age, boolean disease) {
+        List<Vaccines> vaccines = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT v.* FROM vaccines v");
+
+        if (age) {
+            sql.append(" JOIN vaccinetypes vt ON v.id = vt.idVaccine ")
+                    .append(" JOIN agegroups ag ON vt.idAgeGroup = ag.id ");
+        }
+
+        if (disease) {
+            sql.append(age ? " JOIN disasegroups dt ON vt.idDisaseGroup = dt.id " : " JOIN vaccinetypes vt ON v.id = vt.idVaccine JOIN disasegroups dt ON vt.idDisaseGroup = dt.id ");
+        }
+
+        if (age && disease) {
+            sql.append(" ORDER BY ag.id, dt.id ");
+        } else if (age) {
+            sql.append(" ORDER BY ag.id ");
+        } else if (disease) {
+            sql.append(" ORDER BY dt.id ");
+        }
+
+        sql.append(" LIMIT 12 OFFSET ?");
+
+        try (PreparedStatement pst = DBConnect.get(sql.toString())) {
+            pst.setInt(1, (page - 1) * 12);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int idSupplier = rs.getInt("idSupplier");
+                String name = rs.getString("name");
+                String description = rs.getString("description");
+                int stockQuantity = rs.getInt("stockQuantity");
+                float price = rs.getFloat("price");
+                String imageUrl = rs.getString("imageUrl");
+                String status = rs.getString("status");
+                Timestamp timestamp = rs.getTimestamp("createdAt");
+                LocalDateTime createAt = timestamp != null ? timestamp.toLocalDateTime() : null;
+                String prevention = rs.getString("prevention");
+
+                Vaccines vaccine = new Vaccines(id, idSupplier, name, description, stockQuantity, price, imageUrl, status, createAt, prevention);
+                vaccines.add(vaccine);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return vaccines;
+    }
+
     public int getTotalCount() {
         String sql = "SELECT COUNT(*) FROM Vaccines";
 
@@ -336,6 +385,75 @@ public class VaccineDao {
 
         return 0;
     }
+
+    public int getTotalCount(boolean age, boolean disease) {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM vaccines v");
+
+        if (age) {
+            sql.append(" JOIN vaccinetypes vt ON v.id = vt.idVaccine ")
+                    .append(" JOIN agegroups ag ON vt.idAgeGroup = ag.id ");
+        }
+
+        if (disease) {
+            sql.append(age ? " JOIN disasegroups dt ON vt.idDisease = dt.id " : " JOIN vaccinetypes vt ON v.id = vt.idVaccine JOIN disasegroups dt ON vt.idDisaseGroup = dt.id ");
+        }
+
+        try (PreparedStatement pst = DBConnect.get(sql.toString())) {
+            ResultSet resultSet = pst.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+
+    public int getTotalCount(String searchQuery) {
+        String sql = "SELECT COUNT(*) FROM Vaccines WHERE name LIKE ?";
+
+        try (PreparedStatement pst = DBConnect.get(sql)) {
+            pst.setString(1, "%" + searchQuery + "%");
+            ResultSet resultSet = pst.executeQuery();
+            while (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    public int getTotalCount(String searchQuery, boolean age, boolean disease) {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM vaccines v");
+
+        if (age) {
+            sql.append(" JOIN vaccinetypes vt ON v.id = vt.idVaccine ")
+                    .append(" JOIN agegroups ag ON vt.idAgeGroup = ag.id ");
+        }
+
+        if (disease) {
+            sql.append(age ? " JOIN diseasetypes dt ON vt.idDisease = dt.id " : " JOIN vaccinetypes vt ON v.id = vt.idVaccine JOIN diseasetypes dt ON vt.idDisease = dt.id ");
+        }
+
+        sql.append(" WHERE v.name LIKE ? ");
+
+        try (PreparedStatement pst = DBConnect.get(sql.toString())) {
+            pst.setString(1, "%" + searchQuery + "%");
+            ResultSet resultSet = pst.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
 
     public List<Vaccines> searchByName(String searchQuery) {
         List<Vaccines> vaccines = new ArrayList<>();
@@ -371,6 +489,83 @@ public class VaccineDao {
             e.printStackTrace();
         }
         return vaccines;
+    }
+
+    public List<Vaccines> getSearchedVaccinesByPage(String searchQuery, int page, boolean age, boolean disease) {
+        List<Vaccines> vaccines = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT v.* FROM vaccines v");
+
+        System.out.println(age);
+
+        if (age) {
+            sql.append(" JOIN vaccinetypes vt ON v.id = vt.idVaccine ")
+                    .append(" JOIN agegroups ag ON vt.idAgeGroup = ag.id ");
+        }
+
+        if (disease) {
+            sql.append(age ? " JOIN diseasetypes dt ON vt.idDisease = dt.id " : " JOIN vaccinetypes vt ON v.id = vt.idVaccine JOIN diseasetypes dt ON vt.idDisease = dt.id ");
+        }
+
+        sql.append(" WHERE v.name LIKE ? ");
+
+        if (age && disease) {
+            sql.append(" ORDER BY ag.id, dt.id ");
+        } else if (age) {
+            sql.append(" ORDER BY ag.id ");
+        } else if (disease) {
+            sql.append(" ORDER BY dt.id ");
+        }
+
+        sql.append(" LIMIT 12 OFFSET ?");
+
+        try (PreparedStatement stmt = DBConnect.get(sql.toString())) {
+            stmt.setString(1, "%" + searchQuery + "%");
+            stmt.setInt(2, (page - 1) * 12);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int idSupplier = rs.getInt("idSupplier");
+                String name = rs.getString("name");
+                String description = rs.getString("description");
+                int stockQuantity = rs.getInt("stockQuantity");
+                float price = rs.getFloat("price");
+                String imageUrl = rs.getString("imageUrl");
+                String status = rs.getString("status");
+                Timestamp timestamp = rs.getTimestamp("createdAt");
+                LocalDateTime createAt = timestamp != null ? timestamp.toLocalDateTime() : null;
+                String prevention = rs.getString("prevention");
+
+                Vaccines vaccine = new Vaccines(id, idSupplier, name, description, stockQuantity, price, imageUrl, status, createAt, prevention);
+                vaccines.add(vaccine);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return vaccines;
+    }
+
+    public List<String> getAutoCompleteSuggestions(String query) {
+        List<String> suggestions = new ArrayList<>();
+        String sql = "SELECT DISTINCT name FROM vaccines WHERE name LIKE ? LIMIT 5";
+
+        System.out.println(query);
+
+        try (PreparedStatement stmt = DBConnect.get(sql)) {
+            stmt.setString(1, "%" + query + "%");
+
+            System.out.println(stmt);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                suggestions.add(rs.getString("name"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return suggestions;
     }
 
     public List<Vaccines> getTopVaccines() {
@@ -415,6 +610,7 @@ public class VaccineDao {
         }
         return vaccines;
     }
+
     public List<Vaccines> getRandomVaccines() {
         List<Vaccines> vaccines = new ArrayList<>();
         try {
@@ -451,13 +647,17 @@ public class VaccineDao {
     }
 
 
-    public List<Vaccines> getByAgeGroup() {
+    public List<Vaccines> getByAgeGroup(String searchQuery, int page) {
         List<Vaccines> vaccines = new ArrayList<>();
         String sql = "SELECT v.* FROM vaccines v " +
                 "JOIN vaccinetypes vt ON v.id = vt.idVaccine " +
-                "JOIN agegroups ag ON vt.idAgeGroup = ag.id";
+                "JOIN agegroups ag ON vt.idAgeGroup = ag.id " +
+                "WHERE v.name LIKE ? " +
+                "LIMIT 12 OFFSET ?";
 
         try (PreparedStatement stmt = DBConnect.get(sql)) {
+            stmt.setString(1, "%" + searchQuery + "%");
+            stmt.setInt(2, (page - 1) * 12);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -476,6 +676,7 @@ public class VaccineDao {
 
                 String prevention = rs.getString("prevention");
 
+                // Thêm vaccine vào danh sách
                 // Thêm vaccine vào danh sách
                 Vaccines vaccine = new Vaccines(id, idSupplier, name, description,
                         stockQuantity, price, imageUrl, status, createAt, prevention);
@@ -582,12 +783,11 @@ public class VaccineDao {
     }
 
 
-
     public Map<String, Object> getVaccineDetailsById(int id) {
         VaccineContents vaccineContents = null;
         VaccineDetails vaccineDetails = null;
 
-        // ✅ Cập nhật SQL để lấy imageUrl từ bảng vaccines
+        // Cập nhật SQL để lấy imageUrl từ bảng vaccines
         String sql = "SELECT vc.*, v.name, v.description, v.imageUrl, " +
                 "vd.targetGroup, vd.immunization, vd.adverseReactions " +
                 "FROM vaccinecontents vc " +
@@ -599,7 +799,7 @@ public class VaccineDao {
             pst.setInt(1, id);
             try (ResultSet rs = pst.executeQuery()) {
                 if (rs.next()) {
-                    // ✅ Lấy thêm imageUrl từ database
+                    // Lấy thêm imageUrl từ database
                     vaccineContents = new VaccineContents(
                             rs.getInt("id"),
                             rs.getInt("idDetail"),
@@ -622,18 +822,49 @@ public class VaccineDao {
                             rs.getString("adverseReactions")
                     );
 
-                    // ✅ Debug kiểm tra giá trị imageUrl
-                    System.out.println("✅ Image URL from DB: " + vaccineContents.getImageUrl());
+                    // Debug kiểm tra giá trị imageUrl
+                    System.out.println("Image URL from DB: " + vaccineContents.getImageUrl());
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        // ✅ Trả về cả hai đối tượng bằng Map
+        // Trả về cả hai đối tượng bằng Map
         Map<String, Object> result = new HashMap<>();
         result.put("vaccineContents", vaccineContents);
         result.put("vaccineDetails", vaccineDetails);
         return result;
     }
+
+    public List<Map<String, Object>> export() {
+        List<Map<String, Object>> vaccineList = new ArrayList<>();
+
+        try {
+            String sql = "SELECT v.id, v.name, s.countryOfOrigin, v.status, v.price, v.description " +
+                    "FROM vaccines v " +
+                    "JOIN suppliers s ON v.idSupplier = s.id " +
+                    "ORDER BY v.id";
+
+            PreparedStatement pst = DBConnect.get(sql);
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                Map<String, Object> vaccineData = new HashMap<>();
+                vaccineData.put("id", rs.getInt("id")); // Bổ sung ID để có thể sử dụng map() trong JS
+                vaccineData.put("name", rs.getString("name"));
+                vaccineData.put("countryOfOrigin", rs.getString("countryOfOrigin"));
+                vaccineData.put("status", rs.getString("status"));
+                vaccineData.put("price", rs.getFloat("price"));
+                vaccineData.put("description", rs.getString("description"));
+
+                vaccineList.add(vaccineData);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return vaccineList;
+    }
+
+
 }

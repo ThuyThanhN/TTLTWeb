@@ -12,17 +12,23 @@ public class RemoveCenter extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-
-        String id = request.getParameter("id");
-        int idCenter = Integer.parseInt(id);
-        CenterDao centerDao = new CenterDao();
-        centerDao.deleteCenter(idCenter);
-        response.sendRedirect("table-data-center");
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        try {
+            String id = request.getParameter("id");
+            int idCenter = Integer.parseInt(id);
+            CenterDao centerDao = new CenterDao();
+            centerDao.deleteCenter(idCenter);
+            response.getWriter().write("{\"status\": \"success\", \"message\": \"Xóa thành công\"}");
+        } catch (Exception e) {
+            response.getWriter().write("{\"status\": \"error\", \"message\": \"Xóa thất bại!\"}");
+        }
     }
 }
 

@@ -1,9 +1,12 @@
 package com.example.provide_vaccine_services.dao.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public class Vaccines implements Serializable {
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private int id;
     private int idSupplier;
     private String name;
@@ -147,5 +150,22 @@ public class Vaccines implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", idSupplier=" + idSupplier +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", stockQuantity=" + stockQuantity +
+                ", price=" + price +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", status='" + status + '\'' +
+                ", createdAt=" + createdAt +
+                ", prevention='" + prevention + '\'' +
+                ", countryOfOrigin='" + countryOfOrigin + '\'' +
+                ", orderCount=" + orderCount +
+                '}';
     }
 }

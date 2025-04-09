@@ -21,14 +21,21 @@ public class AddSupplier extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
         String name = request.getParameter("supplier-name");
         String country = request.getParameter("supplier-country");
 
         SupplierDao supplierDao = new SupplierDao();
         Suppliers supplier = new Suppliers(name, country);
-        supplierDao.insert(supplier);
+        int insertId = supplierDao.insert(supplier);
 
-        response.sendRedirect("table-data-supplier");
+        // json
+        if (insertId > 0) {
+            response.getWriter().write("{\"status\":\"success\", \"id\":" + insertId + "}");
+        } else {
+            response.getWriter().write("{\"status\":\"error\"}");
+        }
     }
 }

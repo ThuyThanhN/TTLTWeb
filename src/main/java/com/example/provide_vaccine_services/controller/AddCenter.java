@@ -1,3 +1,4 @@
+
 package com.example.provide_vaccine_services.controller;
 
 import com.example.provide_vaccine_services.dao.CenterDao;
@@ -18,6 +19,8 @@ public class AddCenter extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
         String name = request.getParameter("center-name");
         String address = request.getParameter("center-address");
@@ -28,8 +31,13 @@ public class AddCenter extends HttpServlet {
 
         Centers center = new Centers(name, address, province, district, ward, phone);
         CenterDao dao = new CenterDao();
-        dao.insert(center);
-        response.sendRedirect("table-data-center");
+        int insertId = dao.insert(center);
+
+        // json
+        if (insertId > 0) {
+            response.getWriter().write("{\"status\":\"success\", \"id\":" + insertId + "}");
+        } else {
+            response.getWriter().write("{\"status\":\"error\"}");
+        }
     }
 }
-

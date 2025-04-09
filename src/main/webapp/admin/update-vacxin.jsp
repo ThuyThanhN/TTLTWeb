@@ -6,8 +6,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vắc xin | Quản trị Admin </title>
+    <title>Cập nhật vắc xin | Quản trị Admin </title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
@@ -18,6 +19,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
           rel="stylesheet">
     <script src="https://cdn.ckeditor.com/ckeditor5/37.0.1/classic/ckeditor.js"></script>
+    <%-- Ajax --%>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- Bootstrap, jquery   -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <!-- DataTable -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <link rel="stylesheet" href="../css/main_admin.css">
 </head>
 <body>
@@ -30,7 +44,7 @@
     <jsp:include page="headerAdmin.jsp"></jsp:include>
 
     <div class="info-vaccine-wrapper">
-        <form action="updateVaccine" method="post" enctype="multipart/form-data">
+        <form id="updateVaccine" method="post" enctype="multipart/form-data">
             <div class="row">
                 <div class="col-12 col-md-7">
                     <div class="vaccine-info-form">
@@ -97,6 +111,7 @@
                                             </label>
                                             <input id="upload" class="hidden-image" type="file" name="file"
                                                    value="${v.imageUrl}">
+                                            <input type="hidden" name="existingImage" value="${v.imageUrl}">
                                         </div>
                                         <!-- Placeholder for displaying images -->
                                         <div id="image-preview" class="mt-3"></div>
@@ -358,82 +373,8 @@
 </div>
 </body>
 <script>
-    const imagePreview = document.getElementById('image-preview');
-    const uploadInput = document.getElementById('upload');
-    const existingImageUrl = "${v.imageUrl}"; // Ảnh từ server
-
-    function addImage(src) {
-        imagePreview.innerHTML = ''; // Xóa ảnh trước nếu có
-        const imgContainer = document.createElement('div');
-        imgContainer.classList.add('img-container');
-
-        const img = document.createElement('img');
-        img.src = src;
-        img.classList.add('img-fluid');
-        img.style.maxWidth = '100px';
-
-        // Nút xóa ảnh
-        const deleteBtn = document.createElement('span');
-        deleteBtn.classList.add('delete-btn');
-        deleteBtn.innerHTML = `<i class="fa-solid fa-x"></i>`;
-
-        deleteBtn.addEventListener('click', function () {
-            imgContainer.remove(); // Xóa ảnh hiển thị
-            uploadInput.value = ''; // Xóa file đã chọn
-        });
-
-        imgContainer.appendChild(img);
-        imgContainer.appendChild(deleteBtn);
-        imagePreview.appendChild(imgContainer);
-    }
-
-    // Nếu có ảnh cũ, hiển thị nó
-    if (existingImageUrl) {
-        addImage(existingImageUrl.startsWith("http") ? existingImageUrl : `${pageContext.request.contextPath}/${existingImageUrl}`);
-    }
-
-    // Khi chọn ảnh mới
-    uploadInput.addEventListener('change', function (event) {
-        const files = event.target.files;
-        if (files.length > 0) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                addImage(e.target.result);
-            };
-            reader.readAsDataURL(files[0]);
-        }
-    });
-
-    const editors = document.querySelectorAll('.ckeditor');
-
-    editors.forEach(editor => {
-        ClassicEditor
-            .create(editor)
-            .catch(error => {
-                console.error(error);
-            });
-    });
-
-    let navItems = document.querySelectorAll('.nav-item');
-    let contents = document.querySelectorAll('.content');
-
-    navItems.forEach(navItem => {
-        navItem.addEventListener('click', () => {
-            // Bỏ active khỏi tất cả nav-item
-            navItems.forEach(item => item.classList.remove('active'));
-
-            // Ẩn tất cả nội dung
-            contents.forEach(content => content.classList.add('d-none'));
-
-            // Kích hoạt nav-item hiện tại
-            navItem.classList.add('active');
-
-            // Hiển thị nội dung tương ứng
-            const target = document.querySelector(navItem.getAttribute('data-target'));
-            if (target) {
-                target.classList.remove('d-none');
-            }
-        });
-    });
+    const existingImageUrl = "${v.imageUrl}";
+    const contextPath = "<%= request.getContextPath() %>";
 </script>
+<script src="${pageContext.request.contextPath}/js/update-vaccine.js"></script>
 </html>

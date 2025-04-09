@@ -18,16 +18,19 @@ public class UpdateSupplier extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
-        String id = request.getParameter("id");
+        int supplierId = Integer.parseInt(request.getParameter("id"));
         String name = request.getParameter("supplier-name");
         String country = request.getParameter("supplier-country");
 
-        int supplierId = Integer.parseInt(id);
         SupplierDao supplierDao = new SupplierDao();
         Suppliers supplier = new Suppliers(supplierId, name, country);
-
         int result = supplierDao.update(supplier);
-        response.sendRedirect("table-data-supplier");
+
+        response.getWriter().write("{\"status\": \"" + (result > 0 ? "success" : "error")
+                + "\", \"name\": \"" + name + "\", \"country\": \"" + country + "\"}");
+        }
     }
-}
+

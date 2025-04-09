@@ -1,4 +1,3 @@
-
 <%@ page import="com.example.provide_vaccine_services.dao.model.Users" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -15,7 +14,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
-
     <!-- Font awesome-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <!-- Font chữ   -->
@@ -23,10 +21,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
           rel="stylesheet">
+    <%-- Ajax --%>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- DataTable -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <!-- pdfMake (xuat PDF) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <!-- Css   -->
     <link rel="stylesheet" href="../css/main_admin.css">
 </head>
@@ -43,6 +47,13 @@
             <a href="form-add-vacxin" class="btn btn-add btn-sm">
                 <i class="fa-solid fa-plus"></i> Thêm vắc xin
             </a>
+            <button class="btn btn-common btn-sm" id="exportPDF">
+                <i class="fas fa-file-pdf"></i> Xuất PDF
+            </button>
+
+            <button class="btn btn-common btn-sm" id="exportExcel">
+                <i class="fas fas fa-file-excel"></i> Xuất Excel
+            </button>
         </div>
         <table class="w-100 table table-striped" id="vaccine">
             <thead>
@@ -58,7 +69,7 @@
             </thead>
             <tbody>
             <c:forEach var="v" items="${vaccines}">
-                <tr>
+                <tr data-id="${v.id}">
                     <td>${v.id}</td>
                     <td>${v.name}</td>
                     <td>
@@ -67,7 +78,8 @@
                             <c:choose>
                                 <c:when test="${v.imageUrl.startsWith('/uploads')}">
                                     <!-- Neu co, hien thi anh tu thu muc uploads -->
-                                    <img src="${pageContext.request.contextPath}${v.imageUrl}" alt="Vaccine Image" width="150" height="50">
+                                    <img src="${pageContext.request.contextPath}${v.imageUrl}" alt="Vaccine Image"
+                                         width="150" height="50">
                                 </c:when>
                                 <c:otherwise>
                                     <!-- Neu khong, hien thi anh tu duong dan mac dinh -->
@@ -80,10 +92,11 @@
                     <td>
                         <span class="status light-green color-green">${v.status}</span>
                     </td>
-                    <td>${v.price}đ</td>
+                    <td><f:formatNumber value="${v.price}" type="number" pattern="#,##0"/>đ</td>
                     <td>
                         <!-- Nut sua -->
-                        <a href="updateVaccine?id=${v.id}" class="text-decoration-none edit-btn">
+                        <a href="updateVaccine?id=${v.id}"
+                           class="text-decoration-none edit-btn">
                             <img src="../image/edit.png" alt="Sửa" width="22" height="22">
                         </a>
                         <!-- Nut xoa -->

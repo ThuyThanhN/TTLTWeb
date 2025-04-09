@@ -1,3 +1,4 @@
+
 $(document).ready(function () {
     // Lấy danh sách tỉnh thành
     $.getJSON('https://esgoo.net/api-tinhthanh/1/0.htm', function (data_tinh) {

@@ -18,22 +18,19 @@ public class UpdateOrderStatus extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
         int orderId = Integer.parseInt(request.getParameter("order_id"));
         String status = request.getParameter("status");
-
-        System.out.println("orderId:" + orderId);
-        System.out.println("status:" + status);
 
         OrderDao orderDao = new OrderDao();
         boolean isUpdated = orderDao.updateStatus(orderId, status);
 
         if (isUpdated) {
-            System.out.println("Thanh cong");
+            response.getWriter().write("{\"message\": \"success\"}");
         } else {
-            System.out.println("That bai");
+            response.getWriter().write("{\"message\": \"error\"}");
         }
-
-        response.sendRedirect("table-data-order");
     }
 }
