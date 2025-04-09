@@ -177,4 +177,25 @@ public class Orders implements Serializable {
     public void setPrice(float price) {
         this.price = price;
     }
+
+    @Override
+    public String toString() {
+        return "Orders{" +
+                "id=" + id +
+                ", idPatient=" + idPatient +
+                ", idCenter=" + idCenter +
+                ", createdAt=" + createdAt +
+                ", appointmentDate=" + appointmentDate +
+                ", appointmentTime='" + appointmentTime + '\'' +
+                ", status='" + status + '\'' +
+                ", paymentSatus='" + paymentSatus + '\'' +
+                ", patientName='" + patientName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", centerName='" + centerName + '\'' +
+                ", centerAddress='" + centerAddress + '\'' +
+                ", centerPhone='" + centerPhone + '\'' +
+                ", price=" + price +
+                '}';
+    }
+
 }

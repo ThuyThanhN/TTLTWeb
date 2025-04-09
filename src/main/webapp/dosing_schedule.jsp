@@ -349,6 +349,20 @@
                                 <div class="hidden-field error-message" id="vaccination_time-error">Vui lòng chọn/điền
                                 </div>
                             </div>
+                            <%-- Phương thức thanh toán --%>
+                            <div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-section-label">Phương Thức Thanh Toán <span class="asterisk">(*)</span></div>
+                                    <div class="btn-group w-100" role="group" aria-label="Payment selection">
+                                        <input type="radio" class="btn-check" id="payment-cash" value="cash" name="payment_type" autocomplete="off">
+                                        <label class="btn" for="payment-cash"> Tiền mặt </label>
+
+                                        <input type="radio" class="btn-check" id="payment-banking" value="banking" name="payment_type" autocomplete="off">
+                                        <label class="btn" for="payment-banking"> Thanh toán online </label>
+                                    </div>
+                                    <div class="hidden-field error-payment">Vui lòng chọn/điền</div>
+                                </div>
+                            </div>
                             <!-- Cam kết -->
                             <div class="col-12 mt-2 d-flex gap-2">
                                 <input class="form-check-input" type="checkbox" id="commitment">

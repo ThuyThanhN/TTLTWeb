@@ -106,13 +106,15 @@ public class DosingSchedule extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
+
         Users users = (Users) session.getAttribute("user");
+
         if (users == null) {
             throw new ServletException("User is not logged in");
         }
+
         int userId = users.getId();
         List<Integer> listCart = (List<Integer>) session.getAttribute("listCart");
-
 
         String cartIdParam = request.getParameter("cartId");
         System.out.println(request.getQueryString());
@@ -128,21 +130,26 @@ public class DosingSchedule extends HttpServlet {
         String province = request.getParameter("province");
         String district = request.getParameter("district");
         String ward = request.getParameter("ward");
-
         Date dateOfBirth = Date.valueOf(date);
+
+
         //  Nguoi lien he
         String nameContact = request.getParameter("contact_name");
         String relationship = request.getParameter("relationship");
         String phone = request.getParameter("contact_phone");
 
-        // trung tam, thoi gian tiem
+        // trung tam, thoi gian tiem, phương thức thanh toán
         int idCenter = Integer.parseInt(request.getParameter("center-select"));
         LocalDateTime createdAt = LocalDateTime.now();
         String preferredDate = request.getParameter("preferred_date");
         Date appointmentDate = Date.valueOf(preferredDate);
         String appointmentTime = request.getParameter("vaccination_time");
         String status = "Chưa được duyệt";   // Mặc định là "Chưa được duyệt"
-        String paymentStatus = "Chưa thanh toán";  // Mặc định là "Chưa thanh toán"
+        String paymentStatus = "Chưa thanh toán";;  // Mặc định là "Chưa thanh toán"
+        String paymentType = request.getParameter("payment_type"); // phương thức thanh toán
+
+        System.out.println(request.getParameter("payment_type"));
+
 
         // loai vaccine
         String[] selectedPackages = request.getParameterValues("selectedPackages");
@@ -340,7 +347,13 @@ public class DosingSchedule extends HttpServlet {
             session.setAttribute("ordersOrderDetailsMap", ordersOrderDetailsMap);
         }
 
-        // Sau khi thêm OrderDetails vào cart, kiểm tra lại giỏ hàng
-        response.sendRedirect("shoppingCart");
+        if(paymentType.equals("banking")) {
+            response.sendRedirect("onlinePayment");
+        } else {
+            // Sau khi thêm OrderDetails vào cart, kiểm tra lại giỏ hàng
+            response.sendRedirect("shoppingCart");
+        }
+
+
     }
 }
