@@ -43,22 +43,21 @@ public class ajaxServlet extends HttpServlet {
             return;
         }
 
-        double amountDouble = Double.parseDouble(req.getParameter("totalBill"));
+//      double amountDouble = Double.parseDouble(req.getParameter("totalBill"));
+
+        double amountDouble = 100000;
 
         //Gia su user login co id = 1
         //phan id user se lay tu sesson (user dang login)
-        Users user = (Users) session.getAttribute("user");
-        Orders order = (Orders) session.getAttribute("order");
-
-        System.out.println("order: " + order.toString());
-
-        OrderDao orderDao = new OrderDao();
-
-
-        if(order.getId() < 1) {
-            resp.sendRedirect("shoppingCart");
-            return;
-        }
+//        Users user = (Users) session.getAttribute("user");
+//        Orders order = (Orders) session.getAttribute("order");
+//        System.out.println("order: " + order.toString());
+//        OrderDao orderDao = new OrderDao();
+//
+//        if(order.getId() < 1) {
+//            resp.sendRedirect("shoppingCart");
+//            return;
+//        }
 
 
         String vnp_Version = "2.1.0";
@@ -66,7 +65,8 @@ public class ajaxServlet extends HttpServlet {
         String orderType = "other";
 
         // tổng tiền cần thanh toán
-        long amount = (long) (order.getPrice()*100);
+//      long amount = (long) (order.getPrice()*100);
+        long amount = (long) amountDouble * 100;
         String bankCode = req.getParameter("bankCode");
         
         // Mã vnp_TxnRef tham chiếu của giao dịch tại hệ thống của merchant. Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY 
