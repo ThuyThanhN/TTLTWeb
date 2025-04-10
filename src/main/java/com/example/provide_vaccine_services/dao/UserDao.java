@@ -15,6 +15,44 @@ import java.util.List;
 
 public class UserDao {
     private Users u;
+    public int insert(Users u) {
+        int re = 0;
+
+        // Sử dụng try-with-resources để đảm bảo tài nguyên được đóng đúng cách
+        try (PreparedStatement pst = DBConnect.get("INSERT INTO users (fullname, gender, identification, dateOfBirth, " +
+                "address, province, district, ward, phone, email, password, role, status) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+
+            // Set các tham số
+            pst.setString(1, u.getFullname());
+            pst.setString(2, u.getGender());
+            pst.setString(3, u.getIdentification());
+            pst.setDate(4, u.getDateOfBirth());
+            pst.setString(5, u.getAddress());
+            pst.setString(6, u.getProvince());
+            pst.setString(7, u.getDistrict());
+            pst.setString(8, u.getWard());
+            pst.setString(9, u.getPhone());
+            pst.setString(10, u.getEmail());
+            pst.setString(11, u.getPassword());
+            pst.setInt(12, u.getRole());  // Gán giá trị cho cột role
+            pst.setInt(13, u.getStatus());  // Gán giá trị cho cột status
+
+            // Thực thi câu lệnh SQL
+            re = pst.executeUpdate();
+
+            // Kiểm tra kết quả và thông báo
+            if (re > 0) {
+                System.out.println("Thêm dữ liệu thành công");
+            } else {
+                System.out.println("Thêm dữ liệu thất bại!");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return re;
+    }
 
      // Them nhan vien trong Admin
     public int insertStaff(Users u) {
