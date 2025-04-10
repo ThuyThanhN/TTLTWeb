@@ -27,7 +27,7 @@
             <p><strong>Giờ tiêm: </strong>${order.appointmentTime != null ? order.appointmentTime : "Chưa có thông tin"}</p>
         </div>
         <div class="appointmentSlip-details">
-            <h4>Trạm Y Tế ${center.name != null ? center.name : "Chưa có thông tin"}</h4>
+            <h4>${center.name != null ? center.name : "Chưa có thông tin"}</h4>
             <p>Địa Chỉ: ${center.address != null ? center.address : "Chưa có thông tin"}</p>
             <form>
                 <div class="info-row">
