@@ -12,7 +12,7 @@ public class Orders implements Serializable {
     private Date appointmentDate;
     private String appointmentTime;
     private String status;
-    private String paymentSatus;
+    private String paymentStatus;
 
     private String patientName;
     private Date dateOfBirth;
@@ -27,7 +27,7 @@ public class Orders implements Serializable {
     }
 
     public Orders(int id, int idPatient, int idCenter, LocalDateTime createdAt, Date appointmentDate,
-                  String appointmentTime, String status, String paymentSatus, String patientName, Date dateOfBirth,
+                  String appointmentTime, String status, String paymentStatus, String patientName, Date dateOfBirth,
                   String centerName, String centerAddress, String centerPhone, float price) {
         this.id = id;
         this.idPatient = idPatient;
@@ -36,7 +36,7 @@ public class Orders implements Serializable {
         this.appointmentDate = appointmentDate;
         this.appointmentTime = appointmentTime;
         this.status = status;
-        this.paymentSatus = paymentSatus;
+        this.paymentStatus = this.paymentStatus;
         this.patientName = patientName;
         this.dateOfBirth = dateOfBirth;
         this.centerName = centerName;
@@ -53,17 +53,17 @@ public class Orders implements Serializable {
         this.appointmentDate = appointmentDate;
         this.appointmentTime = appointmentTime;
         this.status = status;
-        this.paymentSatus = paymentSatus;
+        this.paymentStatus = paymentStatus;
     }
 
-    public Orders(int idCenter, int idPatient, LocalDateTime createdAt, Date appointmentDate, String appointmentTime, String status, String paymentSatus) {
+    public Orders(int idCenter, int idPatient, LocalDateTime createdAt, Date appointmentDate, String appointmentTime, String status, String paymentStatus) {
         this.idCenter = idCenter;
         this.idPatient = idPatient;
         this.createdAt = createdAt;
         this.appointmentDate = appointmentDate;
         this.appointmentTime = appointmentTime;
         this.status = status;
-        this.paymentSatus = paymentSatus;
+        this.paymentStatus = paymentStatus;
     }
 
     public int getId() {
@@ -94,8 +94,8 @@ public class Orders implements Serializable {
         return status;
     }
 
-    public String getPaymentSatus() {
-        return paymentSatus;
+    public String getPaymentStatus() {
+        return paymentStatus;
     }
 
     public void setIdCenter(int idCenter) {
@@ -127,7 +127,7 @@ public class Orders implements Serializable {
     }
 
     public void setPaymentSatus(String paymentSatus) {
-        this.paymentSatus = paymentSatus;
+        this.paymentStatus = paymentSatus;
     }
 
     public String getPatientName() {
@@ -188,7 +188,7 @@ public class Orders implements Serializable {
                 ", appointmentDate=" + appointmentDate +
                 ", appointmentTime='" + appointmentTime + '\'' +
                 ", status='" + status + '\'' +
-                ", paymentSatus='" + paymentSatus + '\'' +
+                ", paymentSatus='" + paymentStatus + '\'' +
                 ", patientName='" + patientName + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", centerName='" + centerName + '\'' +
