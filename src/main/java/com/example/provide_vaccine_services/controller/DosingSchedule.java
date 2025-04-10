@@ -194,7 +194,7 @@ public class DosingSchedule extends HttpServlet {
                 orders.setAppointmentTime(appointmentTime);
 
                 OrderDetailDao odd = new OrderDetailDao();
-//                List<OrderDetails> oddList = ordersOrderDetailsMap.get(orders);
+//              List<OrderDetails> oddList = ordersOrderDetailsMap.get(orders);
                 List<OrderDetails> ordersOrderDetailsList = new ArrayList<>();
                 if (selectedPackages != null && selectedPackages.length > 0) {
                     // Đếm số lần xuất hiện của mỗi gói

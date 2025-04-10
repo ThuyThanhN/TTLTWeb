@@ -42,6 +42,7 @@ public class ajaxServlet extends HttpServlet {
             resp.sendRedirect("cart");//create cart servlet
             return;
         }
+
         double amountDouble = Double.parseDouble(req.getParameter("totalBill"));
 
         //Gia su user login co id = 1
