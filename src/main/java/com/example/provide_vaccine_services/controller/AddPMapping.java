@@ -14,6 +14,9 @@ import java.io.IOException;
 
 @WebServlet(name = "AddPMapping", value = "/admin/addPMapping")
 public class AddPMapping extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -61,7 +64,7 @@ public class AddPMapping extends HttpServlet {
 
             response.getWriter().write("{\"status\":\"success\", \"id\":" + packageId + "}");
         } catch (Exception e) {
-            e.printStackTrace(); // Ghi log lỗi nếu có
+            e.printStackTrace();
             response.getWriter().write("{\"status\":\"error\", \"message\":\"Lỗi trong quá trình thêm gói tiêm: " + e.getMessage() + "\"}");
         }
     }

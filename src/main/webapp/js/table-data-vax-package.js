@@ -2,6 +2,14 @@ function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("show");
 }
 
+document.querySelectorAll("[data-validate]").forEach(input => {
+    input.addEventListener("input", function () {
+        let isInvalid = /^[\s\d]/.test(this.value);
+        this.classList.toggle("is-invalid", isInvalid);
+        this.nextElementSibling.style.display = isInvalid ? "block" : "none";
+    });
+});
+
 $(document).ready(function () {
     // bo focus khoi cac phan tu trong modal tranh loi aria-hidden
     $(document).on("click", "[data-bs-dismiss='modal']", function () {
@@ -23,7 +31,39 @@ $(document).ready(function () {
                 processing: "Đang xử lý...",
                 search: "Tìm kiếm:",
                 zeroRecords: "Không tìm thấy dữ liệu phù hợp"
-            }
+            },
+            buttons: [
+                {
+                    extend: "print",
+                    title: "Danh sách Gói Vắc Xin",
+                    exportOptions: {columns: [0, 1, 2]}
+                },
+                {
+                    extend: "pdfHtml5",
+                    title: "Danh sách Gói Vắc Xin",
+                    exportOptions: {columns: [0, 1, 2]},
+                    customize: function (doc) {
+                        doc.content[1].table.widths = ["auto", "*", "auto"];
+                    }
+                },
+                {
+                    extend: "excelHtml5",
+                    title: "Danh sách Gói Vắc Xin",
+                    exportOptions: {columns: [0, 1, 2]}
+                }
+            ]
+        });
+
+        $("#print").on("click", function () {
+            table.button(0).trigger();
+        });
+
+        $("#exportPDF").on("click", function () {
+            table.button(1).trigger();
+        });
+
+        $("#exportExcel").on("click", function () {
+            table.button(2).trigger();
         });
 
         return table;
@@ -110,6 +150,7 @@ $(document).ready(function () {
                     console.log("Response: ", responseData);
                     let newRowHtml = generatePackageRowHtml(response.id, responseData);
                     $("#package").DataTable().row.add($(newRowHtml)).draw(false);
+                    setTimeout(() => location.reload(), 1000);
                 } else {
                     alert("Có lỗi xảy ra: " + response.message);
                 }
@@ -151,7 +192,7 @@ $(document).ready(function () {
         $.ajax({
             url: `/provide_vaccine_services_war/admin/updatePackage`,
             type: "POST",
-            traditional: true, // Cho phép gửi mảng như vaccineId=1&vaccineId=2
+            traditional: true,
             dataType: "json",
             data: {
                 id: packageId,
@@ -169,16 +210,15 @@ $(document).ready(function () {
 
                     let row = $(`#package tr[data-id='${packageId}']`);
                     row.find(".package-name").text(name);
-                    row.find(".package-age").text(modal.find(".age-select option:selected").text());
                     row.find(".package-price").text(totalPrice.toLocaleString("vi-VN") + "đ");
 
                     $("#package").DataTable().row(row).invalidate().draw(false);
                 } else {
-                    alert("Cập nhật thất bại!");
+                    alert("Cap nhat that bai!");
                 }
             },
             error: function (xhr) {
-                console.error("Lỗi:", xhr.responseText);
+                console.error("Loi:", xhr.responseText);
             }
         });
     });
