@@ -1,3 +1,4 @@
+
 $(document).ready(function () {
     function loadDistricts(provinceId, modal, selectedDistrictName = "", callback) {
         const districtMenu = modal.find(".district-menu");
@@ -157,4 +158,36 @@ $(document).ready(function () {
         modal.find(".ward-select").val(wardName).attr("data-code", wardId);
         modal.find(".ward-code").val(wardId);
     });
+
+    // loc khi nguoi dung go vao input
+    $(document).on("input", ".province-select", function () {
+        const input = $(this).val().toLowerCase().trim();
+        const dropdownItems = $(this).closest(".dropdown").find(".province-menu li");
+
+        dropdownItems.each(function () {
+            const itemText = $(this).text().toLowerCase();
+            $(this).toggle(itemText.includes(input));
+        });
+    });
+
+    $(document).on("input", ".district-select", function () {
+        const input = $(this).val().toLowerCase().trim();
+        const dropdownItems = $(this).closest(".dropdown").find(".district-menu li");
+
+        dropdownItems.each(function () {
+            const itemText = $(this).text().toLowerCase();
+            $(this).toggle(itemText.includes(input));
+        });
+    });
+
+    $(document).on("input", ".ward-select", function () {
+        const input = $(this).val().toLowerCase().trim();
+        const dropdownItems = $(this).closest(".dropdown").find(".ward-menu li");
+
+        dropdownItems.each(function () {
+            const itemText = $(this).text().toLowerCase();
+            $(this).toggle(itemText.includes(input));
+        });
+    });
+
 });

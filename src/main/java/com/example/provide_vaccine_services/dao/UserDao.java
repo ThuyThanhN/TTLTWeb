@@ -16,16 +16,15 @@ import java.util.List;
 public class UserDao {
     private Users u;
 
-    // Them
-    public int insert(Users u) {
-        int re = 0;
+     // Them nhan vien trong Admin
+    public int insertStaff(Users u) {
+        int newId = -1;
 
-        // Sử dụng try-with-resources để đảm bảo tài nguyên được đóng đúng cách
-        try (PreparedStatement pst = DBConnect.get("INSERT INTO users (fullname, gender, identification, dateOfBirth, " +
-                "address, province, district, ward, phone, email, password, role, status) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+        try {
+            String sql = "insert into users(fullname, gender, identification, dateOfBirth, " +
+                    "address, province, district, ward, phone, email, password, role, status) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement pst = DBConnect.get(sql);
 
-            // Set các tham số
             pst.setString(1, u.getFullname());
             pst.setString(2, u.getGender());
             pst.setString(3, u.getIdentification());
@@ -37,25 +36,25 @@ public class UserDao {
             pst.setString(9, u.getPhone());
             pst.setString(10, u.getEmail());
             pst.setString(11, u.getPassword());
-            pst.setInt(12, u.getRole());  // Gán giá trị cho cột role
-            pst.setInt(13, u.getStatus());  // Gán giá trị cho cột status
+            pst.setInt(12, u.getRole());
+            pst.setInt(13, 1);
 
-            // Thực thi câu lệnh SQL
-            re = pst.executeUpdate();
+            int affectedRows = pst.executeUpdate();
 
-            // Kiểm tra kết quả và thông báo
-            if (re > 0) {
-                System.out.println("Thêm dữ liệu thành công");
-            } else {
-                System.out.println("Thêm dữ liệu thất bại!");
+            if (affectedRows > 0) {
+                // lay id moi nhat
+                String getIdSql = "SELECT MAX(id) FROM users";
+                PreparedStatement getIdStmt = DBConnect.get(getIdSql);
+                ResultSet rs = getIdStmt.executeQuery();
+                if (rs.next()) {
+                    newId = rs.getInt(1);
+                }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return re;
+        return newId;
     }
-
 
     // Cap nhat thong tin
     public int update(Users u) {

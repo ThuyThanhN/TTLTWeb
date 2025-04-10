@@ -1,5 +1,6 @@
 package com.example.provide_vaccine_services.controller;
 
+import com.example.provide_vaccine_services.Service.MD5Hash;
 import com.example.provide_vaccine_services.dao.UserDao;
 import com.example.provide_vaccine_services.dao.model.Users;
 import jakarta.servlet.*;
@@ -19,11 +20,11 @@ public class UpdateStaff extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
 
         String id = request.getParameter("id");
         String name = request.getParameter("fullname");
         String gender = request.getParameter("gender");
-        System.out.println("Gender value: " + gender);
 
         String ident = request.getParameter("ident");
         String date = request.getParameter("date");
@@ -39,12 +40,16 @@ public class UpdateStaff extends HttpServlet {
         int idStaff = Integer.parseInt(id);
         int roleValue = role.equals("Admin") ? 1 : 2;
         Date sqlDate = Date.valueOf(date);
-
+        String hashedPassword = MD5Hash.hashPassword(pass);
         UserDao userDao = new UserDao();
         Users user = new Users(idStaff, name, gender, ident, sqlDate,  address,
                 province, district, ward, phone, email, pass,  roleValue);
-        userDao.update(user);
-        response.sendRedirect("table-data-staff");
+        int result = userDao.update(user);
+        if (result > 0) {
+            response.getWriter().write("{\"status\":\"success\", \"fullname\":\"" + name + "\", \"gender\":\"" + gender + "\", \"ident\":\"" + ident + "\", \"date\":\"" + date + "\", \"email\":\"" + email + "\", \"address\":\"" + address + "\", \"province\":\"" + province + "\", \"district\":\"" + district + "\", \"ward\":\"" + ward + "\", \"phone\":\"" + phone + "\", \"role\":\"" + roleValue + "\", \"password\":\"" + hashedPassword + "\"}");
+        } else {
+            response.getWriter().write("{\"status\":\"error\", \"message\":\"Update failed.\"}");
+        }
     }
 }
 
