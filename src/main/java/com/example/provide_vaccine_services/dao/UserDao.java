@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class UserDao {
     private Users u;
@@ -275,6 +276,56 @@ public class UserDao {
 
             pst.setInt(12, u.getRole());
 
+            System.out.println("sql: " + sql);
+            System.out.println("pst: " + pst);
+
+
+            // Thực hiện câu lệnh và kiểm tra kết quả
+            re = pst.executeUpdate();
+
+
+            if (re > 0) {
+                System.out.println("Them du lieu thanh cong");
+
+            } else {
+                System.out.println("Them du lieu that bai!");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return re; // Trả về kết quả (số bản ghi đã được thêm)
+    }
+
+    public int insertGGUser(Users u) {
+        int re = 0;
+
+        try {
+            // Câu lệnh SQL để chèn dữ liệu vào bảng users
+            String sql = "INSERT INTO users(fullname, gender, identification, dateOfBirth, address, province, district, ward, phone, email, password, role, status)" +
+                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement pst = DBConnect.get(sql);
+
+            String s = u.toString();
+
+            System.out.println("user: " + s);
+
+            // Gán các giá trị từ đối tượng `Users`
+            pst.setString(1, u.getFullname());
+            pst.setString(2, "");
+            pst.setString(3, "");
+            pst.setDate(4, new Date(System.currentTimeMillis())); // thơi gian hiện tại
+            pst.setString(5, "");
+            pst.setString(6, "");
+            pst.setString(7, "");
+            pst.setString(8, "");
+            pst.setString(9, "");
+            pst.setString(10, u.getEmail());
+            pst.setString(11, genPassword());
+            pst.setInt(12, u.getRole());
+            pst.setInt(13, 1);
+
+
             // Thực hiện câu lệnh và kiểm tra kết quả
             re = pst.executeUpdate();
 
@@ -361,6 +412,7 @@ public class UserDao {
         }
         return isUpdated;
     }
+
     public int getUserIdByEmail(String email) {
         int userId = -1; // Giá trị mặc định nếu không tìm thấy
         String sql = "SELECT id FROM users WHERE email = ?";
@@ -378,6 +430,7 @@ public class UserDao {
 
         return userId; // Trả về ID của người dùng (hoặc -1 nếu không tìm thấy)
     }
+
     public int updateUserDetails(Users user) {
         // Cập nhật câu SQL để bao gồm province, district, ward
         String sql = "UPDATE users SET fullname = ?, identification = ?, phone = ?, gender = ?, dateOfBirth = ?, address = ?, province = ?, district = ?, ward = ? WHERE id = ?";
@@ -425,6 +478,7 @@ public class UserDao {
         }
         return 0; // Trả về 0 nếu có lỗi xảy ra
     }
+
     public boolean isEmailExists(String email) {
         String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
         try (PreparedStatement pst = DBConnect.get(sql)) {
@@ -447,6 +501,46 @@ public class UserDao {
             e.printStackTrace();
             return token;  // Trả về token gốc nếu có lỗi giải mã
         }
+    }
+
+    public Users getUserByEmail(String email) {
+        String sql = "SELECT * FROM users WHERE email = ?";
+        try (PreparedStatement pst = DBConnect.get(sql)) {
+
+            pst.setString(1, email);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                Users user = new Users();
+                user.setId(rs.getInt("id"));
+                user.setFullname(rs.getString("fullname"));
+                user.setGender(rs.getString("gender"));
+                user.setIdentification(rs.getString("identification"));
+                user.setDateOfBirth(rs.getDate("dateOfBirth"));
+                user.setAddress(rs.getString("address"));
+                user.setProvince(rs.getString("province"));
+                user.setDistrict(rs.getString("district"));
+                user.setWard(rs.getString("ward"));
+                user.setPhone(rs.getString("phone"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(rs.getInt("role"));
+
+                return user;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // Trả về null nếu không tìm thấy
+    }
+
+
+    // tạo mật khẩu ngẫu nhiên
+    private String genPassword() {
+        Random rand = new Random();
+        int randomNum = rand.nextInt(100000, 999999);
+        String password = String.valueOf(randomNum);
+        return MD5Hash.hashPassword(password);
     }
 
     public boolean updateUserStatusToActive(String token) {
