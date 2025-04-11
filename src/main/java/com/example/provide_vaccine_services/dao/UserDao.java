@@ -4,6 +4,8 @@ import com.example.provide_vaccine_services.Service.MD5Hash;
 import com.example.provide_vaccine_services.dao.db.DBConnect;
 import com.example.provide_vaccine_services.dao.model.Users;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,8 +16,6 @@ import java.util.Random;
 
 public class UserDao {
     private Users u;
-
-    // Them
     public int insert(Users u) {
         int re = 0;
 
@@ -55,6 +55,45 @@ public class UserDao {
         return re;
     }
 
+     // Them nhan vien trong Admin
+    public int insertStaff(Users u) {
+        int newId = -1;
+
+        try {
+            String sql = "insert into users(fullname, gender, identification, dateOfBirth, " +
+                    "address, province, district, ward, phone, email, password, role, status) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement pst = DBConnect.get(sql);
+
+            pst.setString(1, u.getFullname());
+            pst.setString(2, u.getGender());
+            pst.setString(3, u.getIdentification());
+            pst.setDate(4, u.getDateOfBirth());
+            pst.setString(5, u.getAddress());
+            pst.setString(6, u.getProvince());
+            pst.setString(7, u.getDistrict());
+            pst.setString(8, u.getWard());
+            pst.setString(9, u.getPhone());
+            pst.setString(10, u.getEmail());
+            pst.setString(11, u.getPassword());
+            pst.setInt(12, u.getRole());
+            pst.setInt(13, 1);
+
+            int affectedRows = pst.executeUpdate();
+
+            if (affectedRows > 0) {
+                // lay id moi nhat
+                String getIdSql = "SELECT MAX(id) FROM users";
+                PreparedStatement getIdStmt = DBConnect.get(getIdSql);
+                ResultSet rs = getIdStmt.executeQuery();
+                if (rs.next()) {
+                    newId = rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return newId;
+    }
 
     // Cap nhat thong tin
     public int update(Users u) {
@@ -227,12 +266,11 @@ public class UserDao {
             String rawPassword = u.getPassword();
             String hashedPassword = MD5Hash.hashPassword(rawPassword);
 
-
             // Debug mật khẩu
 //            System.out.println("Password trước khi mã hóa: " + rawPassword);
 //            System.out.println("Password sau khi mã hóa: " + hashedPassword);
 
-            pst.setString(11, u.getPassword());
+            pst.setString(11,u.getPassword());
 
             pst.setInt(12, u.getRole());
 
@@ -303,24 +341,30 @@ public class UserDao {
 
         return re; // Trả về kết quả (số bản ghi đã được thêm)
     }
-
-    public Users checkLogin(String phone, String password) {
+    public Users checkLogin(String username, String password) {
         Users user = null;
         try {
-            String sql = "SELECT * FROM users WHERE phone = ? AND password = ? ";
+            // Kiểm tra xem username là số điện thoại hay email
+            String sql = "";
+            if (username.contains("@")) {
+                // Nếu username chứa dấu "@" thì coi như email
+                sql = "SELECT * FROM users WHERE email = ? AND password = ?";
+            } else {
+                // Nếu không có dấu "@" thì coi như số điện thoại
+                sql = "SELECT * FROM users WHERE phone = ? AND password = ?";
+            }
+
             PreparedStatement pst = DBConnect.get(sql);
 
             // Mã hóa mật khẩu trước khi so sánh
-
-            pst.setString(1, phone);
+            pst.setString(1, username); // email hoặc số điện thoại
             String hashedPassword = MD5Hash.hashPassword(password.trim());
             pst.setString(2, hashedPassword);
 
             // Debug kiểm tra giá trị đầu vào
-            System.out.println("Phone: " + phone);
-            System.out.println("Password truoc khi ma hoa: " + password);
-            System.out.println("Password ma hoa: " + hashedPassword);
-
+            System.out.println("Username: " + username);
+            System.out.println("Password trước khi mã hóa: " + password);
+            System.out.println("Password mã hóa: " + hashedPassword);
 
             ResultSet rs = pst.executeQuery();
 
@@ -342,10 +386,10 @@ public class UserDao {
                 );
 
                 // Debug khi đăng nhập thành công
-                System.out.println("Dang nhap thanh cong cho ID: " + user.getId());
+                System.out.println("Đăng nhập thành công cho ID: " + user.getId());
             } else {
                 // Debug khi đăng nhập thất bại
-                System.out.println("Dang nhap that bai. Khong tim thay tai khoan phu hop.");
+                System.out.println("Đăng nhập thất bại. Không tìm thấy tài khoản phù hợp.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -448,6 +492,16 @@ public class UserDao {
         }
         return false;
     }
+    // Giải mã token trước khi lưu vào cơ sở dữ liệu hoặc kiểm tra
+    private String decodeToken(String token) {
+        try {
+            // Giải mã token từ URL (nếu có ký tự đặc biệt)
+            return URLDecoder.decode(token, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return token;  // Trả về token gốc nếu có lỗi giải mã
+        }
+    }
 
     public Users getUserByEmail(String email) {
         String sql = "SELECT * FROM users WHERE email = ?";
@@ -489,4 +543,82 @@ public class UserDao {
         return MD5Hash.hashPassword(password);
     }
 
+    public boolean updateUserStatusToActive(String token) {
+        boolean isUpdated = false;
+        try {
+            // Câu lệnh SQL để cập nhật trạng thái người dùng
+            String sql = "UPDATE users SET status = 1 WHERE verification_token = ?";
+
+            // Lấy PreparedStatement từ DBConnect
+            PreparedStatement pst = DBConnect.get(sql);  // Sử dụng phương thức get() từ DBConnect
+            pst.setString(1, token);  // Gán giá trị token vào câu lệnh SQL
+
+            // Thực thi câu lệnh UPDATE
+            int rows = pst.executeUpdate();
+            isUpdated = rows > 0;  // Nếu có ít nhất một dòng bị cập nhật, trả về true
+        } catch (SQLException e) {
+            e.printStackTrace();  // Xử lý lỗi nếu có
+        }
+        return isUpdated;  // Trả về true nếu thành công, false nếu không thành công
+    }
+    // Lưu token vào cơ sở dữ liệu
+    public boolean saveVerificationToken(String email, String token) {
+        boolean isUpdated = false;
+        try {
+            // Giải mã token từ URL
+            String decodedToken = decodeToken(token);
+
+            // Câu lệnh SQL để cập nhật token
+            String sql = "UPDATE users SET verification_token = ? WHERE email = ?";
+            PreparedStatement pst = DBConnect.get(sql);
+            pst.setString(1, decodedToken);  // Gán token đã giải mã vào tham số đầu tiên
+            pst.setString(2, email);  // Gán email vào tham số thứ hai
+
+            // Thực thi câu lệnh UPDATE
+            int rows = pst.executeUpdate();
+            isUpdated = rows > 0;  // Trả về true nếu cập nhật thành công
+        } catch (SQLException e) {
+            e.printStackTrace();  // Xử lý lỗi nếu có
+        }
+        return isUpdated;  // Trả về true nếu thành công, false nếu có lỗi
+    }
+
+    // Kiểm tra tính hợp lệ của token
+    public boolean isTokenValid(String token) {
+        boolean isValid = false;
+        try {
+            // Giải mã token từ URL
+            String decodedToken = decodeToken(token);
+
+            // In ra token đã giải mã để kiểm tra
+            System.out.println("Decoded Token: " + decodedToken);
+
+            // Câu lệnh SQL để kiểm tra tính hợp lệ của token
+            String sql = "SELECT COUNT(*) FROM users WHERE verification_token = ? AND status = 0";
+
+            // In ra câu lệnh SQL và token để kiểm tra
+            System.out.println("SQL Query: " + sql);
+            System.out.println("Checking with token: " + decodedToken);
+
+            PreparedStatement pst = DBConnect.get(sql);
+            pst.setString(1, decodedToken);  // Gán token đã giải mã vào tham số đầu tiên trong câu lệnh SQL
+
+            // Thực thi câu lệnh SELECT và lấy kết quả
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                isValid = rs.getInt(1) > 0;  // Nếu có ít nhất một bản ghi thỏa mãn điều kiện, trả về true
+            }
+
+            // In ra kết quả kiểm tra
+            System.out.println("Token validity result: " + isValid);
+
+        } catch (SQLException e) {
+            e.printStackTrace();  // Xử lý lỗi nếu có
+        }
+        return isValid;  // Trả về true nếu token hợp lệ, false nếu không hợp lệ
+    }
+
 }
+
+
+

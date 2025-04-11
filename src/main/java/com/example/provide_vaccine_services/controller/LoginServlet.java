@@ -85,19 +85,13 @@ public class LoginServlet extends HttpServlet {
         // Đảm bảo dữ liệu từ form được mã hóa UTF-8
         request.setCharacterEncoding("UTF-8");
 
-
         // Lấy thông tin đăng nhập từ form
-        String email = request.getParameter("username");
+        String username = request.getParameter("username"); // email hoặc số điện thoại
         String password = request.getParameter("password");
-
-        // nếu khng có ật khẩu hoặc dùng mật khẩu set cho các tài khoản google_auth
-        if (password == null || password.isEmpty()) {
-            request.setAttribute("error", "Invalid password");
-        }
 
         // Gọi UserDao để kiểm tra thông tin đăng nhập
         UserDao userDao = new UserDao();
-        Users user = userDao.checkLogin(email, password);
+        Users user = userDao.checkLogin(username, password);
 
         if (user != null) {
             // Đăng nhập thành công, tạo session
