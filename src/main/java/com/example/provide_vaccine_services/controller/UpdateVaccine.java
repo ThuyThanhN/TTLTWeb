@@ -128,7 +128,6 @@ public class UpdateVaccine extends HttpServlet {
         VaccineContents vc = new VaccineContents(idDetail, origin, administrationRoute, contraindications, precaution, drugInteractions, sideEffects);
         boolean contentUpdated = vcDao.updateVaccineContent(vc);
 
-
         Map<String, Object> jsonResponse = new HashMap<>();
         if (vaccineUpdated && typeUpdated && detailUpdated && contentUpdated) {
             jsonResponse.put("status", "success");
