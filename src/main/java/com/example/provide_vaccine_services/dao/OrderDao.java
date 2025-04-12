@@ -190,51 +190,55 @@ public class OrderDao {
 
     public Map<String, Object> getAppointmentDetails(int id) {
         Map<String, Object> result = new HashMap<>();
+        List<Vaccines> vaccinesList = new ArrayList<>();
+        String vaccinePackageName = null;  // Biến để lưu tên gói vắc xin
 
+        // Câu truy vấn SQL để lấy thông tin chi tiết về đơn hàng và các vắc xin liên quan
         String sql = """
-    SELECT 
-        o.id AS order_id, 
-        o.appointmentDate, 
-        o.appointmentTime, 
-        o.status AS order_status, 
-        p.id AS patient_id, 
-        p.fullname AS patient_name, 
-        p.dateOfBirth, 
-        p.gender, 
-        p.identification, 
-        p.address AS patient_address, 
-        p.province AS patient_province, 
-        p.district AS patient_district, 
-        p.ward AS patient_ward, 
-        c.id AS center_id,
-        c.name AS center_name, 
-        c.address AS center_address, 
-        c.phone AS center_phone, 
-        v.id AS vaccine_id, 
-        v.name AS vaccine_name, 
-        v.description AS vaccine_description, 
-        v.price AS vaccine_price, 
-        v.imageUrl AS vaccine_image_url,
-        u.fullname AS contact_fullname,
-        u.phone AS contact_phone,
-        cp.relationship AS contact_relationship 
-    FROM orders o 
-    JOIN patients p ON o.idPatient = p.id 
-    JOIN centers c ON o.idCenter = c.id 
-    JOIN orderdetails od ON o.id = od.idOrder
-    JOIN vaccines v ON od.idVaccine = v.id
-    LEFT JOIN contactpersons cp ON p.id = cp.idPatient
-    LEFT JOIN users u ON cp.idUser = u.id
-    WHERE o.id = ?
+            SELECT 
+                o.id AS order_id, 
+                o.appointmentDate, 
+                o.appointmentTime, 
+                o.status AS order_status, 
+                p.id AS patient_id, 
+                p.fullname AS patient_name, 
+                p.dateOfBirth, 
+                p.gender, 
+                p.identification, 
+                p.address AS patient_address, 
+                p.province AS patient_province, 
+                p.district AS patient_district, 
+                p.ward AS patient_ward, 
+                c.id AS center_id,
+                c.name AS center_name, 
+                c.address AS center_address, 
+                c.phone AS center_phone, 
+                v.id AS vaccine_id, 
+                v.name AS vaccine_name, 
+                v.description AS vaccine_description, 
+                v.price AS vaccine_price, 
+                v.imageUrl AS vaccine_image_url,
+                vp.name AS vaccine_package_name, 
+                u.fullname AS contact_fullname,
+                u.phone AS contact_phone,
+                cp.relationship AS contact_relationship 
+            FROM orders o 
+            JOIN patients p ON o.idPatient = p.id 
+            JOIN centers c ON o.idCenter = c.id 
+            JOIN orderdetails od ON o.id = od.idOrder
+            LEFT JOIN vaccines v ON od.idVaccine = v.id
+            LEFT JOIN vaccinepackages vp ON od.idPackage = vp.id 
+            LEFT JOIN contactpersons cp ON p.id = cp.idPatient
+            LEFT JOIN users u ON cp.idUser = u.id
+            WHERE o.id = ?
     """;
 
         try (PreparedStatement pst = DBConnect.get(sql)) {
-            pst.setInt(1, id);
-            System.out.println("Executing SQL: " + pst.toString());
+            pst.setInt(1, id);  // Đặt tham số ID vào câu truy vấn
 
             try (ResultSet rs = pst.executeQuery()) {
-                if (rs.next()) {
-                    // Tạo đối tượng Orders
+                while (rs.next()) {
+                    // Tạo đối tượng Order và thiết lập các thông tin
                     Orders order = new Orders();
                     order.setId(rs.getInt("order_id"));
                     order.setAppointmentDate(rs.getDate("appointmentDate"));
@@ -242,7 +246,7 @@ public class OrderDao {
                     order.setStatus(rs.getString("order_status"));
                     result.put("order", order);
 
-                    // Tạo đối tượng Patients
+                    // Tạo đối tượng Patient và thiết lập thông tin
                     Patients patient = new Patients();
                     patient.setId(rs.getInt("patient_id"));
                     patient.setFullname(rs.getString("patient_name"));
@@ -255,7 +259,7 @@ public class OrderDao {
                     patient.setWard(rs.getString("patient_ward"));
                     result.put("patient", patient);
 
-                    // Tạo đối tượng Centers
+                    // Tạo đối tượng Center và thiết lập thông tin
                     Centers center = new Centers();
                     center.setId(rs.getInt("center_id"));
                     center.setName(rs.getString("center_name"));
@@ -263,26 +267,42 @@ public class OrderDao {
                     center.setPhone(rs.getString("center_phone"));
                     result.put("center", center);
 
-                    // Tạo đối tượng Vaccines
+                    // Tạo đối tượng Vaccine và thiết lập thông tin
                     Vaccines vaccine = new Vaccines();
                     vaccine.setId(rs.getInt("vaccine_id"));
                     vaccine.setName(rs.getString("vaccine_name"));
                     vaccine.setDescription(rs.getString("vaccine_description"));
                     vaccine.setPrice(rs.getFloat("vaccine_price"));
-                    result.put("vaccine", vaccine);
+
+                    // Nếu vaccine có thông tin đầy đủ, thêm vào danh sách
+                    if (vaccine.getName() != null && !vaccine.getName().isEmpty()) {
+                        vaccinesList.add(vaccine);
+                    }
+
+                    // Kiểm tra gói vắc xin
+                    if (rs.getString("vaccine_package_name") != null) {
+                        vaccinePackageName = rs.getString("vaccine_package_name");
+                    }
+                    result.put("vaccinePackageName", vaccinePackageName); // Lưu tên gói vắc xin
 
                     // Thêm thông tin người liên hệ
                     String contactFullname = rs.getString("contact_fullname");
                     String contactPhone = rs.getString("contact_phone");
-                    String contactRelationship = rs.getString("contact_relationship"); // Lấy mối quan hệ với người liên hệ
+                    String contactRelationship = rs.getString("contact_relationship");
 
                     result.put("contactFullname", contactFullname);
                     result.put("contactPhone", contactPhone);
-                    result.put("contactRelationship", contactRelationship);  // Thêm mối quan hệ với người liên hệ
+                    result.put("contactRelationship", contactRelationship);
                 }
+
+                // Truyền danh sách vắc xin vào kết quả
+                result.put("vaccines", vaccinesList);
+
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace();  // In lỗi nếu có ngoại lệ trong khi truy vấn cơ sở dữ liệu
         }
+
         return result;
-    }    }
+    }
+}
