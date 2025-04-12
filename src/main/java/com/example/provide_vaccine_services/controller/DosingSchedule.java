@@ -146,9 +146,6 @@ public class DosingSchedule extends HttpServlet {
         String appointmentTime = request.getParameter("vaccination_time");
         String status = "Chưa được duyệt";   // Mặc định là "Chưa được duyệt"
         String paymentStatus = "Chưa thanh toán";;  // Mặc định là "Chưa thanh toán"
-        String paymentType = request.getParameter("payment_type"); // phương thức thanh toán
-
-        System.out.println(request.getParameter("payment_type"));
 
 
         // loai vaccine
@@ -347,12 +344,8 @@ public class DosingSchedule extends HttpServlet {
             session.setAttribute("ordersOrderDetailsMap", ordersOrderDetailsMap);
         }
 
-        if(paymentType.equals("banking")) {
-            response.sendRedirect("onlinePayment");
-        } else {
-            // Sau khi thêm OrderDetails vào cart, kiểm tra lại giỏ hàng
-            response.sendRedirect("shoppingCart");
-        }
+        // Sau khi thêm OrderDetails vào cart, kiểm tra lại giỏ hàng
+        response.sendRedirect("shoppingCart");
 
 
     }

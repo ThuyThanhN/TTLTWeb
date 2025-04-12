@@ -43,15 +43,15 @@ public class ajaxServlet extends HttpServlet {
             return;
         }
 
-//      double amountDouble = Double.parseDouble(req.getParameter("totalBill"));
-
-        double amountDouble = 100000;
+      double amountDouble = Double.parseDouble(req.getParameter("totalBill"));
 
         //Gia su user login co id = 1
         //phan id user se lay tu sesson (user dang login)
-//        Users user = (Users) session.getAttribute("user");
+        Users user = (Users) session.getAttribute("user");
 //        Orders order = (Orders) session.getAttribute("order");
+//
 //        System.out.println("order: " + order.toString());
+//
 //        OrderDao orderDao = new OrderDao();
 //
 //        if(order.getId() < 1) {
@@ -65,13 +65,12 @@ public class ajaxServlet extends HttpServlet {
         String orderType = "other";
 
         // tổng tiền cần thanh toán
-//      long amount = (long) (order.getPrice()*100);
-        long amount = (long) amountDouble * 100;
+        long amount = (long) (amountDouble*100);
         String bankCode = req.getParameter("bankCode");
         
         // Mã vnp_TxnRef tham chiếu của giao dịch tại hệ thống của merchant. Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY 
         // MÃ NÀY KHÔNG ĐƯỢC TRÙNG NHAU
-        String vnp_TxnRef = Config.getRandomNumber(8);
+        String vnp_TxnRef = Config.getRandomNumber(8); // String.valueOf(order.getId());
         String vnp_IpAddr = Config.getIpAddress(req);
 
         String vnp_TmnCode = Config.vnp_TmnCode;

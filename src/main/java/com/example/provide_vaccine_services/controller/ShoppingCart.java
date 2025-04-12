@@ -28,13 +28,17 @@ public class ShoppingCart extends HttpServlet {
         HttpSession session = request.getSession();
 
         Users users = (Users) session.getAttribute("user");
+        double totalBill = 0;
+
         if (users == null) {
             throw new ServletException("User is not logged in");
         }
+
         int userId = users.getId();
         System.out.println("userId---" + userId);
         String options = request.getParameter("options");
         String cartId = request.getParameter("cartId");
+
         // get cart session neu ko co thi tao model cart moi
         List<Integer> listCart = (List<Integer>) session.getAttribute("listCart");
         Map<Integer, Patients> integerPatientsMap = (Map<Integer, Patients>) session.getAttribute("integerPatientsMap");
@@ -56,11 +60,23 @@ public class ShoppingCart extends HttpServlet {
                 integerContactPersonsMap.remove(cartIdInt);
                 // remove item trong list orders theo cart id
                 ordersOrderDetailsMap.remove(order.get());
+
+                // chỉnh sửa lại giá cua totalBill
+                for (Map.Entry<Orders, List<OrderDetails>> entry : ordersOrderDetailsMap.entrySet()) {
+                    List<OrderDetails> details = entry.getValue();
+                    for (OrderDetails detail : details) {
+                        totalBill += detail.getPrice();
+                    }
+                }
+
             }
+
+
             session.setAttribute("listCart", listCart);
             session.setAttribute("integerPatientsMap", integerPatientsMap);
             session.setAttribute("integerContactPersonsMap", integerContactPersonsMap);
             session.setAttribute("ordersOrderDetailsMap", ordersOrderDetailsMap);
+            request.setAttribute("totalBill", totalBill);
 
             response.sendRedirect("shoppingCart");
 
@@ -70,12 +86,23 @@ public class ShoppingCart extends HttpServlet {
             if (listCart == null) {
                 listCart = new ArrayList<>();
             }
+
+            // chỉnh sửa lại giá cua totalBill
+            for (Map.Entry<Orders, List<OrderDetails>> entry : ordersOrderDetailsMap.entrySet()) {
+                List<OrderDetails> details = entry.getValue();
+                for (OrderDetails detail : details) {
+                    totalBill += detail.getPrice();
+                    System.out.println("totalBill---" + totalBill + " ---- detail:" + detail);
+                }
+            }
+
             Cart cart = new Cart();
             cart.setIntegerPatientsMap(integerPatientsMap);
             cart.setIntegerContactPersonsMap(integerContactPersonsMap);
             cart.setOrdersOrderDetailsMap(ordersOrderDetailsMap);
             request.setAttribute("cart", cart);
             request.setAttribute("listCart", listCart);
+            request.setAttribute("totalBill", totalBill);
 
             RequestDispatcher dispatcher = request.getRequestDispatcher("shopping_cart.jsp");
             dispatcher.forward(request, response);
@@ -94,6 +121,7 @@ public class ShoppingCart extends HttpServlet {
         int userId = users.getId();
         System.out.println("userId---" + userId);
         List<Integer> listCart = (List<Integer>) session.getAttribute("listCart");
+
         // chua co thi tao moi
         if (listCart == null) {
             listCart = new ArrayList<>();
