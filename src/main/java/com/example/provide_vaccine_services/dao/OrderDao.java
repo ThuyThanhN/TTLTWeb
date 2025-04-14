@@ -11,39 +11,12 @@ import java.util.List;
 import java.util.Map;
 
 public class OrderDao {
-//    public Orders getOrderlById(int id) {
-//        Orders o = null;
-//
-//        try {
-//            String sql = "SELECT * FROM orders WHERE id = ?";
-//            PreparedStatement pst = DBConnect.get(sql);
-//            pst.setInt(1, id);
-//            ResultSet rs = pst.executeQuery();
-//
-//            if (rs.next()) {
-//                int idPatient = rs.getInt("idPatient");
-//                int idCenter = rs.getInt("idCenter");
-//                // Chuyển đổi trường createdAt từ Timestamp thành LocalDateTime
-//                LocalDateTime createdAt = rs.getTimestamp("createdAt").toLocalDateTime();
-//                Date appointmentDate = rs.getDate("appointmentDate");
-//                String appointmentTime = rs.getString("appointmentTime");
-//                String status = rs.getString("status");
-//                String paymentStatus = rs.getString("paymentStatus");
-//
-//                o = new Orders(idPatient, idCenter, createdAt, appointmentDate, appointmentTime, status, paymentStatus);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace(); //
-//        }
-//
-//        return o;
-//    }
 
     public int insertOrder(Orders o) {
         int id = -1;
 
         try {
-            String sql = "INSERT INTO orders(idPatient, idCenter, createdAt, appointmentDate, appointmentTime, status, paymentSatus) "
+            String sql = "INSERT INTO orders(idPatient, idCenter, createdAt, appointmentDate, appointmentTime, status, paymentStatus) "
                     + "VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement pst = DBConnect.getAuto(sql);
 
@@ -53,7 +26,7 @@ public class OrderDao {
             pst.setObject(4, o.getAppointmentDate());
             pst.setString(5, o.getAppointmentTime());
             pst.setString(6, o.getStatus());
-            pst.setString(7, o.getPaymentSatus());
+            pst.setString(7, o.getPaymentStatus());
 
             // Thực thi câu lệnh
             int rows = pst.executeUpdate();
@@ -293,43 +266,41 @@ public class OrderDao {
         Map<String, Object> result = new HashMap<>();
 
         String sql = """
-                SELECT 
-                    o.id AS order_id, 
-                    o.appointmentDate, 
-                    o.appointmentTime, 
-                    o.status AS order_status, 
-                    o.paymentStatus,  -- Đã sửa chính tả từ paymentSatus thành paymentStatus
-                    p.id AS patient_id, 
-                    p.fullname AS patient_name, 
-                    p.dateOfBirth, 
-                    p.gender, 
-                    p.identification, 
-                    p.address AS patient_address, 
-                    p.province AS patient_province, 
-                    p.district AS patient_district, 
-                    p.ward AS patient_ward, 
-                    c.id AS center_id,
-                    c.name AS center_name, 
-                    c.address AS center_address, 
-                    c.phone AS center_phone, 
-                    v.id AS vaccine_id, 
-                    v.name AS vaccine_name, 
-                    v.description AS vaccine_description, 
-                    v.price AS vaccine_price, 
-                    v.imageUrl AS vaccine_image_url,
-                    u.fullname AS contact_fullname,
-                    u.phone AS contact_phone,
-                    cp.relationship AS contact_relationship 
-                FROM orders o 
-                JOIN patients p ON o.idPatient = p.id 
-                JOIN centers c ON o.idCenter = c.id 
-                JOIN orderdetails od ON o.id = od.idOrder
-                JOIN vaccines v ON od.idVaccine = v.id
-                LEFT JOIN contactpersons cp ON p.id = cp.idPatient
-                LEFT JOIN users u ON cp.idUser = u.id
-                WHERE o.id = ?
-                """;
-
+    SELECT 
+        o.id AS order_id, 
+        o.appointmentDate, 
+        o.appointmentTime, 
+        o.status AS order_status, 
+        p.id AS patient_id, 
+        p.fullname AS patient_name, 
+        p.dateOfBirth, 
+        p.gender, 
+        p.identification, 
+        p.address AS patient_address, 
+        p.province AS patient_province, 
+        p.district AS patient_district, 
+        p.ward AS patient_ward, 
+        c.id AS center_id,
+        c.name AS center_name, 
+        c.address AS center_address, 
+        c.phone AS center_phone, 
+        v.id AS vaccine_id, 
+        v.name AS vaccine_name, 
+        v.description AS vaccine_description, 
+        v.price AS vaccine_price, 
+        v.imageUrl AS vaccine_image_url,
+        u.fullname AS contact_fullname,
+        u.phone AS contact_phone,
+        cp.relationship AS contact_relationship 
+    FROM orders o 
+    JOIN patients p ON o.idPatient = p.id 
+    JOIN centers c ON o.idCenter = c.id 
+    JOIN orderdetails od ON o.id = od.idOrder
+    JOIN vaccines v ON od.idVaccine = v.id
+    LEFT JOIN contactpersons cp ON p.id = cp.idPatient
+    LEFT JOIN users u ON cp.idUser = u.id
+    WHERE o.id = ?
+    """;
         try (PreparedStatement pst = DBConnect.get(sql)) {
             pst.setInt(1, id);
             System.out.println("Executing SQL: " + pst.toString());
@@ -387,5 +358,7 @@ public class OrderDao {
             e.printStackTrace();
         }
         return result;
-    }
+
+    }   
 }
+
