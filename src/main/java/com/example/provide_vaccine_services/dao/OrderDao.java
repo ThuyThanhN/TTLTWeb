@@ -118,6 +118,95 @@ public class OrderDao {
         return re;
     }
 
+    public List<Map<String, Object>> getOrderDetailById(int id) {
+        List<Map<String, Object>> re = new ArrayList<>();
+
+        try {
+            String sqlOrder = "SELECT " +
+                    "o.id AS order_id, " +
+                    "cp.fullname AS contact_name, " +
+                    "cp.relationship AS relationship, " +
+                    "cp.phone AS phone, " +
+                    "SUM(COALESCE(v.price, vp.totalPrice) * od.quantityOrder) AS total_price, " +
+                    "GROUP_CONCAT(DISTINCT COALESCE(v.name, vp.name) SEPARATOR ', ') AS vaccine_or_package_names " +
+                    "FROM orders o " +
+                    "JOIN patients p ON o.idPatient = p.id " +
+                    "JOIN contactpersons cp ON cp.idPatient = p.id " +
+                    "JOIN orderdetails od ON o.id = od.idOrder " +
+                    "LEFT JOIN vaccines v ON od.idVaccine = v.id " +
+                    "LEFT JOIN vaccinepackages vp ON od.idPackage = vp.id " +
+                    "WHERE o.id = ? " +
+                    "GROUP BY cp.fullname, cp.relationship, cp.phone";
+
+            PreparedStatement pstOrder = DBConnect.get(sqlOrder);
+            pstOrder.setInt(1, id);
+            ResultSet rsOrder = pstOrder.executeQuery();
+
+            while (rsOrder.next()) {
+                Map<String, Object> orderData = new HashMap<>();
+                orderData.put("order_id", rsOrder.getInt("order_id"));
+                orderData.put("contact_name", rsOrder.getString("contact_name"));
+                orderData.put("relationship", rsOrder.getString("relationship"));
+                orderData.put("phone", rsOrder.getString("phone"));
+                orderData.put("total_price", rsOrder.getFloat("total_price"));
+                orderData.put("vaccine_or_package_names", rsOrder.getString("vaccine_or_package_names"));
+                re.add(orderData);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return re;
+    }
+
+    public List<Map<String, Object>> export() {
+        List<Map<String, Object>> re = new ArrayList<>();
+
+        try {
+            String sqlOrder = "SELECT " +
+                    "o.id AS order_id, " +
+                    "p.fullname AS patient_name, " +
+                    "c.name AS center_name, " +
+                    "o.appointmentDate AS appointment_date, " +
+                    "o.appointmentTime AS appointment_time, " +
+                    "cp.fullname AS contact_name, " +
+                    "cp.relationship AS relationship, " +
+                    "cp.phone AS phone, " +
+                    "SUM(COALESCE(v.price, vp.totalPrice) * od.quantityOrder) AS total_price, " +
+                    "GROUP_CONCAT(DISTINCT COALESCE(v.name, vp.name) SEPARATOR ', ') AS vaccine_or_package_names " +
+                    "FROM orders o " +
+                    "JOIN patients p ON o.idPatient = p.id " +
+                    "JOIN centers c ON o.idCenter = c.id " +
+                    "JOIN contactpersons cp ON cp.idPatient = p.id " +
+                    "JOIN orderdetails od ON o.id = od.idOrder " +
+                    "LEFT JOIN vaccines v ON od.idVaccine = v.id " +
+                    "LEFT JOIN vaccinepackages vp ON od.idPackage = vp.id " +
+                    "GROUP BY o.id, p.fullname, c.name, o.appointmentDate, " +
+                    "o.appointmentTime, cp.fullname, cp.relationship, cp.phone";
+
+            PreparedStatement pstOrder = DBConnect.get(sqlOrder);
+            ResultSet rsOrder = pstOrder.executeQuery();
+
+            while (rsOrder.next()) {
+                Map<String, Object> orderData = new HashMap<>();
+                orderData.put("order_id", rsOrder.getInt("order_id"));
+                orderData.put("patient_name", rsOrder.getString("patient_name"));
+                orderData.put("center_name", rsOrder.getString("center_name"));
+                orderData.put("appointment_date", rsOrder.getDate("appointment_date"));
+                orderData.put("appointment_time", rsOrder.getString("appointment_time"));
+                orderData.put("contact_name", rsOrder.getString("contact_name"));
+                orderData.put("relationship", rsOrder.getString("relationship"));
+                orderData.put("phone", rsOrder.getString("phone"));
+                orderData.put("total_price", rsOrder.getFloat("total_price"));
+                orderData.put("vaccine_or_package_names", rsOrder.getString("vaccine_or_package_names"));
+                re.add(orderData);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return re;
+    }
+
+
     public boolean isEmailExists(String email) {
         String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
         try (PreparedStatement pst = DBConnect.get(sql)) {
