@@ -81,6 +81,31 @@ public class PermissionFilter implements Filter {
             }
         }
 
+        // Phân quyền cho vaccine gồm thêm, sửa, xóa (3) cho userId quản lý vaccine
+        if (path.endsWith("/admin/addvaccine") || path.endsWith("/admin/updatevaccine") || path.endsWith("/admin/removevaccine")) {
+            int requiredPermission = Permissions.WRITE | Permissions.EXECUTE;
+
+            // Kiểm tra xem user hiện tại có đủ quyền đối với module "vaccine" không
+            if (!permissionDao.hasPermission(userId, "vaccine", requiredPermission)) {
+                // Nếu không có quyền, từ chối truy cập
+                deny(resp, req);
+                return;
+            }
+        }
+
+        // Phân quyền cho duyet don hang cho userId quản lý order
+        if (path.endsWith("/admin/updateorderstatus")) {
+            int requiredPermission = Permissions.EXECUTE;
+
+            // Kiểm tra xem user hiện tại có đủ quyền đối với module "order" không
+            if (!permissionDao.hasPermission(userId, "order", requiredPermission)) {
+                // Nếu không có quyền, từ chối truy cập
+                deny(resp, req);
+                return;
+            }
+        }
+
+
         chain.doFilter(request, response);
     }
 
