@@ -300,7 +300,7 @@ public class OrderDao {
 
             }
         } catch (SQLException e) {
-            e.printStackTrace();  // In lỗi nếu có ngoại lệ trong khi truy vấn cơ sở dữ liệu
+            e.printStackTrace();
         }
 
         return result;
