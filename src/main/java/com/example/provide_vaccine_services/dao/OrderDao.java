@@ -285,4 +285,53 @@ public class OrderDao {
             e.printStackTrace();
         }
         return result;
-    }    }
+    }
+
+    public Orders getOrderById(int idOrder) {
+        Orders result = null;
+
+        String sql = "select * from orders where id = ?";
+        try  {
+            PreparedStatement pst = DBConnect.get(sql);
+            pst.setInt(1,idOrder);
+            ResultSet rs = pst.executeQuery();
+                if (rs.next()) {
+                    result = new Orders();
+                    result.setId(rs.getInt("id"));
+                    result.setIdPatient(rs.getInt("idPatient"));
+                    result.setIdCenter(rs.getInt("idCenter"));
+                    // Lấy giá trị createdAt và chuyển thành LocalDateTime
+                    Timestamp timestamp = rs.getTimestamp("createdAt");
+                    if (timestamp != null) {
+                        LocalDateTime createdAt = timestamp.toLocalDateTime();
+                        result.setCreatedAt(createdAt); // Đảm bảo phương thức setCreatedAt đã được định nghĩa trong Orders
+                    }
+                    // Lấy các trường còn lại nếu cần thiết
+                    result.setAppointmentDate(rs.getDate("appointmentDate"));
+                    result.setAppointmentTime(rs.getString("appointmentTime"));
+                    result.setStatus(rs.getString("status"));
+                    result.setPaymentStatus(rs.getString("paymentStatus"));
+                }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+
+    }
+
+    public boolean updateOrderStatus(Orders order) {
+        String sql = "UPDATE orders SET paymentStatus = ? WHERE id = ?";
+        try (PreparedStatement pst = DBConnect.get(sql)) {
+            pst.setString(1,order.getPaymentStatus());
+            pst.setInt(2,order.getId());
+            int rowsAffected = pst.executeUpdate();
+            if(rowsAffected > 0) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+}

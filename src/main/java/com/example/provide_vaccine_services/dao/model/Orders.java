@@ -36,7 +36,7 @@ public class Orders implements Serializable {
         this.appointmentDate = appointmentDate;
         this.appointmentTime = appointmentTime;
         this.status = status;
-        this.paymentStatus = this.paymentStatus;
+        this.paymentStatus = paymentStatus;
         this.patientName = patientName;
         this.dateOfBirth = dateOfBirth;
         this.centerName = centerName;
@@ -45,7 +45,7 @@ public class Orders implements Serializable {
         this.price = price;
     }
 
-    public Orders(int orderId, int idPatient, int idCenter, LocalDateTime createdAt, Date appointmentDate, String appointmentTime, String status, String paymentSatus) {
+    public Orders(int orderId, int idPatient, int idCenter, LocalDateTime createdAt, Date appointmentDate, String appointmentTime, String status, String paymentStatus) {
         this.id = orderId;
         this.idPatient = idPatient;
         this.idCenter = idCenter;
@@ -177,6 +177,12 @@ public class Orders implements Serializable {
     public void setPrice(float price) {
         this.price = price;
     }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+
 
     @Override
     public String toString() {

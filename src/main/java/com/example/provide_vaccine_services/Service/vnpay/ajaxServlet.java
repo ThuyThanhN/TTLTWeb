@@ -5,11 +5,11 @@
  */
 package com.example.provide_vaccine_services.Service.vnpay;
 
+import com.example.provide_vaccine_services.dao.ContactPersonDao;
 import com.example.provide_vaccine_services.dao.OrderDao;
-import com.example.provide_vaccine_services.dao.model.Orders;
-import com.example.provide_vaccine_services.dao.model.Users;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import com.example.provide_vaccine_services.dao.OrderDetailDao;
+import com.example.provide_vaccine_services.dao.PatientDao;
+import com.example.provide_vaccine_services.dao.model.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,14 +19,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
  *
@@ -38,29 +31,55 @@ public class ajaxServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
 
-        // nếu giá tiền là null thì trả về
-        if(req.getParameter("totalBill") == null) {
-            resp.sendRedirect("cart");//create cart servlet
+        /**
+         * Đầu tiên thêm các thuộc tính ( đơn đặt hàng ) vào database với trạng thái chưa thanh toán
+         * ví dụ: Patient, Order, OrderDetail, ...
+         *
+         *
+         *
+         */
+
+        // nếu user chưa đăng nhập thì trả về login
+        Users user = (Users) session.getAttribute("user");
+        if(user == null) {
+            resp.sendRedirect("login");
             return;
         }
 
-      double amountDouble = Double.parseDouble(req.getParameter("totalBill"));
+        // nếu giá tiền là null thì trả về giỏ hàng
+        if(req.getParameter("totalBill") == null) {
+            resp.sendRedirect("cart");
+            return;
+        }
 
-        //Gia su user login co id = 1
-        //phan id user se lay tu sesson (user dang login)
-        Users user = (Users) session.getAttribute("user");
-//        Orders order = (Orders) session.getAttribute("order");
-//
-//        System.out.println("order: " + order.toString());
-//
-//        OrderDao orderDao = new OrderDao();
-//
-//        if(order.getId() < 1) {
-//            resp.sendRedirect("shoppingCart");
-//            return;
-//        }
+        // thêm vào Order vào database và lấy id của Order
+        int idOrder = addOrderToDB(session);
+
+        // nếu id order không tồn tại thì trả về
+        if(idOrder == -1) {
+            resp.sendRedirect("cart");
+            return;
+        }
+
+        // lấy order từ idOrder
+        OrderDao orderDao = new OrderDao();
+        Orders order = orderDao.getOrderById(idOrder);
+        OrderDetailDao odd = new OrderDetailDao();
+
+        if(order == null) {
+            resp.sendRedirect("cart");
+            return;
+        }
+
+        float amountFloat = odd.getOrderPriceByOrderId(order.getId());
+        Double amountDouble = (double) amountFloat;
 
 
+        /**
+         * thực hiện thanh toán bằng vnPay
+         *
+         *
+         */
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String orderType = "other";
@@ -71,11 +90,12 @@ public class ajaxServlet extends HttpServlet {
         
         // Mã vnp_TxnRef tham chiếu của giao dịch tại hệ thống của merchant. Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY 
         // MÃ NÀY KHÔNG ĐƯỢC TRÙNG NHAU
-        String vnp_TxnRef = Config.getRandomNumber(8); // String.valueOf(order.getId());
+        String vnp_TxnRef = String.valueOf(order.getId());
         String vnp_IpAddr = Config.getIpAddress(req);
 
         String vnp_TmnCode = Config.vnp_TmnCode;
-        
+
+        // dùng map lưu các thuộc tính để xử lí thanh toán
         Map<String, String> vnp_Params = new HashMap<>();
         vnp_Params.put("vnp_Version", vnp_Version);
         vnp_Params.put("vnp_Command", vnp_Command);
@@ -144,6 +164,87 @@ public class ajaxServlet extends HttpServlet {
 //        resp.getWriter().write(gson.toJson(job));
 
         resp.sendRedirect(paymentUrl);
+    }
+
+
+    /**
+     * phương thức này nhận vào session để thêm Order, Patient, Orderdetails, ContactPerson vào DB
+     * sau đó trả về id của Order
+     *
+     * @param session
+     * @return
+     *  -1: chưa được thêm vào DB
+     *
+     */
+    public int addOrderToDB( HttpSession session ) {
+        int idOrder = -1;
+        Users user = (Users) session.getAttribute("user");
+
+
+        // lấy danh sách sản phẩm trong list card
+        List<Integer> listCart = (List<Integer>) session.getAttribute("listCart");
+
+        // chưa có thì tạo listCart mới
+        if (listCart == null) {
+            listCart = new ArrayList<>();
+            session.setAttribute("listCart", listCart);
+        }
+
+        Map<Integer, Patients> integerPatientsMap =
+                (Map<Integer, Patients>) session.getAttribute("integerPatientsMap");
+        Map<Integer, ContactPersons> integerContactPersonsMap =
+                (Map<Integer, ContactPersons>) session.getAttribute("integerContactPersonsMap");
+        Map<Orders, List<OrderDetails>> ordersOrderDetailsMap =
+                (Map<Orders, List<OrderDetails>>) session.getAttribute("ordersOrderDetailsMap");
+
+        for (int i = 0; i < listCart.size(); i++) {
+            // them patient
+            PatientDao patientDao = new PatientDao();
+            Patients patients = integerPatientsMap.get(listCart.get(i));
+            if (patients == null) {
+                break; //  den item gio hang tiep theo khi patient ko co trong session
+            }
+            int idPatient = patientDao.insertPatient(new Patients(patients.getFullname(), patients.getDateOfBirth(),
+                    patients.getGender(), patients.getIdentification(), patients.getAddress(), patients.getProvince(),
+                    patients.getDistrict(), patients.getWard()));
+            System.out.println("idPatient " + idPatient);
+            //them contact
+            ContactPersonDao cpDao = new ContactPersonDao();
+            ContactPersons contactPersons = integerContactPersonsMap.get(listCart.get(i));
+            cpDao.insertContact(new ContactPersons(user.getId(), idPatient, contactPersons.getFullname(), contactPersons.getRelationship(), contactPersons.getPhone()));
+
+            System.out.println("contactPersons " + contactPersons.getFullname());
+            // them orders
+            OrderDao orderDao = new OrderDao();
+            int finalI = i;
+            int cartItemId = listCart.get(i);
+            Optional<Orders> order = ordersOrderDetailsMap.keySet().stream()
+                    .filter(o -> o.getId() == cartItemId)
+                    .findFirst();
+            if (order.isPresent()) {
+                Orders foundOrder = order.get();
+                idOrder = orderDao.insertOrder(new Orders(listCart.get(i), idPatient, foundOrder.getIdCenter(), foundOrder.getCreatedAt(),
+                        foundOrder.getAppointmentDate(), foundOrder.getAppointmentTime(), foundOrder.getStatus(),
+                        foundOrder.getPaymentStatus()));
+                System.out.println("idOrder" + idOrder);
+                // them orderdetail
+                OrderDetailDao odd = new OrderDetailDao();
+                List<OrderDetails> orderDetails = ordersOrderDetailsMap.get(foundOrder);
+                for (OrderDetails oddOrderDetail : orderDetails) {
+                    int result = odd.insertDetailFull(idOrder, oddOrderDetail.getIdVaccine(), oddOrderDetail.getIdPackage(),
+                            oddOrderDetail.getQuantityOrder(), oddOrderDetail.getPrice());
+                    System.out.println("orderDetails" + result);
+                }
+            }
+        }
+
+        // bỏ các thuộc tính khỏi session
+        session.removeAttribute("listCart");
+        session.removeAttribute("integerPatientsMap");
+        session.removeAttribute("integerContactPersonsMap");
+        session.removeAttribute("ordersOrderDetailsMap");
+
+        return idOrder;
     }
 
 }

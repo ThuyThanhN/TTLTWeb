@@ -152,6 +152,7 @@ public class DosingSchedule extends HttpServlet {
         String[] selectedPackages = request.getParameterValues("selectedPackages");
         String[] selectedVaccines = request.getParameterValues("selectedVaccines");
 
+        // nếu đã tồn tại cardID ( không phải đki mới mà là chỉnh sửa/xoá/.... )
         if (cartIdParam != null && isNumeric(cartIdParam)) {
             cartId = Integer.parseInt(cartIdParam);
             Map<Integer, Patients> integerPatientsMap =
@@ -288,7 +289,7 @@ public class DosingSchedule extends HttpServlet {
             //  Don hang
             Map<Orders, List<OrderDetails>> ordersOrderDetailsMap =
                     (Map<Orders, List<OrderDetails>>) session.getAttribute("ordersOrderDetailsMap");
-            // neu chua co orrder thi tao map moi, co roi thi se ghi de tiep vao session
+            // neu chua co order thi tao map moi, co roi thi se ghi de tiep vao session
             if (ordersOrderDetailsMap == null) {
                 ordersOrderDetailsMap = new HashMap<>();
             }

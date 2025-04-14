@@ -68,7 +68,6 @@ public class ShoppingCart extends HttpServlet {
                         totalBill += detail.getPrice();
                     }
                 }
-
             }
 
 
@@ -118,8 +117,11 @@ public class ShoppingCart extends HttpServlet {
         if (users == null) {
             throw new ServletException("User is not logged in");
         }
+
         int userId = users.getId();
         System.out.println("userId---" + userId);
+
+        // lấy danh sách sản phẩm trong list card
         List<Integer> listCart = (List<Integer>) session.getAttribute("listCart");
 
         // chua co thi tao moi
