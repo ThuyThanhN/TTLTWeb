@@ -29,7 +29,7 @@
         <div class="appointmentSlip-details">
             <h4>Trạm Y Tế ${center.name != null ? center.name : "Chưa có thông tin"}</h4>
             <p>Địa Chỉ: ${center.address != null ? center.address : "Chưa có thông tin"}</p>
-            <form>
+            <form action="payment" method="post">
                 <div class="info-row">
                     Họ và tên người tiêm: <span class="value">${patient.fullname != null ? patient.fullname : "Chưa có thông tin"}</span>
                 </div>
@@ -52,6 +52,8 @@
                     <span class="value">${contactPhone != null ? contactPhone : "Chưa có thông tin"}</span>
                 </div>
                 <p class="note">Vui lòng chụp lại thông tin phiếu hẹn hoặc ghi nhớ mã phiếu hẹn!</p>
+
+                <button type="submit" class="btn btn-order"> Thanh toán online </button>
             </form>
         </div>
     </div>

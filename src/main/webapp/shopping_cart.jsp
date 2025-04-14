@@ -103,7 +103,6 @@
         </form>
         <%-- Thanh toán --%>
         <form action="payment" method="post">
-            <input type="hidden" name="totalBill" value="${totalBill}">
             <button type="submit" class="btn btn-order"> Đặt và Thanh toán </button>
         </form>
     </div>

@@ -46,14 +46,14 @@ public class ajaxServlet extends HttpServlet {
             return;
         }
 
-        // nếu giá tiền là null thì trả về giỏ hàng
-        if(req.getParameter("totalBill") == null) {
-            resp.sendRedirect("cart");
-            return;
-        }
-
         // thêm vào Order vào database và lấy id của Order
-        int idOrder = addOrderToDB(session);
+        Orders o = (Orders) session.getAttribute("order");
+        int idOrder;
+        if(o == null) {
+            idOrder = addOrderToDB(session);
+        } else {
+            idOrder = o.getId();
+        }
 
         // nếu id order không tồn tại thì trả về
         if(idOrder == -1) {
