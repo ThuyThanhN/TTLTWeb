@@ -1,5 +1,7 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,15 +55,14 @@
                 </div>
                 <p class="note">Vui lòng chụp lại thông tin phiếu hẹn hoặc ghi nhớ mã phiếu hẹn!</p>
                 <input type="hidden" name="id" value="${order.id != null ? order.id : ''}" />
-                <p> ${order.paymentStatus} </p>
                 <c:if test="${order.paymentStatus == 'Chưa thanh toán'}">
                     <!-- Hiển thị nút thanh toán khi trạng thái thanh toán là "Chưa thanh toán" -->
-                    <button type="submit" class="btn btn-order"> Thanh toán online </button>
+                    <button type="submit" class="btn btn-order noPaid"> Thanh toán online </button>
                 </c:if>
 
                 <c:if test="${order.paymentStatus != 'Chưa thanh toán'}">
                     <!-- Nếu trạng thái thanh toán không phải là "Chưa thanh toán", không hiển thị nút -->
-                    <p>Đơn hàng đã được thanh toán</p>
+                    <button disabled class="btn btn-order Paid">Đơn hàng đã được thanh toán</button>
                 </c:if>
 
             </form>

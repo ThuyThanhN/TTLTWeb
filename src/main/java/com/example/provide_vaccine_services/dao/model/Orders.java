@@ -194,7 +194,7 @@ public class Orders implements Serializable {
                 ", appointmentDate=" + appointmentDate +
                 ", appointmentTime='" + appointmentTime + '\'' +
                 ", status='" + status + '\'' +
-                ", paymentSatus='" + paymentStatus + '\'' +
+                ", paymentStatus='" + paymentStatus + '\'' +
                 ", patientName='" + patientName + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", centerName='" + centerName + '\'' +

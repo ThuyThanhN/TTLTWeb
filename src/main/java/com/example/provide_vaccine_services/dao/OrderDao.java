@@ -227,6 +227,7 @@ public class OrderDao {
                     "p.fullname AS patient_name, " +
                     "o.appointmentDate AS appointment_date, " +
                     "o.appointmentTime AS appointment_time, " +
+                    "o.paymentStatus AS paymentStatus, " +
                     "SUM(COALESCE(v.price, vp.totalPrice) * od.quantityOrder) AS total_price, " +
                     "o.status AS order_status, " +
                     "GROUP_CONCAT(COALESCE(v.name, vp.name) SEPARATOR ', ') AS vaccine_or_package_names " +
@@ -254,6 +255,7 @@ public class OrderDao {
                 orderData.put("total_price", rsOrder.getFloat("total_price"));
                 orderData.put("order_status", rsOrder.getString("order_status"));
                 orderData.put("vaccine_or_package_names", rsOrder.getString("vaccine_or_package_names"));
+                orderData.put("paymentStatus", rsOrder.getString("paymentStatus"));
                 re.add(orderData);
             }
         } catch (SQLException e) {
@@ -271,6 +273,7 @@ public class OrderDao {
         o.appointmentDate, 
         o.appointmentTime, 
         o.status AS order_status, 
+        o.paymentStatus,
         p.id AS patient_id, 
         p.fullname AS patient_name, 
         p.dateOfBirth, 
@@ -314,6 +317,7 @@ public class OrderDao {
                     order.setAppointmentDate(rs.getDate("appointmentDate"));
                     order.setAppointmentTime(rs.getString("appointmentTime"));
                     order.setStatus(rs.getString("order_status"));
+                    order.setPaymentStatus(rs.getString("paymentStatus"));
                     result.put("order", order);
 
                     // Tạo đối tượng Patients

@@ -110,6 +110,27 @@ form{
 }
 
 
+/* Button style for "Chưa thanh toán" (not paid) */
+.btn.noPaid {
+    background-color: #28a745; /* Green color for not paid status */
+    color: white;  /* White text */
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;  /* Pointer cursor to indicate the button is clickable */
+    transition: background-color 0.3s ease;  /* Smooth background color change on hover */
+}
+/* Button style for "Đã thanh toán" (paid) */
+.btn.Paid {
+    background-color: #636060; /* Gray color for paid status */
+    color: white;  /* White text */
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: not-allowed;  /* Disabled cursor to show the button is not clickable */
+}
+
+
 
 
 

@@ -1,11 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: admin
-  Date: 4/14/2025
-  Time: 11:08 PM
-  To change this template use File | Settings | File Templates.
---%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,53 +7,78 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kết quả giao dịch</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="css/payment-result.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+          rel="stylesheet">
 </head>
 
-<body style="background-color: #f4f4f4; font-family: Arial, sans-serif; margin: 0; padding: 20px;">
+<body>
+<div id="wrapper">
+    <!-- Header -->
+    <jsp:include page="header.jsp"></jsp:include>
+    <!-- Content   -->
+    <section class="transaction-result">
 
-<%-- kết quả giao dịch --%>
-<section style="margin-top: 50px; text-align: center;">
-    <div>
-        <img src="https://cdn2.cellphones.com.vn/insecure/rs:fill:150:0/q:90/plain/https://cellphones.com.vn/media/wysiwyg/Review-empty.png"
-             alt="Transaction Status"
-             style="width: 120px; height: 120px; margin-bottom: 20px;">
-    </div>
 
-    <!-- Giao dịch thành công -->
-    <c:if test="${transResult}">
-        <div>
-            <h3 style="font-weight: bold; color: #28a745;">
-                Bạn đã giao dịch thành công!
-                <i class="fas fa-check-circle"></i>
-            </h3>
+        <!-- Giao dịch thành công -->
+        <c:if test="${transResult}">
+            <div class="icon-container">
+                <img src="image/sucess-payment.png"
+                     alt="Transaction Status" class="transaction-icon">
+            </div>
+            <div class="result success">
+                <h3>
+                    Bạn đã giao dịch thành công!
+                    <i class="fas fa-check-circle"></i>
+                </h3>
+            </div>
+        </c:if>
+
+        <!-- Giao dịch thất bại -->
+        <c:if test="${transResult == false}">
+            <div class="icon-container">
+                <img src="image/fail-payment.png"
+                     alt="Transaction Status" class="transaction-icon">
+            </div>
+            <div class="result failure">
+                <h3>
+                    Đơn hàng giao dịch thất bại!
+                </h3>
+                <p class="payment-result">Cảm ơn quý khách đã dùng dịch vụ của chúng tôi.</p>
+            </div>
+        </c:if>
+
+        <!-- Đang xử lý giao dịch -->
+        <c:if test="${transResult == null}">
+            <div class="icon-container">
+                <img src="image/fail-payment.png"
+                     alt="Transaction Status" class="transaction-icon">
+            </div>
+            <div class="result processing">
+                <h3>
+                    Chúng tôi đã tiếp nhận đơn hàng, xin chờ quá trình xử lý!
+                </h3>
+            </div>
+        </c:if>
+
+        <!-- Các nút khác -->
+        <div class="button-container">
+            <a href="index.jsp" class="payment-result btn btn-home">Quay về trang chủ</a>
         </div>
-    </c:if>
+    </section>
+</div>
 
-    <!-- Giao dịch thất bại -->
-    <c:if test="${transResult == false}">
-        <div>
-            <h3 style="font-weight: bold; color: #dc3545;">
-                Đơn hàng giao dịch thất bại!
-            </h3>
-            <p style="font-size: 18px; margin-top: 15px;">Cảm ơn quý khách đã dùng dịch vụ của chúng tôi.</p>
-        </div>
-    </c:if>
-
-    <!-- Đang xử lý giao dịch -->
-    <c:if test="${transResult == null}">
-        <div>
-            <h3 style="font-weight: bold; color: #ffc107;">
-                Chúng tôi đã tiếp nhận đơn hàng, xin chờ quá trình xử lý!
-            </h3>
-        </div>
-    </c:if>
-</section>
-
-<%-- các nút khác --%>
-<a href="index.jsp"> <button> Quay về trang chủ </button></a>
-
+<!-- Footer -->
+<jsp:include page="footer.jsp"></jsp:include>
 </body>
+
 </html>
