@@ -47,12 +47,14 @@ public class ajaxServlet extends HttpServlet {
         }
 
         // thêm vào Order vào database và lấy id của Order
-        Orders o = (Orders) session.getAttribute("order");
+        String idParam = req.getParameter("id");
+
         int idOrder;
-        if(o == null) {
+        if(idParam == null ||  idParam.isEmpty()) {
+            System.out.println("order is null");
             idOrder = addOrderToDB(session);
         } else {
-            idOrder = o.getId();
+            idOrder = Integer.parseInt(idParam);
         }
 
         // nếu id order không tồn tại thì trả về

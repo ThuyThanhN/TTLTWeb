@@ -44,6 +44,7 @@ public class OrderDetailServlet extends HttpServlet {
 
             // Truyền dữ liệu vào request
             request.setAttribute("order", orderData.get("order"));
+            System.out.println(orderData.get("order").toString());
             request.setAttribute("patient", orderData.get("patient"));
             request.setAttribute("center", orderData.get("center"));
             request.setAttribute("vaccine", orderData.get("vaccine"));

@@ -52,8 +52,18 @@
                     <span class="value">${contactPhone != null ? contactPhone : "Chưa có thông tin"}</span>
                 </div>
                 <p class="note">Vui lòng chụp lại thông tin phiếu hẹn hoặc ghi nhớ mã phiếu hẹn!</p>
+                <input type="hidden" name="id" value="${order.id != null ? order.id : ''}" />
+                <p> ${order.paymentStatus} </p>
+                <c:if test="${order.paymentStatus == 'Chưa thanh toán'}">
+                    <!-- Hiển thị nút thanh toán khi trạng thái thanh toán là "Chưa thanh toán" -->
+                    <button type="submit" class="btn btn-order"> Thanh toán online </button>
+                </c:if>
 
-                <button type="submit" class="btn btn-order"> Thanh toán online </button>
+                <c:if test="${order.paymentStatus != 'Chưa thanh toán'}">
+                    <!-- Nếu trạng thái thanh toán không phải là "Chưa thanh toán", không hiển thị nút -->
+                    <p>Đơn hàng đã được thanh toán</p>
+                </c:if>
+
             </form>
         </div>
     </div>
