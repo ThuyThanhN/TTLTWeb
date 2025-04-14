@@ -37,6 +37,8 @@ public class Users implements Serializable {
         this.role = role;
         this.status = status;
     }
+    public Users() { }
+
     public Users(int id, String fullname, String gender, String identification, Date dateOfBirth, String address, String province, String district, String ward, String phone, String email, String password, int role) {
         this.id = id;
         this.fullname = fullname;
@@ -178,4 +180,23 @@ public class Users implements Serializable {
     public void setStatus(int status) {
         this.status = status;
     }
+
+    public String toString() {
+        return "Users{" +
+                "id=" + id +
+                ", fullname='" + fullname + '\'' +
+                ", gender='" + gender + '\'' +
+                ", identification='" + identification + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", address='" + address + '\'' +
+                ", province='" + province + '\'' +
+                ", district='" + district + '\'' +
+                ", ward='" + ward + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                '}';
+    }
+
 }

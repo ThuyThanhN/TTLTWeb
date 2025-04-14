@@ -23,8 +23,6 @@ public class AddStaff extends HttpServlet {
 
         String name = request.getParameter("fullname");
         String gender = request.getParameter("gender");
-        System.out.println("Gender value: " + gender);
-
         String ident = request.getParameter("ident");
         String date = request.getParameter("date");
         String email = request.getParameter("email");
@@ -45,7 +43,12 @@ public class AddStaff extends HttpServlet {
         Users user = new Users(name, gender, ident, sqlDate,  address,
                 province, district, ward, phone, email, hashedPassword,  roleValue);
         UserDao dao = new UserDao();
-        dao.insert(user);
-        response.sendRedirect("table-data-staff");
+        int insertId = dao.insertStaff(user);
+        // json
+        if (insertId > 0) {
+            response.getWriter().write("{\"status\":\"success\", \"id\":" + insertId + "}");
+        } else {
+            response.getWriter().write("{\"status\":\"error\"}");
+        }
     }
 }
