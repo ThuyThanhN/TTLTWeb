@@ -20,10 +20,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- *
- * @author HP
- */
+
 public class VnpayReturn extends HttpServlet {
     OrderDao orderDao = new OrderDao();
     /**
@@ -72,7 +69,7 @@ public class VnpayReturn extends HttpServlet {
                 }
 //                orderDao.updateOrderStatus(order);
                 request.setAttribute("transResult", transSuccess);
-                request.getRequestDispatcher("paymentResult.jsp").forward(request, response);
+                request.getRequestDispatcher("payment-result.jsp").forward(request, response);
             } else {
                 //RETURN PAGE ERROR
                 System.out.println("GD KO HOP LE (invalid signature)");

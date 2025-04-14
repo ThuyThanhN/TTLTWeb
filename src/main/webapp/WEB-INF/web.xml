@@ -16,6 +16,15 @@
         <url-pattern>/payment</url-pattern>
     </servlet-mapping>
     <servlet>
+        <servlet-name>VnpayReturn</servlet-name>
+        <servlet-class>com.example.provide_vaccine_services.Service.vnpay.VnpayReturn</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>VnpayReturn</servlet-name>
+        <url-pattern>/VnpayReturn</url-pattern> <!-- Đường dẫn của servlet -->
+    </servlet-mapping>
+    <servlet>
         <servlet-name>AccountActivationServlet</servlet-name>
         <servlet-class>com.example.provide_vaccine_services.Service.AccountActivationServlet</servlet-class>
     </servlet>

@@ -38,6 +38,7 @@ public class ajaxServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
 
+        // nếu giá tiền là null thì trả về
         if(req.getParameter("totalBill") == null) {
             resp.sendRedirect("cart");//create cart servlet
             return;
