@@ -23,9 +23,9 @@ public class VaccinePMappingDao {
             re = pst.executeUpdate();
 
             if (re > 0) {
-                System.out.println("Them du lieu thanh cong");
+                System.out.println("Them du lieu mapping thanh cong");
             } else {
-                System.out.println("Them du lieu that bai!");
+                System.out.println("Them du lieu mapping that bai!");
             }
             return re;
         } catch (SQLException e) {

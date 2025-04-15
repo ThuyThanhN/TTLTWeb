@@ -1,5 +1,7 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +24,23 @@
     <div class="appointmentSlip-content">
         <div class="appointmentSlip-info">
             <h4><strong>Mã phiếu hẹn: </strong>${order.id != null ? order.id : "Chưa có thông tin"}</h4>
-            <p><strong>Loại vắc xin: </strong>${vaccine.name != null ? vaccine.name : "Chưa có thông tin"}</p>
+            <p><strong>Loại vắc xin: </strong>
+                <c:if test="${not empty vaccines}">
+                    <!-- Lặp qua tất cả các vắc xin trong danh sách -->
+                    <c:forEach var="vaccine" items="${vaccines}">
+                        ${vaccine.name != null ? vaccine.name : "Chưa có thông tin"} <br>
+                    </c:forEach>
+                </c:if>
+
+                <!-- Hiển thị tên gói vắc xin nếu có -->
+                <c:if test="${not empty vaccinePackageName}">
+                    <strong>Gói vắc xin: </strong>${vaccinePackageName} <br>
+                </c:if>
+
+                <!-- Nếu không có vắc xin -->
+                <c:if test="${empty vaccines}">
+                </c:if>
+            </p>
             <p><strong>Ngày tiêm: </strong>${order.appointmentDate != null ? order.appointmentDate : "Chưa có thông tin"}</p>
             <p><strong>Giờ tiêm: </strong>${order.appointmentTime != null ? order.appointmentTime : "Chưa có thông tin"}</p>
         </div>
