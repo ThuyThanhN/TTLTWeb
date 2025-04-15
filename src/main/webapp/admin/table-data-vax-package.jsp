@@ -23,10 +23,21 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
           rel="stylesheet">
+    <%-- Ajax --%>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- DataTable -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <!-- pdfMake (xuat PDF) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <!-- JSZip (xuat Excel) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- DataTable Buttons -->
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
     <!-- Css   -->
     <link rel="stylesheet" href="../css/main_admin.css">
 </head>
@@ -43,7 +54,17 @@
             <a href="" class="btn btn-add btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">
                 <i class="fa-solid fa-plus"></i> Tạo mới gói vắc xin
             </a>
+            <button class="btn btn-common btn-sm" id="print">
+                <i class="fas fa-print"></i> In dữ liệu
+            </button>
 
+            <button class="btn btn-common btn-sm" id="exportPDF">
+                <i class="fas fa-file-pdf"></i> Xuất PDF
+            </button>
+
+            <button class="btn btn-common btn-sm" id="exportExcel">
+                <i class="fas fas fa-file-excel"></i> Xuất Excel
+            </button>
         </div>
         <table class="w-100 table table-striped" id="package">
             <thead>
@@ -57,10 +78,10 @@
             </thead>
             <tbody>
             <c:forEach var="pkg" items="${packageList}">
-                <tr>
+                <tr data-id="${pkg.package_id}">
                     <td>${pkg.package_id}</td>
-                    <td>${pkg.package_name}</td>
-                    <td><f:formatNumber value="${pkg.total_price}" type="number" pattern="#,##0" />đ</td>
+                    <td class="package-name">${pkg.package_name}</td>
+                    <td class="package-price"><f:formatNumber value="${pkg.total_price}" type="number" pattern="#,##0" />đ</td>
                 <%--                    <td>--%>
 <%--                        <c:forEach var="vaccine" items="${pkg.vaccines}" varStatus="status">--%>
 <%--                            ${vaccine.vaccine_name}<c:if test="${!status.last}">, </c:if>--%>
@@ -68,7 +89,7 @@
 <%--                    </td>--%>
                     <td>
                         <!-- Nut sua -->
-                        <a href="updatePackage?id=${pkg.package_id}" class="text-decoration-none edit-btn"
+                        <a href="#" class="text-decoration-none edit-btn"
                            data-bs-target="#editModal-${pkg.package_id}" data-bs-toggle="modal">
                             <img src="../image/edit.png" alt="Sửa" width="22" height="22">
                         </a>
@@ -92,7 +113,7 @@
                                                 aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <form action="updatePackage" method="post">
+                                        <form class="editPackageForm" method="post">
                                             <input type="hidden" name="id" value="${pkg.package_id}">
                                             <div class="row">
                                                 <div class="col-12">
@@ -101,7 +122,7 @@
                                                                class="form-label">Tên gói</label>
                                                         <input type="text" class="form-control"
                                                                id="package-select-${pkg.package_id}"
-                                                               value="${pkg.package_name}" name="package-name" required>
+                                                               value="${pkg.package_name}" name="package-name" required data-validate>
                                                     </div>
                                                 </div>
                                                 <div class="col-12">
@@ -148,9 +169,8 @@
                                                 <div class="col-12">
                                                     <div class="mb-3">
                                                         <label for="age-select-${pkg.package_id}" class="form-label">Độ tuổi</label>
-                                                        <select class="form-select form-control"
-                                                                id="age-select-${pkg.package_id}" name="ageId"
-                                                                onchange="updatePackageName(this)" required>
+                                                        <select class="form-select form-control age-select"
+                                                                id="age-select-${pkg.package_id}" name="ageId" required>
                                                             <option value="">---Chọn độ tuổi ---</option>
                                                             <c:forEach var="a" items="${ages}">
                                                                 <option value="${a.id}" ${a.id == pkg.age_id ? 'selected' : ''}>${a.name}</option>
@@ -161,7 +181,7 @@
                                                 <div class="col-12">
                                                     <div class="mb-3">
                                                         <label for="description-name-${pkg.package_id}">Mô tả</label>
-                                                        <textarea class="form-control"
+                                                        <textarea class="form-control description-name"
                                                                   id="description-name-${pkg.package_id}"
                                                                   name="description-name" rows="5" style="margin-top: .5rem">
                                                                 ${pkg.package_description}
@@ -195,13 +215,13 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="addPMapping" method="post">
+                    <form id="addPMappingForm" method="post">
                         <div class="row">
                             <div class="col-12">
                                 <div class="mb-3">
                                     <label for="package-select" class="form-label">Tên gói</label>
                                     <input type="text" class="form-control" id="package-select" name="package-name"
-                                           required>
+                                           required data-validate>
                                 </div>
                             </div>
                             <div class="col-12">

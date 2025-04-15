@@ -2,53 +2,280 @@ function toggleSidebar() {
     document.getElementById("sidebar").classList.toggle("show");
 }
 
+document.querySelectorAll("[data-validate]").forEach(input => {
+    input.addEventListener("input", function () {
+        let isInvalid = /^[\s\d]/.test(this.value);
+        this.classList.toggle("is-invalid", isInvalid);
+        this.nextElementSibling.style.display = isInvalid ? "block" : "none";
+    });
+});
+
 $(document).ready(function () {
-    // Hàm khởi tạo DataTable
+    // bo focus khoi cac phan tu trong modal tranh loi aria-hidden
+    $(document).on("click", "[data-bs-dismiss='modal']", function () {
+        $(this).closest(".modal").find("button, input, textarea, select").blur();
+    });
+
+    // Ham khoi tao DataTable
     function initializeDataTable(selector) {
-        $(selector).DataTable({
-            "pagingType": "numbers",
-            "pageLength": 5,
-            "language": {
-                "emptyTable": "Không có dữ liệu",
-                "info": "Hiển thị _START_ đến _TOTAL_ mục",
-                "infoEmpty": "Hiển thị 0 đến 0 của 0 mục",
-                "infoFiltered": "(được lọc từ _MAX_ mục)",
-                "lengthMenu": "Hiển thị _MENU_ mục",
-                "loadingRecords": "Đang tải...",
-                "processing": "Đang xử lý...",
-                "search": "Tìm kiếm:",
-                "zeroRecords": "Không tìm thấy dữ liệu phù hợp"
+        let table = $(selector).DataTable({
+            pagingType: "numbers",
+            pageLength: 5,
+            language: {
+                emptyTable: "Không có dữ liệu",
+                info: "Hiển thị _START_ đến _TOTAL_ mục",
+                infoEmpty: "Hiển thị 0 đến 0 của 0 mục",
+                infoFiltered: "(được lọc từ _MAX_ mục)",
+                lengthMenu: "Hiển thị _MENU_ mục",
+                loadingRecords: "Đang tải...",
+                processing: "Đang xử lý...",
+                search: "Tìm kiếm:",
+                zeroRecords: "Không tìm thấy dữ liệu phù hợp"
+            },
+            buttons: [
+                {
+                    extend: "print",
+                    title: "Danh sách Gói Vắc Xin",
+                    exportOptions: {columns: [0, 1, 2]}
+                },
+                {
+                    extend: "pdfHtml5",
+                    title: "Danh sách Gói Vắc Xin",
+                    exportOptions: {columns: [0, 1, 2]},
+                    customize: function (doc) {
+                        doc.content[1].table.widths = ["auto", "*", "auto"];
+                    }
+                },
+                {
+                    extend: "excelHtml5",
+                    title: "Danh sách Gói Vắc Xin",
+                    exportOptions: {columns: [0, 1, 2]}
+                }
+            ]
+        });
+
+        $("#print").on("click", function () {
+            table.button(0).trigger();
+        });
+
+        $("#exportPDF").on("click", function () {
+            table.button(1).trigger();
+        });
+
+        $("#exportExcel").on("click", function () {
+            table.button(2).trigger();
+        });
+
+        return table;
+    }
+
+    const packageTable = initializeDataTable('#package');
+
+    function generatePackageRowHtml(packageId, response) {
+        return `
+        <tr data-id="${packageId}">
+            <td>${packageId}</td>
+            <td>${response.name}</td>
+            <<td>${response.totalPrice}đ</td>
+            <td>
+                <a href="#" 
+                   class="text-decoration-none edit-btn" 
+                   data-bs-toggle="modal" 
+                   data-bs-target="#editModal-${packageId}">
+                   <img src="../image/edit.png" alt="Sửa" width="22" height="22">
+                </a>
+                <a href="#" 
+                   class="text-decoration-none delete-btn" 
+                   data-bs-toggle="modal" 
+                   data-bs-target="#deleteStaff" 
+                   data-id="${packageId}" 
+                   data-name="${response.name}">
+                   <img src="../image/bin.png" alt="Xóa" width="24" height="24">
+                </a>
+            </td>
+        </tr>
+    `;
+    }
+
+    $("#addPMappingForm").submit(function (event) {
+        event.preventDefault();
+
+        const modal = document.querySelector('#addModal');
+        updateTotalPrice(modal); // tinh lai tong gia goi
+        const totalPriceStr = modal.querySelector('.totalPriceDisplay').value.replace('đ', '').replace(/\./g, '').replace(/,/g, '');
+        const totalPrice = parseFloat(totalPriceStr);
+
+        let name = $("#package-select").val();
+        let age = $("#age-select").val();
+        let description = $("#description-packag").val();
+
+        let vaccineIds = [];
+        let dosages = [];
+
+
+        $(".list-packages .selected-vaccine").each(function () {
+            let id = $(this).attr('data-id');
+            let dosage = parseInt($(this).find('.dosage').val()) || 1
+
+            vaccineIds.push(id);
+            dosages.push(dosage);
+        });
+
+        console.log("Selected vaccine IDs:", vaccineIds);
+        console.log("Dosages:", dosages);
+
+        $.ajax({
+            url: "/provide_vaccine_services_war/admin/addPMapping",
+            type: "POST",
+            data: {
+                "package-name": name,
+                "age-select": age,
+                "description-name": description,
+                "vaccineId": vaccineIds,
+                "dosage": dosages,
+                "totalPrice": totalPrice
+            },
+            traditional: true,
+            dataType: "json",
+            success: function (response) {
+                if (response.status === "success") {
+                    $("#addModal").find("button, input, textarea, select").blur();
+                    $("#addModal").modal("hide");
+                    $("#addPMappingForm")[0].reset();
+                    $("#selected-vaccines").empty();
+                    let responseData = {
+                        name: name,
+                        totalPrice: totalPrice
+                    };
+                    console.log("Response: ", responseData);
+                    let newRowHtml = generatePackageRowHtml(response.id, responseData);
+                    $("#package").DataTable().row.add($(newRowHtml)).draw(false);
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    alert("Có lỗi xảy ra: " + response.message);
+                }
+            },
+            error: function () {
+                alert("Loi khi them goi!");
             }
         });
-    }
+    });
 
-    function handleDeleteButton(modalId, removeUrlPrefix) {
+    // Ham xu ly chuc nang cap nhat
+    $(document).on("submit", ".editPackageForm", function (e) {
+        e.preventDefault();
+
+        const form = $(this);
+        const modal = form.closest(".modal");
+        const packageId = modal.find("input[name='id']").val();
+        const name = modal.find("input[name='package-name']").val();
+        const ageId = modal.find(".age-select").val();
+        const description = modal.find(".description-name").val();
+
+        let totalPriceStr = modal.find(".totalPriceDisplay").val()
+            .replace('đ', '')
+            .replace(/\./g, '')
+            .replace(/,/g, '');
+        let totalPrice = parseFloat(totalPriceStr);
+
+        let vaccineIds = [];
+        let dosages = [];
+
+        $(".list-packages .selected-vaccine").each(function () {
+            let id = $(this).attr('data-id');
+            let dosage = parseInt($(this).find('.dosage').val()) || 1;
+
+            vaccineIds.push(id);
+            dosages.push(dosage);
+        });
+
+        $.ajax({
+            url: `/provide_vaccine_services_war/admin/updatePackage`,
+            type: "POST",
+            traditional: true,
+            dataType: "json",
+            data: {
+                id: packageId,
+                "package-name": name,
+                "ageId": ageId,
+                "description-name": description,
+                "totalPrice": totalPrice,
+                "vaccineId": vaccineIds,
+                "dosage": dosages
+            },
+            success: function (response) {
+                if (response.status === "success") {
+                    const bsModal = bootstrap.Modal.getInstance(modal[0]);
+                    bsModal.hide();
+
+                    let row = $(`#package tr[data-id='${packageId}']`);
+                    row.find(".package-name").text(name);
+                    row.find(".package-price").text(totalPrice.toLocaleString("vi-VN") + "đ");
+
+                    $("#package").DataTable().row(row).invalidate().draw(false);
+                } else {
+                    alert("Cap nhat that bai!");
+                }
+            },
+            error: function (xhr) {
+                console.error("Loi:", xhr.responseText);
+            }
+        });
+    });
+
+    function handleDeleteButton(modalId, removeUrlPrefix, table) {
+        let deleteRow = null;
+        let deleteId = null;
+
         $("#package").on("click", ".delete-btn", function (e) {
-            e.currentTarget.blur();
-            let removeUrl = `./${removeUrlPrefix}`;
-            let modalSelector = `${modalId}`;
             e.preventDefault();
-            var itemId = $(this).data("id");
-            var itemName = $(this).data("name");
-            // alert(id);
-            console.log("id-name", "vax-package" + modalSelector + itemId + itemName);
-            var modal = document.getElementById(modalSelector);
-            modal.querySelector('.modal-body').textContent = 'Bạn có chắc chắn muốn xóa ' + itemName + '?';
 
-            // Cập nhật link nút xác nhận
-            var confirmDeleteButton = modal.querySelector('#confirmDelete');
-            confirmDeleteButton.setAttribute('href', removeUrl + '?id=' + itemId);
+            deleteId = $(this).data("id");
+            let itemName = $(this).data("name");
+            deleteRow = table.row($(this).closest("tr"));
+
+            let modalSelector = `#${modalId}`;
+            document.querySelector(modalSelector).querySelector('.modal-body').textContent = `Bạn có chắc chắn muốn xóa ${itemName}?`;
+
+            $(modalSelector).modal("show");
+        });
+
+        $("#confirmDelete").on("click", function () {
+            if (!deleteId || !deleteRow) return;
+
+            $.ajax({
+                url: `./${removeUrlPrefix}`,
+                type: "POST",
+                data: {id: deleteId},
+                dataType: "json",
+                success: function (response) {
+                    if (response.status === "success") {
+                        deleteRow.remove().draw();
+                        // xoa focus
+                        $(`#${modalId}`).find("button, input, textarea, select").blur();
+                        // an modal
+                        const bsModal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+                        bsModal.hide();
+                    } else {
+                        alert("Xóa thất bại");
+                    }
+                },
+                error: function (xhr) {
+                    alert("Lỗi: " + xhr.responseText);
+                }
+            });
         });
     }
 
-    initializeDataTable('#package');
-    handleDeleteButton('deleteModal', 'removePackage');
+    handleDeleteButton('deleteModal', 'removePackage', packageTable);
 });
 
 // Lưu trữ số liều cho các vắc xin
 const vaccineDosages = {};
 
 function renderSelectedVaccines(modal) {
+    if (!modal) return;
+
     const listPackages = modal.querySelector('.list-packages');
     const checkInput = modal.querySelectorAll('.vaccine-checkbox');
     const totalPriceDisplays = modal.querySelectorAll('.totalPriceDisplay'); // Lấy tất cả input tổng giá
@@ -137,6 +364,8 @@ function renderSelectedVaccines(modal) {
 
 // Hàm cập nhật lại tổng giá
 function updateTotalPrice(modal) {
+    if (!modal) return;
+
     let totalPrice = 0;
     const selectedVaccines = modal.querySelectorAll('.selected-vaccine');
     selectedVaccines.forEach(div => {
@@ -152,14 +381,12 @@ function updateTotalPrice(modal) {
 }
 
 // Gắn sự kiện tự động sau khi DOM tải
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.vaccine-checkbox').forEach(input => {
-        input.addEventListener('click', (event) => {
-            // fix lỗi arial-hidden
-            event.currentTarget.blur();
-            const modal = event.target.closest('.modal');
-            renderSelectedVaccines(modal);
-        });
+document.querySelectorAll('.vaccine-checkbox').forEach(input => {
+    input.addEventListener('click', (event) => {
+        // fix lỗi arial-hidden
+        event.currentTarget.blur();
+        const modal = event.target.closest('.modal');
+        renderSelectedVaccines(modal);
     });
 });
 
