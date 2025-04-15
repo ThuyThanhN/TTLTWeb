@@ -1,7 +1,5 @@
-
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,12 +22,28 @@
     <div class="appointmentSlip-content">
         <div class="appointmentSlip-info">
             <h4><strong>Mã phiếu hẹn: </strong>${order.id != null ? order.id : "Chưa có thông tin"}</h4>
-            <p><strong>Loại vắc xin: </strong>${vaccine.name != null ? vaccine.name : "Chưa có thông tin"}</p>
+            <p><strong>Loại vắc xin: </strong>
+                <c:if test="${not empty vaccines}">
+                    <!-- Lặp qua tất cả các vắc xin trong danh sách -->
+                    <c:forEach var="vaccine" items="${vaccines}">
+                        ${vaccine.name != null ? vaccine.name : "Chưa có thông tin"} <br>
+                    </c:forEach>
+                </c:if>
+
+                <!-- Hiển thị tên gói vắc xin nếu có -->
+                <c:if test="${not empty vaccinePackageName}">
+                    <strong>Gói vắc xin: </strong>${vaccinePackageName} <br>
+                </c:if>
+
+                <!-- Nếu không có vắc xin -->
+                <c:if test="${empty vaccines}">
+                </c:if>
+            </p>
             <p><strong>Ngày tiêm: </strong>${order.appointmentDate != null ? order.appointmentDate : "Chưa có thông tin"}</p>
             <p><strong>Giờ tiêm: </strong>${order.appointmentTime != null ? order.appointmentTime : "Chưa có thông tin"}</p>
         </div>
         <div class="appointmentSlip-details">
-            <h4>${center.name != null ? center.name : "Chưa có thông tin"}</h4>
+            <h4>Trạm Y Tế ${center.name != null ? center.name : "Chưa có thông tin"}</h4>
             <p>Địa Chỉ: ${center.address != null ? center.address : "Chưa có thông tin"}</p>
             <form action="payment" method="post">
                 <div class="info-row">
@@ -55,6 +69,7 @@
                 </div>
                 <p class="note">Vui lòng chụp lại thông tin phiếu hẹn hoặc ghi nhớ mã phiếu hẹn!</p>
                 <input type="hidden" name="id" value="${order.id != null ? order.id : ''}" />
+                <p>${order.paymentStatus}</p>
                 <c:if test="${order.paymentStatus == 'Chưa thanh toán'}">
                     <!-- Hiển thị nút thanh toán khi trạng thái thanh toán là "Chưa thanh toán" -->
                     <button type="submit" class="btn btn-order noPaid"> Thanh toán online </button>

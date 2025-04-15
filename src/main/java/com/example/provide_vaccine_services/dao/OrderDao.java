@@ -206,6 +206,21 @@ public class OrderDao {
         return re;
     }
 
+
+    public boolean isEmailExists(String email) {
+        String sql = "SELECT COUNT(*) FROM users WHERE email = ?";
+        try (PreparedStatement pst = DBConnect.get(sql)) {
+            pst.setString(1, email);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public boolean updateStatus(int orderId, String status) {
         String sql = "UPDATE orders SET status = ? WHERE id = ?";
         try {
@@ -266,7 +281,10 @@ public class OrderDao {
 
     public Map<String, Object> getAppointmentDetails(int id) {
         Map<String, Object> result = new HashMap<>();
+        List<Vaccines> vaccinesList = new ArrayList<>();
+        String vaccinePackageName = null;  // Biến để lưu tên gói vắc xin
 
+        // Câu truy vấn SQL để lấy thông tin chi tiết về đơn hàng và các vắc xin liên quan
         String sql = """
     SELECT 
         o.id AS order_id, 
@@ -292,6 +310,7 @@ public class OrderDao {
         v.description AS vaccine_description, 
         v.price AS vaccine_price, 
         v.imageUrl AS vaccine_image_url,
+        vp.name AS vaccine_package_name, 
         u.fullname AS contact_fullname,
         u.phone AS contact_phone,
         cp.relationship AS contact_relationship 
@@ -299,19 +318,19 @@ public class OrderDao {
     JOIN patients p ON o.idPatient = p.id 
     JOIN centers c ON o.idCenter = c.id 
     JOIN orderdetails od ON o.id = od.idOrder
-    JOIN vaccines v ON od.idVaccine = v.id
+    LEFT JOIN vaccines v ON od.idVaccine = v.id
+    LEFT JOIN vaccinepackages vp ON od.idPackage = vp.id 
     LEFT JOIN contactpersons cp ON p.id = cp.idPatient
     LEFT JOIN users u ON cp.idUser = u.id
     WHERE o.id = ?
     """;
 
         try (PreparedStatement pst = DBConnect.get(sql)) {
-            pst.setInt(1, id);
-            System.out.println("Executing SQL: " + pst.toString());
+            pst.setInt(1, id);  // Đặt tham số ID vào câu truy vấn
 
             try (ResultSet rs = pst.executeQuery()) {
-                if (rs.next()) {
-                    // Tạo đối tượng Orders
+                while (rs.next()) {
+                    // Tạo đối tượng Order và thiết lập các thông tin
                     Orders order = new Orders();
                     order.setId(rs.getInt("order_id"));
                     order.setAppointmentDate(rs.getDate("appointmentDate"));
@@ -320,7 +339,7 @@ public class OrderDao {
                     order.setPaymentStatus(rs.getString("paymentStatus"));
                     result.put("order", order);
 
-                    // Tạo đối tượng Patients
+                    // Tạo đối tượng Patient và thiết lập thông tin
                     Patients patient = new Patients();
                     patient.setId(rs.getInt("patient_id"));
                     patient.setFullname(rs.getString("patient_name"));
@@ -333,7 +352,7 @@ public class OrderDao {
                     patient.setWard(rs.getString("patient_ward"));
                     result.put("patient", patient);
 
-                    // Tạo đối tượng Centers
+                    // Tạo đối tượng Center và thiết lập thông tin
                     Centers center = new Centers();
                     center.setId(rs.getInt("center_id"));
                     center.setName(rs.getString("center_name"));
@@ -341,23 +360,37 @@ public class OrderDao {
                     center.setPhone(rs.getString("center_phone"));
                     result.put("center", center);
 
-                    // Tạo đối tượng Vaccines
+                    // Tạo đối tượng Vaccine và thiết lập thông tin
                     Vaccines vaccine = new Vaccines();
                     vaccine.setId(rs.getInt("vaccine_id"));
                     vaccine.setName(rs.getString("vaccine_name"));
                     vaccine.setDescription(rs.getString("vaccine_description"));
                     vaccine.setPrice(rs.getFloat("vaccine_price"));
-                    result.put("vaccine", vaccine);
+
+                    // Nếu vaccine có thông tin đầy đủ, thêm vào danh sách
+                    if (vaccine.getName() != null && !vaccine.getName().isEmpty()) {
+                        vaccinesList.add(vaccine);
+                    }
+
+                    // Kiểm tra gói vắc xin
+                    if (rs.getString("vaccine_package_name") != null) {
+                        vaccinePackageName = rs.getString("vaccine_package_name");
+                    }
+                    result.put("vaccinePackageName", vaccinePackageName); // Lưu tên gói vắc xin
 
                     // Thêm thông tin người liên hệ
                     String contactFullname = rs.getString("contact_fullname");
                     String contactPhone = rs.getString("contact_phone");
-                    String contactRelationship = rs.getString("contact_relationship"); // Lấy mối quan hệ với người liên hệ
+                    String contactRelationship = rs.getString("contact_relationship");
 
                     result.put("contactFullname", contactFullname);
                     result.put("contactPhone", contactPhone);
-                    result.put("contactRelationship", contactRelationship);  // Thêm mối quan hệ với người liên hệ
+                    result.put("contactRelationship", contactRelationship);
                 }
+
+                // Truyền danh sách vắc xin vào kết quả
+                result.put("vaccines", vaccinesList);
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
