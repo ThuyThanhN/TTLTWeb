@@ -14,7 +14,6 @@ import java.io.IOException;
 
 @WebServlet(name = "AddPMapping", value = "/admin/addPMapping")
 public class AddPMapping extends HttpServlet {
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     }
@@ -22,39 +21,51 @@ public class AddPMapping extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
         String packageName = request.getParameter("package-name");
         String totalPrice = request.getParameter("totalPrice");
         String description = request.getParameter("description-name");
 
-        totalPrice = totalPrice.replaceAll("[^0-9]", ""); // Loại bỏ các ký tự không phải số
-        float totalPriceFloat = Float.parseFloat(totalPrice);
-
         String[] idVaccines = request.getParameterValues("vaccineId");
         String[] dosages = request.getParameterValues("dosage");
-
         int idAge = Integer.parseInt(request.getParameter("age-select"));
 
+        totalPrice = totalPrice.replaceAll("[^0-9]", "");
+        float totalPriceFloat = Float.parseFloat(totalPrice);
+
+        // DAO
         VaccinePackageDao vpDao = new VaccinePackageDao();
         VaccinePMappingDao vpmDao = new VaccinePMappingDao();
         PackageAgeDao paDao = new PackageAgeDao();
 
-        int packageId = vpDao.insert(new VaccinePackages(packageName,description,totalPriceFloat));
-        if (idVaccines != null) {
-            for (int i = 0; i < idVaccines.length; i++) {
-                int vaccineId = Integer.parseInt(idVaccines[i]);
-                int dosageNum = Integer.parseInt(dosages[i]);
-                VaccinePMappings vpMapping = new VaccinePMappings(vaccineId, packageId, dosageNum);
-                vpmDao.insert(vpMapping);
+        try {
+            // Insert Vaccine Package
+            int packageId = vpDao.insert(new VaccinePackages(packageName, description, totalPriceFloat));
+            if (packageId <= 0) {
+                response.getWriter().write("{\"status\":\"error\", \"message\":\"Không thể thêm gói tiêm.\"}");
+                return;
             }
+
+            // Insert Vaccine Mapping
+            if (idVaccines != null && dosages != null && idVaccines.length == dosages.length) {
+                for (int i = 0; i < idVaccines.length; i++) {
+                    int vaccineId = Integer.parseInt(idVaccines[i]);
+                    int dosageNum = Integer.parseInt(dosages[i]);
+                    VaccinePMappings vpMapping = new VaccinePMappings(vaccineId, packageId, dosageNum);
+                    vpmDao.insert(vpMapping);
+                }
+            }
+
+            // Insert Age Mapping
+            PackageAges pa = new PackageAges(idAge, packageId);
+            paDao.insert(pa);
+
+            response.getWriter().write("{\"status\":\"success\", \"id\":" + packageId + "}");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.getWriter().write("{\"status\":\"error\", \"message\":\"Lỗi trong quá trình thêm gói tiêm: " + e.getMessage() + "\"}");
         }
-
-        PackageAges pa = new PackageAges(idAge, packageId);
-        paDao.insert(pa);
-
-        response.sendRedirect("table-data-vax-package");
     }
 }
-
-
-

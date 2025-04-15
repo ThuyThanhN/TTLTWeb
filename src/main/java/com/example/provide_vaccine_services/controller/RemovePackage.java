@@ -1,5 +1,7 @@
 package com.example.provide_vaccine_services.controller;
 
+import com.example.provide_vaccine_services.dao.SupplierDao;
+import com.example.provide_vaccine_services.dao.VaccineDao;
 import com.example.provide_vaccine_services.dao.VaccinePackageDao;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -12,17 +14,26 @@ public class RemovePackage extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String idStr = request.getParameter("id");
-        int id = Integer.parseInt(idStr);
-
-        VaccinePackageDao dao = new VaccinePackageDao();
-        dao.delete(id);
-
-        response.sendRedirect("table-data-vax-package");
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        String idStr = request.getParameter("id");
+
+        try {
+            int id = Integer.parseInt(idStr);
+
+            VaccinePackageDao dao = new VaccinePackageDao();
+            dao.delete(id);
+
+            response.getWriter().write("{\"status\": \"success\", \"message\": \"Xóa thành công\"}");
+        } catch (Exception e) {
+            response.getWriter().write("{\"status\": \"error\", \"message\": \"Xóa thất bại!\"}");
+        }
     }
 }
 
