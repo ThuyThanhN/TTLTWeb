@@ -16,34 +16,4 @@ public class Permissions {
     public void setId(int id) {
         this.id = id;
     }
-
-    public String getModule() {
-        return module;
-    }
-
-    public void setModule(String module) {
-        this.module = module;
-    }
-
-    public int getPermission() {
-        return permission;
-    }
-
-    public void setPermission(int permission) {
-        this.permission = permission;
-    }
-
-    //
-    public boolean canExecute() {
-        return (permission & EXECUTE) != 0;
-    }
-
-    public boolean canWrite() {
-        return (permission & WRITE) != 0;
-    }
-
-    public boolean canRead() {
-        return (permission & READ) != 0;
-    }
-
 }

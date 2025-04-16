@@ -32,6 +32,7 @@ public class AddStaff extends HttpServlet {
         String ward = request.getParameter("ward");
         String phone = request.getParameter("phone");
         String role = request.getParameter("role");
+        String module = request.getParameter("module");
         String pass = request.getParameter("password");
 
         int roleValue = role.equals("Admin") ? 1 : 2;
@@ -40,10 +41,19 @@ public class AddStaff extends HttpServlet {
         // Ma hoa mat khau
         String hashedPassword = MD5Hash.hashPassword(pass);
 
+        // Them user
         Users user = new Users(name, gender, ident, sqlDate,  address,
-                province, district, ward, phone, email, hashedPassword,  roleValue);
+                province, district, ward, phone, email, hashedPassword, roleValue);
         UserDao dao = new UserDao();
-        int insertId = dao.insertStaff(user);
+        int idUser = dao.insertStaff(user);
+
+
+        // Them moudel cho user tuong ung
+        int idPermission = dao.insertPermission(module);
+        System.out.println("Module: " + module);
+
+        int insertId = dao.insertUserPermission(idUser, idPermission);
+
         // json
         if (insertId > 0) {
             response.getWriter().write("{\"status\":\"success\", \"id\":" + insertId + "}");

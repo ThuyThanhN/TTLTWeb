@@ -116,25 +116,23 @@ public class PermissionFilter implements Filter {
                 return;
             }
         }
-
-
         chain.doFilter(request, response);
     }
 
     // Xử lý khi người dùng không có quyền truy cập
-    private void deny(HttpServletResponse resp, HttpServletRequest req) throws IOException {
+    private void deny(HttpServletResponse resp, HttpServletRequest req) throws IOException, ServletException {
         String requestedWith = req.getHeader("X-Requested-With");
-        System.out.println(requestedWith);  // Debug xem request là AJAX hay không
+        System.out.println(requestedWith);
 
         if ("XMLHttpRequest".equalsIgnoreCase(requestedWith)) {
             // Trả về JSON lỗi nếu là request AJAX
             resp.setContentType("application/json");
             resp.setCharacterEncoding("UTF-8");
-            resp.setStatus(HttpServletResponse.SC_FORBIDDEN); // 403
+            resp.setStatus(HttpServletResponse.SC_FORBIDDEN);
             resp.getWriter().write("{\"status\":\"error\", \"message\":\"Bạn không có quyền truy cập chức năng này!\"}");
         } else {
-            // Gán lỗi để hiển thị ở giao diện nếu không phải AJAX
-            req.setAttribute("error_message", "Bạn không có quyền truy cập chức năng này!");
+            // Nếu không phải AJAX, chuyển hướng tới trang 403.jsp
+            req.getRequestDispatcher("../error403.jsp").forward(req, resp);
         }
     }
 }
