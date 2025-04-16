@@ -87,15 +87,23 @@
                 </c:forEach>
             </div>
             <div class="d-flex gap-3">
+                <p> Tổng cộng: ${totalBill} vnd</p>
+                <%-- đặt thêm --%>
                 <div>
                     <a href="dosing_schedule">
                         <button type="button" class="btn btn-add">Thêm</button>
                     </a>
                 </div>
+                <%-- đặt lịch --%>
                 <div>
                     <button type="submit" class="btn btn-order">Đặt lịch</button>
                 </div>
+
             </div>
+        </form>
+        <%-- Thanh toán --%>
+        <form action="payment" method="post">
+            <button type="submit" class="btn btn-order"> Đặt và Thanh toán </button>
         </form>
     </div>
 </div>

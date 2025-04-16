@@ -58,6 +58,7 @@ public class OrderDetailServlet extends HttpServlet {
             request.setAttribute("contactFullname", orderData.get("contactFullname"));
             request.setAttribute("contactPhone", orderData.get("contactPhone"));
             request.setAttribute("contactRelationship", orderData.get("contactRelationship"));
+            request.setAttribute("paymentStatus", orderData.get("paymentStatus"));
 
             // Truyền tên gói vắc xin vào request
             request.setAttribute("vaccinePackageName", orderData.get("vaccinePackageName"));
