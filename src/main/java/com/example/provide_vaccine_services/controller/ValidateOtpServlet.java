@@ -16,7 +16,7 @@ public class ValidateOtpServlet extends HttpServlet {
 
     // Thời gian khóa sau khi nhập sai 3 lần OTP (1 phút)
     private static final long LOCK_DURATION = 60 * 1000; // 1 phút (60 giây)
-    private static final long RESEND_INTERVAL = 0 * 1000; // Thời gian giữa các lần gửi mã OTP (1 phút)
+    private static final long RESEND_INTERVAL = 60 * 1000; // Thời gian giữa các lần gửi mã OTP (1 phút)
     private static final int MAX_OTP_SENT_PER_DAY = 3; // Giới hạn số lần gửi mã OTP trong một ngày (3 lần)
 
     @Override
@@ -45,7 +45,7 @@ public class ValidateOtpServlet extends HttpServlet {
         if (lockTime != null && new Date().getTime() - lockTime < LOCK_DURATION) {
             // Nếu người dùng vẫn bị khóa, tính thời gian còn lại và hiển thị thông báo
             long timeLeft = (LOCK_DURATION - (new Date().getTime() - lockTime)) / 1000;
-            request.setAttribute("error", "Bạn đã nhập sai 3 lần. Vui lòng đợi " + timeLeft + " giây để thử lại.");
+            request.setAttribute("error", "Bạn đã nhập sai 3 lần. Vui lòng đợi 1 Phút để thử lại.");
             request.getRequestDispatcher("verify-reset-passwd.jsp").forward(request, response);
             return;
         }
