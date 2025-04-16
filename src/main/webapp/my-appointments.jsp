@@ -52,6 +52,7 @@
                             <a href="appointment-slip?id=${o.order_id}">
                                 <ul style="color: #2A388F; font-size: 14px; font-weight: 500; float: right; margin-bottom: 0">
                                     <li>${o.order_status}</li>
+                                    <li>${o.paymentStatus}</li>
                                 </ul>
                                 <img src="image/online-appointment1.png" alt="Hình ảnh phiếu hẹn">
                                 <p>Mã phiếu: <b>${o.order_id}</b></p>

@@ -106,13 +106,15 @@ public class DosingSchedule extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
+
         Users users = (Users) session.getAttribute("user");
+
         if (users == null) {
             throw new ServletException("User is not logged in");
         }
+
         int userId = users.getId();
         List<Integer> listCart = (List<Integer>) session.getAttribute("listCart");
-
 
         String cartIdParam = request.getParameter("cartId");
         System.out.println(request.getQueryString());
@@ -128,26 +130,29 @@ public class DosingSchedule extends HttpServlet {
         String province = request.getParameter("province");
         String district = request.getParameter("district");
         String ward = request.getParameter("ward");
-
         Date dateOfBirth = Date.valueOf(date);
+
+
         //  Nguoi lien he
         String nameContact = request.getParameter("contact_name");
         String relationship = request.getParameter("relationship");
         String phone = request.getParameter("contact_phone");
 
-        // trung tam, thoi gian tiem
+        // trung tam, thoi gian tiem, phương thức thanh toán
         int idCenter = Integer.parseInt(request.getParameter("center-select"));
         LocalDateTime createdAt = LocalDateTime.now();
         String preferredDate = request.getParameter("preferred_date");
         Date appointmentDate = Date.valueOf(preferredDate);
         String appointmentTime = request.getParameter("vaccination_time");
         String status = "Chưa được duyệt";   // Mặc định là "Chưa được duyệt"
-        String paymentStatus = "Chưa thanh toán";  // Mặc định là "Chưa thanh toán"
+        String paymentStatus = "Chưa thanh toán";;  // Mặc định là "Chưa thanh toán"
+
 
         // loai vaccine
         String[] selectedPackages = request.getParameterValues("selectedPackages");
         String[] selectedVaccines = request.getParameterValues("selectedVaccines");
 
+        // nếu đã tồn tại cardID ( không phải đki mới mà là chỉnh sửa/xoá/.... )
         if (cartIdParam != null && isNumeric(cartIdParam)) {
             cartId = Integer.parseInt(cartIdParam);
             Map<Integer, Patients> integerPatientsMap =
@@ -187,7 +192,7 @@ public class DosingSchedule extends HttpServlet {
                 orders.setAppointmentTime(appointmentTime);
 
                 OrderDetailDao odd = new OrderDetailDao();
-//                List<OrderDetails> oddList = ordersOrderDetailsMap.get(orders);
+//              List<OrderDetails> oddList = ordersOrderDetailsMap.get(orders);
                 List<OrderDetails> ordersOrderDetailsList = new ArrayList<>();
                 if (selectedPackages != null && selectedPackages.length > 0) {
                     // Đếm số lần xuất hiện của mỗi gói
@@ -284,7 +289,7 @@ public class DosingSchedule extends HttpServlet {
             //  Don hang
             Map<Orders, List<OrderDetails>> ordersOrderDetailsMap =
                     (Map<Orders, List<OrderDetails>>) session.getAttribute("ordersOrderDetailsMap");
-            // neu chua co orrder thi tao map moi, co roi thi se ghi de tiep vao session
+            // neu chua co order thi tao map moi, co roi thi se ghi de tiep vao session
             if (ordersOrderDetailsMap == null) {
                 ordersOrderDetailsMap = new HashMap<>();
             }
@@ -342,5 +347,7 @@ public class DosingSchedule extends HttpServlet {
 
         // Sau khi thêm OrderDetails vào cart, kiểm tra lại giỏ hàng
         response.sendRedirect("shoppingCart");
+
+
     }
 }
