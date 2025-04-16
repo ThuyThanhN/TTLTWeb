@@ -30,7 +30,7 @@
   <div class="login-container">
       <div class="login-form">
 
-    <form class="login-form" action="login" method="POST">
+    <form action="login" method="POST">
       <h2>Đăng Nhập</h2>
 
       <% if (request.getAttribute("error") != null) { %>

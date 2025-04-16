@@ -24,6 +24,16 @@
     font-weight: 500;
     margin-top: 10px;
 }
+
+.btn-order {
+    background-color: #fb6800;
+    border-radius: 4px;
+    color: #fff !important;
+    width: 125px;
+    font-weight: 500;
+    margin-top: 10px;
+}
+
 .btn-add {
     background-color: #198754;
     border-radius: 4px;

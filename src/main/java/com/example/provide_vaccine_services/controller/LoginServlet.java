@@ -1,5 +1,6 @@
 package com.example.provide_vaccine_services.controller;
 
+import com.example.provide_vaccine_services.Service.EmailSender;
 import com.example.provide_vaccine_services.Service.GoogleLogin;
 import com.example.provide_vaccine_services.dao.UserDao;
 import com.example.provide_vaccine_services.dao.model.Users;
@@ -62,8 +63,12 @@ public class LoginServlet extends HttpServlet {
         Users user = userDao.getUserByEmail(authUser.getEmail());
         if (user == null) {
             authUser.setRole(0);
-            userDao.insertGGUser(authUser);
+            String rawPassword = userDao.insertGGUser(authUser);
             user = authUser;
+            // gửi mật khẩu về mail
+            String topic = "Mật khẩu đăng nhập TTT";
+            String body = "mật khẩu của bạn là: " + rawPassword;
+            EmailSender.sendEmail(user.getEmail(), topic, body);
         }
 
 

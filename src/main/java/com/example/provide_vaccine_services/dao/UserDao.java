@@ -297,9 +297,10 @@ public class UserDao {
         return re; // Trả về kết quả (số bản ghi đã được thêm)
     }
 
-    public int insertGGUser(Users u) {
+    // thêm và trả về mật khẩu chưa mã hoá
+    public String insertGGUser(Users u) {
         int re = 0;
-
+        String rawPassword = "";
         try {
             // Câu lệnh SQL để chèn dữ liệu vào bảng users
             String sql = "INSERT INTO users(fullname, gender, identification, dateOfBirth, address, province, district, ward, phone, email, password, role, status)" +
@@ -307,6 +308,7 @@ public class UserDao {
             PreparedStatement pst = DBConnect.get(sql);
 
             String s = u.toString();
+            rawPassword = genPassword();
 
             System.out.println("user: " + s);
 
@@ -321,7 +323,7 @@ public class UserDao {
             pst.setString(8, "");
             pst.setString(9, "");
             pst.setString(10, u.getEmail());
-            pst.setString(11, genPassword());
+            pst.setString(11, MD5Hash.hashPassword(rawPassword));
             pst.setInt(12, u.getRole());
             pst.setInt(13, 1);
 
@@ -338,8 +340,11 @@ public class UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return re; // Trả về kết quả (số bản ghi đã được thêm)
+        if (re > 0) {
+            return rawPassword; // Trả về kết quả (số bản ghi đã được thêm)
+        } else {
+            return null;
+        }
     }
     public Users checkLogin(String username, String password) {
         Users user = null;
@@ -539,8 +544,8 @@ public class UserDao {
     private String genPassword() {
         Random rand = new Random();
         int randomNum = rand.nextInt(100000, 999999);
-        String password = String.valueOf(randomNum);
-        return MD5Hash.hashPassword(password);
+        return String.valueOf(randomNum);
+
     }
 
     public boolean updateUserStatusToActive(String token) {
