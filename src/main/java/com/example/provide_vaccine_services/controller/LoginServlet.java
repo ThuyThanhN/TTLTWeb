@@ -164,12 +164,12 @@ public class LoginServlet extends HttpServlet {
                     authUser = gg.getGGUserInfo(accessToken);
                 }
                 break;
-//            case "facebook":
-//                accessToken = gg.getFBToken(code);
-//                if (accessToken != null && !accessToken.isEmpty()) {
-//                    authUser = gg.getFBUserInfo(accessToken);
-//                }
-//                break;
+            case "facebook":
+                accessToken = gg.getFBToken(code);
+                if (accessToken != null && !accessToken.isEmpty()) {
+                    authUser = gg.getFBUserInfo(accessToken);
+                }
+                break;
 
             // provider không hợp lệ
             default:

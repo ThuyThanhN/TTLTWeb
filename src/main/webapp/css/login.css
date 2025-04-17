@@ -100,28 +100,28 @@ a {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #db4437; /* Màu đỏ Google */
     border-radius: 50%;
+    outline: solid 1px #ad9b9b38;
+
 }
 
 .authentication-button.google:hover {
-    background-color: #c1351d; /* Màu đậm hơn khi hover */
+    background-color: #b9b8b866; /* Màu đậm hơn khi hover */
 }
 
 /* Nút Zalo */
-.authentication-button.zalo {
+.authentication-button.facebook {
     width: 40px; /* Chiều rộng */
     height: 40px; /* Chiều cao */
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #1877f2; /* Màu xanh Zalo */
     border-radius: 50%;
-
+    outline: solid 1px #ad9b9b38;
 }
 
 .authentication-button.facebook:hover {
-    background-color: #0d5bbf; /* Màu đậm hơn khi hover */
+    background-color: #b9b8b866; /* Màu đậm hơn khi hover */
 }
 
 /* Đổi màu icon bên trong */
