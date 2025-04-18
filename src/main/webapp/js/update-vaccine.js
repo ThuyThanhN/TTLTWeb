@@ -98,8 +98,22 @@ $(document).ready(function () {
                 }
             },
             error: function (xhr) {
-                alert("Loi khi cap nhat vac xin!");
-                console.log("Lỗi: " + xhr.responseText);
+                if (xhr.status === 403) {
+                    const res = JSON.parse(xhr.responseText);
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Cảnh báo',
+                        text: res.message || "Không có quyền thực hiện chức năng này!",
+                        confirmButtonText: 'OK'
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi hệ thống!',
+                        text: 'Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.',
+                        confirmButtonText: 'Đóng'
+                    });
+                }
             }
         });
     });

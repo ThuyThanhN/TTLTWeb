@@ -78,7 +78,22 @@ $(document).ready(function () {
                console.log("Cap nhat trang thai thanh cong", response);
             },
             error: function (xhr) {
-                console.log("Response: ", xhr.responseText);
+                if (xhr.status === 403) {
+                    const res = JSON.parse(xhr.responseText);
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Cảnh báo',
+                        text: res.message || "Không có quyền thực hiện chức năng này!",
+                        confirmButtonText: 'OK'
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi hệ thống!',
+                        text: 'Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.',
+                        confirmButtonText: 'Đóng'
+                    });
+                }
             }
         });
     });
