@@ -69,6 +69,24 @@ public class Users implements Serializable {
         this.password = password;
         this.role = role;
     }
+    public Users(int id, String fullname, String gender, String identification, Date dateOfBirth,
+                 String address, String province, String district, String ward, String phone,
+                 String email, String password, int role, int status) {
+        this.id = id;
+        this.fullname = fullname;
+        this.gender = gender;
+        this.identification = identification;
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
+        this.province = province;
+        this.district = district;
+        this.ward = ward;
+        this.phone = phone;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.status = status;
+    }
 
     public int getId() {
         return id;

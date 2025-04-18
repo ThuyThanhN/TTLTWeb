@@ -382,7 +382,8 @@ public class UserDao {
                         rs.getString("phone"),
                         rs.getString("email"),
                         rs.getString("password"),
-                        rs.getInt("role")
+                        rs.getInt("role"),
+                        rs.getInt("status")  // Đảm bảo rằng bạn đang lấy đúng giá trị status
                 );
 
                 // Debug khi đăng nhập thành công

@@ -96,20 +96,21 @@ public class LoginServlet extends HttpServlet {
         // Gọi UserDao để kiểm tra thông tin đăng nhập
         UserDao userDao = new UserDao();
         Users user = userDao.checkLogin(username, password);
+        System.out.println("Status của tài khoản: " + user.getStatus()); // Kiểm tra giá trị status
 
         if (user != null) {
             // Kiểm tra trạng thái xác thực của tài khoản
             if (user.getStatus() == 0) {
-                // Nếu chưa xác thực, hiển thị modal yêu cầu xác thực và gửi email
+//                 Nếu chưa xác thực, hiển thị modal yêu cầu xác thực và gửi email
                 request.setAttribute("modalMessage", "Tài khoản chưa được xác thực. Một email xác thực đã được gửi đến bạn.");
                 sendActivationEmail(user.getEmail()); // Gửi email xác thực
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 return;
             }
 
-            // Đăng nhập thành công, tạo session
+            // Nếu trạng thái = 1 (đã xác thực), tiếp tục đăng nhập thành công
             HttpSession session = request.getSession();
-            session.setAttribute("user", user);
+            session.setAttribute("user", user); // Lưu thông tin người dùng vào session
 
             // Giới hạn thời gian session (ví dụ: 30 phút)
             session.setMaxInactiveInterval(30 * 60); // 30 phút

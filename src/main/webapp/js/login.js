@@ -1,11 +1,20 @@
-// Tắt modal khi nhấn nút OK
-document.querySelector('.btn-primary').addEventListener('click', function() {
-    var modal = new bootstrap.Modal(document.querySelector('.modal'));
-    modal.hide(); // Đóng modal khi nhấn OK
-});
+document.addEventListener('DOMContentLoaded', function () {
+    // Đảm bảo modal chỉ được đóng khi các phần tử tồn tại
+    const modal = document.querySelector('.modal');
+    const okButton = document.getElementById('ok-modal');
+    const closeButton = document.getElementById('close-modal');
 
-// Tắt modal khi nhấn nút "X" trên header modal
-document.querySelector('.btn-close').addEventListener('click', function() {
-    var modal = new bootstrap.Modal(document.querySelector('.modal'));
-    modal.hide(); // Đóng modal khi nhấn "X"
+    // Đóng modal khi nhấn nút OK
+    if (okButton) {
+        okButton.addEventListener('click', function() {
+            modal.style.display = 'none';  // Ẩn modal khi nhấn OK
+        });
+    }
+
+    // Đóng modal khi nhấn nút "X"
+    if (closeButton) {
+        closeButton.addEventListener('click', function() {
+            modal.style.display = 'none';  // Ẩn modal khi nhấn "X"
+        });
+    }
 });

@@ -24,21 +24,8 @@
           rel="stylesheet">
     <link rel="stylesheet" href="css/login.css">
     <style>
-        .modal-content {
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        .modal-header {
-            background-color: #007bff;
-            color: white;
-            border-radius: 15px 15px 0 0;
-        }
-        .modal-footer {
-            border-radius: 0 0 15px 15px;
-        }
-        .modal-body {
-            font-size: 1.1em;
-        }
+        /* Modal */
+
     </style>
 </head>
 <body>
@@ -78,18 +65,20 @@
     </form>
           <%-- Hiển thị modal nếu có thông báo lỗi --%>
           <% if (request.getAttribute("modalMessage") != null) { %>
-          <div class="modal fade show" tabindex="-1" style="display: block;" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal" tabindex="-1" style="display: block;" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog">
                   <div class="modal-content">
                       <div class="modal-header">
                           <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          <!-- Nút đóng modal "X" -->
+                          <button type="button" class="btn-close" id="close-modal" aria-label="Close"></button>
                       </div>
                       <div class="modal-body">
                           <%= request.getAttribute("modalMessage") %>
                       </div>
                       <div class="modal-footer">
-                          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                          <!-- Nút OK đóng modal -->
+                          <button type="button" class="btn btn-primary" id="ok-modal">OK</button>
                       </div>
                   </div>
               </div>
