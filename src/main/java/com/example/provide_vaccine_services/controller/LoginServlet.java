@@ -1,6 +1,8 @@
 package com.example.provide_vaccine_services.controller;
 
+import com.example.provide_vaccine_services.Service.EmailSender;
 import com.example.provide_vaccine_services.Service.GoogleLogin;
+import com.example.provide_vaccine_services.Service.TokenGenerator;
 import com.example.provide_vaccine_services.dao.UserDao;
 import com.example.provide_vaccine_services.dao.model.Users;
 import jakarta.servlet.ServletException;
@@ -11,6 +13,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 @WebServlet(name = "LoginServlet", value = "/login")
 public class LoginServlet extends HttpServlet {
@@ -94,6 +98,15 @@ public class LoginServlet extends HttpServlet {
         Users user = userDao.checkLogin(username, password);
 
         if (user != null) {
+            // Kiểm tra trạng thái xác thực của tài khoản
+            if (user.getStatus() == 0) {
+                // Nếu chưa xác thực, hiển thị modal yêu cầu xác thực và gửi email
+                request.setAttribute("modalMessage", "Tài khoản chưa được xác thực. Một email xác thực đã được gửi đến bạn.");
+                sendActivationEmail(user.getEmail()); // Gửi email xác thực
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+
             // Đăng nhập thành công, tạo session
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
@@ -113,6 +126,45 @@ public class LoginServlet extends HttpServlet {
             // Đăng nhập thất bại, quay lại login.jsp với thông báo lỗi
             request.setAttribute("error", "Tên đăng nhập hoặc mật khẩu không đúng!");
             request.getRequestDispatcher("login.jsp").forward(request, response);
+        }
+    }
+
+    // Phương thức gửi email xác thực
+    private void sendActivationEmail(String email) {
+        // Tạo mã token xác thực
+        String token = TokenGenerator.generateActivationToken();  // Tạo token để xác thực tài khoản
+
+        // Lưu token vào cơ sở dữ liệu để liên kết với tài khoản người dùng
+        UserDao userDao = new UserDao();
+        boolean isTokenSaved = userDao.saveVerificationToken(email, token);  // Lưu token vào DB
+
+        if (!isTokenSaved) {
+            System.out.println("Lỗi khi lưu token xác thực vào cơ sở dữ liệu!");
+            return; // Nếu không lưu được token, thoát khỏi phương thức
+        }
+
+        // Mã hóa token để có thể sử dụng trong URL
+        String encodedToken = encodeToken(token);  // Mã hóa token
+
+        // Tạo URL xác thực (địa chỉ này có thể thay đổi tùy thuộc vào cấu trúc của bạn)
+        String verificationLink = "http://localhost:8080/provide_vaccine_services_war/verifyAccount?token=" + encodedToken;
+
+        // Nội dung email
+        String subject = "Xác thực tài khoản";
+        String body = "Chào bạn,\n\nVui lòng nhấn vào liên kết dưới đây để xác thực tài khoản của bạn:\n" + verificationLink;
+
+        // Gửi email xác thực
+        EmailSender.sendEmail(email, subject, body);  // Sử dụng lớp EmailSender để gửi email
+        System.out.println("Email xác thực đã được gửi đến: " + email); // Đoạn này để kiểm tra log
+    }
+
+    // Phương thức mã hóa token trước khi sử dụng trong URL
+    private String encodeToken(String token) {
+        try {
+            return URLEncoder.encode(token, "UTF-8");  // Mã hóa token tại đây
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;  // Nếu có lỗi mã hóa, trả về null
         }
     }
 
