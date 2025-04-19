@@ -53,16 +53,6 @@
             <div class="sidebar">
                 <div class="profile-card">
                     <img src="image/avatar1.png" alt="Avatar" class="profile-image">
-                    <%
-                        // Kiểm tra trạng thái tài khoản của người dùng
-                        int status = user.getStatus();// Lấy giá trị status từ đối tượng user
-                    %>
-
-                    <!-- Hiển thị thông báo về trạng thái xác thực tài khoản -->
-                    <%--                    <div class="status-message">--%>
-                    <%--                        <%= (status == 0) ? "Tài khoản chưa xác thực" : "Tài khoản đã xác minh" %>--%>
-                    <%--                    </div>--%>
-
                     <h2 class="sidebar-username"><%= user.getFullname() %>
                     </h2>
                     <p><%= user.getPhone() %>
@@ -83,7 +73,7 @@
                 </ul>
             </div>
 
-            <!-- Modal Bootstrap 5 -->
+            <!-- Modal lock account -->
             <div class="modal fade" id="lockAccountModal" tabindex="-1" aria-labelledby="lockAccountModalLabel"
                  aria-hidden="true">
                 <div class="modal-dialog">

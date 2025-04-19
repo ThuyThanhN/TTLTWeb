@@ -305,7 +305,10 @@ form.bg-light {
 .dropdown input {
     cursor: pointer;
 }
-
+.modal-header {
+    background: linear-gradient(90deg, #2a388f, #68aaf6, rgba(170, 229, 236, 0.73));
+    color: white;
+}
 
 @media (max-width: 1024px) {
     .main-content {
