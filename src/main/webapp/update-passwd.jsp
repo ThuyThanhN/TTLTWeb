@@ -20,7 +20,7 @@
 <body>
 <div id="wrapper">
     <div class="header text-center">
-        <a href="index.html"><img src="image/logo.png" alt="Logo" class="img-responsive"></a>
+        <a href="index"><img src="image/logo.png" alt="Logo" class="img-responsive"></a>
     </div>
     <% if (request.getAttribute("message") != null) { %>
     <div class="alert alert-info text-center">
@@ -52,7 +52,7 @@
         <div class="container-lg">
             <div class="row">
                 <div class="col-12 col-lg-3">
-                    <a href="index.html">
+                    <a href="index">
                         <img src="image/logo.png" alt="Logo" class="footer-logo">
                     </a>
                     <div id="copy-right">
