@@ -446,7 +446,8 @@ public class UserDao {
                         rs.getString("phone"),
                         rs.getString("email"),
                         rs.getString("password"),
-                        rs.getInt("role")
+                        rs.getInt("role"),
+                        rs.getInt("status")  // Đảm bảo rằng bạn đang lấy đúng giá trị status
                 );
 
                 // Debug khi đăng nhập thành công
@@ -589,6 +590,7 @@ public class UserDao {
                 user.setEmail(rs.getString("email"));
                 user.setPassword(rs.getString("password"));
                 user.setRole(rs.getInt("role"));
+                user.setStatus(rs.getInt("status"));  
 
                 return user;
             }

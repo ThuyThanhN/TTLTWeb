@@ -3,6 +3,7 @@ package com.example.provide_vaccine_services.controller;
 import com.example.provide_vaccine_services.Service.EmailSender;
 import com.example.provide_vaccine_services.Service.OTPGenerator;
 import com.example.provide_vaccine_services.dao.UserDao;
+import com.example.provide_vaccine_services.dao.model.Users;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -36,14 +37,16 @@ public class ForgotPasswordServlet extends HttpServlet {
         try {
             // Kiểm tra xem email có tồn tại không
             if (userDao.isEmailExists(email)) {
-                // Kiểm tra nếu OTP đã được gửi và không được nhập lại
-                if (request.getSession().getAttribute("otpEntered") != null) {
-                    request.setAttribute("error", "Mã OTP đã được nhập. Bạn không thể nhập lại.");
+                // Kiểm tra trạng thái tài khoản (nếu chưa xác thực)
+                Users user = userDao.getUserByEmail(email);
+                if (user != null && user.getStatus() == 0) {
+                    // Nếu tài khoản chưa xác thực, thông báo yêu cầu xác thực tài khoản
+                    request.setAttribute("error", "Tài khoản chưa được xác thực. Vui lòng xác thực tài khoản trước khi thực hiện reset mật khẩu.");
                     request.getRequestDispatcher("reset-password.jsp").forward(request, response);
                     return;
                 }
 
-                // Tạo và gửi mã OTP nếu chưa nhập OTP trước đó
+                // Tiến hành gửi OTP nếu tài khoản đã xác thực
                 String otp = OTPGenerator.generateOTP();
                 EmailSender.sendEmail(email, "Reset Password OTP", "Mã OTP của bạn là: " + otp);
 
@@ -61,22 +64,6 @@ public class ForgotPasswordServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Có lỗi xảy ra khi xử lý yêu cầu.");
-        }
-    }
-
-    // Phương thức để kiểm tra OTP nhập vào
-    public void checkOTP(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String enteredOtp = request.getParameter("otp");
-        String otp = (String) request.getSession().getAttribute("otp");
-
-        if (otp != null && otp.equals(enteredOtp)) {
-            // Nếu OTP đúng, lưu trạng thái OTP đã nhập
-            request.getSession().setAttribute("otpEntered", true);
-            request.setAttribute("message", "Mã OTP đã được xác nhận thành công.");
-            request.getRequestDispatcher("reset-password-success.jsp").forward(request, response);
-        } else {
-            request.setAttribute("error", "Mã OTP không chính xác.");
-            request.getRequestDispatcher("verify-reset-passwd.jsp").forward(request, response);
         }
     }
 }
