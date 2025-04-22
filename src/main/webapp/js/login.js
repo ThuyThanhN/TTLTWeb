@@ -4,6 +4,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const closeButton = document.getElementById('close-modal');
     const errorMessage = document.getElementById('error-message');
     const loginForm = document.getElementById('login-form');
+    const loginButton = document.getElementById('login-button'); // Nút đăng nhập
+    const spinner = document.createElement('div');
+    spinner.classList.add('spinner');  // Thêm vòng xoay vào nút
+
+    // Thêm spinner vào nút đăng nhập
+    loginButton.appendChild(spinner);
 
     // Ẩn modal khi nhấn "OK"
     const hideModal = () => modal.classList.add('hidden');
@@ -25,41 +31,51 @@ document.addEventListener('DOMContentLoaded', function () {
     loginForm.addEventListener('submit', function(event) {
         event.preventDefault();  // Ngừng hành động gửi form mặc định
 
+        // Lấy thông tin đăng nhập từ form
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
 
+        // Kiểm tra nếu username và password không rỗng
+        if (!username || !password) {
+            console.error('Username or password is empty');
+            return;  // Dừng lại nếu username hoặc password trống
+        }
+
         const xhr = new XMLHttpRequest();
         xhr.open('POST', 'login', true);
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest'); // Đảm bảo header cho AJAX
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest'); // Đảm bảo header cho AJAX
+
+        // Hiển thị vòng xoay và vô hiệu hóa nút
+        loginButton.classList.add('btn-loading');
+        spinner.style.display = 'block';  // Hiển thị vòng xoay
 
         xhr.onload = function() {
+            // Xử lý phản hồi từ server
             if (xhr.status == 200) {
                 const response = xhr.responseText;
-                console.log('Server response:', response);  // Kiểm tra phản hồi từ server
+                console.log('Server response:', response);
 
                 // Kiểm tra nếu tài khoản chưa được xác thực
                 if (response === "not_verified") {
-                    // Hiển thị modal xác thực tài khoản
                     document.getElementById('modal-message').innerText = "Tài khoản chưa xác thực. Vui lòng kiểm tra email để xác thực tài khoản.";
                     modal.classList.remove('hidden'); // Mở modal
                 } else if (response === "error") {
-                    // Hiển thị thông báo lỗi đăng nhập
                     errorMessage.style.display = 'block';
                     errorMessage.innerHTML = 'Tên đăng nhập hoặc mật khẩu không đúng!';
                 } else if (response === "index" || response === "admin/dashboard") {
-                    // Chuyển hướng trang khi đăng nhập thành công
-                    window.location.href = response;  // Chuyển hướng bằng JavaScript
-                } else {
-                    // Nếu không phải phản hồi dự kiến, thông báo lỗi chung
-                    console.error('Unexpected server response:', response);
+                    window.location.href = response;  // Chuyển hướng thành công
                 }
             } else {
-                // Xử lý nếu server trả về lỗi (status khác 200)
+                // Nếu yêu cầu không thành công
                 console.error('Request failed with status:', xhr.status);
                 errorMessage.style.display = 'block';
                 errorMessage.innerHTML = 'Lỗi khi kết nối với server!';
             }
+
+            // Ẩn vòng xoay và kích hoạt lại nút khi xong
+            loginButton.classList.remove('btn-loading');
+            spinner.style.display = 'none'; // Ẩn vòng xoay
         };
 
         // Gửi thông tin đăng nhập qua AJAX

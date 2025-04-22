@@ -193,6 +193,37 @@ a {
 .modal .btn-close {
     font-size: 24px;
 }
+/* Nút đăng nhập - hiệu ứng xoay */
+/* Nút đăng nhập - hiệu ứng xoay */
+.btn-loading {
+    position: relative;
+    pointer-events: none;  /* Vô hiệu hóa tương tác khi đang tải */
+    display: inline-flex;  /* Sử dụng inline-flex để căn chỉnh các phần tử con theo chiều ngang */
+    align-items: center;  /* Căn giữa các phần tử theo chiều dọc */
+    justify-content: center; /* Căn giữa chữ "Đăng nhập" */
+}
+
+/* Định dạng vòng xoay */
+.btn-loading .spinner {
+    margin-left: 10px;  /* Thêm khoảng cách giữa chữ "Đăng nhập" và vòng xoay */
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+}
+
+/* Định nghĩa chuyển động xoay */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Ẩn vòng xoay khi chưa kích hoạt */
+.spinner {
+    display: none;
+}
 
 /* Responsive điều chỉnh */
 /*Khi màn hình < 768px( chiều rộng phổ biến của nhiều loại thiết bị)*/
@@ -223,37 +254,6 @@ a {
     .login-container .login-options {
         gap: 10px;
     }
-}
-/* Nút đăng nhập - hiệu ứng xoay */
-.btn-loading {
-    position: relative;
-    pointer-events: none;  /* Vô hiệu hóa tương tác khi đang tải */
-}
-
-/* Định dạng vòng xoay */
-.btn-loading .spinner {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #3498db;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    animation: spin 1s linear infinite;
-}
-
-/* Định nghĩa chuyển động xoay */
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Ẩn vòng xoay khi chưa kích hoạt */
-.spinner {
-    display: none;
-}
 
 /*Khi màn hình < 480x(chiều rộng hợp lý cho các thiết bị cầm tay theo chiều dọc)*/
 @media (max-width: 480px) {
@@ -291,4 +291,4 @@ a {
     .header img {
         width: 80%;
     }
-}
+}}

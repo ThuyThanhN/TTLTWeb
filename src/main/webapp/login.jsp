@@ -64,7 +64,7 @@
                 </div>
 
                 <!-- Nút đăng nhập -->
-                <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
+                <button type="submit" id="login-button" class="btn btn-primary w-100">Đăng nhập</button>
             </form>
 
             <!-- Modal thông báo lỗi -->
