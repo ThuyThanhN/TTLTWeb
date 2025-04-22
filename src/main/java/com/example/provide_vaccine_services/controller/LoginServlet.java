@@ -96,12 +96,12 @@ public class LoginServlet extends HttpServlet {
         // Gọi UserDao để kiểm tra thông tin đăng nhập
         UserDao userDao = new UserDao();
         Users user = userDao.checkLogin(username, password);
-        System.out.println("Status của tài khoản: " + user.getStatus()); // Kiểm tra giá trị status
 
+        // Kiểm tra nếu user không phải null
         if (user != null) {
             // Kiểm tra trạng thái xác thực của tài khoản
             if (user.getStatus() == 0) {
-//                 Nếu chưa xác thực, hiển thị modal yêu cầu xác thực và gửi email
+                // Nếu chưa xác thực, hiển thị modal yêu cầu xác thực và gửi email
                 request.setAttribute("modalMessage", "Tài khoản chưa được xác thực. Một email xác thực đã được gửi đến bạn.");
                 sendActivationEmail(user.getEmail()); // Gửi email xác thực
                 request.getRequestDispatcher("login.jsp").forward(request, response);
