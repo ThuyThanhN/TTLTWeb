@@ -7,10 +7,6 @@
         <error-code>404</error-code>
         <location>/error404.jsp</location>
     </error-page>
-    <servlet>
-        <servlet-name>AccountActivationServlet</servlet-name>
-        <servlet-class>com.example.provide_vaccine_services.Service.AccountActivationServlet</servlet-class>
-    </servlet>
     <servlet-mapping>
         <servlet-name>AccountActivationServlet</servlet-name>
         <url-pattern>/activate</url-pattern>
