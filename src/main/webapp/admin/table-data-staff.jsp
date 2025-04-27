@@ -35,6 +35,7 @@
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Css   -->
     <link rel="stylesheet" href="../css/main_admin.css">
 </head>
@@ -207,14 +208,14 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-4">
+                                                <div class="col-3">
                                                     <div class="mb-3">
                                                         <label for="phone-${staff.id}" class="form-label">Số điện thoại</label>
                                                         <input type="tel" class="form-control" id="phone-${staff.id}" name="phone" value="${staff.phone}" required data-phone>
                                                         <div class="error-message">Số điện thoại không hợp lệ.</div>
                                                     </div>
                                                 </div>
-                                                <div class="col-4">
+                                                <div class="col-3">
                                                     <div class="mb-3 position-relative">
                                                         <label for="role-${staff.id}" class="form-label">Chức vụ</label>
                                                         <select class="form-select" id="role-${staff.id}" name="role" required>
@@ -225,7 +226,24 @@
                                                         <i class="fa-solid fa-angle-down position-absolute end-0 translate-middle" style="top: 72%"></i>
                                                     </div>
                                                 </div>
-                                                <div class="col-4">
+                                                <div class="col-3">
+                                                    <div class="mb-3 position-relative">
+                                                        <label for="module-${staff.id}" class="form-label">Phân quyền:</label>
+                                                        <select class="form-select" id="module-${staff.id}" name="module" required>
+                                                            <option value="" ${staff.module == null? 'selected' : ''}>-- Chọn --</option>
+                                                            <option value="none" ${staff.module == 'none' ? 'selected' : ''}>Nhân viên</option>
+                                                            <option value="staff" ${staff.module == 'staff' ? 'selected' : ''}>Quản lý nhân viên</option>
+                                                            <option value="customer" ${staff.module == 'customer' ? 'selected' : ''}>Quản lý khách hàng</option>
+                                                            <option value="order" ${staff.module == 'order' ? 'selected' : ''}>Quản lý đơn hàng</option>
+                                                            <option value="vaccine" ${staff.module == 'vaccine' ? 'selected' : ''}>Quản lý vắc xin</option>
+                                                            <option value="package" ${staff.module == 'package' ? 'selected' : ''}>Quản lý gói vắc xin</option>
+                                                            <option value="supplier" ${staff.module == 'supplier' ? 'selected' : ''}>Quản lý nhà cung cấp</option>
+                                                            <option value="center" ${staff.module == 'center' ? 'selected' : ''}>Quản lý trung tâm</option>
+                                                        </select>
+                                                        <i class="fa-solid fa-angle-down position-absolute end-0 translate-middle" style="top: 72%"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="col-3">
                                                     <div class="mb-3">
                                                         <label for="pass-${staff.id}" class="form-label">Mật khẩu</label>
                                                         <input type="password" class="form-control" id="pass-${staff.id}" name="password" value="${staff.password}" required data-password>
@@ -359,14 +377,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-3">
                                 <div class="mb-3">
                                     <label for="staff-phone" class="form-label">Số điện thoại</label>
                                     <input type="tel" class="form-control" id="staff-phone" name="phone" required data-phone>
                                     <div class="error-message">Số điện thoại không hợp lệ.</div>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-3">
                                 <div class="mb-3 position-relative">
                                     <label for="role" class="form-label">Chức vụ</label>
                                     <select class="form-select" id="role" name="role" required>
@@ -377,7 +395,24 @@
                                     <i class="fa-solid fa-angle-down position-absolute end-0 translate-middle" style="top: 72%"></i>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-3">
+                                <div class="mb-3 position-relative">
+                                    <label for="module" class="form-label">Phân quyền:</label>
+                                    <select class="form-select" id="module" name="module" required>
+                                        <option value="" selected>--Phân quyền--</option>
+                                        <option value="none">Nhân viên</option>
+                                        <option value="staff">Quản lý nhân viên</option>
+                                        <option value="customer">Quản lý khách hàng</option>
+                                        <option value="order">Quản lý đơn hàng</option>
+                                        <option value="vaccine">Quản lý vắc xin</option>
+                                        <option value="package">Quản lý gói vắc xin</option>
+                                        <option value="supplier">Quản lý nhà cung cấp</option>
+                                        <option value="center">Quản lý trung tâm</option>
+                                    </select>
+                                    <i class="fa-solid fa-angle-down position-absolute end-0 translate-middle" style="top: 72%"></i>
+                                </div>
+                            </div>
+                            <div class="col-3">
                                 <div class="mb-3">
                                     <label for="password" class="form-label">Mật khẩu</label>
                                     <input type="password" class="form-control" id="password" name="password" required data-password>
