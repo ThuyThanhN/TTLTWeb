@@ -168,7 +168,6 @@ body {
     height: 120px;
     border-radius: 10px;
     transition: all 0.5s ease-in-out;
-    background: linear-gradient(to right, #FFFFFF, #EAFFF9);
     border: 1px solid #d1d5db80;
     border-radius: 0.5rem;
     padding: 1rem;
@@ -193,8 +192,25 @@ body {
     font-weight: 500;
     padding: 2px 0;
 }
+.text-danger-main {
+    color: #EF4A00;
+    font-weight: 500;
+    padding: 2px 0;
+}
 .bg-success-focus {
     background-color: rgba(69, 179, 105, 0.1490196078) !important;
+}
+.bg-danger-focus {
+    background-color: rgba(239, 71, 112, 0.1490196078);
+}
+.bg-gradient-end-1 {
+    background: linear-gradient(to right, #FFFFFF, #EAFFF9);
+}
+.bg-gradient-end-2 {
+    background: linear-gradient(to right, #FFFFFF, #FFF5E9);
+}
+.bg-gradient-end-3 {
+    background: linear-gradient(to right, #FFFFFF, #EEFBFF);
 }
 .tabular-wrapper {
     background-color: #fff;
@@ -263,6 +279,9 @@ tfoot td {
 }
 .dark-red {
     background-color: #de2222;
+}
+.dark-lightbule {
+    background: #00B8F2;
 }
 .card-container .card-wrapper {
     margin-bottom: 15px;

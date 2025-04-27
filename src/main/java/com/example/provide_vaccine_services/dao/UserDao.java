@@ -14,6 +14,7 @@ import java.util.*;
 
 public class UserDao {
     private Users u;
+
     public int insert(Users u) {
         int re = 0;
 
@@ -53,7 +54,7 @@ public class UserDao {
         return re;
     }
 
-     // Them nhan vien trong Admin
+    // Them nhan vien trong Admin
     public int insertStaff(Users u) {
         int newId = -1;
 
@@ -334,7 +335,7 @@ public class UserDao {
 //            System.out.println("Password trước khi mã hóa: " + rawPassword);
 //            System.out.println("Password sau khi mã hóa: " + hashedPassword);
 
-            pst.setString(11,u.getPassword());
+            pst.setString(11, u.getPassword());
 
             pst.setInt(12, u.getRole());
 
@@ -405,6 +406,7 @@ public class UserDao {
 
         return re; // Trả về kết quả (số bản ghi đã được thêm)
     }
+
     public Users checkLogin(String username, String password) {
         Users user = null;
         try {
@@ -556,6 +558,7 @@ public class UserDao {
         }
         return false;
     }
+
     // Giải mã token trước khi lưu vào cơ sở dữ liệu hoặc kiểm tra
     private String decodeToken(String token) {
         try {
@@ -625,6 +628,7 @@ public class UserDao {
         }
         return isUpdated;  // Trả về true nếu thành công, false nếu không thành công
     }
+
     // Lưu token vào cơ sở dữ liệu
     public boolean saveVerificationToken(String email, String token) {
         boolean isUpdated = false;
@@ -680,6 +684,31 @@ public class UserDao {
             e.printStackTrace();  // Xử lý lỗi nếu có
         }
         return isValid;  // Trả về true nếu token hợp lệ, false nếu không hợp lệ
+    }
+
+    // Đếm số lượng người đăng ký tài khoản tuần này so với tuần trước bao nhiêu người
+    public int getUsersCountLastWeek() {
+        int count = 0;
+        try {
+            String sql = "SELECT " +
+                    "(SELECT COUNT(*) " +
+                    "FROM users " +
+                    "WHERE createdAt >= CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY " +
+                    "AND createdAt < CURDATE() + INTERVAL 1 DAY) - " +
+                    "(SELECT COUNT(*) " +
+                    "FROM users " +
+                    "WHERE createdAt >= CURDATE() - INTERVAL WEEKDAY(CURDATE()) + 7 DAY " +
+                    "AND createdAt < CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY) AS count;";
+
+            PreparedStatement pst = DBConnect.get(sql);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt("count");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return count;
     }
 
 }
