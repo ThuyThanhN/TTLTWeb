@@ -692,16 +692,21 @@ public class UserDao {
         try {
             String sql = "SELECT " +
                     "(SELECT COUNT(*) " +
-                    "FROM users " +
-                    "WHERE createdAt >= CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY " +
-                    "AND createdAt < CURDATE() + INTERVAL 1 DAY) - " +
+                    "FROM users u " +
+                    "WHERE u.createdAt >= CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY " +
+                    "AND u.createdAt < CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY + INTERVAL 7 DAY " +
+                    "AND u.role = 0) " +
+                    "- " +
                     "(SELECT COUNT(*) " +
-                    "FROM users " +
-                    "WHERE createdAt >= CURDATE() - INTERVAL WEEKDAY(CURDATE()) + 7 DAY " +
-                    "AND createdAt < CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY) AS count;";
+                    "FROM users u " +
+                    "WHERE u.createdAt >= CURDATE() - INTERVAL WEEKDAY(CURDATE()) + 7 DAY " +
+                    "AND u.createdAt < CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY + INTERVAL 7 DAY " +
+                    "AND u.role = 0) " +
+                    "AS count;";
 
             PreparedStatement pst = DBConnect.get(sql);
             ResultSet rs = pst.executeQuery();
+
             if (rs.next()) {
                 count = rs.getInt("count");
             }
@@ -710,6 +715,7 @@ public class UserDao {
         }
         return count;
     }
+
 
 }
 

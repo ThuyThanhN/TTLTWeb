@@ -53,7 +53,7 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <span class="title">Người dùng</span>
+                                    <span class="title">Tổng người dùng</span>
                                     <div class="amount-value">${totalUser}</div>
                                 </div>
                             </div>
@@ -137,7 +137,7 @@
                                        style="width:24.75px; height:24.75px; font-size:24.75px;"></i>
                                 </div>
                                 <div>
-                                    <span class="title">Đơn hàng</span>
+                                    <span class="title">Tổng đơn hàng</span>
                                     <div class="amount-value">${totalOrder}</div>
                                 </div>
                             </div>
@@ -204,9 +204,20 @@
 
                         </div>
                     </div>
-                    <p class="text-sm mt-2 mb-0" style="color: #485563; font-size: 15px">Tăng <span
-                            class="bg-danger-focus px-1 rounded-2 fw-medium text-danger-main text-sm">+200</span>
-                        trong tuần này</p>
+                    <c:choose>
+                        <c:when test="${orderCountChange >= 0}">
+                            <p class="text-sm mt-2 mb-0" style="color: #485563; font-size: 15px">
+                                Tăng <span class="bg-success-focus px-1 rounded-2 fw-medium text-success-main text-sm">+${orderCountChange}</span>
+                                trong tuần này
+                            </p>
+                        </c:when>
+                        <c:when test="${orderCountChange < 0}">
+                            <p class="text-sm mt-2 mb-0" style="color: #485563; font-size: 15px">
+                                Giảm <span class="bg-danger-focus px-1 rounded-2 fw-medium text-danger-main text-sm">${orderCountChange}</span>
+                                trong tuần này
+                            </p>
+                        </c:when>
+                    </c:choose>
                 </div>
             </div>
             <div class="col-12 col-md-6 col-lg-4">
@@ -225,13 +236,12 @@
                                 </div>
                                 <div>
                                     <span class="title">Doanh thu</span>
-                                    <div class="amount-value"></div>
+                                    <div class="amount-value"><f:formatNumber value="${totalRevenue}" type="number" pattern="#,##0"/></div>
                                 </div>
                             </div>
                         </div>
                         <div class="card-right">
-                            <svg id="SvgjsSvg9460" width="80" height="42" xmlns="http://www.w3.org/2000/svg"
-                                 version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
+                            <svg id="SvgjsSvg9460" width="80" height="42" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                  class="apexcharts-svg" transform="translate(0, 0)"
                                  style="background: transparent;">
                                 <foreignObject x="0" y="0" width="80" height="42">
@@ -325,9 +335,20 @@
                             </svg>
                         </div>
                     </div>
-                    <p class="text-sm mt-2 mb-0" style="color: #485563; font-size: 15px">Tăng <span
-                            class="bg-success-focus px-1 rounded-2 fw-medium text-success-main text-sm">+200</span>
-                        trong tuần này</p>
+                    <c:choose>
+                        <c:when test="${revenueCountChange >= 0}">
+                            <p class="text-sm mt-2 mb-0" style="color: #485563; font-size: 15px">
+                                Tăng <span class="bg-success-focus px-1 rounded-2 fw-medium text-success-main text-sm">+<f:formatNumber value="${revenueCountChange}" type="number" pattern="#,##0"/></span>
+                                trong tuần này
+                            </p>
+                        </c:when>
+                        <c:when test="${revenueCountChange < 0}">
+                            <p class="text-sm mt-2 mb-0" style="color: #485563; font-size: 15px">
+                                Giảm <span class="bg-danger-focus px-1 rounded-2 fw-medium text-danger-main text-sm"><f:formatNumber value="${revenueCountChange}" type="number" pattern="#,##0"/></span>
+                                trong tuần này
+                            </p>
+                        </c:when>
+                    </c:choose>
                 </div>
             </div>
 

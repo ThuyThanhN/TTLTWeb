@@ -24,19 +24,29 @@ public class TKAdmin extends HttpServlet {
         OrderDetailDao odd = new OrderDetailDao();
         OrderDao od = new OrderDao();
 
-//        int totalVacine = vaccineDao.totalVaccines();
-//        int totalExpire = vaccineDao.statusVaccines();
+
         int totalUser = userDao.totalUser();
         int userCountChange = userDao.getUsersCountLastWeek();
-        int totalOrder = odd.totalOrder();
-        List<Vaccines> countOrder = od.quantityVaccine();
 
-//        request.setAttribute("totalVacine", totalVacine);
-//        request.setAttribute("totalExpire", totalExpire);
+        int totalOrder = odd.totalOrder();
+        int orderCountChange = odd.getOrdersCountLastWeek();
+
+        float totalRevenue = odd.totalRevenue();
+        float revenueCountChange = odd.getTotalRevenueLaskWeeks();
+
+//        int totalVacine = vaccineDao.totalVaccines();
+//        int totalExpire = vaccineDao.statusVaccines();
+//        List<Vaccines> countOrder = od.quantityVaccine();
+
         request.setAttribute("totalUser", totalUser);
         request.setAttribute("userCountChange", userCountChange);
         request.setAttribute("totalOrder", totalOrder);
-        request.setAttribute("countOrder", countOrder);
+        request.setAttribute("orderCountChange", orderCountChange);
+        request.setAttribute("totalRevenue", totalRevenue);
+        request.setAttribute("revenueCountChange", revenueCountChange);
+//        request.setAttribute("totalVacine", totalVacine);
+//        request.setAttribute("totalExpire", totalExpire);
+//        request.setAttribute("countOrder", countOrder);
 
         request.getRequestDispatcher("/admin/dashboard.jsp").forward(request, response);
     }
