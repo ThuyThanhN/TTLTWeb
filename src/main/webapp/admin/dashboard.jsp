@@ -20,6 +20,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
           rel="stylesheet">
+    <%-- Ajax --%>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- DataTable -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
@@ -35,7 +37,7 @@
     <!-- Header -->
     <jsp:include page="headerAdmin.jsp"></jsp:include>
     <div class="card-container">
-        <h5 class="main-title">Thống kê</h5>
+        <h4 class="main-title-dashboard">Thống kê</h4>
         <div class="row">
             <div class="col-12 col-md-6 col-lg-4">
                 <div class="card-wrapper bg-gradient-end-1">
@@ -114,13 +116,15 @@
                     <c:choose>
                         <c:when test="${userCountChange >= 0}">
                             <p class="text-sm mt-2 mb-0" style="color: #485563; font-size: 15px">
-                                Tăng <span class="bg-success-focus px-1 rounded-2 fw-medium text-success-main text-sm">+${userCountChange}</span>
+                                Tăng <span
+                                    class="bg-success-focus px-1 rounded-2 fw-medium text-success-main text-sm">+${userCountChange}</span>
                                 trong tuần này
                             </p>
                         </c:when>
                         <c:when test="${userCountChange < 0}">
                             <p class="text-sm mt-2 mb-0" style="color: #485563; font-size: 15px">
-                                Giảm <span class="bg-danger-focus px-1 rounded-2 fw-medium text-danger-main text-sm">${userCountChange}</span>
+                                Giảm <span
+                                    class="bg-danger-focus px-1 rounded-2 fw-medium text-danger-main text-sm">${userCountChange}</span>
                                 trong tuần này
                             </p>
                         </c:when>
@@ -207,13 +211,15 @@
                     <c:choose>
                         <c:when test="${orderCountChange >= 0}">
                             <p class="text-sm mt-2 mb-0" style="color: #485563; font-size: 15px">
-                                Tăng <span class="bg-success-focus px-1 rounded-2 fw-medium text-success-main text-sm">+${orderCountChange}</span>
+                                Tăng <span
+                                    class="bg-success-focus px-1 rounded-2 fw-medium text-success-main text-sm">+${orderCountChange}</span>
                                 trong tuần này
                             </p>
                         </c:when>
                         <c:when test="${orderCountChange < 0}">
                             <p class="text-sm mt-2 mb-0" style="color: #485563; font-size: 15px">
-                                Giảm <span class="bg-danger-focus px-1 rounded-2 fw-medium text-danger-main text-sm">${orderCountChange}</span>
+                                Giảm <span
+                                    class="bg-danger-focus px-1 rounded-2 fw-medium text-danger-main text-sm">${orderCountChange}</span>
                                 trong tuần này
                             </p>
                         </c:when>
@@ -236,12 +242,14 @@
                                 </div>
                                 <div>
                                     <span class="title">Doanh thu</span>
-                                    <div class="amount-value"><f:formatNumber value="${totalRevenue}" type="number" pattern="#,##0"/></div>
+                                    <div class="amount-value"><f:formatNumber value="${totalRevenue}" type="number"
+                                                                              pattern="#,##0"/></div>
                                 </div>
                             </div>
                         </div>
                         <div class="card-right">
-                            <svg id="SvgjsSvg9460" width="80" height="42" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                            <svg id="SvgjsSvg9460" width="80" height="42" xmlns="http://www.w3.org/2000/svg"
+                                 xmlns:xlink="http://www.w3.org/1999/xlink"
                                  class="apexcharts-svg" transform="translate(0, 0)"
                                  style="background: transparent;">
                                 <foreignObject x="0" y="0" width="80" height="42">
@@ -338,13 +346,16 @@
                     <c:choose>
                         <c:when test="${revenueCountChange >= 0}">
                             <p class="text-sm mt-2 mb-0" style="color: #485563; font-size: 15px">
-                                Tăng <span class="bg-success-focus px-1 rounded-2 fw-medium text-success-main text-sm">+<f:formatNumber value="${revenueCountChange}" type="number" pattern="#,##0"/></span>
+                                Tăng <span class="bg-success-focus px-1 rounded-2 fw-medium text-success-main text-sm">+<f:formatNumber
+                                    value="${revenueCountChange}" type="number" pattern="#,##0"/></span>
                                 trong tuần này
                             </p>
                         </c:when>
                         <c:when test="${revenueCountChange < 0}">
                             <p class="text-sm mt-2 mb-0" style="color: #485563; font-size: 15px">
-                                Giảm <span class="bg-danger-focus px-1 rounded-2 fw-medium text-danger-main text-sm"><f:formatNumber value="${revenueCountChange}" type="number" pattern="#,##0"/></span>
+                                Giảm <span
+                                    class="bg-danger-focus px-1 rounded-2 fw-medium text-danger-main text-sm"><f:formatNumber
+                                    value="${revenueCountChange}" type="number" pattern="#,##0"/></span>
                                 trong tuần này
                             </p>
                         </c:when>
@@ -352,6 +363,7 @@
                 </div>
             </div>
 
+            <%-- Phan kho  --%>
             <%--            <div class="col-12 col-md-6 col-lg-4">--%>
             <%--                <div class="card-wrapper light-blue">--%>
             <%--                    <div class="card-left dark-blue">--%>
@@ -375,6 +387,48 @@
             <%--                    </div>--%>
             <%--                </div>--%>
             <%--            </div>--%>
+        </div>
+    </div>
+    <div class="tabular-wrapper">
+        <h5 class="main-title">Người dùng đăng ký trong tháng</h5>
+        <div class="table-container">
+            <table class="w-100 table table-striped" id="user">
+                <thead>
+                <tr>
+                    <th>Tài khoản</th>
+                    <th>Giới tính</th>
+                    <th>Ngày đăng ký</th>
+                    <th>Tình trạng</th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach var="ur" items="${userRegister}">
+                    <tr>
+                        <td>
+                            <div>${ur.fullname}</div>
+                            <div class="user-email">${ur.email}</div>
+                        </td>
+                        <td class="align-middle">${ur.gender}</td>
+                        <td class="align-middle">
+                            <f:formatDate value="${ur.createdAt}" pattern="dd-MM-yyyy"/>
+                        </td>
+                        <td class="align-middle">
+                            <select class="status" name="status" data-id="${ur.id}" disabled>
+                                <option value="-1" class="status-select" ${ur.status == -1 ? 'selected' : ''}>Khóa
+                                    tài khoản
+                                </option>
+                                <option value="0" class="status-select" ${ur.status == 0 ? 'selected' : ''}>Chưa xác
+                                    thực
+                                </option>
+                                <option value="1" class="status-select" ${ur.status == 1 ? 'selected' : ''}>Đã xác
+                                    thực
+                                </option>
+                            </select>
+                        </td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
         </div>
     </div>
     <div class="tabular-wrapper">

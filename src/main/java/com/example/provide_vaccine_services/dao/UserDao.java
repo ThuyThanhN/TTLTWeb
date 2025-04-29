@@ -716,7 +716,45 @@ public class UserDao {
         return count;
     }
 
+    public List<Users> getUsersRegisterThisMonth() {
+        List<Users> result = new ArrayList<>();
+        try {
+            String sql = "SELECT id, fullname, email, gender, createdAt, status " +
+                    "FROM users " +
+                    "WHERE role = 0 " +
+                    "AND MONTH(createdAt) = MONTH(CURDATE()) " +
+                    "AND YEAR(createdAt) = YEAR(CURDATE()) " +
+                    "ORDER BY createdAt ASC;";
+            PreparedStatement pst = DBConnect.get(sql);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Users user = new Users();
+                user.setId(rs.getInt("id"));
+                user.setFullname(rs.getString("fullname"));
+                user.setGender(rs.getString("gender"));
+                user.setEmail(rs.getString("email"));
+                user.setCreatedAt(rs.getDate("createdAt"));
+                user.setStatus(rs.getInt("status"));  // Thêm dòng này
+                result.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
+    public boolean updateStatus(int orderId, String status) {
+        String sql = "UPDATE users SET status = ? WHERE id = ?";
+        try {
+            PreparedStatement pst = DBConnect.get(sql);
+            pst.setString(1, status);
+            pst.setInt(2, orderId);
+            return pst.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
 
 
