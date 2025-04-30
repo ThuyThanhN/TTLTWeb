@@ -1,0 +1,69 @@
+
+/* Section chứa kết quả giao dịch */
+.transaction-result {
+    text-align: center;
+    margin-top: 50px;
+    min-height: 300px;
+}
+
+#wrapper {
+    min-height: 800px;
+}
+
+/* Container cho biểu tượng */
+.icon-container {
+    margin-bottom: 20px;
+}
+
+/* Kiểu cho biểu tượng */
+.transaction-icon {
+    width: 120px;
+    height: 120px;
+}
+
+/* Kiểu cho các thông báo kết quả giao dịch */
+.result {
+    font-weight: bold;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.success {
+    color: #28a745; /* Màu xanh cho giao dịch thành công */
+}
+
+.failure {
+    color: #dc3545; /* Màu đỏ cho giao dịch thất bại */
+}
+
+.processing {
+    color: #ffc107; /* Màu vàng cho trạng thái đang xử lý */
+}
+
+/* Kiểu cho các thông báo bổ sung */
+.p.payment-result {
+    font-size: 18px;
+    margin-top: 15px;
+}
+
+/* Kiểu cho nút quay về trang chủ */
+.button-container.payment-result {
+    margin-top: 30px;
+}
+
+.btn.payment-result {
+    padding: 10px 20px;
+    font-size: 16px;
+    text-decoration: none;
+    border-radius: 5px;
+    display: inline-block;
+    color: #fff;
+}
+
+.btn-home.payment-result {
+    background-color: #007bff; /* Màu xanh cho nút quay về trang chủ */
+}
+
+.btn-home.payment-result:hover {
+    background-color: #0056b3; /* Màu khi hover */
+}

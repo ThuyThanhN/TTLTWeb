@@ -151,4 +151,21 @@ public class OrderDetailDao {
             return false;
         }
     }
+
+    public float getOrderPriceByOrderId(int id) {
+        String sql = "SELECT price FROM orderdetails WHERE idOrder=?";
+        float price = 0;
+        try {
+            PreparedStatement pst = DBConnect.get(sql);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
+            while(rs.next()) {
+                price += rs.getFloat("price");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return price;
+    }
 }

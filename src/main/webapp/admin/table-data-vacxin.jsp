@@ -31,6 +31,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Css   -->
     <link rel="stylesheet" href="../css/main_admin.css">
 </head>
@@ -95,7 +96,7 @@
                     <td><f:formatNumber value="${v.price}" type="number" pattern="#,##0"/>đ</td>
                     <td>
                         <!-- Nut sua -->
-                        <a href="updateVaccine?id=${v.id}"
+                        <a href="displayVaccine?id=${v.id}"
                            class="text-decoration-none edit-btn">
                             <img src="../image/edit.png" alt="Sửa" width="22" height="22">
                         </a>
