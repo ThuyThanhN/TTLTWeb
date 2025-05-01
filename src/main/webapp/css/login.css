@@ -139,6 +139,76 @@ a {
     font-size: 20px; /* Kích thước biểu tượng */
     color: #333; /* Màu sắc biểu tượng */
 }
+.modal {
+    display: none; /* Mặc định modal bị ẩn */
+    position: fixed; /* Đặt modal cố định trên trang */
+    top: 50%; /* Đặt modal giữa trang */
+    left: 50%;
+    transform: translate(-50%, -50%); /* Đảm bảo modal nằm chính giữa màn hình */
+    background-color: transparent; /* Bỏ nền mờ */
+    width: 70%; /* Thay đổi để modal lớn hơn */
+    max-width: 1000px; /* Giới hạn chiều rộng tối đa của modal */
+    height: auto; /* Chiều cao tự động điều chỉnh */
+    z-index: 1050; /* Đảm bảo modal nằm trên các phần tử khác */
+}
+
+/* Modal content */
+.modal-content {
+    background-color: #ffffff; /* Màu nền trắng */
+    color: #333; /* Màu chữ */
+    border-radius: 8px; /* Bo góc modal content */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Bóng nhẹ */
+    padding: 30px; /* Thêm padding để nội dung không sát lề */
+    font-size: 18px; /* Cỡ chữ dễ đọc */
+}
+
+/* Modal header */
+.modal-header {
+    background-color: #007bff; /* Màu nền xanh dương */
+    color: white; /* Màu chữ trắng */
+    font-size: 22px; /* Cỡ chữ lớn hơn một chút */
+    padding: 15px;
+    border-radius: 8px 8px 0 0; /* Bo góc trên */
+    text-align: center;
+}
+
+/* Modal footer */
+.modal-footer {
+    display: flex;
+    justify-content: center; /* Căn giữa nút OK */
+    padding-top: 15px;
+}
+
+/* Nút OK */
+.modal-footer .btn-primary {
+    background-color: #007bff; /* Màu xanh cho nút OK */
+    color: white;
+    padding: 12px 40px; /* Tăng kích thước padding để nút lớn hơn */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px; /* Cỡ chữ trong nút OK */
+}
+
+/* Nút đóng modal "X" */
+.modal-header .btn-close {
+    background-color: #ff4d4d; /* Màu đỏ cho nút đóng */
+    color: white;
+    font-size: 20px;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Hiệu ứng hover cho các nút */
+.modal-footer .btn-primary:hover {
+    background-color: #0056b3; /* Màu tối hơn khi hover */
+}
+
+.modal-header .btn-close:hover {
+    background-color: #e60000; /* Màu đỏ đậm khi hover */
+}
+
 
 /* Responsive điều chỉnh */
 /*Khi màn hình < 768px( chiều rộng phổ biến của nhiều loại thiết bị)*/

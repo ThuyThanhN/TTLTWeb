@@ -7,6 +7,10 @@
         <error-code>404</error-code>
         <location>/error404.jsp</location>
     </error-page>
+    <error-page>
+        <error-code>403</error-code>
+        <location>/error403.jsp</location>
+    </error-page>
     <servlet>
         <servlet-name>PaymentVNPAY</servlet-name>
         <servlet-class>com.example.provide_vaccine_services.Service.vnpay.ajaxServlet</servlet-class>

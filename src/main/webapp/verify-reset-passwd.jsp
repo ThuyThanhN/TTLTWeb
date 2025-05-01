@@ -46,12 +46,9 @@
                     </p>
                     <% } %>
                 </div>
-
                 <button type="submit" class="btn-edit">Xác nhận</button>
-
             </div>
         </form>
-
     </div>
     <!-- Footer -->
     <jsp:include page="footer.jsp"></jsp:include>
@@ -74,7 +71,6 @@
         });
     });
 </script>
-
 <script src="js/verify-reset-passwd.js"></script>
 </body>
 </html>

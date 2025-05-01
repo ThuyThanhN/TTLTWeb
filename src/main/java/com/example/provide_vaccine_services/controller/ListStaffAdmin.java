@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet(name = "ListStaffAdmin", value = "/admin/table-data-staff")
 public class ListStaffAdmin extends HttpServlet {
@@ -20,7 +21,7 @@ public class ListStaffAdmin extends HttpServlet {
 
         // Lấy danh sách nhân viên
         UserDao userDao = new UserDao();
-        List<Users> staffs = userDao.getAllByStaff();
+        List<Map<String, Object>> staffs = userDao.getAllByStaff();
 
         request.setAttribute("staffs", staffs);
         request.getRequestDispatcher("table-data-staff.jsp").forward(request, response);

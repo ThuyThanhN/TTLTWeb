@@ -86,6 +86,7 @@ public class OrderDao {
         try {
             String sqlOrder = "SELECT o.id AS order_id, " +
                     "p.fullname AS patient_name, " +
+                    "c.name AS center_name, " +
                     "o.appointmentDate AS appointment_date, " +
                     "o.appointmentTime AS appointment_time, " +
                     "SUM(COALESCE(v.price, vp.totalPrice) * od.quantityOrder) AS total_price, " +
@@ -94,6 +95,7 @@ public class OrderDao {
                     "FROM orders o " +
                     "JOIN patients p ON o.idPatient = p.id " +
                     "JOIN orderdetails od ON o.id = od.idOrder " +
+                    "JOIN centers c ON o.idCenter = c.id " +
                     "LEFT JOIN vaccines v ON od.idVaccine = v.id " +
                     "LEFT JOIN vaccinepackages vp ON od.idPackage = vp.id " +
                     "GROUP BY o.id, p.fullname, o.appointmentDate, o.appointmentTime, o.status";
@@ -105,6 +107,7 @@ public class OrderDao {
                 Map<String, Object> orderData = new HashMap<>();
                 orderData.put("order_id", rsOrder.getInt("order_id"));
                 orderData.put("patient_name", rsOrder.getString("patient_name"));
+                orderData.put("center_name", rsOrder.getString("center_name"));
                 orderData.put("appointment_date", rsOrder.getDate("appointment_date"));
                 orderData.put("appointment_time", rsOrder.getString("appointment_time"));
                 orderData.put("total_price", rsOrder.getFloat("total_price"));
