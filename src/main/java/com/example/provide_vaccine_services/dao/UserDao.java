@@ -620,6 +620,12 @@ public class UserDao {
         return isValid;  // Trả về true nếu token hợp lệ, false nếu không hợp lệ
     }
 
+    public void insertFBUser(Users user) {
+        System.out.println("thêm người dùng");
+        System.out.println(user.getFullname());
+        System.out.println(user.getEmail());
+
+    }
 }
 
 

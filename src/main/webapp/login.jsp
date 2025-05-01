@@ -88,9 +88,18 @@
               <a class="authentication-button google" href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid&redirect_uri=http://localhost:8080/provide_vaccine_services_war/login?provider=google&response_type=code&client_id=737894268831-9ab6vfskfnv7pfoh1i7nnagpmmau67oi.apps.googleusercontent.com&approval_prompt=force">
                   <i class="fa fa-google" aria-hidden="true"></i>
               </a>
-              <%--                <a class="authentication-button facebook" href="https://www.facebook.com/v19.0/dialog/oauth?fields=id,name,email&client_id=1610596812975790&redirect_uri=http://localhost:8080/provide_vaccine_services_war/login?provider=facebook&scope=email">--%>
-              <%--                    <i class="fa fa-facebook-official" aria-hidden="true"></i>--%>
-              <%--                </a>--%>
+              <!-- Nút đăng nhập Facebook -->
+              <button type="button" onclick="fbLogin()" class="btn btn-primary w-100" style="background:#4267B2; border:none;">
+                  <i class="fab fa-facebook-f"></i> Đăng nhập bằng Facebook
+              </button>
+
+              <!-- Form ẩn để gửi data Facebook user lên servlet -->
+              <form id="fbLoginForm" action="facebookLogin" method="POST" style="display:none;">
+                  <input type="hidden" name="fbUserId" id="fbUserId" />
+                  <input type="hidden" name="fbUserName" id="fbUserName" />
+                  <input type="hidden" name="fbUserEmail" id="fbUserEmail" />
+              </form>
+
           </div>
       </div>
   </div>
@@ -98,6 +107,8 @@
   <jsp:include page="footer.jsp"></jsp:include>
 </div>
 <script src = "js/login.js"></script>
+<script src="js/login-facebook.js"></script>
+
 </body>
 </html>
 
