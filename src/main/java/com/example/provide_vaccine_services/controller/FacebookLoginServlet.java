@@ -16,9 +16,8 @@ public class FacebookLoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String fbUserId = request.getParameter("fbUserId");
         String fbUserName = request.getParameter("fbUserName");
-        String fbUserEmail = request.getParameter("fbUserEmail");
+        String fbUserEmail = request.getParameter("fbUserId");
 
         UserDao userDao = new UserDao();
         Users user = null;
