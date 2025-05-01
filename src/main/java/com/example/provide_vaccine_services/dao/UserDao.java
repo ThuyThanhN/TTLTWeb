@@ -625,6 +625,41 @@ public class UserDao {
         System.out.println(user.getFullname());
         System.out.println(user.getEmail());
 
+        int result = 0;
+        try {
+            String sql = "INSERT INTO users (fullname, gender, identification, dateOfBirth, address, province, district, ward, phone, email, password, role, status, facebookId) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            PreparedStatement pst = DBConnect.get(sql);
+
+            // Gán giá trị. Các trường không có thông tin Facebook thì để rỗng hoặc mặc định.
+            pst.setString(1, user.getFullname() != null ? user.getFullname() : "");
+            pst.setString(2, user.getGender() != null ? user.getGender() : "");
+            pst.setString(3, user.getIdentification() != null ? user.getIdentification() : "");
+            pst.setDate(4, user.getDateOfBirth() != null ? user.getDateOfBirth() : new Date(System.currentTimeMillis())); // hoặc null tùy DB
+            pst.setString(5, user.getAddress() != null ? user.getAddress() : "");
+            pst.setString(6, user.getProvince() != null ? user.getProvince() : "");
+            pst.setString(7, user.getDistrict() != null ? user.getDistrict() : "");
+            pst.setString(8, user.getWard() != null ? user.getWard() : "");
+            pst.setString(9, user.getPhone() != null ? user.getPhone() : "");
+            pst.setString(10, user.getEmail()); // email bắt buộc phải có
+            pst.setString(11, "");
+            pst.setInt(12, user.getRole()); // thường role = 0 (khách)  1 (staff)
+            pst.setInt(13, 1); // status = 1 (active)
+            pst.setInt(14,  user.getFacebookId() != null ? user.getFacebookId() : -1); // nếu không có thì set id = -1
+
+            result = pst.executeUpdate();
+
+            if (result > 0) {
+                System.out.println("Thêm user Facebook thành công");
+            } else {
+                System.out.println("Thêm user Facebook thất bại");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 }
 
