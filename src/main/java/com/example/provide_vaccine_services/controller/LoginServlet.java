@@ -109,13 +109,19 @@ public class LoginServlet extends HttpServlet {
             return;  // Dừng lại để không tiếp tục kiểm tra trạng thái và vai trò
         }
 
-
         // Kiểm tra trạng thái xác thực của tài khoản
         if (user.getStatus() == 0) {
             // Nếu chưa xác thực, hiển thị modal yêu cầu xác thực và gửi email
             if (request.getHeader("X-Requested-With") != null) {
                 response.getWriter().write("not_verified");  // Gửi phản hồi cho AJAX để xử lý modal
                 sendActivationEmail(user.getEmail()); // Gửi email xác thực
+            }
+            return;  // Dừng lại, không tiếp tục đăng nhập
+        } else if (user.getStatus() == -1) {
+            // Nếu tài khoản bị khóa, hiển thị modal thông báo tài khoản bị khóa và gửi email
+            if (request.getHeader("X-Requested-With") != null) {
+                response.getWriter().write("lockAccount");  // Trả về phản hồi cho AJAX để hiển thị modal
+                sendActivationEmail(user.getEmail());  // Gửi email xác thực
             }
             return;  // Dừng lại, không tiếp tục đăng nhập
         }
