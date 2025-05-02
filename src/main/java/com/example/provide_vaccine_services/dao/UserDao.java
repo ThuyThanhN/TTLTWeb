@@ -624,6 +624,8 @@ public class UserDao {
         System.out.println("thêm người dùng");
         System.out.println(user.getFullname());
         System.out.println(user.getEmail());
+        System.out.println(user.getFacebookId());
+
 
         int result = 0;
         try {
@@ -646,7 +648,7 @@ public class UserDao {
             pst.setString(11, "");
             pst.setInt(12, user.getRole()); // thường role = 0 (khách)  1 (staff)
             pst.setInt(13, 1); // status = 1 (active)
-            pst.setInt(14,  user.getFacebookId() != null ? user.getFacebookId() : -1); // nếu không có thì set id = -1
+            pst.setLong(14,  user.getFacebookId() != null ? user.getFacebookId() : -1); // nếu không có thì set id = -1
 
             result = pst.executeUpdate();
 
@@ -659,6 +661,41 @@ public class UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+    }
+
+    public Users getUserByFaceBookId(String fbUserId) {
+
+        String sql = "SELECT * FROM users WHERE facebookId = ?";
+        try (PreparedStatement pst = DBConnect.get(sql)) {
+
+            pst.setString(1, fbUserId);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                Users user = new Users();
+                user.setId(rs.getInt("id"));
+                user.setFullname(rs.getString("fullname"));
+                user.setGender(rs.getString("gender"));
+                user.setIdentification(rs.getString("identification"));
+                user.setDateOfBirth(rs.getDate("dateOfBirth"));
+                user.setAddress(rs.getString("address"));
+                user.setProvince(rs.getString("province"));
+                user.setDistrict(rs.getString("district"));
+                user.setWard(rs.getString("ward"));
+                user.setPhone(rs.getString("phone"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(rs.getInt("role"));
+                user.setStatus(rs.getInt("status"));
+                user.setFacebookId(rs.getLong("facebookId"));
+
+                return user;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // Trả về null nếu không tìm thấy
 
     }
 }

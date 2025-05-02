@@ -18,14 +18,14 @@ public class FacebookLoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String fbUserId = request.getParameter("fbUserId");
         String fbUserName = request.getParameter("fbUserName");
-        String fbUserEmail = request.getParameter("fbUserEmail");
+        String fbUserEmail = request.getParameter("fbEmail");
 
         UserDao userDao = new UserDao();
         Users user = null;
 
         // Tìm user theo fbUserId hoặc fbUserEmail
-        if (fbUserEmail != null && !fbUserEmail.isEmpty()) {
-            user = userDao.getUserByEmail(fbUserEmail);
+        if (fbUserId != null && !fbUserId.isEmpty()) {
+            user = userDao.getUserByFaceBookId(fbUserId);
         }
         if (user == null) {
             // Nếu chưa có user, tạo mới
@@ -34,6 +34,8 @@ public class FacebookLoginServlet extends HttpServlet {
             user.setEmail(fbUserEmail);
             user.setRole(0); // user thường
             user.setStatus(1); // mặc định là đã xác thực nếu qua FB
+            Long facebookId = Long.parseLong(fbUserId);
+            user.setFacebookId(facebookId);
             userDao.insertFBUser(user);
         }
 

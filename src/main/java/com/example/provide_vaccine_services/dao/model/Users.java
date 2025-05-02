@@ -18,7 +18,7 @@ public class Users implements Serializable {
     private String password;
     private int role;
     private int status;
-    private Integer facebookId;
+    private Long facebookId;
 
     // Constructor không có id (dùng khi chèn người dùng mới và id được tự động tạo)
     public Users(String fullname, String gender, String identification, Date dateOfBirth,
@@ -200,11 +200,11 @@ public class Users implements Serializable {
         this.status = status;
     }
 
-    public Integer getFacebookId() {
+    public Long getFacebookId() {
         return facebookId;
     }
 
-    public void setFacebookId(Integer facebookId) {
+    public void setFacebookId(Long facebookId) {
         this.facebookId = facebookId;
     }
 
