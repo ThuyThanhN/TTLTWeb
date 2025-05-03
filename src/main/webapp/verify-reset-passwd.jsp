@@ -21,6 +21,8 @@
     </div>
     <!-- Content -->
     <div class="main-content">
+        <!-- Mũi tên quay lại -->
+        <i class="fas fa-arrow-left back-arrow" onclick="window.location.href='reset-password';"></i>
         <h1 class="welcome-message">Xác thực mã OTP</h1>
         <form action="verify-reset-passwd" method="post">
             <div class="info-card">

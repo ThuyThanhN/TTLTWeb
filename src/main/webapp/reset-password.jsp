@@ -21,6 +21,7 @@
     </div>
     <!-- Content -->
     <div class="main-content">
+        <i class="fas fa-arrow-left back-arrow" onclick="window.location.href='index';"></i>
         <h1 class="welcome-message">Lấy lại mật khẩu</h1>
         <%-- Hiển thị thông báo lỗi nếu có --%>
         <% if (request.getAttribute("error") != null) { %>
