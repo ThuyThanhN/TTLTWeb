@@ -44,7 +44,9 @@
                 <p style="margin-top: 15px; font-size: 14px; color: #333;">
                     Chúng tôi sẽ gửi mã xác nhận đặt lại mật khẩu thông qua email.
                 </p>
-                <button type="submit" class="btn-edit">Gửi Mã</button>
+                <button type="submit" class="btn-edit">
+                    <span>Gửi Mã</span> <!-- Văn bản "Gửi Mã" sẽ bị ẩn khi loading -->
+                </button>
             </div>
 
         </form>
@@ -55,21 +57,5 @@
 
 
 <script src="js/reset-password.js"></script>
-<script>
-    // Kiểm tra định dạng email phía client
-    document.querySelector("form").addEventListener("submit", function (e) {
-        const emailField = document.getElementById("email");
-        const errorMessage = document.getElementById("error-message");
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!emailRegex.test(emailField.value)) {
-            e.preventDefault(); // Ngăn gửi form
-            errorMessage.textContent = "Vui lòng nhập email hợp lệ.";
-            errorMessage.style.display = "block";
-        } else {
-            errorMessage.style.display = "none";
-        }
-    });
-</script>
 </body>
 </html>
