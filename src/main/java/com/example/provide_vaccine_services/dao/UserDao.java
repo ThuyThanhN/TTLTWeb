@@ -590,7 +590,7 @@ public class UserDao {
                 user.setEmail(rs.getString("email"));
                 user.setPassword(rs.getString("password"));
                 user.setRole(rs.getInt("role"));
-                user.setStatus(rs.getInt("status"));  
+                user.setStatus(rs.getInt("status"));
 
                 return user;
             }

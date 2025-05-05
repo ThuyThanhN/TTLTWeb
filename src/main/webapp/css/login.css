@@ -108,17 +108,6 @@ a {
     background-color: #c1351d; /* Màu đậm hơn khi hover */
 }
 
-/* Nút Zalo */
-.authentication-button.zalo {
-    width: 40px; /* Chiều rộng */
-    height: 40px; /* Chiều cao */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #1877f2; /* Màu xanh Zalo */
-    border-radius: 50%;
-
-}
 
 .authentication-button.facebook:hover {
     background-color: #0d5bbf; /* Màu đậm hơn khi hover */
@@ -139,76 +128,102 @@ a {
     font-size: 20px; /* Kích thước biểu tượng */
     color: #333; /* Màu sắc biểu tượng */
 }
+/* Modal Styles */
 .modal {
-    display: none; /* Mặc định modal bị ẩn */
-    position: fixed; /* Đặt modal cố định trên trang */
-    top: 50%; /* Đặt modal giữa trang */
-    left: 50%;
-    transform: translate(-50%, -50%); /* Đảm bảo modal nằm chính giữa màn hình */
-    background-color: transparent; /* Bỏ nền mờ */
-    width: 70%; /* Thay đổi để modal lớn hơn */
-    max-width: 1000px; /* Giới hạn chiều rộng tối đa của modal */
-    height: auto; /* Chiều cao tự động điều chỉnh */
-    z-index: 1050; /* Đảm bảo modal nằm trên các phần tử khác */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Màu nền tối */
+    z-index: 1050;
+    justify-content: center;
+    align-items: center;
+    display: none; /* Đặt mặc định là không hiển thị */
 }
 
-/* Modal content */
+/* Hiển thị modal khi cần thiết */
+.modal:not(.hidden) {
+    display: flex; /* Hiển thị modal */
+}
+
+/* Phần thân modal */
+.modal-dialog {
+    max-width: 500px;
+    margin: 15px auto;
+}
+
+/* Nội dung của modal */
 .modal-content {
-    background-color: #ffffff; /* Màu nền trắng */
-    color: #333; /* Màu chữ */
-    border-radius: 8px; /* Bo góc modal content */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Bóng nhẹ */
-    padding: 30px; /* Thêm padding để nội dung không sát lề */
-    font-size: 18px; /* Cỡ chữ dễ đọc */
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
 }
 
-/* Modal header */
+/* Tiêu đề modal */
 .modal-header {
-    background-color: #007bff; /* Màu nền xanh dương */
-    color: white; /* Màu chữ trắng */
-    font-size: 22px; /* Cỡ chữ lớn hơn một chút */
-    padding: 15px;
-    border-radius: 8px 8px 0 0; /* Bo góc trên */
-    text-align: center;
-}
-
-/* Modal footer */
-.modal-footer {
     display: flex;
-    justify-content: center; /* Căn giữa nút OK */
-    padding-top: 15px;
+    justify-content: space-between;
+    align-items: center;
 }
 
-/* Nút OK */
-.modal-footer .btn-primary {
-    background-color: #007bff; /* Màu xanh cho nút OK */
-    color: white;
-    padding: 12px 40px; /* Tăng kích thước padding để nút lớn hơn */
+.modal-footer {
+    text-align: right;
+}
+
+.modal-title {
+    margin: 0;
+    font-size: 18px;
+}
+
+/* Nút đóng modal (X) */
+.btn-close {
+    background: transparent;
     border: none;
-    border-radius: 5px;
+    font-size: 24px;
     cursor: pointer;
-    font-size: 16px; /* Cỡ chữ trong nút OK */
 }
 
-/* Nút đóng modal "X" */
-.modal-header .btn-close {
-    background-color: #ff4d4d; /* Màu đỏ cho nút đóng */
-    color: white;
-    font-size: 20px;
-    padding: 5px;
+/* Modal body */
+.modal-body {
+    padding: 20px;
+}
+
+/* Khi modal hiển thị, hiển thị nút đóng */
+.modal .btn-close {
+    font-size: 24px;
+}
+/* Nút đăng nhập - hiệu ứng xoay */
+/* Nút đăng nhập - hiệu ứng xoay */
+.btn-loading {
+    position: relative;
+    pointer-events: none;  /* Vô hiệu hóa tương tác khi đang tải */
+    display: inline-flex;  /* Sử dụng inline-flex để căn chỉnh các phần tử con theo chiều ngang */
+    align-items: center;  /* Căn giữa các phần tử theo chiều dọc */
+    justify-content: center; /* Căn giữa chữ "Đăng nhập" */
+}
+
+/* Định dạng vòng xoay */
+.btn-loading .spinner {
+    margin-left: 10px;  /* Thêm khoảng cách giữa chữ "Đăng nhập" và vòng xoay */
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
     border-radius: 50%;
-    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
 }
 
-/* Hiệu ứng hover cho các nút */
-.modal-footer .btn-primary:hover {
-    background-color: #0056b3; /* Màu tối hơn khi hover */
+/* Định nghĩa chuyển động xoay */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
-.modal-header .btn-close:hover {
-    background-color: #e60000; /* Màu đỏ đậm khi hover */
+/* Ẩn vòng xoay khi chưa kích hoạt */
+.spinner {
+    display: none;
 }
-
 
 /* Responsive điều chỉnh */
 /*Khi màn hình < 768px( chiều rộng phổ biến của nhiều loại thiết bị)*/
@@ -239,7 +254,6 @@ a {
     .login-container .login-options {
         gap: 10px;
     }
-}
 
 /*Khi màn hình < 480x(chiều rộng hợp lý cho các thiết bị cầm tay theo chiều dọc)*/
 @media (max-width: 480px) {
@@ -277,4 +291,4 @@ a {
     .header img {
         width: 80%;
     }
-}
+}}

@@ -96,37 +96,51 @@ public class LoginServlet extends HttpServlet {
         // Gọi UserDao để kiểm tra thông tin đăng nhập
         UserDao userDao = new UserDao();
         Users user = userDao.checkLogin(username, password);
-        System.out.println("Status của tài khoản: " + user.getStatus()); // Kiểm tra giá trị status
 
-        if (user != null) {
-            // Kiểm tra trạng thái xác thực của tài khoản
-            if (user.getStatus() == 0) {
-//                 Nếu chưa xác thực, hiển thị modal yêu cầu xác thực và gửi email
-                request.setAttribute("modalMessage", "Tài khoản chưa được xác thực. Một email xác thực đã được gửi đến bạn.");
-                sendActivationEmail(user.getEmail()); // Gửi email xác thực
+        // Kiểm tra nếu người dùng không tồn tại
+        if (user == null) {
+            // Nếu không tìm thấy người dùng, đăng nhập thất bại
+            if (request.getHeader("X-Requested-With") != null) {
+                response.getWriter().write("error");  // Trả về lỗi khi gọi AJAX
+            } else {
+                request.setAttribute("error", "Tên đăng nhập hoặc mật khẩu không đúng!");
                 request.getRequestDispatcher("login.jsp").forward(request, response);
-                return;
             }
+            return;  // Dừng lại để không tiếp tục kiểm tra trạng thái và vai trò
+        }
 
-            // Nếu trạng thái = 1 (đã xác thực), tiếp tục đăng nhập thành công
-            HttpSession session = request.getSession();
-            session.setAttribute("user", user); // Lưu thông tin người dùng vào session
 
-            // Giới hạn thời gian session (ví dụ: 30 phút)
-            session.setMaxInactiveInterval(30 * 60); // 30 phút
+        // Kiểm tra trạng thái xác thực của tài khoản
+        if (user.getStatus() == 0) {
+            // Nếu chưa xác thực, hiển thị modal yêu cầu xác thực và gửi email
+            if (request.getHeader("X-Requested-With") != null) {
+                response.getWriter().write("not_verified");  // Gửi phản hồi cho AJAX để xử lý modal
+                sendActivationEmail(user.getEmail()); // Gửi email xác thực
+            }
+            return;  // Dừng lại, không tiếp tục đăng nhập
+        }
 
-            // Kiểm tra vai trò và chuyển hướng trang
+
+        // Nếu trạng thái = 1 (đã xác thực), tiếp tục đăng nhập thành công
+        HttpSession session = request.getSession();
+        session.setAttribute("user", user); // Lưu thông tin người dùng vào session
+
+        // Giới hạn thời gian session (ví dụ: 30 phút)
+        session.setMaxInactiveInterval(30 * 60); // 30 phút
+
+        // Kiểm tra vai trò và chuyển hướng trang
+        if (request.getHeader("X-Requested-With") != null) {
             if (user.getRole() == 1) {
-                // Vai trò admin
-                response.sendRedirect("admin/dashboard");
+                response.getWriter().write("admin/dashboard");  // Chuyển hướng cho AJAX
             } else if (user.getRole() == 0) {
-                // Vai trò người dùng thường
-                response.sendRedirect("index");
+                response.getWriter().write("index");  // Chuyển hướng cho AJAX
             }
         } else {
-            // Đăng nhập thất bại, quay lại login.jsp với thông báo lỗi
-            request.setAttribute("error", "Tên đăng nhập hoặc mật khẩu không đúng!");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            if (user.getRole() == 1) {
+                response.sendRedirect("admin/dashboard");
+            } else if (user.getRole() == 0) {
+                response.sendRedirect("index");
+            }
         }
     }
 
