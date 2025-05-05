@@ -684,8 +684,6 @@ public class UserDao {
         return isValid;  // Trả về true nếu token hợp lệ, false nếu không hợp lệ
     }
 
-
-
     public boolean lockAccount(int userId) {
         try {
             String sql = "UPDATE users SET status = -1 WHERE id = ?";
@@ -693,6 +691,19 @@ public class UserDao {
             pst.setInt(1, userId);
             return pst.executeUpdate() > 0;
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updateStatus(int orderId, String status) {
+        String sql = "UPDATE users SET status = ? WHERE id = ?";
+        try {
+            PreparedStatement pst = DBConnect.get(sql);
+            pst.setString(1, status);
+            pst.setInt(2, orderId);
+            return pst.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
