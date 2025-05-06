@@ -24,7 +24,7 @@
         <a href="index"><img src="image/logo.png" alt="Logo" class="img-responsive"></a>
     </div>
     <div class="form-container">
-        <h3 class="text-center mt-2">Đăng ký</h3>
+        <h5 class="mt-2">ĐĂNG KÝ</h5>
         <div class="text-center" style="color: #8F8F8F; font-size: 15px;">Đăng ký để tạo và truy cập ứng dụng của
             bạn
         </div>
