@@ -20,6 +20,10 @@ chatbotToggle.onclick = () => {
     } else {
         chatbot.style.display = 'flex';
         input.focus();
+
+        if (messages.children.length === 0) {
+            addMessage("Chào bạn! Tôi có thể giúp gì cho bạn hôm nay?", 'bot');
+        }
     }
 };
 

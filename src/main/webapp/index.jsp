@@ -223,8 +223,12 @@
     </div>
     <div id="chatbot">
         <div id="chatbot-header">Hỗ trợ trực tuyến</div>
-        <div id="chatbot-messages"></div>
+        <div id="chatbot-messages">
+
+        </div>
         <div id="chatbot-input">
+            <input type="text" id="chatbot-text" placeholder="Nhập câu hỏi...">
+            <button id="chatbot-send">Gửi</button>
         </div>
     </div>
     </div>
