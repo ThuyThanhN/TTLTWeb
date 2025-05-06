@@ -165,7 +165,7 @@ input::placeholder {
     padding: 0.5em;
     background-color: #f1f1f3;
 }
-#backtop, #facebook-icon {
+#backtop, #facebook-icon, #chatbot-toggle {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -185,6 +185,10 @@ input::placeholder {
 }
 #facebook-icon {
     bottom: 40px;
+}
+
+#chatbot-toggle {
+    bottom: 160px;
 }
 
 @media (max-width: 992px) {
@@ -230,4 +234,58 @@ input::placeholder {
         width: 10px;
         height: 10px;
     }
+}
+
+#chatbot {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 300px;
+    max-height: 400px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    font-family: Arial, sans-serif;
+    display: none;
+    flex-direction: column;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    z-index: 10000;
+}
+#chatbot-header {
+    background: #007bff;
+    color: white;
+    padding: 10px;
+    font-weight: bold;
+}
+#chatbot-messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    border-bottom: 1px solid #ddd;
+}
+#chatbot-input {
+    display: flex;
+}
+#chatbot-input input {
+    flex: 1;
+    border: none;
+    padding: 10px;
+    font-size: 14px;
+}
+#chatbot-input button {
+    border: none;
+    background: #007bff;
+    color: white;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.message {
+    margin-bottom: 10px;
+}
+.message.bot {
+    color: #007bff;
+}
+.message.user {
+    text-align: right;
 }

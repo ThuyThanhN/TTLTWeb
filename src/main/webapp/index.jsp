@@ -221,6 +221,16 @@
             <path d="M2.37373 9.70711C1.98321 10.0976 1.35004 10.0976 0.959519 9.70711C0.568995 9.31658 0.568995 8.68342 0.959519 8.29289L2.37373 9.70711ZM9.66663 1L8.95952 0.292893C9.35004 -0.0976308 9.98321 -0.0976307 10.3737 0.292894L9.66663 1ZM18.3737 8.29289C18.7643 8.68342 18.7643 9.31658 18.3737 9.70711C17.9832 10.0976 17.35 10.0976 16.9595 9.70711L18.3737 8.29289ZM10.6666 21C10.6666 21.5523 10.2189 22 9.66663 22C9.11434 22 8.66663 21.5523 8.66663 21L10.6666 21ZM0.959519 8.29289L8.95952 0.292893L10.3737 1.70711L2.37373 9.70711L0.959519 8.29289ZM10.3737 0.292894L18.3737 8.29289L16.9595 9.70711L8.95952 1.70711L10.3737 0.292894ZM10.6666 1L10.6666 21L8.66663 21L8.66663 1L10.6666 1Z" fill="#222222"></path>
         </svg>
     </div>
+    <div id="chatbot">
+        <div id="chatbot-header">Hỗ trợ trực tuyến</div>
+        <div id="chatbot-messages"></div>
+        <div id="chatbot-input">
+        </div>
+    </div>
+    </div>
+    <div id="chatbot-toggle" title="Chat với chúng tôi">
+        <img src="image/facebook_64.png" width="48" height="48">
+    </div>
 
     <div id="facebook-icon">
         <a href="https://www.facebook.com/kcntt.nlu?mibextid=ZbWKwL">
@@ -231,4 +241,6 @@
 </body>
 <script src="js/index.js"></script>
 <script src="js/show_navbarNav.js"></script>
+<script src="js/chatbot.js"></script>
+
 </html>
