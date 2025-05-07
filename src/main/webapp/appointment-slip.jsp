@@ -11,6 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <!--    bootstrap -->
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/appointment-slip.css">
@@ -39,18 +40,34 @@
                 <c:if test="${empty vaccines}">
                 </c:if>
             </p>
-            <p><strong>Ngày tiêm: </strong>${order.appointmentDate != null ? order.appointmentDate : "Chưa có thông tin"}</p>
+
+            <c:if test="${order.appointmentDate != null}">
+                <fmt:parseDate value="${order.appointmentDate}" var="parsedDate" pattern="yyyy-MM-dd" />
+                <p><strong>Ngày tiêm: </strong><fmt:formatDate value="${parsedDate}" pattern="dd/MM/yyyy"/></p>
+            </c:if>
+            <c:if test="${order.appointmentDate == null}">
+                <p><strong>Ngày tiêm: </strong>Chưa có thông tin</p>
+            </c:if>
             <p><strong>Giờ tiêm: </strong>${order.appointmentTime != null ? order.appointmentTime : "Chưa có thông tin"}</p>
         </div>
         <div class="appointmentSlip-details">
-            <h4>Trạm Y Tế ${center.name != null ? center.name : "Chưa có thông tin"}</h4>
+            <h4> ${center.name != null ? center.name : "Chưa có thông tin"}</h4>
             <p>Địa Chỉ: ${center.address != null ? center.address : "Chưa có thông tin"}</p>
             <form action="payment" method="post">
                 <div class="info-row">
                     Họ và tên người tiêm: <span class="value">${patient.fullname != null ? patient.fullname : "Chưa có thông tin"}</span>
                 </div>
                 <div class="info-row">
-                    Ngày sinh: <span class="value">${patient.dateOfBirth != null ? patient.dateOfBirth : "Chưa có thông tin"}</span>
+                    Ngày sinh:
+                    <c:choose>
+                        <c:when test="${patient.dateOfBirth != null}">
+                            <fmt:parseDate value="${patient.dateOfBirth}" var="dateObj" pattern="yyyy-MM-dd" />
+                            <fmt:formatDate value="${dateObj}" pattern="dd/MM/yyyy" />
+                        </c:when>
+                        <c:otherwise>
+                            Chưa có thông tin
+                        </c:otherwise>
+                    </c:choose>
                 </div>
                 <div class="info-row">
                     Họ và tên người liên hệ:
@@ -83,7 +100,6 @@
             </form>
         </div>
     </div>
-
     <!-- Phần footer -->
     <jsp:include page="footer.jsp"></jsp:include>
 </div>

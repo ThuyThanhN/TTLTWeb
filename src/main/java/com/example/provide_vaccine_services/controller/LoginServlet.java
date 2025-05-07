@@ -11,13 +11,18 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+
 @WebServlet(name = "LoginServlet", value = "/login")
 public class LoginServlet extends HttpServlet {
+    // Khởi tạo logger cho lớp TestService
+    private static final Logger LOGGER = LogManager.getLogger(LoginServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -25,54 +30,44 @@ public class LoginServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         UserDao userDao = new UserDao();
 
-
-        /**
-         *
-         * cách hoạt động của Oauth
-         *
-         * sau khi đăng nhập bên thứ 3 sẽ trả về code & provider đăng nhập ghi người dùng đăng nhập Oauth ( sẽ là null nếu không đăng nhạp oauth )
-         * ví dụ: code = FNAFJKS... provider = "google", "facebook"
-         *
-         * sử dụng code đó để lấy được
-         *  + ACCESS_TOKEN: truy cập vào dữ liệu người dùng của bên thứ 3
-         *
-         * bên thứ 3 sẽ kiểm tra ACCESS_TOKEN có hợp lệ hay không. nếu có thì trả về dữ liệu người dùng
-         *
-         */
+        // Lấy thông tin code và provider từ request
         String code = request.getParameter("code");
         String provider = request.getParameter("provider");
 
-
-        // nếu không có code => trả về trang login và kết thúc.
+        // Ghi log thông báo khi người dùng truy cập trang login
+        LOGGER.info("moved to login page");
+        // Nếu không có code => trả về trang login và kết thúc.
         if (code == null || code.isEmpty()) {
+            LOGGER.info("No OAuth code received, redirecting to login page.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
 
-        // lấy dữ liệu người dùng bằng code và provider tương ứng
+        // Lấy dữ liệu người dùng bằng code và provider tương ứng
         Users authUser = authenticateUser(code, provider);
         if (authUser == null) {
+            // Nếu không xác thực được người dùng, ghi log lỗi và chuyển hướng
+            LOGGER.error("Failed to authenticate user with code: {} and provider: {}", code, provider);
             session.setAttribute("error", "login.jsp?error=invalid_auth");
             return;
         }
 
-        /**
-         *  kiểm tra xem user có tồn tại trong DB chưa
-         *
-         *  + nếu có => lấy thông tin người dùng đó và đăng nhập
-         *  + nếu chưa => tạo người dùng mới lưu vào database
-         *
-         */
+        // Kiểm tra xem user có tồn tại trong DB chưa
         Users user = userDao.getUserByEmail(authUser.getEmail());
         if (user == null) {
-            authUser.setRole(0);
+            // Nếu không có, tạo mới người dùng và lưu vào database
+            LOGGER.info("New user detected. Creating new user with email: {}", authUser.getEmail());
+            authUser.setRole(0); // Thiết lập vai trò mặc định là người dùng thường
             userDao.insertGGUser(authUser);
             user = authUser;
+        } else {
+            // Nếu đã tồn tại, ghi log thông báo
+            LOGGER.info("User found in database: {}", user.getEmail());
         }
 
-
-        // lưu ngươi dùng vào session
+        // Lưu người dùng vào session
         session.setAttribute("user", user);
+        LOGGER.info("User {} logged in successfully, redirecting to the appropriate dashboard.", user.getEmail());
 
         // Kiểm tra vai trò và chuyển hướng trang
         if (user.getRole() == 1) {

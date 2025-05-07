@@ -1,0 +1,12 @@
+2025-05-07 23:59:35 [] [http-nio-8080-exec-4] INFO  com.example.provide_vaccine_services.controller.LoginServlet - User is attempting to log in with OAuth, provider: null
+2025-05-07 23:59:35 [] [http-nio-8080-exec-4] INFO  com.example.provide_vaccine_services.controller.LoginServlet - User is attempting to log in with OAuth, provider: null
+2025-05-07 23:59:35 [] [http-nio-8080-exec-4] INFO  com.example.provide_vaccine_services.controller.LoginServlet - No OAuth code received, redirecting to login page.
+2025-05-07 23:59:35 [] [http-nio-8080-exec-4] INFO  com.example.provide_vaccine_services.controller.LoginServlet - No OAuth code received, redirecting to login page.
+2025-05-08 00:01:56 [] [http-nio-8080-exec-6] INFO  com.example.provide_vaccine_services.controller.LoginServlet - moved to login page
+2025-05-08 00:01:56 [] [http-nio-8080-exec-6] INFO  com.example.provide_vaccine_services.controller.LoginServlet - moved to login page
+2025-05-08 00:01:56 [] [http-nio-8080-exec-6] INFO  com.example.provide_vaccine_services.controller.LoginServlet - No OAuth code received, redirecting to login page.
+2025-05-08 00:01:56 [] [http-nio-8080-exec-6] INFO  com.example.provide_vaccine_services.controller.LoginServlet - No OAuth code received, redirecting to login page.
+2025-05-08 00:10:57 [] [http-nio-8080-exec-4] INFO  com.example.provide_vaccine_services.controller.LoginServlet - moved to login page
+2025-05-08 00:10:57 [] [http-nio-8080-exec-4] INFO  com.example.provide_vaccine_services.controller.LoginServlet - moved to login page
+2025-05-08 00:10:57 [] [http-nio-8080-exec-4] INFO  com.example.provide_vaccine_services.controller.LoginServlet - No OAuth code received, redirecting to login page.
+2025-05-08 00:10:57 [] [http-nio-8080-exec-4] INFO  com.example.provide_vaccine_services.controller.LoginServlet - No OAuth code received, redirecting to login page.
