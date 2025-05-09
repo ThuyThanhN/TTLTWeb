@@ -10,3 +10,45 @@
 2025-05-08 00:10:57 [] [http-nio-8080-exec-4] INFO  com.example.provide_vaccine_services.controller.LoginServlet - moved to login page
 2025-05-08 00:10:57 [] [http-nio-8080-exec-4] INFO  com.example.provide_vaccine_services.controller.LoginServlet - No OAuth code received, redirecting to login page.
 2025-05-08 00:10:57 [] [http-nio-8080-exec-4] INFO  com.example.provide_vaccine_services.controller.LoginServlet - No OAuth code received, redirecting to login page.
+2025-05-08 23:10:41 [] [http-nio-8080-exec-10] INFO  com.example.provide_vaccine_services.controller.LoginServlet - nguoi dung truy cap trang login
+2025-05-08 23:10:41 [] [http-nio-8080-exec-10] INFO  com.example.provide_vaccine_services.controller.LoginServlet - nguoi dung truy cap trang login
+2025-05-09 00:09:06 [] [http-nio-8080-exec-7] INFO  com.example.provide_vaccine_services.controller.LoginServlet - nguoi dung truy cap trang login
+2025-05-09 00:09:06 [] [http-nio-8080-exec-7] INFO  com.example.provide_vaccine_services.controller.LoginServlet - nguoi dung truy cap trang login
+2025-05-09 02:03:02 [] [] [http-nio-8080-exec-4] INFO  com.example.provide_vaccine_services.controller.LoginServlet - nguoi dung truy cap trang login
+2025-05-09 02:05:34 [] [] [http-nio-8080-exec-4] INFO  com.example.provide_vaccine_services.controller.LoginServlet - nguoi dung truy cap trang login
+2025-05-09 11:55:48 [] [] [http-nio-8080-exec-4] INFO  com.example.provide_vaccine_services.controller.LoginServlet - nguoi dung truy cap trang login
+2025-05-09 11:58:59 [] [] [http-nio-8080-exec-4] INFO  com.example.provide_vaccine_services.controller.LoginServlet - moved to login page
+2025-05-09 11:58:59 [] [] [http-nio-8080-exec-4] INFO  com.example.provide_vaccine_services.controller.LoginServlet - No OAuth code received, redirecting to login page.
+2025-05-09 12:21:26 [] [] [http-nio-8080-exec-7] INFO  com.example.provide_vaccine_services.controller.LoginServlet - moved to login page
+2025-05-09 12:21:26 [] [] [http-nio-8080-exec-7] INFO  com.example.provide_vaccine_services.controller.LoginServlet - No OAuth code received, redirecting to login page.
+2025-05-09 12:24:07 [] [] [http-nio-8080-exec-6] INFO  com.example.provide_vaccine_services.controller.LoginServlet - moved to login page
+2025-05-09 12:24:07 [] [] [http-nio-8080-exec-6] INFO  com.example.provide_vaccine_services.controller.LoginServlet - No OAuth code received, redirecting to login page.
+2025-05-09 13:17:04 [http-nio-8080-exec-12] INFO  com.example.provide_vaccine_services.controller.LoginServlet - User: null | IP: 0:0:0:0:0:0:0:1 - moved to login page
+2025-05-09 13:17:04 [http-nio-8080-exec-12] INFO  com.example.provide_vaccine_services.controller.LoginServlet - No OAuth code received, redirecting to login page.
+2025-05-09 14:49:00 [http-nio-8080-exec-17] INFO  com.example.provide_vaccine_services.controller.LoginServlet - User: null | IP: 0:0:0:0:0:0:0:1 - moved to login page
+2025-05-09 14:49:00 [http-nio-8080-exec-17] INFO  com.example.provide_vaccine_services.controller.LoginServlet - No OAuth code received, redirecting to login page.
+2025-05-09 14:53:26 [http-nio-8080-exec-11] INFO  com.example.provide_vaccine_services.controller.LoginServlet - User: null | IP: 0:0:0:0:0:0:0:1 - moved to login page
+2025-05-09 14:53:26 [http-nio-8080-exec-11] INFO  com.example.provide_vaccine_services.controller.LoginServlet - No OAuth code received, redirecting to login page.
+2025-05-09 15:03:19 [http-nio-8080-exec-24] INFO  com.example.provide_vaccine_services.controller.LoginServlet - User: null | IP: 0:0:0:0:0:0:0:1 - moved to login page
+2025-05-09 15:03:19 [http-nio-8080-exec-24] INFO  com.example.provide_vaccine_services.controller.LoginServlet - No OAuth code received, redirecting to login page.
+2025-05-09 15:05:39 [http-nio-8080-exec-31] INFO  com.example.provide_vaccine_services.controller.LoginServlet - User: null | IP: 0:0:0:0:0:0:0:1 - moved to login page
+2025-05-09 15:05:39 [http-nio-8080-exec-31] INFO  com.example.provide_vaccine_services.controller.LoginServlet - No OAuth code received, redirecting to login page.
+2025-05-09 15:05:40 [http-nio-8080-exec-27] ERROR com.example.provide_vaccine_services.controller.LoginServlet - Failed login attempt for username: 72 | IP: 0:0:0:0:0:0:0:1
+2025-05-09 15:05:42 [http-nio-8080-exec-32] ERROR com.example.provide_vaccine_services.controller.LoginServlet - Failed login attempt for username: 72 | IP: 0:0:0:0:0:0:0:1
+2025-05-09 15:05:44 [http-nio-8080-exec-29] ERROR com.example.provide_vaccine_services.controller.LoginServlet - Failed login attempt for username: 72 | IP: 0:0:0:0:0:0:0:1
+2025-05-09 15:05:44 [http-nio-8080-exec-21] ERROR com.example.provide_vaccine_services.controller.LoginServlet - Failed login attempt for username: 72 | IP: 0:0:0:0:0:0:0:1
+2025-05-09 15:05:44 [http-nio-8080-exec-33] ERROR com.example.provide_vaccine_services.controller.LoginServlet - Failed login attempt for username: 72 | IP: 0:0:0:0:0:0:0:1
+2025-05-09 15:05:44 [http-nio-8080-exec-35] ERROR com.example.provide_vaccine_services.controller.LoginServlet - Failed login attempt for username: 72 | IP: 0:0:0:0:0:0:0:1
+2025-05-09 15:21:36 [http-nio-8080-exec-46] INFO  com.example.provide_vaccine_services.controller.LoginServlet - User: null | IP: 0:0:0:0:0:0:0:1 - moved to login page
+2025-05-09 15:21:36 [http-nio-8080-exec-46] INFO  com.example.provide_vaccine_services.controller.LoginServlet - No OAuth code received, redirecting to login page.
+2025-05-09 15:21:39 [http-nio-8080-exec-45] ERROR com.example.provide_vaccine_services.controller.LoginServlet - Failed login attempt for username: 72 | IP: 0:0:0:0:0:0:0:1
+2025-05-09 15:23:06 [http-nio-8080-exec-50] INFO  com.example.provide_vaccine_services.controller.LoginServlet - User: null | IP: 0:0:0:0:0:0:0:1 - moved to login page
+2025-05-09 15:23:06 [http-nio-8080-exec-50] INFO  com.example.provide_vaccine_services.controller.LoginServlet - No OAuth code received, redirecting to login page.
+2025-05-09 15:23:07 [http-nio-8080-exec-51] ERROR com.example.provide_vaccine_services.controller.LoginServlet - Failed login attempt for username: 72 | IP: 0:0:0:0:0:0:0:1
+2025-05-09 15:24:59 [http-nio-8080-exec-54] ERROR com.example.provide_vaccine_services.controller.LoginServlet - Failed login attempt for username: 32 | IP: 0:0:0:0:0:0:0:1
+2025-05-09 15:28:24 [http-nio-8080-exec-57] ERROR com.example.provide_vaccine_services.controller.LoginServlet - Failed login attempt for username: 32 | IP: 0:0:0:0:0:0:0:1
+2025-05-09 15:28:50 [http-nio-8080-exec-50] INFO  com.example.provide_vaccine_services.controller.LoginServlet - User: 0703035425 | IP: 0:0:0:0:0:0:0:1 - User sss logged in successfully, redirecting to the homepage.
+2025-05-09 15:43:52 [http-nio-8080-exec-70] INFO  com.example.provide_vaccine_services.controller.LoginServlet - User: null | IP: 0:0:0:0:0:0:0:1 - moved to login page
+2025-05-09 15:43:52 [http-nio-8080-exec-70] INFO  com.example.provide_vaccine_services.controller.LoginServlet - No OAuth code received, redirecting to login page.
+2025-05-09 15:43:54 [http-nio-8080-exec-71] ERROR com.example.provide_vaccine_services.controller.LoginServlet - Failed login attempt for username: 72 | IP: 0:0:0:0:0:0:0:1
+2025-05-09 15:44:03 [http-nio-8080-exec-72] INFO  com.example.provide_vaccine_services.controller.LoginServlet - User: 0703035425 | IP: 0:0:0:0:0:0:0:1 - User sss logged in successfully, redirecting to the homepage.

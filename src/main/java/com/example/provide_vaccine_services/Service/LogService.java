@@ -3,33 +3,31 @@ package com.example.provide_vaccine_services.Service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+
+
 public class LogService {
 
     // Khởi tạo logger
     private static final Logger LOGGER = LogManager.getLogger(LogService.class);
 
-    // Ghi log mức độ INFO
-    public static void LogInfo(String message) {
-        LOGGER.info(message);
+    // Hàm ghi log với thông tin tên tài khoản và địa chỉ IP
+    public static void LogInfo(String message, String userName, String userIp) {
+        LOGGER.info("User: {} | IP: {} - {}", userName, userIp, message);
     }
 
-    // Ghi log mức độ ERROR
-    public static void LogError(String message) {
-        LOGGER.error(message);
+    public static void LogError(String message, String userName, String userIp) {
+        LOGGER.error("User: {} | IP: {} - {}", userName, userIp, message);
     }
 
-    // Ghi log mức độ WARNING
-    public static void LogWarning(String message) {
-        LOGGER.warn(message);
+    public static void LogWarning(String message, String userName, String userIp) {
+        LOGGER.warn("User: {} | IP: {} - {}", userName, userIp, message);
     }
 
-    // Ghi log mức độ DEBUG
-    public static void LogDebug(String message) {
-        LOGGER.debug(message);
+    public static void LogDebug(String message, String userName, String userIp) {
+        LOGGER.debug("User: {} | IP: {} - {}", userName, userIp, message);
     }
 
-    // Ghi log mức độ TRACE
-    public static void LogTrace(String message) {
-        LOGGER.trace(message);
+    public static void LogTrace(String message, String userName, String userIp) {
+        LOGGER.trace("User: {} | IP: {} - {}", userName, userIp, message);
     }
 }

@@ -34,8 +34,14 @@ public class LoginServlet extends HttpServlet {
         String code = request.getParameter("code");
         String provider = request.getParameter("provider");
 
+        // Lấy thông tin người dùng và IP từ request/session
+        String userName = (String) session.getAttribute("user"); // Giả sử bạn lưu thông tin người dùng vào session
+        String ip = request.getRemoteAddr(); // Lấy địa chỉ IP của người dùng
+
         // Ghi log thông báo khi người dùng truy cập trang login
-        LOGGER.info("moved to login page");
+        LOGGER.info("User: {} | IP: {} - moved to login page", userName, ip);
+
+
         // Nếu không có code => trả về trang login và kết thúc.
         if (code == null || code.isEmpty()) {
             LOGGER.info("No OAuth code received, redirecting to login page.");
@@ -56,18 +62,14 @@ public class LoginServlet extends HttpServlet {
         Users user = userDao.getUserByEmail(authUser.getEmail());
         if (user == null) {
             // Nếu không có, tạo mới người dùng và lưu vào database
-            LOGGER.info("New user detected. Creating new user with email: {}", authUser.getEmail());
             authUser.setRole(0); // Thiết lập vai trò mặc định là người dùng thường
             userDao.insertGGUser(authUser);
             user = authUser;
         } else {
-            // Nếu đã tồn tại, ghi log thông báo
-            LOGGER.info("User found in database: {}", user.getEmail());
         }
 
         // Lưu người dùng vào session
-        session.setAttribute("user", user);
-        LOGGER.info("User {} logged in successfully, redirecting to the appropriate dashboard.", user.getEmail());
+        session.setAttribute("user", authUser.getEmail()); // Lưu lại email hoặc user vào session
 
         // Kiểm tra vai trò và chuyển hướng trang
         if (user.getRole() == 1) {
@@ -75,7 +77,10 @@ public class LoginServlet extends HttpServlet {
             response.sendRedirect("admin/dashboard");
         } else if (user.getRole() == 0) {
             // Vai trò người dùng thường
+            // Ghi log khi người dùng được chuyển hướng tới trang index
+            LOGGER.info("User: {} | IP: {} - Redirecting to the user dashboard (index page).", userName, ip);
             response.sendRedirect("index");
+
         }
     }
 
@@ -94,6 +99,7 @@ public class LoginServlet extends HttpServlet {
 
         // Kiểm tra nếu người dùng không tồn tại
         if (user == null) {
+            LOGGER.error("Failed login attempt for username: {} | IP: {}", username, request.getRemoteAddr()); // Log khi đăng nhập sai
             // Nếu không tìm thấy người dùng, đăng nhập thất bại
             if (request.getHeader("X-Requested-With") != null) {
                 response.getWriter().write("error");  // Trả về lỗi khi gọi AJAX
@@ -123,18 +129,22 @@ public class LoginServlet extends HttpServlet {
         // Giới hạn thời gian session (ví dụ: 30 phút)
         session.setMaxInactiveInterval(30 * 60); // 30 phút
 
+        // Ghi log khi đăng nhập thành công
+        if (user.getRole() == 1) {
+            // Log cho admin
+            LOGGER.info("Admin User: {} | IP: {} - Admin {} logged in successfully, redirecting to the admin dashboard.", username, request.getRemoteAddr(), user.getEmail());
+        } else {
+            // Log cho người dùng thường
+            LOGGER.info("User: {} | IP: {} - User {} logged in successfully, redirecting to the homepage.", username, request.getRemoteAddr(), user.getEmail());
+        }
+
         // Kiểm tra vai trò và chuyển hướng trang
         if (request.getHeader("X-Requested-With") != null) {
             if (user.getRole() == 1) {
                 response.getWriter().write("admin/dashboard");  // Chuyển hướng cho AJAX
             } else if (user.getRole() == 0) {
+
                 response.getWriter().write("index");  // Chuyển hướng cho AJAX
-            }
-        } else {
-            if (user.getRole() == 1) {
-                response.sendRedirect("admin/dashboard");
-            } else if (user.getRole() == 0) {
-                response.sendRedirect("index");
             }
         }
     }

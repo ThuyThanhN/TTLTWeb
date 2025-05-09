@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
     <Appenders>
         <!-- Ghi log ra console -->
@@ -7,18 +6,9 @@
         </Console>
 
         <!-- Ghi log vào file -->
-        <File name="FileLogger" fileName="D:\ajax-login\TTLTWeb-ajax-login\logs\app.log">
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%X{user}] [%t] %-5level %logger{36} - %msg%n"/>
-        </File>
-
-        <!-- Quay vòng log -->
-        <RollingFile name="RollingFileLogger" fileName="D:\ajax-login\TTLTWeb-ajax-login\logs\app.log"
-                     filePattern="logs/$${date:yyyy-MM-dd}/app-%d{MM-dd-yyyy}.log">
+        <File name="FileLogger" fileName="D:/ajax-login/TTLTWeb-ajax-login/logs/app.log">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
-            <Policies>
-                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
-            </Policies>
-        </RollingFile>
+        </File>
     </Appenders>
 
     <Loggers>
@@ -26,12 +16,6 @@
         <Root level="info">
             <AppenderRef ref="Console"/>
             <AppenderRef ref="FileLogger"/>
-            <AppenderRef ref="RollingFileLogger"/>
         </Root>
-
-        <!-- Logger cho các lớp cụ thể -->
-        <Logger name="com.example" level="debug">
-            <AppenderRef ref="FileLogger"/>
-        </Logger>
     </Loggers>
 </Configuration>
