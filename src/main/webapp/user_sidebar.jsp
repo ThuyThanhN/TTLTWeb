@@ -1,14 +1,33 @@
+<%@ page import="com.example.provide_vaccine_services.dao.model.Users" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Title</title>
 </head>
 <body>
+<%
+    // Lấy thông tin người dùng từ session
+    Users user = (Users) session.getAttribute("user");
+    if (user == null) {
+        // Nếu người dùng chưa đăng nhập, chuyển hướng đến trang đăng nhập
+        response.sendRedirect("login.jsp");
+        return;
+    }
+
+    // Lấy thông báo thành công từ session
+    String successMessage = (String) session.getAttribute("successMessage");
+    if (successMessage != null) {
+        session.removeAttribute("successMessage");
+%>
+<div class="alert alert-success" role="alert">
+    <%= successMessage %>
+</div>
+<% } %>
 <div class="sidebar">
     <div class="profile-card">
         <img src="image/avatar1.png" alt="Avatar" class="profile-image">
-        <h2 id="sidebar-username" class="sidebar-username">Anh Tiến</h2>
-        <p>0703035425</p>
+        <h2 id="sidebar-username" class="sidebar-username"><%= user.getFullname() %></h2>
+        <p><%= user.getPhone() %></p>
     </div>
     <ul class="menu">
         <li>

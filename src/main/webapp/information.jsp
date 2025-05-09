@@ -1,5 +1,6 @@
 <%@ page import="com.example.provide_vaccine_services.dao.model.Users" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -79,7 +80,7 @@
                         </div>
                         <div class="item-info">
                             <span class="label">Ngày sinh:</span>
-                            <span class="value"><%= user.getDateOfBirth() %></span>
+                            <span class="value"><f:formatDate value="${user.dateOfBirth}" pattern="dd-MM-yyyy" /></span>
                         </div>
                         <div class="item-info">
                             <span class="label">Địa chỉ:</span>
