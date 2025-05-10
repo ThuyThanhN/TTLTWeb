@@ -30,35 +30,35 @@ h1 {
 
 .btn-edit {
     display: block;
-    margin: 20px auto; /* Auto giúp căn giữa */
-    padding: 10px 20px;
-    background-color: #2a388f;
-    color: #fff;
+    min-width: 48px;
+    height: 48px;
+    margin: 20px auto;
+    padding: 12px 24px;
+    background-color: #eaeffa;
+    color: #2a388f;
     border: none;
-    border-radius: 5px;
+    border-radius: 50px;
     cursor: pointer;
     font-size: 16px;
     text-align: center;
+    font-weight: 500;
 }
-
-.btn-edit:hover {
-    background: #4d63a6;
-}
-
 .sidebar {
     width: 40%;
-    background-color: #fff;
-    padding: 20px;
+    height: 650px;
     border-radius: 8px;
     min-width: 250px;
     margin-right: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary {
     color: #fff;
     background-color: #2a388f;
     border-color: #0d6efd;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 50px;
 }
 /* Đảm bảo container của dropdown có position: relative để căn chỉnh dropdown menu đúng */
 .dropdown {
@@ -151,54 +151,60 @@ h1 {
 }
 
 .label {
-    font-weight: 600;
+    color: #4a4f63;
     font-size: 16px;
-    color: #555;
-    min-width: 150px; /* Đảm bảo phần nhãn không quá hẹp */
+    min-width: 100px; /* Đảm bảo phần nhãn không quá hẹp */
     text-align: left; /* Để nhãn luôn thẳng bên trái */
 }
 
 .value {
+    font-weight: 500;
     font-size: 16px;
     color: #333;
     text-align: right; /* Căn nội dung về bên phải */
-    flex-grow: 1; /* Giúp nội dung co giãn linh hoạt */
     word-break: break-word; /* Ngắt từ nếu quá dài */
 }
 
 .menu {
+    height: 68%;
+    background: #fff;
+    border-radius: 8px;
     list-style: none;
-    margin-top: 20px;
     padding: 0;
 }
 
-.menu li {
-    margin: 10px 0;
-}
+/*.menu li {*/
+/*    margin: 10px 0;*/
+/*}*/
 
 .menu li a {
     color: #333;
     text-decoration: none;
     display: block;
     padding: 10px;
-    border-radius: 8px;
     font-size: 16px;
 }
-
 .menu li i {
     margin-right: 5px;
 }
 
-.menu li a.active, .menu li a:hover {
+.menu li a.active {
     background-color: #dbe9ff;
     color: #337ab7;
     font-weight: 600;
+    border-left: 2px #1250dc solid;
 }
+
+/*.menu li a.active, .menu li a:hover {*/
+/*    background-color: #dbe9ff;*/
+/*    color: #337ab7;*/
+/*    font-weight: 600;*/
+/*    border-left: 2px var(--blue-500) solid;*/
+/*}*/
 
 /* Main content styling */
 .main-content {
     width: 60%;
-    padding: 20px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -309,10 +315,41 @@ form.bg-light {
     background: linear-gradient(90deg, #2a388f, #68aaf6, rgba(170, 229, 236, 0.73));
     color: white;
 }
+.title {
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 600;
+    color: #020b27;
+}
+#edit-form .form-label {
+    margin-top: 8px;
+    font-size: 12px;
+    color: #3D3D3D;
+    text-transform: uppercase;
+    font-weight: 500;
+    line-height: 24px;
+    display: block;
+}
+.scrollable {
+    max-height: 400px;
+    overflow-y: scroll;
+}
 
+.scrollable::-webkit-scrollbar {
+    display: none;
+}
+#edit-form .form-control {
+    width: 100%;
+    height: 45px;
+    padding: 8px;
+    border-radius: 8px !important;
+    background-color: #FAFAFA !important;
+    border: 1px solid #DEDEDE;
+    color: #4B5563 !important;
+    position: relative;
+}
 @media (max-width: 1024px) {
     .main-content {
-        padding: 30px;
         width: 100%;
     }
 
