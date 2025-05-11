@@ -18,8 +18,9 @@ a {
 /*Content*/
 .authentication-group {
     display: flex;
-    justify-content: space-evenly;
-    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
 }
 
 
@@ -100,14 +101,25 @@ a {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #db4437; /* Màu đỏ Google */
     border-radius: 50%;
+    outline: solid 1px #ad9b9b38;
+
 }
 
 .authentication-button.google:hover {
-    background-color: #c1351d; /* Màu đậm hơn khi hover */
+    background-color: #b9b8b866; /* Màu đậm hơn khi hover */
 }
 
+/* Nút Zalo */
+.authentication-button.facebook {
+    width: 40px; /* Chiều rộng */
+    height: 40px; /* Chiều cao */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    outline: solid 1px #ad9b9b38;
+}
 
 .authentication-button.facebook:hover {
     background-color: #0d5bbf; /* Màu đậm hơn khi hover */
@@ -255,40 +267,41 @@ a {
         gap: 10px;
     }
 
-/*Khi màn hình < 480x(chiều rộng hợp lý cho các thiết bị cầm tay theo chiều dọc)*/
-@media (max-width: 480px) {
-    .login-container h2 {
-        font-size: 22px;
+    /*Khi màn hình < 480x(chiều rộng hợp lý cho các thiết bị cầm tay theo chiều dọc)*/
+    @media (max-width: 480px) {
+        .login-container h2 {
+            font-size: 22px;
+        }
+
+        .login-container .login-form {
+            padding: 15px; /* Thêm padding để giữ form không sát lề */
+            box-shadow: none;
+        }
+
+        .login-container .input-group label {
+            font-size: 14px;
+        }
+
+        .login-container .input-group input {
+            height: 32px;
+            font-size: 13px;
+        }
+
+        .login-container button {
+            height: 32px;
+            font-size: 14px;
+        }
+
+        .login-container .login-options {
+            gap: 8px;
+            font-size: 13px;
+        }
     }
 
-    .login-container .login-form {
-        padding: 15px; /* Thêm padding để giữ form không sát lề */
-        box-shadow: none;
-    }
-
-    .login-container .input-group label {
-        font-size: 14px;
-    }
-
-    .login-container .input-group input {
-        height: 32px;
-        font-size: 13px;
-    }
-
-    .login-container button {
-        height: 32px;
-        font-size: 14px;
-    }
-
-    .login-container .login-options {
-        gap: 8px;
-        font-size: 13px;
+    /*Khi màn hình < 320px*/
+    @media (max-width: 320px) {
+        .header img {
+            width: 80%;
+        }
     }
 }
-
-/*Khi màn hình < 320px*/
-@media (max-width: 320px) {
-    .header img {
-        width: 80%;
-    }
-}}
