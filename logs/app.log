@@ -156,3 +156,5 @@
 2025-05-11 23:11:53 [http-nio-8080-exec-4] INFO  com.example.provide_vaccine_services.controller.LoginServlet - No OAuth code received, redirecting to login page.
 2025-05-11 23:12:03 [http-nio-8080-exec-5] INFO  com.example.provide_vaccine_services.controller.LoginServlet - User: null | IP: 0:0:0:0:0:0:0:1 - moved to login page
 2025-05-11 23:12:03 [http-nio-8080-exec-5] INFO  com.example.provide_vaccine_services.controller.LoginServlet - No OAuth code received, redirecting to login page.
+2025-05-11 23:12:51 [http-nio-8080-exec-6] INFO  com.example.provide_vaccine_services.controller.LoginServlet - User: null | IP: 0:0:0:0:0:0:0:1 - moved to login page
+2025-05-11 23:12:51 [http-nio-8080-exec-6] INFO  com.example.provide_vaccine_services.controller.LoginServlet - No OAuth code received, redirecting to login page.
