@@ -96,8 +96,12 @@
             <artifactId>fluent-hc</artifactId>
             <version>4.5.13</version>
         </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20210307</version>  <!-- Đây là phiên bản mới nhất tại thời điểm trả lời, bạn có thể kiểm tra phiên bản mới hơn nếu cần -->
+        </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
