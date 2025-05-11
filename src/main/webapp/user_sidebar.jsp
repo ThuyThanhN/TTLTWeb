@@ -34,28 +34,38 @@
     </div>
     <ul class="menu">
         <li>
-            <a href="information.jsp" class="<%= request.getRequestURI().contains("information.jsp") ? "active" : "" %>">
-                <img src="image/user.png" width="20" height="20" class="me-2"> Thông tin cá nhân
+            <a href="information.jsp" class="d-flex align-items-center <%= request.getRequestURI().contains("information.jsp") ? "active" : "" %>">
+                <img src="image/user.png" width="20" height="20" class="me-2">
+                Thông tin cá nhân
+                <i class="fa-solid fa-chevron-right ms-auto"></i>
             </a>
         </li>
         <li>
-            <a href="my-appointments" class="<%= request.getRequestURI().contains("my-appointments") ? "active" : "" %>">
-                <img src="image/syringe.png" width="20" height="20" class="me-2"> Lịch hẹn tiêm vắc xin
+            <a href="my-appointments" class="d-flex align-items-center <%= request.getRequestURI().contains("my-appointments") ? "active" : "" %>">
+                <img src="image/syringe.png" width="20" height="20" class="me-2">
+                Lịch hẹn tiêm vắc xin
+                <i class="fa-solid fa-chevron-right ms-auto"></i>
             </a>
         </li>
         <li>
-            <a href="changePassword">
-                <img src="image/key.png" width="20" height="20" class="me-2"> Đổi mật khẩu
+            <a href="changePassword" class="d-flex align-items-center">
+                <img src="image/key.png" width="20" height="20" class="me-2">
+                Đổi mật khẩu
+                <i class="fa-solid fa-chevron-right ms-auto"></i>
             </a>
         </li>
         <li>
-            <a href="#" data-bs-toggle="modal" data-bs-target="#lockAccountModal">
-                <img src="image/padlock.png" width="20" height="20" class="me-2"> Khóa tài khoản
+            <a href="#" data-bs-toggle="modal" data-bs-target="#lockAccountModal" class="d-flex align-items-center">
+                <img src="image/padlock.png" width="20" height="20" class="me-2">
+                Khóa tài khoản
+                <i class="fa-solid fa-chevron-right ms-auto"></i>
             </a>
         </li>
         <li>
-            <a href="logout">
-                <img src="image/enter.png" width="20" height="20" class="me-2"> Đăng xuất
+            <a href="logout" class="d-flex align-items-center">
+                <img src="image/enter.png" width="20" height="20" class="me-2">
+                Đăng xuất
+                <i class="fa-solid fa-chevron-right ms-auto"></i>
             </a>
         </li>
     </ul>

@@ -30,23 +30,59 @@
             <jsp:include page="user_sidebar.jsp"></jsp:include>
 
             <!-- Main Content -->
-            <div class="main-content">
-                <h1 class="text-center">Danh sách lịch hẹn</h1>
+            <div style="width: 60%">
                 <div class="appointment-grid">
                     <c:forEach var="o" items="${orders}">
+                        <%--                        <div class="appointment-card">--%>
+                        <%--                            <a href="appointment-slip?id=${o.order_id}">--%>
+                        <%--                                <ul style="color: #2A388F; font-size: 14px; font-weight: 500; float: right; margin-bottom: 0">--%>
+                        <%--                                    <li>${o.order_status}</li>--%>
+                        <%--                                    <li>${o.paymentStatus}</li>--%>
+                        <%--                                </ul>--%>
+                        <%--                                <img src="image/online-appointment1.png" alt="Hình ảnh phiếu hẹn">--%>
+                        <%--                                <p>Mã phiếu: <b>${o.order_id}</b></p>--%>
+                        <%--                                <p>Giá:<b><f:formatNumber value="${o.total_price}" type="number" pattern="#,##0"/>đ</b>--%>
+                        <%--                                </p>--%>
+                        <%--                                <p>Ngày hẹn: <b><f:formatDate value="${o.appointment_date}" pattern="dd-MM-yyyy"/></b>--%>
+                        <%--                                </p>--%>
+                        <%--                            </a>--%>
+                        <%--                        </div>--%>
+
                         <div class="appointment-card">
-                            <a href="appointment-slip?id=${o.order_id}">
-                                <ul style="color: #2A388F; font-size: 14px; font-weight: 500; float: right; margin-bottom: 0">
-                                    <li>${o.order_status}</li>
-                                    <li>${o.paymentStatus}</li>
-                                </ul>
-                                <img src="image/online-appointment1.png" alt="Hình ảnh phiếu hẹn">
-                                <p>Mã phiếu: <b>${o.order_id}</b></p>
-                                <p>Giá:<b><f:formatNumber value="${o.total_price}" type="number" pattern="#,##0"/>đ</b>
-                                </p>
-                                <p>Ngày hẹn: <b><f:formatDate value="${o.appointment_date}" pattern="dd-MM-yyyy"/></b>
-                                </p>
-                            </a>
+                            <div class="d-flex justify-content-between border-bottom pb-2">
+                                <div class="d-flex order_id">
+                                    <span><b>Mã phiếu:</b> ${o.order_id}</span>
+                                    <span class="dot-before appointment-date">
+                                            <b>Ngày hẹn: <f:formatDate value="${o.appointment_date}"
+                                                                       pattern="dd-MM-yyyy"/></b>
+                                        </span>
+                                </div>
+                                <div class="status ${o.order_status eq 'Chưa được duyệt' ? 'status-pending' : 'status-approved'}">
+                                        ${o.order_status}
+                                </div>
+
+                            </div>
+                            <div class="d-flex justify-content-between mt-2">
+                                <div>
+                                    <img src="image/report.png" alt="Hình ảnh phiếu hẹn">
+                                </div>
+                                <div>
+                                    <div style="color: #333; font-size: 14px">Tổng tiền: <span
+                                            class="price"><f:formatNumber value="${o.total_price}" type="number"
+                                                                          pattern="#,##0"/>đ</span></div>
+
+                                    <div class="text-end mt-1 status ${o.paymentStatus eq 'Chưa thanh toán' ? 'status-pending' : 'status-approved'}">
+                                        <img src="image/${o.paymentStatus eq 'Chưa thanh toán' ? 'remove' : 'checked'}.png"
+                                             alt="${o.paymentStatus}"
+                                             style="width: 16px; height: 16px; margin: 1px 3px 0 0">
+                                            ${o.paymentStatus}
+                                    </div>
+                                    <div class="d-flex mt-5">
+                                        <a href="appointment-slip?id=${o.order_id}" class="btn btn-detail ms-auto">Xem chi tiết</a>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </c:forEach>
                 </div>
