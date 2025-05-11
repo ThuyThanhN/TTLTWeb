@@ -87,7 +87,6 @@
                 </c:forEach>
             </div>
             <div class="d-flex gap-3">
-                <p> Tổng cộng: ${totalBill} vnd</p>
                 <%-- đặt thêm --%>
                 <div>
                     <a href="dosing_schedule">
@@ -102,8 +101,9 @@
             </div>
         </form>
         <%-- Thanh toán --%>
-        <form action="payment" method="post">
-            <button type="submit" class="btn btn-order"> Đặt và Thanh toán </button>
+        <p class="fs-3 mb-0">Tổng cộng: ${totalBill} vnd</p>
+        <form class="d-flex justify-content-start mt-4" action="payment" method="post">
+            <button type="submit" class="btn btn-payment ms-3">Thanh toán</button>
         </form>
     </div>
 </div>
