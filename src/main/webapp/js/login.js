@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const modal = document.getElementById('error-modal');
     const okButton = document.getElementById('ok-modal');
     const closeButton = document.getElementById('close-modal');
-    const errorMessage = document.getElementById('error-message');
+    const errorMessage = document.getElementById('error-message'); // Phần tử thông báo lỗi
     const loginForm = document.getElementById('login-form');
     const loginButton = document.getElementById('login-button'); // Nút đăng nhập
     const spinner = document.createElement('div');
@@ -56,11 +56,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 const response = xhr.responseText;
                 console.log('Server response:', response);
 
+                // Ẩn thông báo lỗi nếu có trước khi hiển thị thông báo mới
+                errorMessage.style.display = 'none';
+
                 // Kiểm tra nếu tài khoản chưa được xác thực
                 if (response === "not_verified") {
                     document.getElementById('modal-message').innerText = "Tài khoản chưa xác thực. Vui lòng kiểm tra email để xác thực tài khoản.";
                     modal.classList.remove('hidden'); // Mở modal
+                } else if (response === "locked") {
+                    // Nếu server trả về "locked", hiển thị thông báo khóa tài khoản
+                    errorMessage.style.display = 'block';  // Hiển thị phần tử thông báo
+                    errorMessage.innerHTML = 'Quá nhiều yêu cầu. Vui lòng thử lại sau.';
                 } else if (response === "error") {
+                    // Nếu đăng nhập sai nhưng chưa bị khóa
                     errorMessage.style.display = 'block';
                     errorMessage.innerHTML = 'Tên đăng nhập hoặc mật khẩu không đúng!';
                 } else if (response === "index" || response === "admin/dashboard") {

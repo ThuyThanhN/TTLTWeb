@@ -14,7 +14,8 @@
 
     <!-- Bootstrap CSS (Sửa lại, chỉ giữ 1 liên kết) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-
+        <!-- Thêm Font Awesome từ CDN -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <!-- Bootstrap JS (Sửa lại, chỉ giữ 1 liên kết) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
     <!--    font chữ-->
@@ -70,7 +71,9 @@
                         <div class="modal-header">
                             <h5 class="modal-title">Thông báo</h5>
                             <!-- Nút đóng modal -->
-                            <button type="button" class="btn-close" id="close-modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" id="close-modal" aria-label="Close">
+                                <i class="fas fa-times"></i> <!-- Dấu "x" từ Font Awesome -->
+                            </button>
                         </div>
                         <div class="modal-body">
                             <p id="modal-message">Tài khoản hoặc mật khẩu không chính xác.</p>
