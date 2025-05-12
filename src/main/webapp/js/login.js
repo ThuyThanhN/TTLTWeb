@@ -59,7 +59,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Kiểm tra nếu tài khoản chưa được xác thực
                 if (response === "not_verified") {
                     document.getElementById('modal-message').innerText = "Tài khoản chưa xác thực. Vui lòng kiểm tra email để xác thực tài khoản.";
-                    modal.classList.remove('hidden'); // Mở modal
+                    modal.classList.remove('hidden'); // Mở modal xác thực
+                } else if (response === "lockAccount") {
+                    // Hiển thị modal thông báo tài khoản bị khóa và yêu cầu kích hoạt lại
+                    document.getElementById('modal-message').innerText = "Tài khoản của bạn đã bị khóa. Vui lòng kiểm tra email để kích hoạt lại tài khoản.";
+                    modal.classList.remove('hidden'); // Mở modal xác thực
                 } else if (response === "error") {
                     errorMessage.style.display = 'block';
                     errorMessage.innerHTML = 'Tên đăng nhập hoặc mật khẩu không đúng!';
@@ -81,4 +85,5 @@ document.addEventListener('DOMContentLoaded', function () {
         // Gửi thông tin đăng nhập qua AJAX
         xhr.send('username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password));
     });
+
 });
