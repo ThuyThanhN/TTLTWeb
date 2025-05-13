@@ -1,5 +1,6 @@
 <%@ page import="com.example.provide_vaccine_services.dao.model.Users" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,46 +46,7 @@
     <div class="main">
         <div class="container">
             <!-- Sidebar -->
-            <div class="sidebar">
-                <div class="profile-card">
-                    <img src="image/avatar1.png" alt="Avatar" class="profile-image">
-                    <h2 class="sidebar-username"><%= user.getFullname() %></h2>
-                    <p><%= user.getPhone() %></p>
-                </div>
-                <ul class="menu">
-                    <li><a href="information.jsp" class="active"><i class="fa-regular fa-user"></i> Thông tin cá nhân</a></li>
-                    <li><a href="my-appointments"><i class="fa-solid fa-calendar-check"></i> Lịch hẹn tiêm vắc xin</a></li>
-                    <li><a href="changePassword"><i class="fa-solid fa-key"></i> Đổi mật khẩu</a></li>
-                    <li><a href="#" data-bs-toggle="modal" data-bs-target="#lockAccountModal"><i class="fas fa-user-lock"></i> Khóa tài khoản</a></li>
-                    <li><a href="logout"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
-                </ul>
-
-                <!-- Modal lock account -->
-                <div class="modal fade" id="lockAccountModal" tabindex="-1" aria-labelledby="lockAccountModalLabel"
-                     aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <form action="lockAccount" method="post">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="lockAccountModalLabel">Thông Báo Khóa Tài Khoản
-                                    </h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Đóng"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="text-center">Tài khoản của bạn sẽ bị khóa. <br> Bạn có chắc chắn muốn tiếp
-                                        tục?
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                                    <button type="submit" class="btn btn-danger">Xác Nhận</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <jsp:include page="user_sidebar.jsp"></jsp:include>
 
             <!-- Main Content -->
             <div class="main-content">
@@ -118,7 +80,7 @@
                         </div>
                         <div class="item-info">
                             <span class="label">Ngày sinh:</span>
-                            <span class="value"><%= user.getDateOfBirth() %></span>
+                            <span class="value"><f:formatDate value="${user.dateOfBirth}" pattern="dd-MM-yyyy" /></span>
                         </div>
                         <div class="item-info">
                             <span class="label">Địa chỉ:</span>

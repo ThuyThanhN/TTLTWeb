@@ -25,10 +25,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
           rel="stylesheet">
     <link rel="stylesheet" href="css/login.css">
-    <style>
-        /* Modal */
-
-    </style>
+  
 </head>
 <body>
 <div id="wrapper">
@@ -40,7 +37,7 @@
     <div class="login-container">
         <div class="login-form">
 
-            <form action="login" method="POST">
+            <form id="login-form" method="POST">
                 <h2>Đăng Nhập</h2>
 
                 <!-- Thông báo lỗi từ server -->

@@ -26,10 +26,11 @@ a {
     border-radius: 4px;
     margin-bottom: 20px;
 }
-.form-container h3 {
-    font-size: 30px;
-    color: #042026;
-    font-weight: 500;
+.form-container h5 {
+    font-weight: 800;
+    line-height: 22px;
+    color: #464E5F;
+    text-align: center;
 }
 .form-container #section-title {
     font-weight: bold;
