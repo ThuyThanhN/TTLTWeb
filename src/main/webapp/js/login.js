@@ -86,4 +86,18 @@ document.addEventListener('DOMContentLoaded', function () {
         xhr.send('username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password));
     });
 
+    const togglePasswordVisibility = (toggleButton, passwordInput) => {
+        if (toggleButton && passwordInput) {
+            toggleButton.addEventListener('click', function () {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            });
+        }
+    };
+
+    const togglePassword = document.querySelector('#togglePassword');
+    const passwordInput = document.querySelector('#password');
+    togglePasswordVisibility(togglePassword, passwordInput)
 });

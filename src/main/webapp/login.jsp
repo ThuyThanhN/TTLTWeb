@@ -25,10 +25,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
           rel="stylesheet">
     <link rel="stylesheet" href="css/login.css">
-    <style>
-        /* Modal */
-
-    </style>
 </head>
 <body>
 <div id="wrapper">
@@ -40,8 +36,8 @@
     <div class="login-container">
         <div class="login-form">
 
-            <form action="login" method="POST">
-                <h2>Đăng Nhập</h2>
+            <form id="login-form">
+                <h5>Đăng Nhập</h5>
 
                 <!-- Thông báo lỗi từ server -->
                 <div class="alert alert-danger" id="error-message" style="display:none;"></div>
@@ -53,8 +49,9 @@
                 </div>
                 <div class="input-group password-group">
                     <label for="password">Mật khẩu</label>
-                    <input type="password" id="password" name="password" required autocomplete="off"
+                    <input type="password" id="password" class="password" name="password" required autocomplete="off"
                            placeholder="Nhập mật khẩu">
+                    <i class="fa-solid fa-eye eye-icon" id="togglePassword"></i>
                 </div>
 
                 <!-- Tùy chọn đăng nhập -->
@@ -91,8 +88,8 @@
                 </div>
             </div>
 
-
-            <div class=" authentication-group pt-3">
+            <div class="mt-2 text-center mt-3" style="color: #9999A4; font-size: 14px; font-weight: 500">Hoặc Đăng nhập với tài khoản mạng xã hội</div>
+            <div class=" authentication-group">
                 <a class="authentication-button google"
                    href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid&redirect_uri=http://localhost:8080/provide_vaccine_services_war/login?provider=google&response_type=code&client_id=737894268831-9ab6vfskfnv7pfoh1i7nnagpmmau67oi.apps.googleusercontent.com&approval_prompt=force">
                     <img src="image/google.png">
