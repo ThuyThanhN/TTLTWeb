@@ -97,6 +97,17 @@ public class LoginServlet extends HttpServlet {
         String username = request.getParameter("username"); // email hoặc số điện thoại
         String password = request.getParameter("password");
 
+        // Lấy session hiện tại
+        HttpSession session = request.getSession();
+
+        // Kiểm tra nếu tài khoản bị khóa (kiểm tra thời gian khóa trong session)
+        Long lockTime = (Long) session.getAttribute("lockTime");
+        if (lockTime != null && System.currentTimeMillis() - lockTime < 60000) {
+            // Nếu thời gian khóa chưa hết 1 phút, trả về "locked"
+            response.getWriter().write("locked");
+            return;
+        }
+
         // Gọi UserDao để kiểm tra thông tin đăng nhập
         UserDao userDao = new UserDao();
         Users user = userDao.checkLogin(username, password);
@@ -104,46 +115,55 @@ public class LoginServlet extends HttpServlet {
         // Kiểm tra nếu người dùng không tồn tại
         if (user == null) {
             // Nếu không tìm thấy người dùng, đăng nhập thất bại
-            if (request.getHeader("X-Requested-With") != null) {
-                response.getWriter().write("error");  // Trả về lỗi khi gọi AJAX
+            Integer failedAttempts = (Integer) session.getAttribute("failedLoginAttempts");
+            if (failedAttempts == null) {
+                failedAttempts = 0;  // Nếu chưa có, khởi tạo là 0
+            }
+
+            // Tăng số lần đăng nhập sai
+            failedAttempts++;
+            session.setAttribute("failedLoginAttempts", failedAttempts);
+
+            // Kiểm tra nếu số lần đăng nhập sai vượt quá 5 lần
+            if (failedAttempts >= 5) {
+                // Lưu thời gian khóa vào session
+                session.setAttribute("lockTime", System.currentTimeMillis());
+                response.getWriter().write("locked");  // Trả về "locked" để yêu cầu người dùng thử lại sau 1 phút
             } else {
-                request.setAttribute("error", "Tên đăng nhập hoặc mật khẩu không đúng!");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
+                response.getWriter().write("error");  // Trả về lỗi khi gọi AJAX
             }
             return;  // Dừng lại để không tiếp tục kiểm tra trạng thái và vai trò
         }
 
         // Kiểm tra trạng thái xác thực của tài khoản
         if (user.getStatus() == 0) {
-            // Nếu chưa xác thực, hiển thị modal yêu cầu xác thực và gửi email
             if (request.getHeader("X-Requested-With") != null) {
                 response.getWriter().write("not_verified");  // Gửi phản hồi cho AJAX để xử lý modal
                 sendActivationEmail(user.getEmail()); // Gửi email xác thực
             }
-            return;  // Dừng lại, không tiếp tục đăng nhập
+            return;
         } else if (user.getStatus() == -1) {
-            // Nếu tài khoản bị khóa, hiển thị modal thông báo tài khoản bị khóa và gửi email
             if (request.getHeader("X-Requested-With") != null) {
                 response.getWriter().write("lockAccount");  // Trả về phản hồi cho AJAX để hiển thị modal
                 sendActivationEmail(user.getEmail());  // Gửi email xác thực
             }
-            return;  // Dừng lại, không tiếp tục đăng nhập
+            return;
         }
 
+        // Nếu đăng nhập thành công, reset số lần đăng nhập sai và thời gian khóa
+        session.setAttribute("failedLoginAttempts", 0);
+        session.removeAttribute("lockTime");
 
-        // Nếu trạng thái = 1 (đã xác thực), tiếp tục đăng nhập thành công
-        HttpSession session = request.getSession();
-        session.setAttribute("user", user); // Lưu thông tin người dùng vào session
-
-        // Giới hạn thời gian session (ví dụ: 30 phút)
+        // Lưu thông tin người dùng vào session
+        session.setAttribute("user", user);
         session.setMaxInactiveInterval(30 * 60); // 30 phút
 
         // Kiểm tra vai trò và chuyển hướng trang
         if (request.getHeader("X-Requested-With") != null) {
             if (user.getRole() == 1) {
-                response.getWriter().write("admin/dashboard");  // Chuyển hướng cho AJAX
+                response.getWriter().write("admin/dashboard");
             } else if (user.getRole() == 0) {
-                response.getWriter().write("index");  // Chuyển hướng cho AJAX
+                response.getWriter().write("index");
             }
         } else {
             if (user.getRole() == 1) {
@@ -153,6 +173,7 @@ public class LoginServlet extends HttpServlet {
             }
         }
     }
+
 
     // Phương thức gửi email xác thực
     private void sendActivationEmail(String email) {
