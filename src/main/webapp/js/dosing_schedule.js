@@ -164,3 +164,22 @@ radioButtons.forEach(button => {
         selectedLabel.classList.add('selected');
     });
 });
+
+const preferredDateInput = document.getElementById('preferred_date');
+
+preferredDateInput.addEventListener('change', function () {
+    const selectedDate = new Date(this.value);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Xóa giờ phút giây để so sánh chính xác
+
+    if (selectedDate < today) {
+        Swal.fire({
+            icon: 'warning',
+            text: 'Ngày hẹn tiêm không được nhỏ hơn ngày hôm nay!',
+            confirmButtonText: 'OK'
+        });
+
+        // Reset lại ô nhập ngày
+        this.value = '';
+    }
+});

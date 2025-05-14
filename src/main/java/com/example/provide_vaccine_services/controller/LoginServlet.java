@@ -11,18 +11,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-
 @WebServlet(name = "LoginServlet", value = "/login")
 public class LoginServlet extends HttpServlet {
-    // Khởi tạo logger cho lớp TestService
-    private static final Logger LOGGER = LogManager.getLogger(LoginServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -31,46 +26,57 @@ public class LoginServlet extends HttpServlet {
         UserDao userDao = new UserDao();
 
 
-        // Lấy thông tin code và provider từ request
+        /**
+         *
+         * cách hoạt động của Oauth
+         *
+         * sau khi đăng nhập bên thứ 3 sẽ trả về code & provider đăng nhập ghi người dùng đăng nhập Oauth ( sẽ là null nếu không đăng nhạp oauth )
+         * ví dụ: code = FNAFJKS... provider = "google", "facebook"
+         *
+         * sử dụng code đó để lấy được
+         *  + ACCESS_TOKEN: truy cập vào dữ liệu người dùng của bên thứ 3
+         *
+         * bên thứ 3 sẽ kiểm tra ACCESS_TOKEN có hợp lệ hay không. nếu có thì trả về dữ liệu người dùng
+         *
+         */
         String code = request.getParameter("code");
         String provider = request.getParameter("provider");
 
-        // Lấy thông tin người dùng và IP từ request/session
-        String userName = (String) session.getAttribute("user"); // Giả sử bạn lưu thông tin người dùng vào session
-        String ip = request.getRemoteAddr(); // Lấy địa chỉ IP của người dùng
 
-        // Ghi log thông báo khi người dùng truy cập trang login
-        LOGGER.info("User: {} | IP: {} - moved to login page", userName, ip);
-
-
-        // Nếu không có code => trả về trang login và kết thúc.
+        // nếu không có code => trả về trang login và kết thúc.
         if (code == null || code.isEmpty()) {
-            LOGGER.info("No OAuth code received, redirecting to login page.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
 
-        // Lấy dữ liệu người dùng bằng code và provider tương ứng
+        // lấy dữ liệu người dùng bằng code và provider tương ứng
         Users authUser = authenticateUser(code, provider);
         if (authUser == null) {
-            // Nếu không xác thực được người dùng, ghi log lỗi và chuyển hướng
-            LOGGER.error("Failed to authenticate user with code: {} and provider: {}", code, provider);
             session.setAttribute("error", "login.jsp?error=invalid_auth");
             return;
         }
 
-        // Kiểm tra xem user có tồn tại trong DB chưa
+        /**
+         *  kiểm tra xem user có tồn tại trong DB chưa
+         *
+         *  + nếu có => lấy thông tin người dùng đó và đăng nhập
+         *  + nếu chưa => tạo người dùng mới lưu vào database
+         *
+         */
         Users user = userDao.getUserByEmail(authUser.getEmail());
         if (user == null) {
-            // Nếu không có, tạo mới người dùng và lưu vào database
-            authUser.setRole(0); // Thiết lập vai trò mặc định là người dùng thường
-            userDao.insertGGUser(authUser);
+            authUser.setRole(0);
+            String rawPassword = userDao.insertGGUser(authUser);
             user = authUser;
-        } else {
+            // gửi mật khẩu về mail
+            String topic = "Mật khẩu đăng nhập TTT";
+            String body = "mật khẩu của bạn là: " + rawPassword;
+            EmailSender.sendEmail(user.getEmail(), topic, body);
         }
 
-        // Lưu người dùng vào session
-        session.setAttribute("user", authUser.getEmail()); // Lưu lại email hoặc user vào session
+
+        // lưu ngươi dùng vào session
+        session.setAttribute("user", user);
 
         // Kiểm tra vai trò và chuyển hướng trang
         if (user.getRole() == 1) {
@@ -78,10 +84,7 @@ public class LoginServlet extends HttpServlet {
             response.sendRedirect("admin/dashboard");
         } else if (user.getRole() == 0) {
             // Vai trò người dùng thường
-            // Ghi log khi người dùng được chuyển hướng tới trang index
-            LOGGER.info("User: {} | IP: {} - Redirecting to the user dashboard (index page).", userName, ip);
             response.sendRedirect("index");
-
         }
     }
 
@@ -94,58 +97,60 @@ public class LoginServlet extends HttpServlet {
         String username = request.getParameter("username"); // email hoặc số điện thoại
         String password = request.getParameter("password");
 
-        HttpSession session = request.getSession();
-        Integer loginAttempts = (Integer) session.getAttribute("loginAttempts");
-
-        // Kiểm tra số lần đăng nhập sai
-        if (loginAttempts == null) {
-            loginAttempts = 0; // Nếu lần đầu tiên, khởi tạo số lần đăng nhập sai
-        }
-
-        // Kiểm tra thông tin đăng nhập
+        // Gọi UserDao để kiểm tra thông tin đăng nhập
         UserDao userDao = new UserDao();
         Users user = userDao.checkLogin(username, password);
 
+        // Kiểm tra nếu người dùng không tồn tại
         if (user == null) {
-            loginAttempts++;  // Tăng số lần đăng nhập sai
-            session.setAttribute("loginAttempts", loginAttempts);  // Lưu số lần đăng nhập sai vào session
-
-            if (loginAttempts >= 5) {
-                // Nếu đã vượt quá 5 lần sai, khóa tài khoản trong một khoảng thời gian (ví dụ: 5 phút)
-                session.setAttribute("lockTime", System.currentTimeMillis() + 5 * 60 * 1000); // Thời gian khóa 5 phút
-
-                // Gửi phản hồi "locked" về client để thông báo tài khoản bị khóa
-                response.getWriter().write("locked");
-                return;
+            // Nếu không tìm thấy người dùng, đăng nhập thất bại
+            if (request.getHeader("X-Requested-With") != null) {
+                response.getWriter().write("error");  // Trả về lỗi khi gọi AJAX
             } else {
-                // Nếu đăng nhập sai nhưng chưa vượt quá 5 lần, trả về thông báo lỗi
-                response.getWriter().write("error");
-                return;
+                request.setAttribute("error", "Tên đăng nhập hoặc mật khẩu không đúng!");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
             }
+            return;  // Dừng lại để không tiếp tục kiểm tra trạng thái và vai trò
         }
-
-        // Nếu đăng nhập đúng
-        session.setAttribute("user", user); // Lưu thông tin người dùng vào session
-        session.setMaxInactiveInterval(30 * 60); // 30 phút
 
         // Kiểm tra trạng thái xác thực của tài khoản
         if (user.getStatus() == 0) {
-            // Nếu chưa xác thực, gửi email xác thực
+            // Nếu chưa xác thực, hiển thị modal yêu cầu xác thực và gửi email
             if (request.getHeader("X-Requested-With") != null) {
                 response.getWriter().write("not_verified");  // Gửi phản hồi cho AJAX để xử lý modal
                 sendActivationEmail(user.getEmail()); // Gửi email xác thực
-            } else {
-                request.setAttribute("error", "Tài khoản chưa xác thực. Vui lòng kiểm tra email để xác thực tài khoản.");
-                request.getRequestDispatcher("login.jsp").forward(request, response);
             }
-            return;
+            return;  // Dừng lại, không tiếp tục đăng nhập
+        } else if (user.getStatus() == -1) {
+            // Nếu tài khoản bị khóa, hiển thị modal thông báo tài khoản bị khóa và gửi email
+            if (request.getHeader("X-Requested-With") != null) {
+                response.getWriter().write("lockAccount");  // Trả về phản hồi cho AJAX để hiển thị modal
+                sendActivationEmail(user.getEmail());  // Gửi email xác thực
+            }
+            return;  // Dừng lại, không tiếp tục đăng nhập
         }
 
-        // Nếu đã xác thực, chuyển hướng đến trang chủ hoặc dashboard
-        if (user.getRole() == 1) {
-            response.sendRedirect("admin/dashboard");
+
+        // Nếu trạng thái = 1 (đã xác thực), tiếp tục đăng nhập thành công
+        HttpSession session = request.getSession();
+        session.setAttribute("user", user); // Lưu thông tin người dùng vào session
+
+        // Giới hạn thời gian session (ví dụ: 30 phút)
+        session.setMaxInactiveInterval(30 * 60); // 30 phút
+
+        // Kiểm tra vai trò và chuyển hướng trang
+        if (request.getHeader("X-Requested-With") != null) {
+            if (user.getRole() == 1) {
+                response.getWriter().write("admin/dashboard");  // Chuyển hướng cho AJAX
+            } else if (user.getRole() == 0) {
+                response.getWriter().write("index");  // Chuyển hướng cho AJAX
+            }
         } else {
-            response.sendRedirect("index");
+            if (user.getRole() == 1) {
+                response.sendRedirect("admin/dashboard");
+            } else if (user.getRole() == 0) {
+                response.sendRedirect("index");
+            }
         }
     }
 
@@ -231,12 +236,12 @@ public class LoginServlet extends HttpServlet {
                     authUser = gg.getGGUserInfo(accessToken);
                 }
                 break;
-//            case "facebook":
-//                accessToken = gg.getFBToken(code);
-//                if (accessToken != null && !accessToken.isEmpty()) {
-//                    authUser = gg.getFBUserInfo(accessToken);
-//                }
-//                break;
+            case "facebook":
+                accessToken = gg.getFBToken(code);
+                if (accessToken != null && !accessToken.isEmpty()) {
+                    authUser = gg.getFBUserInfo(accessToken);
+                }
+                break;
 
             // provider không hợp lệ
             default:

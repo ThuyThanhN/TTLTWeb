@@ -23,27 +23,48 @@ $(document).ready(function () {
     }
 
     initializeDataTable('#user');
+
+    $(".status").change(function () {
+        var id = $(this).data("id");
+        var status = $(this).val();
+
+        $.ajax({
+            url: "/provide_vaccine_services_war/admin/updateOrderStatus",
+            type: "POST",
+            data: {
+                id: id,
+                status: status
+            },
+            success: function (response) {
+                console.log("Cap nhat trang thai thanh cong", response);
+            },
+            error: function (xhr) {
+                console.error("Lỗi khi cập nhật trạng thái", xhr);
+            }
+        });
+    });
 });
 
 const statusSelects = document.querySelectorAll('.status');
 
 statusSelects.forEach(select => {
-    if (select.value === 'active') {
+    if (select.value === "1") {
         select.classList.add('active');
     } else {
         select.classList.add('inactive');
     }
 
-    select.addEventListener('change', function() {
+    select.addEventListener('change', function () {
         const selectedValue = this.value;
 
         this.classList.remove('active', 'inactive');
 
-        if (selectedValue === 'active') {
+        if (selectedValue === "1") {
             this.classList.add('active');
         } else {
             this.classList.add('inactive');
         }
     });
 });
+
 
