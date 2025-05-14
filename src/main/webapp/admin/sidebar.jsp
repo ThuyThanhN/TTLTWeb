@@ -61,8 +61,8 @@
                 <span>Trung tâm</span>
             </a>
         </li>
-        <li class="logout">
-            <a href="logout">
+        <li>
+            <a href="${pageContext.request.contextPath}/logout">
                 <i class="fas fa-sign-out-alt"></i>
                 <span>Đăng xuất</span>
             </a>
