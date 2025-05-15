@@ -5,7 +5,8 @@
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danh sách lịch hẹn</title>
+    <title>Lịch hẹn tiêm vắc xin</title>
+    <link rel="icon" type="image/png" href="image/logo1.png">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -48,7 +49,7 @@
                         <%--                            </a>--%>
                         <%--                        </div>--%>
 
-                        <div class="appointment-card">
+                        <div class="appointment-card mb-4">
                             <div class="d-flex justify-content-between border-bottom pb-2">
                                 <div class="d-flex order_id">
                                     <span><b>Mã phiếu:</b> ${o.order_id}</span>
