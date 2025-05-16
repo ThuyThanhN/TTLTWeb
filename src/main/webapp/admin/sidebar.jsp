@@ -61,6 +61,12 @@
                 <span>Trung tâm</span>
             </a>
         </li>
+        <li class="<%= (request.getRequestURI().contains("table-data-warehouse")) ? "active" : "" %>">
+            <a href="table-data-warehouse">
+                <i class="fa-solid fa-warehouse"></i>
+                <span>Trung tâm</span>
+            </a>
+        </li>
         <li class="logout">
             <a href="logout">
                 <i class="fas fa-sign-out-alt"></i>
