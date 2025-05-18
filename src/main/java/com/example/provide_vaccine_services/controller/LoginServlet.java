@@ -3,6 +3,7 @@ package com.example.provide_vaccine_services.controller;
 import com.example.provide_vaccine_services.Service.EmailSender;
 import com.example.provide_vaccine_services.Service.GoogleLogin;
 import com.example.provide_vaccine_services.Service.TokenGenerator;
+import com.example.provide_vaccine_services.dao.LogDao;
 import com.example.provide_vaccine_services.dao.UserDao;
 import com.example.provide_vaccine_services.dao.model.Users;
 import jakarta.servlet.ServletException;
@@ -11,10 +12,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.sql.SQLException;
 
 @WebServlet(name = "LoginServlet", value = "/login")
 public class LoginServlet extends HttpServlet {
@@ -25,68 +28,45 @@ public class LoginServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         UserDao userDao = new UserDao();
 
+        // Giả sử dbLogger đã được khởi tạo ở init()
+        String userIp = request.getRemoteAddr();
 
-        /**
-         *
-         * cách hoạt động của Oauth
-         *
-         * sau khi đăng nhập bên thứ 3 sẽ trả về code & provider đăng nhập ghi người dùng đăng nhập Oauth ( sẽ là null nếu không đăng nhạp oauth )
-         * ví dụ: code = FNAFJKS... provider = "google", "facebook"
-         *
-         * sử dụng code đó để lấy được
-         *  + ACCESS_TOKEN: truy cập vào dữ liệu người dùng của bên thứ 3
-         *
-         * bên thứ 3 sẽ kiểm tra ACCESS_TOKEN có hợp lệ hay không. nếu có thì trả về dữ liệu người dùng
-         *
-         */
         String code = request.getParameter("code");
         String provider = request.getParameter("provider");
 
-
-        // nếu không có code => trả về trang login và kết thúc.
         if (code == null || code.isEmpty()) {
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
 
-        // lấy dữ liệu người dùng bằng code và provider tương ứng
         Users authUser = authenticateUser(code, provider);
         if (authUser == null) {
             session.setAttribute("error", "login.jsp?error=invalid_auth");
             return;
         }
 
-        /**
-         *  kiểm tra xem user có tồn tại trong DB chưa
-         *
-         *  + nếu có => lấy thông tin người dùng đó và đăng nhập
-         *  + nếu chưa => tạo người dùng mới lưu vào database
-         *
-         */
         Users user = userDao.getUserByEmail(authUser.getEmail());
         if (user == null) {
             authUser.setRole(0);
             String rawPassword = userDao.insertGGUser(authUser);
             user = authUser;
-            // gửi mật khẩu về mail
+
+
             String topic = "Mật khẩu đăng nhập TTT";
-            String body = "mật khẩu của bạn là: " + rawPassword;
+            String body = "Mật khẩu của bạn là: " + rawPassword;
             EmailSender.sendEmail(user.getEmail(), topic, body);
+        } else {
         }
 
-
-        // lưu ngươi dùng vào session
         session.setAttribute("user", user);
 
-        // Kiểm tra vai trò và chuyển hướng trang
         if (user.getRole() == 1) {
-            // Vai trò admin
             response.sendRedirect("admin/dashboard");
         } else if (user.getRole() == 0) {
-            // Vai trò người dùng thường
             response.sendRedirect("index");
         }
     }
+
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -153,6 +133,15 @@ public class LoginServlet extends HttpServlet {
         // Nếu đăng nhập thành công, reset số lần đăng nhập sai và thời gian khóa
         session.setAttribute("failedLoginAttempts", 0);
         session.removeAttribute("lockTime");
+
+        LogDao logDao = new LogDao();
+        String userIp = request.getRemoteAddr();
+
+        try {
+            logDao.insertLog("INFO", "User logged in successfully", user.getEmail(), userIp);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         // Lưu thông tin người dùng vào session
         session.setAttribute("user", user);
