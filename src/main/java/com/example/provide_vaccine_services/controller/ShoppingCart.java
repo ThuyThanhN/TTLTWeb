@@ -103,6 +103,14 @@ public class ShoppingCart extends HttpServlet {
                 listCart = new ArrayList<>();
             }
 
+            //
+            // Kiểm tra nếu giỏ hàng trống thì chuyển đến trang "noOrder.jsp"
+            if (ordersOrderDetailsMap == null || ordersOrderDetailsMap.isEmpty()) {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("noOrder.jsp");
+                dispatcher.forward(request, response);
+                return; // Dừng thực thi để không tiếp tục xử lý bên dưới
+            }
+
             // chỉnh sửa lại giá cua totalBill
             for (Map.Entry<Orders, List<OrderDetails>> entry : ordersOrderDetailsMap.entrySet()) {
                 List<OrderDetails> details = entry.getValue();
