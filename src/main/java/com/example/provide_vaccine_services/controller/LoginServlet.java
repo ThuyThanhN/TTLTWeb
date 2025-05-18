@@ -70,6 +70,9 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        LogDao logDao = new LogDao();  // Khai báo 1 lần đầu method
+
+        String userIp = request.getRemoteAddr();  // Lấy IP theo từng request
         // Đảm bảo dữ liệu từ form được mã hóa UTF-8
         request.setCharacterEncoding("UTF-8");
 
@@ -94,6 +97,12 @@ public class LoginServlet extends HttpServlet {
 
         // Kiểm tra nếu người dùng không tồn tại
         if (user == null) {
+            // Ghi log đăng nhập thất bại
+            try {
+                logDao.insertLog("WARN", "Failed login attempt for username: " + username, username, userIp);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             // Nếu không tìm thấy người dùng, đăng nhập thất bại
             Integer failedAttempts = (Integer) session.getAttribute("failedLoginAttempts");
             if (failedAttempts == null) {
@@ -115,17 +124,30 @@ public class LoginServlet extends HttpServlet {
             return;  // Dừng lại để không tiếp tục kiểm tra trạng thái và vai trò
         }
 
-        // Kiểm tra trạng thái xác thực của tài khoản
         if (user.getStatus() == 0) {
+            // Log tài khoản chưa xác thực
+            try {
+                logDao.insertLog("WARN", "Login attempt with unverified account", user.getEmail(), userIp);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
             if (request.getHeader("X-Requested-With") != null) {
-                response.getWriter().write("not_verified");  // Gửi phản hồi cho AJAX để xử lý modal
-                sendActivationEmail(user.getEmail()); // Gửi email xác thực
+                response.getWriter().write("not_verified");
+                sendActivationEmail(user.getEmail());
             }
             return;
         } else if (user.getStatus() == -1) {
+            // Log tài khoản bị khóa
+            try {
+                logDao.insertLog("WARN", "Login attempt with locked account", user.getEmail(), userIp);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
             if (request.getHeader("X-Requested-With") != null) {
-                response.getWriter().write("lockAccount");  // Trả về phản hồi cho AJAX để hiển thị modal
-                sendActivationEmail(user.getEmail());  // Gửi email xác thực
+                response.getWriter().write("lockAccount");
+                sendActivationEmail(user.getEmail());
             }
             return;
         }
@@ -133,9 +155,6 @@ public class LoginServlet extends HttpServlet {
         // Nếu đăng nhập thành công, reset số lần đăng nhập sai và thời gian khóa
         session.setAttribute("failedLoginAttempts", 0);
         session.removeAttribute("lockTime");
-
-        LogDao logDao = new LogDao();
-        String userIp = request.getRemoteAddr();
 
         try {
             logDao.insertLog("INFO", "User logged in successfully", user.getEmail(), userIp);
