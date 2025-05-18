@@ -1,6 +1,7 @@
 package com.example.provide_vaccine_services.controller;
 
 
+import com.example.provide_vaccine_services.dao.LogDao;
 import com.example.provide_vaccine_services.dao.UserDao;
 import com.example.provide_vaccine_services.dao.model.Users;
 import jakarta.servlet.ServletException;
@@ -17,7 +18,6 @@ import java.sql.Date;
 public class UpdateInformationServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Xử lý cập nhật thông tin (giữ nguyên code cũ)
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
         Users user = (Users) session.getAttribute("user");
@@ -52,21 +52,36 @@ public class UpdateInformationServlet extends HttpServlet {
         user.setPhone(phone);
         user.setGender(gender);
         user.setDateOfBirth(dateOfBirth);
-        user.setAddress(address );
+        user.setAddress(address);
         user.setProvince(province);
         user.setDistrict(district);
         user.setWard(ward);
 
-        // Cập nhật dữ liệu vào cơ sở dữ liệu
         UserDao userDao = new UserDao();
         int result = userDao.updateUserDetails(user);
 
+        LogDao logDao = new LogDao();
+        String userIp = request.getRemoteAddr();
 
         if (result > 0) {
+            // Ghi log cập nhật thành công
+            try {
+                logDao.insertLog("INFO", "User updated profile information successfully", user.getEmail(), userIp);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             session.setAttribute("successMessage", "Cập nhật thông tin thành công!");
             session.setAttribute("user", user);
             response.sendRedirect("information.jsp");
         } else {
+            // Ghi log cập nhật thất bại
+            try {
+                logDao.insertLog("ERROR", "Failed to update user profile information", user.getEmail(), userIp);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             request.setAttribute("error", "Cập nhật thông tin thất bại!");
             request.getRequestDispatcher("information.jsp").forward(request, response);
         }
