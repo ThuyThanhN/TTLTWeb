@@ -231,7 +231,6 @@ a {
     box-shadow: none;
 }
 /* Nút đăng nhập - hiệu ứng xoay */
-/* Nút đăng nhập - hiệu ứng xoay */
 .btn-loading {
     position: relative;
     pointer-events: none;  /* Vô hiệu hóa tương tác khi đang tải */

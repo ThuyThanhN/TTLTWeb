@@ -62,11 +62,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     modal.classList.remove('hidden'); // Mở modal xác thực
                 } else if (response === "lockAccount") {
                     // Hiển thị modal thông báo tài khoản bị khóa và yêu cầu kích hoạt lại
-                    document.getElementById('modal-message').innerText = "Tài khoản của bạn đã bị khóa. Vui lòng kiểm tra email để kích hoạt lại tài khoản.";
+                    document.getElementById('modal-message').innerText = "Tài khoản của bạn đã bị khóa. Quá nhiều yêu cầu. Vui lòng thử lại sau 1 phút.";
                     modal.classList.remove('hidden'); // Mở modal xác thực
                 } else if (response === "error") {
                     errorMessage.style.display = 'block';
                     errorMessage.innerHTML = 'Tên đăng nhập hoặc mật khẩu không đúng!';
+                } else if (response === "locked") {
+                    // Hiển thị modal cho người dùng bị khóa đăng nhập
+                    document.getElementById('modal-message').innerText = "Tài khoản đã bị khóa do quá nhiều lần nhập sai. Vui lòng thử lại sau 1 phút.";
+                    modal.classList.remove('hidden'); // Mở modal khóa tài khoản
                 } else if (response === "index" || response === "admin/dashboard") {
                     window.location.href = response;  // Chuyển hướng thành công
                 }

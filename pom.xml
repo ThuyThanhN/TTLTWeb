@@ -17,6 +17,20 @@
         <junit.version>5.11.0</junit.version>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
+        </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository>
+            <id>sonatype</id>
+            <url>https://oss.sonatype.org/content/repositories/releases/</url>
+        </repository>
+    </repositories>
     <dependencies>
         <dependency>
             <groupId>jakarta.servlet</groupId>
@@ -48,11 +62,6 @@
             <version>3.0.1</version>
         </dependency>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.33</version>
-        </dependency>
-        <dependency>
             <groupId>com.sun.mail</groupId>
             <artifactId>javax.mail</artifactId>
             <version>1.6.2</version>
@@ -63,6 +72,7 @@
             <version>2.0.1</version> <!-- Thay bằng phiên bản mới nhất nếu cần -->
         </dependency>
         <!-- Chuyển object sang file json -->
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -100,6 +110,30 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20210307</version>  <!-- Đây là phiên bản mới nhất tại thời điểm trả lời, bạn có thể kiểm tra phiên bản mới hơn nếu cần -->
+        </dependency>
+        <!-- Logback (Sử dụng với SLF4J) -->
+        <!-- SLF4J API -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.32</version>
+        </dependency>
+
+        <!-- Logback (Sử dụng với SLF4J) -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-dbcp2</artifactId>
+            <version>2.9.0</version>
         </dependency>
     </dependencies>
     <build>
