@@ -5,6 +5,7 @@
 <html>
 <head>
     <title>Title</title>
+    <link rel="icon" type="image/png" href="image/logo1.png">
     <!-- Css -->
     <link rel="stylesheet" href="css/header.css">
 </head>

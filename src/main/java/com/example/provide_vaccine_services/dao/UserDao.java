@@ -14,7 +14,6 @@ import java.util.*;
 
 public class UserDao {
     private Users u;
-
     public int insert(Users u) {
         int re = 0;
 
@@ -54,7 +53,7 @@ public class UserDao {
         return re;
     }
 
-    // Them nhan vien trong Admin
+     // Them nhan vien trong Admin
     public int insertStaff(Users u) {
         int newId = -1;
 
@@ -335,7 +334,7 @@ public class UserDao {
 //            System.out.println("Password trước khi mã hóa: " + rawPassword);
 //            System.out.println("Password sau khi mã hóa: " + hashedPassword);
 
-            pst.setString(11, u.getPassword());
+            pst.setString(11,u.getPassword());
 
             pst.setInt(12, u.getRole());
 
@@ -362,9 +361,10 @@ public class UserDao {
         return re; // Trả về kết quả (số bản ghi đã được thêm)
     }
 
-    public int insertGGUser(Users u) {
+    // thêm và trả về mật khẩu chưa mã hoá
+    public String insertGGUser(Users u) {
         int re = 0;
-
+        String rawPassword = "";
         try {
             // Câu lệnh SQL để chèn dữ liệu vào bảng users
             String sql = "INSERT INTO users(fullname, gender, identification, dateOfBirth, address, province, district, ward, phone, email, password, role, status)" +
@@ -372,6 +372,7 @@ public class UserDao {
             PreparedStatement pst = DBConnect.get(sql);
 
             String s = u.toString();
+            rawPassword = genPassword();
 
             System.out.println("user: " + s);
 
@@ -386,7 +387,7 @@ public class UserDao {
             pst.setString(8, "");
             pst.setString(9, "");
             pst.setString(10, u.getEmail());
-            pst.setString(11, genPassword());
+            pst.setString(11, MD5Hash.hashPassword(rawPassword));
             pst.setInt(12, u.getRole());
             pst.setInt(13, 1);
 
@@ -403,10 +404,12 @@ public class UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return re; // Trả về kết quả (số bản ghi đã được thêm)
+        if (re > 0) {
+            return rawPassword; // Trả về kết quả (số bản ghi đã được thêm)
+        } else {
+            return null;
+        }
     }
-
     public Users checkLogin(String username, String password) {
         Users user = null;
         try {
@@ -448,7 +451,8 @@ public class UserDao {
                         rs.getString("phone"),
                         rs.getString("email"),
                         rs.getString("password"),
-                        rs.getInt("role")
+                        rs.getInt("role"),
+                        rs.getInt("status")  // Đảm bảo rằng bạn đang lấy đúng giá trị status
                 );
 
                 // Debug khi đăng nhập thành công
@@ -558,7 +562,6 @@ public class UserDao {
         }
         return false;
     }
-
     // Giải mã token trước khi lưu vào cơ sở dữ liệu hoặc kiểm tra
     private String decodeToken(String token) {
         try {
@@ -592,6 +595,7 @@ public class UserDao {
                 user.setEmail(rs.getString("email"));
                 user.setPassword(rs.getString("password"));
                 user.setRole(rs.getInt("role"));
+                user.setStatus(rs.getInt("status"));
 
                 return user;
             }
@@ -606,8 +610,8 @@ public class UserDao {
     private String genPassword() {
         Random rand = new Random();
         int randomNum = rand.nextInt(100000, 999999);
-        String password = String.valueOf(randomNum);
-        return MD5Hash.hashPassword(password);
+        return String.valueOf(randomNum);
+
     }
 
     public boolean updateUserStatusToActive(String token) {
@@ -628,7 +632,6 @@ public class UserDao {
         }
         return isUpdated;  // Trả về true nếu thành công, false nếu không thành công
     }
-
     // Lưu token vào cơ sở dữ liệu
     public boolean saveVerificationToken(String email, String token) {
         boolean isUpdated = false;
@@ -686,61 +689,17 @@ public class UserDao {
         return isValid;  // Trả về true nếu token hợp lệ, false nếu không hợp lệ
     }
 
-    // Đếm số lượng người đăng ký tài khoản tuần này so với tuần trước bao nhiêu người
-    public int getUsersCountLastWeek() {
-        int count = 0;
+    public boolean lockAccount(int userId) {
         try {
-            String sql = "SELECT " +
-                    "(SELECT COUNT(*) " +
-                    "FROM users u " +
-                    "WHERE u.createdAt >= CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY " +
-                    "AND u.createdAt < CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY + INTERVAL 7 DAY " +
-                    "AND u.role = 0) " +
-                    "- " +
-                    "(SELECT COUNT(*) " +
-                    "FROM users u " +
-                    "WHERE u.createdAt >= CURDATE() - INTERVAL WEEKDAY(CURDATE()) + 7 DAY " +
-                    "AND u.createdAt < CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY + INTERVAL 7 DAY " +
-                    "AND u.role = 0) " +
-                    "AS count;";
-
+            String sql = "UPDATE users SET status = -1 WHERE id = ?";
             PreparedStatement pst = DBConnect.get(sql);
-            ResultSet rs = pst.executeQuery();
+            pst.setInt(1, userId);
+            return pst.executeUpdate() > 0;
 
-            if (rs.next()) {
-                count = rs.getInt("count");
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return count;
-    }
-
-    public List<Users> getUsersRegisterThisMonth() {
-        List<Users> result = new ArrayList<>();
-        try {
-            String sql = "SELECT id, fullname, email, gender, createdAt, status " +
-                    "FROM users " +
-                    "WHERE role = 0 " +
-                    "AND MONTH(createdAt) = MONTH(CURDATE()) " +
-                    "AND YEAR(createdAt) = YEAR(CURDATE()) " +
-                    "ORDER BY createdAt ASC;";
-            PreparedStatement pst = DBConnect.get(sql);
-            ResultSet rs = pst.executeQuery();
-            while (rs.next()) {
-                Users user = new Users();
-                user.setId(rs.getInt("id"));
-                user.setFullname(rs.getString("fullname"));
-                user.setGender(rs.getString("gender"));
-                user.setEmail(rs.getString("email"));
-                user.setCreatedAt(rs.getDate("createdAt"));
-                user.setStatus(rs.getInt("status"));  // Thêm dòng này
-                result.add(user);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return result;
+        return false;
     }
 
     public boolean updateStatus(int orderId, String status) {

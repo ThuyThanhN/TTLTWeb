@@ -4,6 +4,7 @@
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Đổi mật khẩu</title>
+  <link rel="icon" type="image/png" href="image/logo1.png">
   <!--    font awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <!--    bootstrap -->
@@ -18,7 +19,7 @@
 <body>
 <div id="wrapper">
   <div class="header text-center">
-    <a href="index.html"><img src="image/logo.png" alt="Logo" class="img-responsive"></a>
+    <a href="index"><img src="image/logo.png" alt="Logo" class="img-responsive"></a>
   </div>
 
   <% if (request.getAttribute("message") != null) { %>
@@ -29,30 +30,32 @@
 
   <div class="change-container">
     <form class="change-form" id="changePasswordForm" action="changePassword" method="post">
-      <h2>Đổi mật khẩu</h2>
+      <h5>ĐỔI MẬT KHẨU</h5>
       <div class="input-group password-group">
         <label for="currentPassword">Mật khẩu hiện tại</label>
-        <input type="password" id="currentPassword" name="currentPassword" required>
-        <span class="toggle-password">
-            <i class="fa-solid fa-eye" id="toggleCurrentPassword"></i>
-          </span>
+        <div class="password-group">
+          <input type="password" id="currentPassword" name="currentPassword" placeholder="Nhập mật khẩu hiện tại" required>
+          <i class="fa-solid fa-eye eye-icon" id="toggleCurrentPassword"></i>
+        </div>
       </div>
-      <div class="input-group password-group">
+      <div class="input-group">
         <label for="newPassword">Mật khẩu mới</label>
-        <input type="password" id="newPassword" name="newPassword" required>
-        <span class="toggle-password">
-            <i class="fa-solid fa-eye" id="toggleNewPassword"></i>
-          </span>
-        <span class="error-message" id="newPassword-error" style="color: red; display: none;">Mật khẩu mới phải có ít nhất 8 ký tự, bao gồm 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt.</span>
+        <div class="password-group">
+          <input type="password" id="newPassword" name="newPassword" placeholder="Nhập mật khẩu mới" required>
+          <i class="fa-solid fa-eye eye-icon" id="toggleNewPassword"></i>
+        </div>
+        <span class="error-message" id="newPassword-error">Mật khẩu mới phải có ít nhất 8 ký tự, bao gồm 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt.</span>
+        <span class="error-message" id="samePassword-error">Mật khẩu mới phải khác mật khẩu hiện tại.</span>
       </div>
       <div class="input-group password-group">
         <label for="confirmNewPassword">Xác nhận mật khẩu mới</label>
-        <input type="password" id="confirmNewPassword" name="confirmNewPassword" required>
-        <span class="toggle-password">
-            <i class="fa-solid fa-eye" id="toggleConfirmNewPassword"></i>
-          </span>
+        <div class="password-group">
+          <input type="password" id="confirmNewPassword" name="confirmNewPassword" placeholder="Nhập mật khẩu mới" required>
+          <i class="fa-solid fa-eye eye-icon" id="toggleConfirmNewPassword"></i>
+        </div>
+        <span class="error-message" id="confirmPassword-error">Xác nhận mật khẩu không khớp.</span>
       </div>
-      <button type="submit" class="btn btn-primary" id="submitButton">Đổi mật khẩu</button>
+      <button type="submit" class="btn btn-primary" id="submitButton">LƯU THAY ĐỔI</button>
     </form>
   </div>
 
@@ -61,6 +64,4 @@
 
 <script src="js/change-password.js"></script>
 </body>
-
-
 </html>
