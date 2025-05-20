@@ -714,6 +714,63 @@ public class UserDao {
         }
         return false;
     }
+
+    // Đếm số lượng người đăng ký tài khoản tuần này so với tuần trước bao nhiêu người
+    public int getUsersCountLastWeek() {
+        int count = 0;
+        try {
+            String sql = "SELECT " +
+                    "(SELECT COUNT(*) " +
+                    "FROM users u " +
+                    "WHERE u.createdAt >= CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY " +
+                    "AND u.createdAt < CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY + INTERVAL 7 DAY " +
+                    "AND u.role = 0) " +
+                    "- " +
+                    "(SELECT COUNT(*) " +
+                    "FROM users u " +
+                    "WHERE u.createdAt >= CURDATE() - INTERVAL WEEKDAY(CURDATE()) + 7 DAY " +
+                    "AND u.createdAt < CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY + INTERVAL 7 DAY " +
+                    "AND u.role = 0) " +
+                    "AS count;";
+
+            PreparedStatement pst = DBConnect.get(sql);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                count = rs.getInt("count");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
+    public List<Users> getUsersRegisterThisMonth() {
+        List<Users> result = new ArrayList<>();
+        try {
+            String sql = "SELECT id, fullname, email, gender, createdAt, status " +
+                    "FROM users " +
+                    "WHERE role = 0 " +
+                    "AND MONTH(createdAt) = MONTH(CURDATE()) " +
+                    "AND YEAR(createdAt) = YEAR(CURDATE()) " +
+                    "ORDER BY createdAt ASC;";
+            PreparedStatement pst = DBConnect.get(sql);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Users user = new Users();
+                user.setId(rs.getInt("id"));
+                user.setFullname(rs.getString("fullname"));
+                user.setGender(rs.getString("gender"));
+                user.setEmail(rs.getString("email"));
+                user.setCreatedAt(rs.getDate("createdAt"));
+                user.setStatus(rs.getInt("status"));  // Thêm dòng này
+                result.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }
 
 
