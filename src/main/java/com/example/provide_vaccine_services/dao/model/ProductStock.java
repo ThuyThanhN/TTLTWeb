@@ -6,7 +6,6 @@ public class ProductStock {
     int id;
     int vaccineId;
     String productName;
-    int quantity;
     int loss;
     LocalDateTime expired;
     double totalPrice;
@@ -14,11 +13,10 @@ public class ProductStock {
     public ProductStock() {
 
     }
-    public ProductStock(int vaccineId, String productName,double totalPrice, int quantity, int loss, LocalDateTime expired) {
+    public ProductStock(int vaccineId, String productName,double totalPrice, int loss, LocalDateTime expired) {
         this.vaccineId = vaccineId;
         this.productName = productName;
         this.totalPrice = totalPrice;
-        this.quantity = quantity;
         this.loss = loss;
         this.expired = expired;
     }
@@ -47,14 +45,6 @@ public class ProductStock {
 
     public void setProductName(String productName) {
         this.productName = productName;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 
     public int getLoss() {

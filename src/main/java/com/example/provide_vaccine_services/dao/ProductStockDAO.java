@@ -25,14 +25,13 @@ public class ProductStockDAO {
             while (rs.next()) {
                 int vaccine_id = rs.getInt("idVaccine");
                 String productName = rs.getString("name");
-                int quantity = rs.getInt("quantity");
                 double totalPrice = rs.getDouble("totalPrice");
                 int loss = rs.getInt("loss");
                 // Dung Timestamp lay gia tri => Chuyen doi sang LocalDateTime
                 Timestamp timestamp = rs.getTimestamp("expired");
                 LocalDateTime expired = timestamp != null ? timestamp.toLocalDateTime() : null;
 
-                ProductStock productStock = new ProductStock(vaccine_id, productName,totalPrice, quantity, loss, expired);
+                ProductStock productStock = new ProductStock(vaccine_id, productName,totalPrice, loss, expired);
 
                 productStocks.add(productStock);
 
@@ -58,7 +57,6 @@ public class ProductStockDAO {
                 ps.setVaccineId(rs.getInt("idVaccine"));
                 ps.setProductName(rs.getString("name"));
                 ps.setTotalPrice(rs.getDouble("totalPrice"));
-                ps.setQuantity(rs.getInt("quantity"));
                 ps.setLoss(rs.getInt("loss"));
                 ps.setExpired(rs.getTimestamp("expired").toLocalDateTime());
                 return ps;
@@ -85,21 +83,20 @@ public class ProductStockDAO {
         }
     }
 
-    public void insert(ProductStock stock) throws SQLException {
+    public void insert(ProductStock stock, int delta) throws SQLException {
 
-        String sql = "INSERT INTO productstock (idVaccine, name, quantity, totalPrice, loss, expired) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO productstock (idVaccine, name, totalPrice, loss, expired) VALUES (?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement pst = DBConnect.get(sql);
             pst.setInt(1, stock.getVaccineId());
             pst.setString(2, stock.getProductName());
-            pst.setInt(3, stock.getQuantity());
 
             // tính tổng tiền
             VaccineDao vaccineDao = new VaccineDao();
             Vaccines v = vaccineDao.getVaccineById(stock.getVaccineId());
-            double totalPrice = v.getPrice() * stock.getQuantity();
-            pst.setDouble(4, totalPrice);
-            pst.setInt(5, stock.getLoss());
+            double totalPrice = v.getPrice() * delta;
+            pst.setDouble(3, totalPrice);
+            pst.setInt(4, stock.getLoss());
             pst.setTimestamp(6, Timestamp.valueOf(stock.getExpired()));
             pst.executeUpdate();
 

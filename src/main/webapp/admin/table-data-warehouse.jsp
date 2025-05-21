@@ -72,7 +72,7 @@
                 <tr data-id="${ps.id}">
                     <td>${ps.vaccineId}</td>
                     <td>${ps.productName}</td>
-                    <td>${ps.quantity}</td>
+                    <td>${vaccinesMap.get(ps.vaccineId).getStockQuantity()}</td>
                     <td>${ps.totalPrice}</td>
                     <td>${ps.loss}</td>
                     <td>${ps.expired}</td>

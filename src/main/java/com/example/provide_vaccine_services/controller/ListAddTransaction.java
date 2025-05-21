@@ -20,7 +20,6 @@ public class ListAddTransaction extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         // Lấy danh sách nhà cung cấp
-        SupplierDao supplierDao = new SupplierDao();
         AgeGroupDao ageDao = new AgeGroupDao();
         DisaseGroupDao disaseDao = new DisaseGroupDao();
         VaccineDao vaccineDao = new VaccineDao();
@@ -65,7 +64,7 @@ public class ListAddTransaction extends HttpServlet {
         ProductStock existingStock = null;
         try {
             existingStock = productStockDAO.findByVaccineId(t.getVaccineId());
-            int delta = (t.getType() == "1") ? t.getQuantity() : -t.getQuantity();
+            int delta = (t.getType().equals("1")) ? t.getQuantity() : -t.getQuantity();
 
             if (existingStock != null) {
                 System.out.println("Existing stock is not null");
@@ -77,11 +76,10 @@ public class ListAddTransaction extends HttpServlet {
                         t.getVaccineId(),
                         vaccineDao.getVaccineById(t.getVaccineId()).getName(),
                         vaccineDao.getVaccineById(t.getVaccineId()).getPrice() * t.getQuantity(),
-                        t.getQuantity(),
                         0,               // loss ban đầu = 0
                         LocalDateTime.now().plusMonths(6) // hết hạn sau 6 tháng
                 );
-                productStockDAO.insert(newStock);
+                productStockDAO.insert(newStock, delta);
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
