@@ -255,6 +255,20 @@ public class VaccineDao {
         return result;
     }
 
+    // update so luong
+    public void updateQuantity(int vaccineId, int delta) throws SQLException {
+        String sql = "UPDATE vaccine SET quantity = quantity + ? WHERE vaccine_id = ?";
+        try {
+            PreparedStatement pst = DBConnect.get(sql);
+            pst.setInt(1, delta);
+            pst.setInt(2, vaccineId);
+            pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     // Phương thức cập nhật thông tin vắc xin
     public boolean updateVaccine(Vaccines vaccine) {
         String sql = "UPDATE vaccines SET idSupplier = ?, name = ?, description = ?, stockQuantity = ?, "

@@ -1,0 +1,95 @@
+package com.example.provide_vaccine_services.controller;
+
+import com.example.provide_vaccine_services.dao.*;
+import com.example.provide_vaccine_services.dao.model.*;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.List;
+
+@WebServlet(name = "ListAddVaccine", value = "/admin/form-add-transaction")
+public class ListAddTransaction extends HttpServlet {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+
+        // Lấy danh sách nhà cung cấp
+        SupplierDao supplierDao = new SupplierDao();
+        AgeGroupDao ageDao = new AgeGroupDao();
+        DisaseGroupDao disaseDao = new DisaseGroupDao();
+        VaccineDao vaccineDao = new VaccineDao();
+        CenterDao centerDao = new CenterDao();
+
+        List<Vaccines> vaccines = vaccineDao.getAll();
+        List<AgeGroups> ages = ageDao.getAgeGroups();
+        List<DisaseGroups> disases = disaseDao.getDisaseGroups();
+        List<Centers> centers = centerDao.getAll();
+
+        request.setAttribute("vaccines", vaccines);
+        request.setAttribute("centers", centers);
+        request.setAttribute("ages", ages);
+        request.setAttribute("disases", disases);
+        request.getRequestDispatcher("form-add-transaction.jsp").forward(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
+
+        String vaccine = request.getParameter("vaccine");
+        String quantity = request.getParameter("quantityVaccine");
+        String type = request.getParameter("type");
+        String centerName = request.getParameter("center");
+
+        // parse
+        int centerId = Integer.parseInt(centerName);
+        int vaccineId = Integer.parseInt(vaccine);
+        int quantityVaccine = Integer.parseInt(quantity);
+        Users user = (Users) request.getSession().getAttribute("user");
+
+        // thêm transaction
+        Transaction t = new Transaction(centerId, vaccineId, type, quantityVaccine, user);
+        TransactionDAO transactionDAO = new TransactionDAO();
+        transactionDAO.insert(t);
+
+        // cộng vào productStock
+        VaccineDao vaccineDao = new VaccineDao();
+        ProductStockDAO productStockDAO = new ProductStockDAO();
+        ProductStock existingStock = null;
+        try {
+            existingStock = productStockDAO.findByVaccineId(t.getVaccineId());
+            int delta = (t.getType() == "1") ? t.getQuantity() : -t.getQuantity();
+
+            if (existingStock != null) {
+                System.out.println("Existing stock is not null");
+                productStockDAO.updateQuantity(t.getVaccineId(), delta);
+            } else {
+                System.out.println("Existing stock is null");
+                // nếu chưa có, tạo mới. Cần truyền thêm productName và expired từ form hoặc truy DB vaccine
+                ProductStock newStock = new ProductStock(
+                        t.getVaccineId(),
+                        vaccineDao.getVaccineById(t.getVaccineId()).getName(),
+                        vaccineDao.getVaccineById(t.getVaccineId()).getPrice() * t.getQuantity(),
+                        t.getQuantity(),
+                        0,               // loss ban đầu = 0
+                        LocalDateTime.now().plusMonths(6) // hết hạn sau 6 tháng
+                );
+                productStockDAO.insert(newStock);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
+        response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+    }
+
+}

@@ -58,24 +58,26 @@
         <table class="w-100 table table-striped" id="vaccine">
             <thead>
             <tr class="list-header">
-                <th scope="col">ID Vaccine</th>
-                <th scope="col">Tên Vaccine</th>
+                <th scope="col">ID</th>
+                <th scope="col">Tên vắc xin</th>
+                <th scope="col">Trung tâm</th>
+                <th scope="col">Nhập/Xuất</th>
                 <th scope="col">Số lượng</th>
-                <th scope="col"> Tổng Giá </th>
-                <th scope="col"> Hao hụt </th>
-                <th scope="col"> Ngày hết hạn </th>
+                <th scope="col">Ngày</th>
+                <th scope="col">Người thực hiện</th>
                 <th scope="col">Chỉnh sửa</th>
             </tr>
             </thead>
             <tbody>
-            <c:forEach var="ps" items="${productStocks}">
-                <tr data-id="${ps.id}">
-                    <td>${ps.vaccineId}</td>
-                    <td>${ps.productName}</td>
-                    <td>${ps.quantity}</td>
-                    <td>${ps.totalPrice}</td>
-                    <td>${ps.loss}</td>
-                    <td>${ps.expired}</td>
+            <c:forEach var="t" items="${transactions}">
+                <tr data-id="${t.transactionId}">
+                    <td>${t.transactionId}</td>
+                    <td>${t.vaccineId}</td>
+                    <td>${t.warehouseId}</td>
+                    <td>${t.type == 1 ? 'Nhập' : t.type == 2 ? 'Xuất' : 'Không xác định'}</td>
+                    <td>${t.quantity}</td>
+                    <td>${t.date}</td>
+                    <td>${t.user.id}</td>
                     <td>
                         <!-- Nut sua -->
                         <a href="#"

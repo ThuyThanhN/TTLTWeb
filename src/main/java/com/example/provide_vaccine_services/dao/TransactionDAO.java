@@ -24,10 +24,9 @@ public class TransactionDAO {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 int vaccine_id = rs.getInt("vaccine_id");
-                int ware_house_id = rs.getInt("ware_house_id");
+                int center_id = rs.getInt("center_id");
                 String type = rs.getString("type");
                 int quantity = rs.getInt("quantity");
-                String imageUrl = rs.getString("imageUrl");
                 int user_id = rs.getInt("user_id");
                 // Dung Timestamp lay gia tri => Chuyen doi sang LocalDateTime
                 Timestamp timestamp = rs.getTimestamp("date");
@@ -36,7 +35,7 @@ public class TransactionDAO {
                 UserDao userDao = new UserDao();
                 Users user = userDao.getUserById(user_id);
 
-                Transaction transaction = new Transaction(id ,ware_house_id, vaccine_id, type, quantity, createAt, user);
+                Transaction transaction = new Transaction(id ,center_id, vaccine_id, type, quantity, createAt, user);
 
                 transactions.add(transaction);
 
@@ -49,4 +48,36 @@ public class TransactionDAO {
 
     }
 
+    public int insert(Transaction t) {
+        int newId = -1;
+
+        try {
+            String sql = "insert into transaction( vaccine_id, center_id, type, quantity, date, user_id) " +
+                    "values(?, ?, ?, ?, ?, ?)";
+            PreparedStatement pst = DBConnect.getAuto(sql);
+            pst.setInt(1, t.getVaccineId());
+            pst.setInt(2, t.getWarehouseId());
+            pst.setString(3, t.getType());
+            pst.setInt(4, t.getQuantity());
+            pst.setTimestamp(5,Timestamp.valueOf(t.getDate()));
+            pst.setInt(6, t.getUser().getId());
+
+            int affectedRows = pst.executeUpdate();
+
+            if (affectedRows > 0) {
+                // lay id moi nhat
+                String getIdSql = "SELECT MAX(id) FROM transaction";
+                PreparedStatement getIdStmt = DBConnect.get(getIdSql);
+                ResultSet rs = getIdStmt.executeQuery();
+                if (rs.next()) {
+                    newId = rs.getInt(1);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return newId;
+    }
 }

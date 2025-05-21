@@ -22,5 +22,62 @@ public class Transaction {
 
     }
 
+    public Transaction(int warehouseId, int vaccineId, String type, int quantity, Users user) {
+        this.warehouseId = warehouseId;
+        this.vaccineId = vaccineId;
+        this.type = type;
+        this.quantity = quantity;
+        this.date = LocalDateTime.now();
+        this.user = user;
+    }
+
+    public int getTransactionId() {
+        return transactionId;
+    }
+    public void setTransactionId(int transactionId) {
+        this.transactionId = transactionId;
+    }
+    public int getWarehouseId() {
+        return warehouseId;
+    }
+    public void setWarehouseId(int warehouseId) {
+        this.warehouseId = warehouseId;
+    }
+    public int getVaccineId() {
+        return vaccineId;
+    }
+    public void setVaccineId(int vaccineId) {
+        this.vaccineId = vaccineId;
+    }
+    public String getType() {
+        return type;
+    }
+    public void setType(String type) {
+        this.type = type;
+    }
+    public int getQuantity() {
+        return quantity;
+    }
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+
+    }
+
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+    public Users getUser() {
+        return user;
+
+    }
+
+    public void setUser(Users user) {
+        this.user = user;
+    }
 
 }
+

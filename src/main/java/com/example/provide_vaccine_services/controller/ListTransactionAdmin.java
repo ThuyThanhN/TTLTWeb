@@ -1,8 +1,6 @@
 package com.example.provide_vaccine_services.controller;
 
-import com.example.provide_vaccine_services.dao.ProductStockDAO;
 import com.example.provide_vaccine_services.dao.TransactionDAO;
-import com.example.provide_vaccine_services.dao.model.ProductStock;
 import com.example.provide_vaccine_services.dao.model.Transaction;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,23 +11,19 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(name = "ListWarehouseAdmin", value = "/admin/table-data-warehouse")
-public class ListWarehouseAdmin extends HttpServlet {
+@WebServlet(name = "ListTransactionAdmin", value = "/admin/table-data-transaction")
+public class ListTransactionAdmin extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
         // Lấy danh sách vắc xin
-        ProductStockDAO productStockDAO = new ProductStockDAO();
-        List<ProductStock> productStocks = productStockDAO.getAll();
+        TransactionDAO transactionDAO = new TransactionDAO();
+        List<Transaction> transactions = transactionDAO.getAllTransaction();
 
-        for (ProductStock productStock : productStocks) {
-            System.out.println(productStock.getProductName() + " " + productStock.getQuantity() + productStock.getTotalPrice());
-        }
-
-        request.setAttribute("productStocks", productStocks);
-        request.getRequestDispatcher("table-data-warehouse.jsp").forward(request, response);
+        request.setAttribute("transactions", transactions);
+        request.getRequestDispatcher("table-data-transaction.jsp").forward(request, response);
     }
 
     @Override
