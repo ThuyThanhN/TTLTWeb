@@ -51,13 +51,13 @@ public class TransactionDAO {
         int newId = -1;
 
         try {
-            String sql = "insert into transaction( vaccine_id, center_id, type, quantity, date, user_id) " +
+            String sql = "insert into transaction( vaccine_id, type, quantity, expiry_date, user_id) " +
                     "values(?, ?, ?, ?, ?)";
             PreparedStatement pst = DBConnect.getAuto(sql);
             pst.setInt(1, t.getVaccineId());
             pst.setString(2, t.getType());
             pst.setInt(3, t.getQuantity());
-            pst.setTimestamp(4,Timestamp.valueOf(t.getDate()));
+            pst.setTimestamp(4, Timestamp.valueOf(t.getExpiry_date())); // chuyển đổi tại đây
             pst.setInt(5, t.getUser().getId());
 
             int affectedRows = pst.executeUpdate();

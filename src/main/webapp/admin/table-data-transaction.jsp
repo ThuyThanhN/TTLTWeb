@@ -72,7 +72,7 @@
             <c:forEach var="t" items="${transactions}">
                 <tr data-id="${t.transactionId}">
                     <td>${t.transactionId}</td>
-                    <td>${t.vaccineId}</td>
+                    <td>${vaccines.get(t.vaccineId)}</td>
                     <td>${t.type == 1 ? 'Nhập' : t.type == 2 ? 'Xuất' : 'Không xác định'}</td>
                     <td>${t.quantity}</td>
                     <td>${t.date}</td>

@@ -70,10 +70,9 @@ public class ProductStockDAO {
     }
 
     public void updateQuantity(int vaccineId, int delta) throws SQLException {
-        String sql = "UPDATE productStock SET quantity = quantity + ? WHERE idVaccine = ?";
+        String sql = "UPDATE vaccines SET stockQuantity = stockQuantity + ? WHERE id = ?";
         try  {
             PreparedStatement pst = DBConnect.get(sql);
-            pst.setInt(1, vaccineId);
             pst.setInt(1, delta);
             pst.setInt(2, vaccineId);
             pst.executeUpdate();
