@@ -231,7 +231,7 @@
                     <div>
                         <div class="">
                             <div class="d-flex gap-3">
-                                <div class="card-left dark-lightbule">
+                                <div class="card-left dark-lightblue">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24.75"
                                          height="24.75"
                                          viewBox="0 0 14 14">
@@ -362,7 +362,145 @@
                     </c:choose>
                 </div>
             </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card-wrapper bg-gradient-end-3">
+                    <div>
+                        <div class="">
+                            <div class="d-flex gap-3">
+                                <div class="card-left dark-blue">
+                                    <i class="fa-solid fa-syringe" style="width:24.75px; height:24.75px; font-size:24.75px;"></i>
+                                </div>
+                                <div>
+                                    <span class="title">Tổng vắc xin còn hàng</span>
+                                    <div class="amount-value"><f:formatNumber value="" type="number"
+                                                                              pattern="#,##0"/></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-right">
+                            <svg id="SvgjsSvg1724" width="80" height="42" xmlns="http://www.w3.org/2000/svg" version="1.1" transform="translate(0, 0)" style="background: transparent;">
+                                <foreignObject x="0" y="0" width="80" height="42">
+                                    <div class="apexcharts-legend" xmlns="http://www.w3.org/1999/xhtml" style="max-height: 21px;"></div>
+                                </foreignObject>
+                                <rect id="SvgjsRect1729" width="0" height="0" x="0" y="0" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fefefe"></rect>
+                                <g id="SvgjsG1762" class="apexcharts-yaxis" rel="0" transform="translate(-18, 0)"></g>
+                                <g id="SvgjsG1726" class="apexcharts-inner apexcharts-graphical" transform="translate(0, -3)">
+                                    <defs id="SvgjsDefs1725">
+                                        <clipPath id="gridRectMaskjbwqio8z">
+                                            <rect id="SvgjsRect1731" width="86" height="47" x="-3" y="-1" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect>
+                                        </clipPath>
+                                        <clipPath id="forecastMaskjbwqio8z"></clipPath>
+                                        <clipPath id="nonForecastMaskjbwqio8z"></clipPath>
+                                        <clipPath id="gridRectMarkerMaskjbwqio8z">
+                                            <rect id="SvgjsRect1732" width="84" height="49" x="-2" y="-2" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect>
+                                        </clipPath>
+                                        <linearGradient id="SvgjsLinearGradient1737" x1="0" y1="0" x2="0" y2="1">
+                                            <stop id="SvgjsStop1738" stop-opacity="0.75" stop-color="rgba(72,127,255,0.75)" offset="0"></stop>
+                                            <stop id="SvgjsStop1739" stop-opacity="0.3" stop-color="#487fff00" offset="1"></stop>
+                                            <stop id="SvgjsStop1740" stop-opacity="0.3" stop-color="#487fff00" offset="1"></stop>
+                                        </linearGradient>
+                                    </defs>
+                                    <g id="SvgjsG1743" class="apexcharts-grid">
+                                        <g id="SvgjsG1744" class="apexcharts-gridlines-horizontal"></g>
+                                        <g id="SvgjsG1745" class="apexcharts-gridlines-vertical"></g>
+                                        <!-- Các line bên trong grid bị xóa nếu có stroke-dasharray -->
+                                        <line id="SvgjsLine1748" x1="0" y1="45" x2="80" y2="45" stroke="transparent" stroke-dasharray="0" stroke-linecap="butt"></line>
+                                        <line id="SvgjsLine1747" x1="0" y1="1" x2="0" y2="45" stroke="transparent" stroke-dasharray="0" stroke-linecap="butt"></line>
+                                    </g>
+                                    <g id="SvgjsG1733" class="apexcharts-area-series apexcharts-plot-series">
+                                        <g id="SvgjsG1734" class="apexcharts-series" seriesName="series1" data:longestSeries="true" rel="1" data:realIndex="0">
+                                            <path id="SvgjsPath1741" d="M 0 45 L 0 37.5C 3.5 37.5 6.5 22.5 10 22.5C 13.5 22.5 16.5 33 20 33C 23.5 33 26.5 28.5 30 28.5C 33.5 28.5 36.5 36 40 36C 43.5 36 46.5 25.5 50 25.5C 53.5 25.5 56.5 34.5 60 34.5C 63.5 34.5 66.5 7.5 70 7.5C 73.5 7.5 76.5 30 80 30C 80 30 80 30 80 45M 80 30z" fill="url(#SvgjsLinearGradient1737)" fill-opacity="1" stroke-opacity="1" stroke-linecap="round" stroke-width="0" stroke-dasharray="0" class="apexcharts-area" index="0" clip-path="url(#gridRectMaskjbwqio8z)"></path>
+                                            <path id="SvgjsPath1742" d="M 0 37.5C 3.5 37.5 6.5 22.5 10 22.5C 13.5 22.5 16.5 33 20 33C 23.5 33 26.5 28.5 30 28.5C 33.5 28.5 36.5 36 40 36C 43.5 36 46.5 25.5 50 25.5C 53.5 25.5 56.5 34.5 60 34.5C 63.5 34.5 66.5 7.5 70 7.5C 73.5 7.5 76.5 30 80 30" fill="none" stroke="#487fff" stroke-opacity="1" stroke-linecap="round" stroke-width="2" class="apexcharts-area" index="0" clip-path="url(#gridRectMaskjbwqio8z)"></path>
+                                            <g id="SvgjsG1735" class="apexcharts-series-markers-wrap apexcharts-hidden-element-shown" data:realIndex="0">
+                                                <g class="apexcharts-series-markers">
+                                                    <circle id="SvgjsCircle1766" r="0" cx="0" cy="0" class="apexcharts-marker w39oozns9 no-pointer-events" stroke="#ffffff" fill="#487fff" fill-opacity="1" stroke-width="2" stroke-opacity="0.9"></circle>
+                                                </g>
+                                            </g>
+                                        </g>
+                                        <g id="SvgjsG1736" class="apexcharts-datalabels" data:realIndex="0"></g>
+                                    </g>
+                                    <g id="SvgjsG1746" class="apexcharts-grid-borders"></g>
+                                    <line id="SvgjsLine1750" x1="0" y1="0" x2="80" y2="0" stroke-dasharray="0" stroke-width="0" stroke-linecap="butt" class="apexcharts-ycrosshairs-hidden"></line>
+                                    <g id="SvgjsG1751" class="apexcharts-xaxis" transform="translate(0, 0)">
+                                        <g id="SvgjsG1752" class="apexcharts-xaxis-texts-g" transform="translate(0, 4)"></g>
+                                    </g>
+                                    <g id="SvgjsG1763" class="apexcharts-yaxis-annotations"></g>
+                                    <g id="SvgjsG1764" class="apexcharts-xaxis-annotations"></g>
+                                    <g id="SvgjsG1765" class="apexcharts-point-annotations"></g>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card-wrapper bg-gradient-end-3">
+                    <div>
+                        <div class="">
+                            <div class="d-flex gap-3">
+                                <div class="card-left dark-red">
+                                    <i class="fas fa-syringe" style="width:24.75px; height:24.75px; font-size:24.75px;"></i>
+                                </div>
+                                <div>
+                                    <span class="title">Tổng vắc xin hết hàng</span>
+                                    <div class="amount-value"><f:formatNumber value="" type="number"
+                                                                              pattern="#,##0"/></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-right">
+                            <svg id="SvgjsSvgRed" width="80" height="42" xmlns="http://www.w3.org/2000/svg" version="1.1" style="background: transparent;">
+                                <foreignObject x="0" y="0" width="80" height="42">
+                                    <div class="apexcharts-legend" xmlns="http://www.w3.org/1999/xhtml" style="max-height: 21px;"></div>
+                                </foreignObject>
+                                <rect width="0" height="0" x="0" y="0" fill="#fefefe"></rect>
+                                <g class="apexcharts-yaxis" transform="translate(-18, 0)"></g>
+                                <g class="apexcharts-inner apexcharts-graphical" transform="translate(0, -3)">
+                                    <defs>
+                                        <clipPath id="gridRectMaskRed">
+                                            <rect width="86" height="47" x="-3" y="-1" fill="#fff"></rect>
+                                        </clipPath>
+                                        <clipPath id="forecastMaskRed"></clipPath>
+                                        <clipPath id="nonForecastMaskRed"></clipPath>
+                                        <clipPath id="gridRectMarkerMaskRed">
+                                            <rect width="84" height="49" x="-2" y="-2" fill="#fff"></rect>
+                                        </clipPath>
+                                        <linearGradient id="SvgjsLinearGradientRed" x1="0" y1="0" x2="0" y2="1">
+                                            <stop stop-opacity="0.75" stop-color="rgba(255,77,77,0.75)" offset="0"></stop>
+                                            <stop stop-opacity="0.3" stop-color="rgba(255,77,77,0)" offset="1"></stop>
+                                        </linearGradient>
+                                    </defs>
+                                    <g class="apexcharts-grid">
+                                        <line x1="0" y1="45" x2="80" y2="45" stroke="transparent"></line>
+                                        <line x1="0" y1="1" x2="0" y2="45" stroke="transparent"></line>
+                                    </g>
+                                    <g class="apexcharts-area-series apexcharts-plot-series">
+                                        <g class="apexcharts-series" seriesName="series1">
+                                            <path d="M 0 45 L 0 37.5C 3.5 37.5 6.5 22.5 10 22.5C 13.5 22.5 16.5 33 20 33C 23.5 33 26.5 28.5 30 28.5C 33.5 28.5 36.5 36 40 36C 43.5 36 46.5 25.5 50 25.5C 53.5 25.5 56.5 34.5 60 34.5C 63.5 34.5 66.5 7.5 70 7.5C 73.5 7.5 76.5 30 80 30C 80 30 80 30 80 45M 80 30z"
+                                                  fill="url(#SvgjsLinearGradientRed)" stroke-width="0"></path>
+                                            <path d="M 0 37.5C 3.5 37.5 6.5 22.5 10 22.5C 13.5 22.5 16.5 33 20 33C 23.5 33 26.5 28.5 30 28.5C 33.5 28.5 36.5 36 40 36C 43.5 36 46.5 25.5 50 25.5C 53.5 25.5 56.5 34.5 60 34.5C 63.5 34.5 66.5 7.5 70 7.5C 73.5 7.5 76.5 30 80 30"
+                                                  fill="none" stroke="#ff4d4d" stroke-width="2"></path>
+                                            <g class="apexcharts-series-markers-wrap">
+                                                <g class="apexcharts-series-markers">
+                                                    <circle r="0" cx="0" cy="0" stroke="#ffffff" fill="#ff4d4d" stroke-width="2"></circle>
+                                                </g>
+                                            </g>
+                                        </g>
+                                    </g>
+                                    <line x1="0" y1="0" x2="80" y2="0" class="apexcharts-ycrosshairs-hidden"></line>
+                                    <g class="apexcharts-xaxis" transform="translate(0, 0)">
+                                        <g class="apexcharts-xaxis-texts-g" transform="translate(0, 4)"></g>
+                                    </g>
+                                    <g class="apexcharts-yaxis-annotations"></g>
+                                    <g class="apexcharts-xaxis-annotations"></g>
+                                    <g class="apexcharts-point-annotations"></g>
+                                </g>
+                            </svg>
 
+                        </div>
+                    </div>
+                </div>
+            </div>
             <%-- Phan kho  --%>
             <%--            <div class="col-12 col-md-6 col-lg-4">--%>
             <%--                <div class="card-wrapper light-blue">--%>

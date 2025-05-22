@@ -274,14 +274,14 @@ tfoot td {
 .drak-green {
     background: #22ad56;
 }
-.dark-blue {
-    background-color: #1d5aab;
-}
 .dark-red {
-    background-color: #de2222;
+    background-color: #E30A0A;
 }
-.dark-lightbule {
+.dark-lightblue {
     background: #00B8F2;
+}
+.dark-blue {
+    background-color: #487FFF;
 }
 .card-container .card-wrapper {
     margin-bottom: 15px;
