@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Định nghĩa Appender cho JDBC -->
+    <appender name="DB" class="ch.qos.logback.core.db.JDBCAppender">
+        <connectionSource class="ch.qos.logback.core.db.DriverManagerConnectionSource">
+            <driverClass>com.mysql.cj.jdbc.Driver</driverClass>
+            <url>jdbc:mysql://localhost:3306/your_database</url>
+            <user>your_user</user>
+            <password>your_password</password>
+        </connectionSource>
+        <sql>
+            <![CDATA[
+                INSERT INTO logs (level, message, logger, timestamp)
+                VALUES (%level%, %message%, %logger%, %timestamp%)
+            ]]>
+        </sql>
+    </appender>
+
+    <!-- Định nghĩa phần tử root để liên kết các appender -->
+    <root level="INFO">
+        <appender-ref ref="DB"/>
+        <appender-ref ref="console"/>
+    </root>
+
+</configuration>

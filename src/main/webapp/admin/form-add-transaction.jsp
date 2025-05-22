@@ -43,11 +43,11 @@
     <jsp:include page="headerAdmin.jsp"></jsp:include>
 
     <div class="info-vaccine-wrapper">
-        <form id="addTransaction" method="post" >
+        <form id="addTransaction" method="post">
             <div class="row">
                 <div class="col-12 col-md-7">
                     <div class="vaccine-info-form">
-                        <div class="section-title border-bottom p-3"> Tạo Giao dịch mới </div>
+                        <div class="section-title border-bottom p-3"> Tạo Giao dịch mới</div>
                         <div class="p-3">
                             <div class="row">
                                 <%--                                tên vaccine --%>
@@ -72,13 +72,8 @@
                                 </div>
                                 <div class="col-4">
                                     <div class="mb-3">
-                                        <label for="form-select-center" class="form-label"> Trung Tâm </label>
-                                        <select class="form-select form-control" id="form-select-center" name="center">
-                                            <option value="">---Chọn tình trạng---</option>
-                                            <c:forEach var="c" items="${centers}">
-                                                <option value="${c.id}">${c.name}</option>
-                                            </c:forEach>
-                                        </select>
+                                        <label for="expiry-date" class="form-label">Ngày hết hạn</label>
+                                        <input type="date" class="form-control" id="expiry-date" name="expiry_date">
                                     </div>
                                 </div>
                                 <%--                            loại transactions --%>

@@ -5,7 +5,8 @@
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danh sách lịch hẹn</title>
+    <title>Lịch hẹn tiêm vắc xin</title>
+    <link rel="icon" type="image/png" href="image/logo1.png">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -27,67 +28,62 @@
     <div class="main">
         <div class="container">
             <!-- Sidebar -->
-            <div class="sidebar">
-                <div class="profile-card">
-                    <img src="image/avatar1.png" alt="Avatar" class="profile-image">
-                    <h2 id="sidebar-username" class="sidebar-username">Anh Tiến</h2>
-                    <p>0703035425</p>
-                </div>
-                <ul class="menu">
-                    <li><a href="information.jsp"><i class="fa-regular fa-user"></i> Thông tin cá
-                        nhân</a></li>
-                    <li><a href="my-appointments" class="active"><i class="fa-solid fa-calendar-check"></i> Lịch hẹn tiêm vắc xin</a>
-                    </li>
-                    <li><a href="changePassword"><i class="fa-solid fa-key"></i> Đổi mật khẩu</a></li>
-                    <li><a href="#" data-bs-toggle="modal" data-bs-target="#lockAccountModal"><i class="fas fa-user-lock"></i> Khóa tài khoản</a></li>
-                    <li><a href="logout"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
-                </ul>
-
-                <!-- Modal lock account -->
-                <div class="modal fade" id="lockAccountModal" tabindex="-1" aria-labelledby="lockAccountModalLabel"
-                     aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <form action="lockAccount" method="post">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="lockAccountModalLabel">Thông Báo Khóa Tài Khoản
-                                    </h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Đóng"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="text-center">Tài khoản của bạn sẽ bị khóa. <br> Bạn có chắc chắn muốn tiếp
-                                        tục?
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                                    <button type="submit" class="btn btn-danger">Xác Nhận</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <jsp:include page="user_sidebar.jsp"></jsp:include>
 
             <!-- Main Content -->
-            <div class="main-content">
-                <h1 class="text-center">Danh sách lịch hẹn</h1>
+            <div style="width: 60%">
                 <div class="appointment-grid">
                     <c:forEach var="o" items="${orders}">
-                        <div class="appointment-card">
-                            <a href="appointment-slip?id=${o.order_id}">
-                                <ul style="color: #2A388F; font-size: 14px; font-weight: 500; float: right; margin-bottom: 0">
-                                    <li>${o.order_status}</li>
-                                    <li>${o.paymentStatus}</li>
-                                </ul>
-                                <img src="image/online-appointment1.png" alt="Hình ảnh phiếu hẹn">
-                                <p>Mã phiếu: <b>${o.order_id}</b></p>
-                                <p>Giá:<b><f:formatNumber value="${o.total_price}" type="number" pattern="#,##0"/>đ</b>
-                                </p>
-                                <p>Ngày hẹn: <b><f:formatDate value="${o.appointment_date}" pattern="dd-MM-yyyy"/></b>
-                                </p>
-                            </a>
+                        <%--                        <div class="appointment-card">--%>
+                        <%--                            <a href="appointment-slip?id=${o.order_id}">--%>
+                        <%--                                <ul style="color: #2A388F; font-size: 14px; font-weight: 500; float: right; margin-bottom: 0">--%>
+                        <%--                                    <li>${o.order_status}</li>--%>
+                        <%--                                    <li>${o.paymentStatus}</li>--%>
+                        <%--                                </ul>--%>
+                        <%--                                <img src="image/online-appointment1.png" alt="Hình ảnh phiếu hẹn">--%>
+                        <%--                                <p>Mã phiếu: <b>${o.order_id}</b></p>--%>
+                        <%--                                <p>Giá:<b><f:formatNumber value="${o.total_price}" type="number" pattern="#,##0"/>đ</b>--%>
+                        <%--                                </p>--%>
+                        <%--                                <p>Ngày hẹn: <b><f:formatDate value="${o.appointment_date}" pattern="dd-MM-yyyy"/></b>--%>
+                        <%--                                </p>--%>
+                        <%--                            </a>--%>
+                        <%--                        </div>--%>
+
+                        <div class="appointment-card mb-4">
+                            <div class="d-flex justify-content-between border-bottom pb-2">
+                                <div class="d-flex order_id">
+                                    <span><b>Mã phiếu:</b> ${o.order_id}</span>
+                                    <span class="dot-before appointment-date">
+                                            <b>Ngày hẹn: <f:formatDate value="${o.appointment_date}"
+                                                                       pattern="dd-MM-yyyy"/></b>
+                                        </span>
+                                </div>
+                                <div class="status ${o.order_status eq 'Chưa được duyệt' ? 'status-pending' : 'status-approved'}">
+                                        ${o.order_status}
+                                </div>
+
+                            </div>
+                            <div class="d-flex justify-content-between mt-2">
+                                <div>
+                                    <img src="image/report.png" alt="Hình ảnh phiếu hẹn">
+                                </div>
+                                <div>
+                                    <div style="color: #333; font-size: 14px">Tổng tiền: <span
+                                            class="price"><f:formatNumber value="${o.total_price}" type="number"
+                                                                          pattern="#,##0"/>đ</span></div>
+
+                                    <div class="text-end mt-1 status ${o.paymentStatus eq 'Chưa thanh toán' ? 'status-pending' : 'status-approved'}">
+                                        <img src="image/${o.paymentStatus eq 'Chưa thanh toán' ? 'remove' : 'checked'}.png"
+                                             alt="${o.paymentStatus}"
+                                             style="width: 16px; height: 16px; margin: 1px 3px 0 0">
+                                            ${o.paymentStatus}
+                                    </div>
+                                    <div class="d-flex mt-5">
+                                        <a href="appointment-slip?id=${o.order_id}" class="btn btn-detail ms-auto">Xem chi tiết</a>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </c:forEach>
                 </div>

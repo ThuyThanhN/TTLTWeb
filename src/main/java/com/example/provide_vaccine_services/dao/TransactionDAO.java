@@ -24,18 +24,17 @@ public class TransactionDAO {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 int vaccine_id = rs.getInt("vaccine_id");
-                int center_id = rs.getInt("center_id");
                 String type = rs.getString("type");
                 int quantity = rs.getInt("quantity");
                 int user_id = rs.getInt("user_id");
                 // Dung Timestamp lay gia tri => Chuyen doi sang LocalDateTime
-                Timestamp timestamp = rs.getTimestamp("date");
-                LocalDateTime createAt = timestamp != null ? timestamp.toLocalDateTime() : null;
+                Timestamp timestamp = rs.getTimestamp("expiry_date");
+                LocalDateTime expiry_date = timestamp != null ? timestamp.toLocalDateTime() : null;
 
                 UserDao userDao = new UserDao();
                 Users user = userDao.getUserById(user_id);
 
-                Transaction transaction = new Transaction(id ,center_id, vaccine_id, type, quantity, createAt, user);
+                Transaction transaction = new Transaction(id, vaccine_id, type, quantity, expiry_date, user);
 
                 transactions.add(transaction);
 
@@ -53,14 +52,13 @@ public class TransactionDAO {
 
         try {
             String sql = "insert into transaction( vaccine_id, center_id, type, quantity, date, user_id) " +
-                    "values(?, ?, ?, ?, ?, ?)";
+                    "values(?, ?, ?, ?, ?)";
             PreparedStatement pst = DBConnect.getAuto(sql);
             pst.setInt(1, t.getVaccineId());
-            pst.setInt(2, t.getWarehouseId());
-            pst.setString(3, t.getType());
-            pst.setInt(4, t.getQuantity());
-            pst.setTimestamp(5,Timestamp.valueOf(t.getDate()));
-            pst.setInt(6, t.getUser().getId());
+            pst.setString(2, t.getType());
+            pst.setInt(3, t.getQuantity());
+            pst.setTimestamp(4,Timestamp.valueOf(t.getDate()));
+            pst.setInt(5, t.getUser().getId());
 
             int affectedRows = pst.executeUpdate();
 

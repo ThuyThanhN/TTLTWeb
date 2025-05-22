@@ -4,31 +4,31 @@ import java.time.LocalDateTime;
 
 public class Transaction {
     int transactionId;
-    int warehouseId;
     int vaccineId;
     String type;
     int quantity;
-    LocalDateTime date;
+    LocalDateTime created_date;
+    LocalDateTime expiry_date;
     Users user; // person who created the transaction
 
-    public Transaction(int transactionId, int warehouseId, int vaccineId, String type, int quantity, LocalDateTime date, Users user) {
+
+    public Transaction(int transactionId, int vaccineId, String type, int quantity, LocalDateTime expiry_date, Users user) {
         this.transactionId = transactionId;
-        this.warehouseId = warehouseId;
         this.vaccineId = vaccineId;
         this.type = type;
         this.quantity = quantity;
-        this.date = date;
+        this.created_date = LocalDateTime.now();
         this.user = user;
-
+        this.expiry_date = expiry_date;
     }
 
-    public Transaction(int warehouseId, int vaccineId, String type, int quantity, Users user) {
-        this.warehouseId = warehouseId;
+    public Transaction( int vaccineId, String type, int quantity, LocalDateTime expiry_date, Users user) {
         this.vaccineId = vaccineId;
         this.type = type;
         this.quantity = quantity;
-        this.date = LocalDateTime.now();
+        this.created_date = LocalDateTime.now();
         this.user = user;
+        this.expiry_date = expiry_date;
     }
 
     public int getTransactionId() {
@@ -36,12 +36,6 @@ public class Transaction {
     }
     public void setTransactionId(int transactionId) {
         this.transactionId = transactionId;
-    }
-    public int getWarehouseId() {
-        return warehouseId;
-    }
-    public void setWarehouseId(int warehouseId) {
-        this.warehouseId = warehouseId;
     }
     public int getVaccineId() {
         return vaccineId;
@@ -64,17 +58,22 @@ public class Transaction {
     }
 
     public LocalDateTime getDate() {
-        return date;
+        return created_date;
     }
 
-    public void setDate(LocalDateTime date) {
-        this.date = date;
+    public void setDate(LocalDateTime created_date) {
+        this.created_date = created_date;
     }
     public Users getUser() {
         return user;
 
     }
-
+    public LocalDateTime getExpiry_date() {
+        return expiry_date;
+    }
+    public void setExpiry_date(LocalDateTime expiry_date) {
+        this.expiry_date = expiry_date;
+    }
     public void setUser(Users user) {
         this.user = user;
     }

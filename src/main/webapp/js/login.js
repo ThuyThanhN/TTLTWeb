@@ -59,10 +59,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Kiểm tra nếu tài khoản chưa được xác thực
                 if (response === "not_verified") {
                     document.getElementById('modal-message').innerText = "Tài khoản chưa xác thực. Vui lòng kiểm tra email để xác thực tài khoản.";
-                    modal.classList.remove('hidden'); // Mở modal
+                    modal.classList.remove('hidden'); // Mở modal xác thực
+                } else if (response === "lockAccount") {
+                    // Hiển thị modal thông báo tài khoản bị khóa và yêu cầu kích hoạt lại
+                    document.getElementById('modal-message').innerText = "Tài khoản của bạn đã bị khóa. Quá nhiều yêu cầu. Vui lòng thử lại sau 1 phút.";
+                    modal.classList.remove('hidden'); // Mở modal xác thực
                 } else if (response === "error") {
                     errorMessage.style.display = 'block';
                     errorMessage.innerHTML = 'Tên đăng nhập hoặc mật khẩu không đúng!';
+                } else if (response === "locked") {
+                    // Hiển thị modal cho người dùng bị khóa đăng nhập
+                    document.getElementById('modal-message').innerText = "Tài khoản đã bị khóa do quá nhiều lần nhập sai. Vui lòng thử lại sau 1 phút.";
+                    modal.classList.remove('hidden'); // Mở modal khóa tài khoản
                 } else if (response === "index" || response === "admin/dashboard") {
                     window.location.href = response;  // Chuyển hướng thành công
                 }
@@ -81,4 +89,19 @@ document.addEventListener('DOMContentLoaded', function () {
         // Gửi thông tin đăng nhập qua AJAX
         xhr.send('username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password));
     });
+
+    const togglePasswordVisibility = (toggleButton, passwordInput) => {
+        if (toggleButton && passwordInput) {
+            toggleButton.addEventListener('click', function () {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.classList.toggle('fa-eye');
+                this.classList.toggle('fa-eye-slash');
+            });
+        }
+    };
+
+    const togglePassword = document.querySelector('#togglePassword');
+    const passwordInput = document.querySelector('#password');
+    togglePasswordVisibility(togglePassword, passwordInput)
 });

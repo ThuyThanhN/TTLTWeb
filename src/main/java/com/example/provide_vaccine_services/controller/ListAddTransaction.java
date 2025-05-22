@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -45,16 +46,18 @@ public class ListAddTransaction extends HttpServlet {
         String vaccine = request.getParameter("vaccine");
         String quantity = request.getParameter("quantityVaccine");
         String type = request.getParameter("type");
-        String centerName = request.getParameter("center");
+        String expiry_date = request.getParameter("expiry_date");
+        LocalDate expiryDate = LocalDate.parse(expiry_date); // yyyy-MM-dd
+        LocalDateTime expiryDateTime = expiryDate.atStartOfDay(); // chuyển thành LocalDateTime
+
 
         // parse
-        int centerId = Integer.parseInt(centerName);
         int vaccineId = Integer.parseInt(vaccine);
         int quantityVaccine = Integer.parseInt(quantity);
         Users user = (Users) request.getSession().getAttribute("user");
 
         // thêm transaction
-        Transaction t = new Transaction(centerId, vaccineId, type, quantityVaccine, user);
+        Transaction t = new Transaction(vaccineId, type, quantityVaccine, expiryDateTime, user);
         TransactionDAO transactionDAO = new TransactionDAO();
         transactionDAO.insert(t);
 
@@ -65,6 +68,7 @@ public class ListAddTransaction extends HttpServlet {
         try {
             existingStock = productStockDAO.findByVaccineId(t.getVaccineId());
             int delta = (t.getType().equals("1")) ? t.getQuantity() : -t.getQuantity();
+            System.out.println(t.getType());
 
             if (existingStock != null) {
                 System.out.println("Existing stock is not null");
@@ -77,7 +81,7 @@ public class ListAddTransaction extends HttpServlet {
                         vaccineDao.getVaccineById(t.getVaccineId()).getName(),
                         vaccineDao.getVaccineById(t.getVaccineId()).getPrice() * t.getQuantity(),
                         0,               // loss ban đầu = 0
-                        LocalDateTime.now().plusMonths(6) // hết hạn sau 6 tháng
+                        expiryDateTime // hết hạn sau 6 tháng
                 );
                 productStockDAO.insert(newStock, delta);
             }

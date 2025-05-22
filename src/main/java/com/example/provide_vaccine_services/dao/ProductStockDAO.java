@@ -100,6 +100,8 @@ public class ProductStockDAO {
             pst.setTimestamp(6, Timestamp.valueOf(stock.getExpired()));
             pst.executeUpdate();
 
+            vaccineDao.updateQuantity(v.getId(), v.getStockQuantity() + delta);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

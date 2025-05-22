@@ -60,10 +60,10 @@
             <tr class="list-header">
                 <th scope="col">ID</th>
                 <th scope="col">Tên vắc xin</th>
-                <th scope="col">Trung tâm</th>
                 <th scope="col">Nhập/Xuất</th>
                 <th scope="col">Số lượng</th>
-                <th scope="col">Ngày</th>
+                <th scope="col">Ngày Tạo </th>
+                <th scope="col"> Ngày hết hạn vaccine </th>
                 <th scope="col">Người thực hiện</th>
                 <th scope="col">Chỉnh sửa</th>
             </tr>
@@ -73,10 +73,10 @@
                 <tr data-id="${t.transactionId}">
                     <td>${t.transactionId}</td>
                     <td>${t.vaccineId}</td>
-                    <td>${t.warehouseId}</td>
                     <td>${t.type == 1 ? 'Nhập' : t.type == 2 ? 'Xuất' : 'Không xác định'}</td>
                     <td>${t.quantity}</td>
                     <td>${t.date}</td>
+                    <td>${t.expiry_date}</td>
                     <td>${t.user.id}</td>
                     <td>
                         <!-- Nut sua -->

@@ -30,20 +30,37 @@ public class ShoppingCart extends HttpServlet {
         Users users = (Users) session.getAttribute("user");
         double totalBill = 0;
 
-        if (users == null) {
-            throw new ServletException("User is not logged in");
+//        if (users == null) {
+//            throw new ServletException("User is not logged in");
+//        }
+
+        // Chỉ lấy userId nếu đã đăng nhập
+        Integer userId = null;
+        if (users != null) {
+            userId = users.getId();
+            System.out.println("userId---" + userId);
         }
 
-        int userId = users.getId();
-        System.out.println("userId---" + userId);
         String options = request.getParameter("options");
         String cartId = request.getParameter("cartId");
 
         // get cart session neu ko co thi tao model cart moi
         List<Integer> listCart = (List<Integer>) session.getAttribute("listCart");
+        if (listCart == null) {
+            listCart = new ArrayList<>();
+        }
         Map<Integer, Patients> integerPatientsMap = (Map<Integer, Patients>) session.getAttribute("integerPatientsMap");
+        if (integerPatientsMap == null) {
+            integerPatientsMap = new HashMap<>();
+        }
         Map<Integer, ContactPersons> integerContactPersonsMap = (Map<Integer, ContactPersons>) session.getAttribute("integerContactPersonsMap");
+        if (integerContactPersonsMap == null) {
+            integerContactPersonsMap = new HashMap<>();
+        }
         Map<Orders, List<OrderDetails>> ordersOrderDetailsMap = (Map<Orders, List<OrderDetails>>) session.getAttribute("ordersOrderDetailsMap");
+        if (ordersOrderDetailsMap == null) {
+            ordersOrderDetailsMap = new HashMap<>();
+        }
 
         // neu remove
         if (options != null && cartId != null && options.equalsIgnoreCase("remove")) {
@@ -84,6 +101,14 @@ public class ShoppingCart extends HttpServlet {
             // neu vao cart mac dinh
             if (listCart == null) {
                 listCart = new ArrayList<>();
+            }
+
+            //
+            // Kiểm tra nếu giỏ hàng trống thì chuyển đến trang "noOrder.jsp"
+            if (ordersOrderDetailsMap == null || ordersOrderDetailsMap.isEmpty()) {
+                RequestDispatcher dispatcher = request.getRequestDispatcher("noOrder.jsp");
+                dispatcher.forward(request, response);
+                return; // Dừng thực thi để không tiếp tục xử lý bên dưới
             }
 
             // chỉnh sửa lại giá cua totalBill
