@@ -212,6 +212,9 @@ body {
 .bg-gradient-end-3 {
     background: linear-gradient(to right, #FFFFFF, #EEFBFF);
 }
+.bg-gradient-end-4 {
+    background: linear-gradient(to right, #FFFFFF, #FFE5E7);
+}
 .tabular-wrapper {
     background-color: #fff;
     margin-top: 1rem;

@@ -23,22 +23,24 @@ public class TKAdmin extends HttpServlet {
         VaccineDao vaccineDao = new VaccineDao();
         UserDao userDao = new UserDao();
         OrderDetailDao odd = new OrderDetailDao();
-        OrderDao od = new OrderDao();
 
-
+        // Người dùng
         int totalUser = userDao.totalUser();
         int userCountChange = userDao.getUsersCountLastWeek();
         List<Users> userRegisterThisMonth = userDao.getUsersRegisterThisMonth();
 
+
+        // Đơn hàng
         int totalOrder = odd.totalOrder();
         int orderCountChange = odd.getOrdersCountLastWeek();
 
+        // Doanh thu
         float totalRevenue = odd.totalRevenue();
         float revenueCountChange = odd.getTotalRevenueLaskWeeks();
 
-//        int totalVacine = vaccineDao.totalVaccines();
-//        int totalExpire = vaccineDao.statusVaccines();
-//        List<Vaccines> countOrder = od.quantityVaccine();
+        // Vắc xin còn hàng hoặc hết hàng
+        int countInStock = vaccineDao.countInStock();
+        int countOutOfStock = vaccineDao.countOutOfStock();
 
         request.setAttribute("totalUser", totalUser);
         request.setAttribute("userCountChange", userCountChange);
@@ -47,9 +49,8 @@ public class TKAdmin extends HttpServlet {
         request.setAttribute("orderCountChange", orderCountChange);
         request.setAttribute("totalRevenue", totalRevenue);
         request.setAttribute("revenueCountChange", revenueCountChange);
-//        request.setAttribute("totalVacine", totalVacine);
-//        request.setAttribute("totalExpire", totalExpire);
-//        request.setAttribute("countOrder", countOrder);
+        request.setAttribute("countInStock", countInStock);
+        request.setAttribute("countOutOfStock", countOutOfStock);
 
         request.getRequestDispatcher("/admin/dashboard.jsp").forward(request, response);
     }

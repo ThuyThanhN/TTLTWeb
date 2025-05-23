@@ -716,6 +716,8 @@ public class UserDao {
     }
 
     // Đếm số lượng người đăng ký tài khoản tuần này so với tuần trước bao nhiêu người
+    // SQL1: Đếm số người dùng mới trong tuần này tính từ t2 -> cn này
+    // SQL2: Đếm số người dùng mới trong tuần này tính từ t2 tuần trước -> t2 tuần này
     public int getUsersCountLastWeek() {
         int count = 0;
         try {
@@ -745,6 +747,7 @@ public class UserDao {
         return count;
     }
 
+    // Danh sách người dùng đăng ký trong một tháng
     public List<Users> getUsersRegisterThisMonth() {
         List<Users> result = new ArrayList<>();
         try {

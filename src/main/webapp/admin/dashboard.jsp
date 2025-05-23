@@ -372,8 +372,7 @@
                                 </div>
                                 <div>
                                     <span class="title">Tổng vắc xin còn hàng</span>
-                                    <div class="amount-value"><f:formatNumber value="" type="number"
-                                                                              pattern="#,##0"/></div>
+                                    <div class="amount-value">${countInStock}</div>
                                 </div>
                             </div>
                         </div>
@@ -434,7 +433,7 @@
                 </div>
             </div>
             <div class="col-12 col-md-6 col-lg-4">
-                <div class="card-wrapper bg-gradient-end-3">
+                <div class="card-wrapper bg-gradient-end-4">
                     <div>
                         <div class="">
                             <div class="d-flex gap-3">
@@ -443,8 +442,7 @@
                                 </div>
                                 <div>
                                     <span class="title">Tổng vắc xin hết hàng</span>
-                                    <div class="amount-value"><f:formatNumber value="" type="number"
-                                                                              pattern="#,##0"/></div>
+                                    <div class="amount-value">${countOutOfStock}</div>
                                 </div>
                             </div>
                         </div>
