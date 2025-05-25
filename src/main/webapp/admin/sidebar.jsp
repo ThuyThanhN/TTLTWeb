@@ -61,8 +61,8 @@
                 <span>Trung tâm</span>
             </a>
         </li>
-        <li class="<%= (request.getRequestURI().contains("table-data-center")) ? "active" : "" %>">
-            <a href="table-data-center">
+        <li class="<%= (request.getRequestURI().contains("table-data-logs")) ? "active" : "" %>">
+            <a href="table-data-logs">
                 <i class="fa-regular fa-hospital"></i>
                 <span>Logs</span>
             </a>

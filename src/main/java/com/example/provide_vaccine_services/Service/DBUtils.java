@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -42,5 +43,9 @@ public class DBUtils {
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(url, user, password);
+    }
+    public static PreparedStatement get(String sql) throws SQLException {
+        Connection conn = getConnection();
+        return conn.prepareStatement(sql);
     }
 }
