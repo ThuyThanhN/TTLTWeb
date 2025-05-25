@@ -1,10 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html lang="vi">
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Không có quyền truy cập - TTT</title>
+    <title>Giỏ hàng</title>
     <link rel="icon" type="image/png" href="image/logo1.png">
     <!-- Bootstrap, jquery   -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -16,21 +13,18 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/error.css">
+    <link rel="stylesheet" href="css/noCart.css">
 </head>
 <body>
-<!-- Header -->
 <jsp:include page="header.jsp"></jsp:include>
 <div class="main">
     <div class="container">
         <div class="row my-4">
-            <div class="col-xs-12 col-sm-6 col-md-6 padding-right-0" id="bentrai">
-                <img src="image/error403.jpeg" class="w-100" id="anhbentrai">
-            </div>
-            <div class="col-xs-12 col-sm-6 col-md-6 reset_xs_12 padding-left-0" id="benphai">
-                <div class="text_404_italic">
-                    <p class="error-content">Bạn không có quyền truy cập hoặc trên máy chủ này
-                </div>
+            <div class="col-12 d-flex flex-column align-items-center justify-content-center">
+                <img src="image/nocart.png" class="nocart mb-3">
+                <p class="text-center" style="font-size: 21px">Giỏ hàng trống</p>
+                <p class="text-center" style="font-size: 17px; color: #98A2B3">Không có sản phẩm nào trong giỏ hàng</p>
+                <a href="index" class="home mt-3">VỀ TRANG CHỦ</a>
             </div>
         </div>
     </div>

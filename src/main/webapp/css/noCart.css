@@ -1,0 +1,27 @@
+.home {
+    display: flex;
+    width: 40%;
+    justify-content: center;
+    border-radius: .5rem;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #2a388f;
+    background-color: #2a388f;
+    padding: .625rem;
+    text-align: center;
+    font-weight: 700;
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+.home:hover {
+    color: #fff !important;
+}
+.nocart {
+    height: 270px;
+    width: 432px;
+    background-size: 432px 270px;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+    line-height: 2rem;
+}
+

@@ -157,25 +157,25 @@ body {
     text-transform: uppercase;
 }
 .card-container .card-left {
+    width: 51px;
+    height: 51px;
     text-align: center;
     color: #fff;
     border-radius: 50%;
-    padding: 20px 25px;
-}
-.card-container {
-    background: #fff;
-    padding: 2rem 2rem 1rem 2rem;
-    border-radius: 10px;
+    padding-top: 12px;
 }
 .card-wrapper {
     height: 120px;
     border-radius: 10px;
-    padding: 0.8rem 0.5rem;
-    gap: 5px;
+    transition: all 0.5s ease-in-out;
+    border: 1px solid #d1d5db80;
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+.card-wrapper > div {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: all 0.5s ease-in-out;
 }
 .card-wrapper .title {
     font-size: 15px;
@@ -184,8 +184,36 @@ body {
     color: #333;
 }
 .card-wrapper .amount-value {
-    font-size: 15px;
+    font-size: 20px;
     font-weight: 600;
+}
+.text-success-main {
+    color: #45B369;
+    font-weight: 500;
+    padding: 2px 0;
+}
+.text-danger-main {
+    color: #EF4A00;
+    font-weight: 500;
+    padding: 2px 0;
+}
+.bg-success-focus {
+    background-color: rgba(69, 179, 105, 0.1490196078) !important;
+}
+.bg-danger-focus {
+    background-color: rgba(239, 71, 112, 0.1490196078);
+}
+.bg-gradient-end-1 {
+    background: linear-gradient(to right, #FFFFFF, #EAFFF9);
+}
+.bg-gradient-end-2 {
+    background: linear-gradient(to right, #FFFFFF, #FFF5E9);
+}
+.bg-gradient-end-3 {
+    background: linear-gradient(to right, #FFFFFF, #EEFBFF);
+}
+.bg-gradient-end-4 {
+    background: linear-gradient(to right, #FFFFFF, #FFE5E7);
 }
 .tabular-wrapper {
     background-color: #fff;
@@ -249,11 +277,14 @@ tfoot td {
 .drak-green {
     background: #22ad56;
 }
-.dark-blue {
-    background-color: #1d5aab;
-}
 .dark-red {
-    background-color: #de2222;
+    background-color: #E30A0A;
+}
+.dark-lightblue {
+    background: #00B8F2;
+}
+.dark-blue {
+    background-color: #487FFF;
 }
 .card-container .card-wrapper {
     margin-bottom: 15px;
@@ -291,10 +322,31 @@ tfoot td {
 input:focus {
     box-shadow: none !important;
 }
-@media (min-width: 1200px) {
-    .card-wrapper {
-        justify-content: space-around;
-    }
+.status-select {
+    font-size: 13px;
+    background: #fff;
+    color: #000;
+}
+
+.status.active {
+    border-color: #b9ffd3;
+    background-color: #b9ffd3;
+    color: #008000;
+}
+
+.status.inactive {
+    border-color: #f9c9cd;
+    background-color: #f9c9cd;
+    color: #a90312;
+}
+.user-email {
+    font-weight: 500;
+    font-size: 13px;
+}
+.main-title-dashboard {
+    text-transform: uppercase;
+    margin: 15px 0;
+    color: #2a388f;
 }
 @media (max-width: 786px) {
     body {

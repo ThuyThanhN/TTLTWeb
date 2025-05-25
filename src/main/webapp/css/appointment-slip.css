@@ -55,19 +55,20 @@ form{
     flex-direction: column;
 }
 .info-row {
-    font-weight: 500;
-    color: #333333; /* Đậm màu hơn cho nhãn */
+    display: grid;
+    grid-template-columns: 200px auto;
     margin-bottom: 10px;
-}
-
-.info-row .value {
-    color: #888888; /* Nhạt màu hơn cho giá trị */
-    font-weight: normal;
     font-size: 14px;
+}
+.order-info-label {
+    color: #666;
+}
+.info-row .value {
+    color: #333;
 }
 .note{
     color: #ff8b07 !important;
-    margin-top: 10px;
+    margin: 10px 0 !important;
     font-weight: 500;
 }
 /* Responsive */
