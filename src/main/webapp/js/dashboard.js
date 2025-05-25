@@ -23,6 +23,49 @@ $(document).ready(function () {
     }
 
     initializeDataTable('#admin');
+    initializeDataTable('#user');
+
+    $(".status").change(function () {
+        var id = $(this).data("id");
+        var status = $(this).val();
+
+        $.ajax({
+            url: "/provide_vaccine_services_war/admin/dashboard",
+            type: "POST",
+            data: {
+                id: id,
+                status: status
+            },
+            success: function (response) {
+                console.log("Cap nhat trang thai thanh cong", response);
+            },
+            error: function (xhr) {
+            }
+        });
+    });
+
+});
+
+const statusSelects = document.querySelectorAll('.status');
+
+statusSelects.forEach(select => {
+    if (select.value === "1") {
+        select.classList.add('active');
+    } else {
+        select.classList.add('inactive');
+    }
+
+    select.addEventListener('change', function () {
+        const selectedValue = this.value;
+
+        this.classList.remove('active', 'inactive');
+
+        if (selectedValue === "1") {
+            this.classList.add('active');
+        } else {
+            this.classList.add('inactive');
+        }
+    });
 });
 
 

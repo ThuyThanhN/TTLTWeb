@@ -103,7 +103,7 @@ function showVaccines(response) {
                     <div class="col-12 col-md-4 mb-3">
                         <div class="vx_item">
                             <a href="detail_vaccines?id=${v.id}">
-                                <img src="${v.imageUrl}" alt="">
+                                <img src="${v.imageUrl}" alt="${v.name}" loading="lazy" decoding="async">
                                 <div class="vaccine_name" title="${v.name}">${v.name}</div>
                             </a>
                             <div class="vaccine-content">${v.description}</div>

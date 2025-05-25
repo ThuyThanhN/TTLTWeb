@@ -6,6 +6,7 @@ import com.example.provide_vaccine_services.dao.UserDao;
 import com.example.provide_vaccine_services.dao.VaccineDao;
 import com.example.provide_vaccine_services.dao.model.OrderDetails;
 import com.example.provide_vaccine_services.dao.model.Orders;
+import com.example.provide_vaccine_services.dao.model.Users;
 import com.example.provide_vaccine_services.dao.model.Vaccines;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -22,24 +23,50 @@ public class TKAdmin extends HttpServlet {
         VaccineDao vaccineDao = new VaccineDao();
         UserDao userDao = new UserDao();
         OrderDetailDao odd = new OrderDetailDao();
-        OrderDao od = new OrderDao();
 
-        int totalVacine = vaccineDao.totalVaccines();
-        int totalExpire = vaccineDao.statusVaccines();
+        // Người dùng
         int totalUser = userDao.totalUser();
-        int totalOrder = odd.totalOrder();
-        List<Vaccines> countOrder = od.quantityVaccine();
+        int userCountChange = userDao.getUsersCountLastWeek();
+        List<Users> userRegisterThisMonth = userDao.getUsersRegisterThisMonth();
 
-        request.setAttribute("totalVacine", totalVacine);
-        request.setAttribute("totalExpire", totalExpire);
+
+        // Đơn hàng
+        int totalOrder = odd.totalOrder();
+        int orderCountChange = odd.getOrdersCountLastWeek();
+
+        // Doanh thu
+        float totalRevenue = odd.totalRevenue();
+        float revenueCountChange = odd.getTotalRevenueLaskWeeks();
+
+        // Vắc xin còn hàng hoặc hết hàng
+        int countInStock = vaccineDao.countInStock();
+        int countOutOfStock = vaccineDao.countOutOfStock();
+
         request.setAttribute("totalUser", totalUser);
+        request.setAttribute("userCountChange", userCountChange);
+        request.setAttribute("userRegister", userRegisterThisMonth);
         request.setAttribute("totalOrder", totalOrder);
-        request.setAttribute("countOrder", countOrder);
+        request.setAttribute("orderCountChange", orderCountChange);
+        request.setAttribute("totalRevenue", totalRevenue);
+        request.setAttribute("revenueCountChange", revenueCountChange);
+        request.setAttribute("countInStock", countInStock);
+        request.setAttribute("countOutOfStock", countOutOfStock);
 
         request.getRequestDispatcher("/admin/dashboard.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        String status = request.getParameter("status");
+
+        UserDao userDao = new UserDao();
+        boolean isUpdated = userDao.updateStatus(id, status);
+
+        if (isUpdated) {
+            response.getWriter().write("{\"message\": \"success\"}");
+        } else {
+            response.getWriter().write("{\"message\": \"error\"}");
+        }
     }
 }
