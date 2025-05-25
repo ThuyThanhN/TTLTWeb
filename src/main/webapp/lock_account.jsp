@@ -58,7 +58,7 @@
                     <p><%= user.getPhone() %>
                     </p>
                 </div>
-                <ul class="menu">
+                <ul class=" ,. ">
                     <li><a href="information.jsp" class="active"><i class="fa-regular fa-user"></i> Thông tin cá
                         nhân</a></li>
                     <li><a href="my-appointments"><i class="fa-solid fa-calendar-check"></i> Lịch hẹn tiêm vắc xin</a>

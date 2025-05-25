@@ -811,7 +811,7 @@ public class VaccineDao {
                             rs.getString("sideEffects"),
                             rs.getString("name"),
                             rs.getString("description"),
-                            rs.getString("imageUrl") // 🔥 Lấy ảnh từ database
+                            rs.getString("imageUrl") //
                     );
 
                     vaccineDetails = new VaccineDetails(

@@ -61,6 +61,12 @@
                 <span>Trung tâm</span>
             </a>
         </li>
+        <li class="<%= (request.getRequestURI().contains("table-data-center")) ? "active" : "" %>">
+            <a href="table-data-center">
+                <i class="fa-regular fa-hospital"></i>
+                <span>Logs</span>
+            </a>
+        </li>
         <li>
             <a href="${pageContext.request.contextPath}/logout">
                 <i class="fas fa-sign-out-alt"></i>
