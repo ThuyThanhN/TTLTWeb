@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Title</title>
+    <link rel="stylesheet" href="../css/sidebar.css">
 </head>
 <body>
 <div class="sidebar" id="sidebar">
@@ -63,20 +64,20 @@
         </li>
         <li class="<%= (request.getRequestURI().contains("table-data-logs")) ? "active" : "" %>">
             <a href="table-data-logs">
-                <i class="fa-regular fa-hospital"></i>
+                <i class="fas fa-file-alt"></i>
                 <span>Logs</span>
             </a>
         </li>
         <li class="<%= (request.getRequestURI().contains("table-data-transaction")) ? "active" : "" %>">
             <a href="table-data-transaction">
                 <i class="fa-solid fa-truck"></i>
-                <span> Nhập / xuất hàng </span>
+                <span>Giao dịch</span>
             </a>
         </li>
         <li class="<%= (request.getRequestURI().contains("table-data-warehouse")) ? "active" : "" %>">
             <a href="table-data-warehouse">
                 <i class="fa-solid fa-warehouse"></i>
-                <span> Kho hàng </span>
+                <span>Kho hàng</span>
             </a>
         </li>
         <li>

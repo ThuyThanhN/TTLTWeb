@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vắc xin | Quản trị Admin</title>
+    <title>Kho hàng | Quản trị Admin</title>
     <!-- Bootstrap, jquery   -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -42,11 +42,8 @@
     <jsp:include page="headerAdmin.jsp"></jsp:include>
 
     <div class="tabular-wrapper">
-        <h5 class="main-title">Vắc xin</h5>
+        <h5 class="main-title">Kho hàng</h5>
         <div>
-            <a href="form-add-transaction" class="btn btn-add btn-sm">
-                <i class="fa-solid fa-plus"></i> Thêm Giao dịch
-            </a>
             <button class="btn btn-common btn-sm" id="exportPDF">
                 <i class="fas fa-file-pdf"></i> Xuất PDF
             </button>
@@ -73,7 +70,7 @@
                     <td>${ps.vaccineId}</td>
                     <td>${ps.productName}</td>
                     <td>${vaccinesMap.get(ps.vaccineId).getStockQuantity()}</td>
-                    <td>${ps.totalPrice}</td>
+                    <td><f:formatNumber value="${ps.totalPrice}" type="number" pattern="#,##0"/>đ</td>
                     <td>${ps.loss}</td>
                     <td>${ps.expired}</td>
                     <td>
