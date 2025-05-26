@@ -715,6 +715,36 @@ public class UserDao {
         return false;
     }
 
+    public Users getUserById(int userId) {
+        String sql = "SELECT * FROM users WHERE id = ?";
+        try (PreparedStatement pst = DBConnect.get(sql)) {
+            pst.setInt(1, userId);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                Users user = new Users();
+                user.setId(rs.getInt("id"));
+                user.setFullname(rs.getString("fullname"));
+                user.setGender(rs.getString("gender"));
+                user.setIdentification(rs.getString("identification"));
+                user.setDateOfBirth(rs.getDate("dateOfBirth"));
+                user.setAddress(rs.getString("address"));
+                user.setProvince(rs.getString("province"));
+                user.setDistrict(rs.getString("district"));
+                user.setWard(rs.getString("ward"));
+                user.setPhone(rs.getString("phone"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(rs.getInt("role"));
+                user.setStatus(rs.getInt("status"));
+                return user;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     // Đếm số lượng người đăng ký tài khoản tuần này so với tuần trước bao nhiêu người
     // SQL1: Đếm số người dùng mới trong tuần này tính từ t2 -> cn này
     // SQL2: Đếm số người dùng mới trong tuần này tính từ t2 tuần trước -> t2 tuần này

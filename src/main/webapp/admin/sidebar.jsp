@@ -61,24 +61,6 @@
                 <span>Trung tâm</span>
             </a>
         </li>
-        <li class="<%= (request.getRequestURI().contains("table-data-logs")) ? "active" : "" %>">
-            <a href="table-data-logs">
-                <i class="fa-regular fa-hospital"></i>
-                <span>Logs</span>
-            </a>
-        </li>
-        <li class="<%= (request.getRequestURI().contains("table-data-transaction")) ? "active" : "" %>">
-            <a href="table-data-transaction">
-                <i class="fa-solid fa-truck"></i>
-                <span> Nhập / xuất hàng </span>
-            </a>
-        </li>
-        <li class="<%= (request.getRequestURI().contains("table-data-warehouse")) ? "active" : "" %>">
-            <a href="table-data-warehouse">
-                <i class="fa-solid fa-warehouse"></i>
-                <span> Kho hàng </span>
-            </a>
-        </li>
         <li>
             <a href="${pageContext.request.contextPath}/logout">
                 <i class="fas fa-sign-out-alt"></i>
