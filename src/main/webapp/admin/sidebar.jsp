@@ -73,7 +73,7 @@
                 <span> Nhập / xuất hàng </span>
             </a>
         </li>
-      <li class="<%= (request.getRequestURI().contains("table-data-warehouse")) ? "active" : "" %>">
+        <li class="<%= (request.getRequestURI().contains("table-data-warehouse")) ? "active" : "" %>">
             <a href="table-data-warehouse">
                 <i class="fa-solid fa-warehouse"></i>
                 <span> Kho hàng </span>
