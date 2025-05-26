@@ -1,10 +1,11 @@
 package com.example.provide_vaccine_services.dao;
 
 import com.example.provide_vaccine_services.Service.DBUtils;
+import com.example.provide_vaccine_services.dao.model.logs;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LogDao {
 
@@ -24,4 +25,29 @@ public class LogDao {
             stmt.executeUpdate();
         }
     }
+    public List<logs> getAll() {
+        List<logs> logsList = new ArrayList<>();
+        String sql = "SELECT * FROM logs ORDER BY timestamp DESC";
+
+        try {
+            PreparedStatement pst = DBUtils.get(sql);
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String logLevel = rs.getString("log_level");
+                String logMessage = rs.getString("log_message");
+                String userName = rs.getString("user_name");
+                String userIp = rs.getString("user_ip");
+                Timestamp timestamp = rs.getTimestamp("timestamp");
+
+                logs log = new logs(id, logLevel, logMessage, userName, userIp, timestamp);
+                logsList.add(log);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return logsList;
+    }
+
 }
