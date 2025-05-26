@@ -195,42 +195,6 @@ public class VaccineDao {
         return vaccine;
     }
 
-    public int totalVaccines() {
-        int result = 0;
-
-        try {
-            String sql = "SELECT COUNT(*) AS total FROM vaccines";
-            PreparedStatement pst = DBConnect.get(sql);
-            ResultSet rs = pst.executeQuery();
-
-            if (rs.next()) {
-                result = rs.getInt("total");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return result;
-    }
-
-    public int statusVaccines() {
-        int result = 0;
-
-        try {
-            String sql = "SELECT COUNT(*) AS total FROM vaccines WHERE status = 'Hết hàng'";
-            PreparedStatement pst = DBConnect.get(sql);
-            ResultSet rs = pst.executeQuery();
-
-            if (rs.next()) {
-                result = rs.getInt("total");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return result;
-    }
-
     public String getVaccineName(int vaccineId) {
         String result = "";
 
@@ -880,5 +844,32 @@ public class VaccineDao {
         return vaccineList;
     }
 
+    // Đếm số vắc xin còn hàng
+    public int countInStock() {
+        String sql = "SELECT COUNT(*) FROM Vaccines WHERE stockQuantity > 0";
+        try (PreparedStatement pst = DBConnect.get(sql);
+             ResultSet rs = pst.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    // Đếm số vắc xin hết hàng
+    public int countOutOfStock() {
+        String sql = "SELECT COUNT(*) FROM Vaccines WHERE stockQuantity <= 0";
+        try (PreparedStatement pst = DBConnect.get(sql);
+             ResultSet rs = pst.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
 }
