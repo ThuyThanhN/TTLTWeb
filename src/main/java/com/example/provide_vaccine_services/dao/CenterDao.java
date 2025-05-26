@@ -136,25 +136,58 @@ public class CenterDao {
         }
     }
 
-    // Lay danh sach theo id
-//    public Centers getById(int id) {
-//        Centers re = null;
-//        try {
-//            String sql = "select * from centers where id=?";
-//            PreparedStatement pst = DBConnect.get(sql);
-//            pst.setInt(1, id);
-//            ResultSet rs = pst.executeQuery();
-//            while (rs.next()) {
-//                String name = rs.getString("name");
-//                String address = rs.getString("address");
-//                String phone = rs.getString("phone");
-//
-//                Centers center = new Centers(name, address, phone);
-//            }
-//            return re;
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            return re;
-//        }
-//    }
+    public Centers getCenterByName(String centerName) {
+        Centers center = null;
+        try {
+            String sql = "select * from centers where name = ?";
+            PreparedStatement pst = DBConnect.get(sql);
+            pst.setString(1, centerName);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                String address = rs.getString("address");
+                String province = rs.getString("province");
+                String district = rs.getString("district");
+                String ward = rs.getString("ward");
+                String phone = rs.getString("phone");
+
+                center = new Centers(id, name, address, province, district, ward, phone);
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return center;
+
+    }
+
+
+    // Lay theo id
+    public Centers getById(int id) {
+        Centers re = null;
+        try {
+            String sql = "select * from centers where id=?";
+            PreparedStatement pst = DBConnect.get(sql);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                String name = rs.getString("name");
+                String address = rs.getString("address");
+                String province = rs.getString("province");
+                String district = rs.getString("district");
+                String ward = rs.getString("ward");
+                String phone = rs.getString("phone");
+
+                re = new Centers(id, name, address, province, district, ward, phone);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return re;
+
+    }
 }

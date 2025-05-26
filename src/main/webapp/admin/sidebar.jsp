@@ -61,7 +61,19 @@
                 <span>Trung tâm</span>
             </a>
         </li>
-        <li>
+        <li class="<%= (request.getRequestURI().contains("table-data-transaction")) ? "active" : "" %>">
+            <a href="table-data-transaction">
+                <i class="fa-solid fa-truck"></i>
+                <span> Nhập / xuất hàng </span>
+            </a>
+        </li>
+        <li class="<%= (request.getRequestURI().contains("table-data-warehouse")) ? "active" : "" %>">
+            <a href="table-data-warehouse">
+                <i class="fa-solid fa-warehouse"></i>
+                <span> Kho hàng </span>
+            </a>
+        </li>
+        <li class="logout">
             <a href="${pageContext.request.contextPath}/logout">
                 <i class="fas fa-sign-out-alt"></i>
                 <span>Đăng xuất</span>
