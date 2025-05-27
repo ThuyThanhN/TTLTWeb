@@ -239,6 +239,9 @@
                                                             <option value="package" ${staff.module == 'package' ? 'selected' : ''}>Quản lý gói vắc xin</option>
                                                             <option value="supplier" ${staff.module == 'supplier' ? 'selected' : ''}>Quản lý nhà cung cấp</option>
                                                             <option value="center" ${staff.module == 'center' ? 'selected' : ''}>Quản lý trung tâm</option>
+                                                            <option value="log" ${staff.module == 'log' ? 'selected' : ''}>Quản lý log</option>
+                                                            <option value="transaction" ${staff.module == 'transaction' ? 'selected' : ''}>Quản lý giao dịch</option>
+                                                            <option value="warehouse" ${staff.module == 'warehouse' ? 'selected' : ''}>Quản lý kho hàng</option>
                                                         </select>
                                                         <i class="fa-solid fa-angle-down position-absolute end-0 translate-middle" style="top: 72%"></i>
                                                     </div>
@@ -408,6 +411,9 @@
                                         <option value="package">Quản lý gói vắc xin</option>
                                         <option value="supplier">Quản lý nhà cung cấp</option>
                                         <option value="center">Quản lý trung tâm</option>
+                                        <option value="log">Quản lý log</option>
+                                        <option value="center">Quản lý giao dịch</option>
+                                        <option value="log">Quản lý kho hàng</option>
                                     </select>
                                     <i class="fa-solid fa-angle-down position-absolute end-0 translate-middle" style="top: 72%"></i>
                                 </div>

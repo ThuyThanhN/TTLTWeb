@@ -317,6 +317,7 @@ $(document).ready(function () {
                         province: province,
                         district: district,
                         ward: ward,
+                        date: date,
                         gender: gender,
                         phone: phone
                     };
