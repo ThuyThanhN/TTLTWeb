@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thêm vắc xin | Quản trị Admin </title>
+    <title>Nhập/Xuất kho hàng | Quản trị Admin </title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -42,64 +42,60 @@
     <!-- Header -->
     <jsp:include page="headerAdmin.jsp"></jsp:include>
 
-    <div class="info-vaccine-wrapper">
+
         <form id="addTransaction" method="post">
-            <div class="row">
-                <div class="col-12 col-md-7">
-                    <div class="vaccine-info-form">
-                        <div class="section-title border-bottom p-3"> Tạo Giao dịch mới</div>
-                        <div class="p-3">
-                            <div class="row">
-                                <%--                                tên vaccine --%>
-                                <div class="col-6">
-                                    <div class="mb-3">
-                                        <label for="vaccine-select" class="form-label">Tên vắc xin</label>
-                                        <select class="form-select form-control" id="vaccine-select" name="vaccine">
-                                            <option value="">---Chọn Vaccine ---</option>
-                                            <c:forEach var="v" items="${vaccines}">
-                                                <option value="${v.id}">${v.name}</option>
-                                            </c:forEach>
-                                        </select>
-                                    </div>
-                                </div>
-                                <%--                            số lượng --%>
-                                <div class="col-6">
-                                    <div class="mb-3">
-                                        <label for="quantity-vaccine" class="form-label">Số lượng</label>
-                                        <input type="number" class="form-control" id="quantity-vaccine"
-                                               name="quantityVaccine">
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="mb-3">
-                                        <label for="expiry-date" class="form-label">Ngày hết hạn</label>
-                                        <input type="date" class="form-control" id="expiry-date" name="expiry_date">
-                                    </div>
-                                </div>
-                                <%--                            loại transactions --%>
-                                <div class="col-4">
-                                    <div class="mb-3">
-                                        <label for="form-select-type" class="form-label"> Loại </label>
-                                        <select class="form-select form-control" id="form-select-type" name="type">
-                                            <option value="">---Chọn tình trạng---</option>
-                                            <option value="1"> Nhập hàng</option>
-                                            <option value="2"> Xuất Hàng</option>
-                                        </select>
-                                    </div>
-                                </div>
+            <div class="tabular-wrapper">
+                <div class="section-title border-bottom pb-3">Nhập/Xuất kho hàng</div>
+                <div class="pt-3">
+                    <div class="row">
+                        <%--                                tên vaccine --%>
+                        <div class="col-4">
+                            <div class="mb-3">
+                                <label for="vaccine-select" class="form-label">Tên vắc xin</label>
+                                <select class="form-select form-control" id="vaccine-select" name="vaccine">
+                                    <option value="">---Chọn Vaccine ---</option>
+                                    <c:forEach var="v" items="${vaccines}">
+                                        <option value="${v.id}">${v.name}</option>
+                                    </c:forEach>
+                                </select>
                             </div>
                         </div>
-                        <div class="col-12">
-                            <button type="submit" class="btn btn-save">Lưu lại</button>
-                            <a href="table-data-vacxin">
-                                <button type="button" class="btn btn-return">Quay lại</button>
-                            </a>
+                        <%--                            số lượng --%>
+                        <div class="col-4">
+                            <div class="mb-3">
+                                <label for="quantity-vaccine" class="form-label">Số lượng</label>
+                                <input type="number" class="form-control" id="quantity-vaccine"
+                                       name="quantityVaccine">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="mb-3">
+                                <label for="expiry-date" class="form-label">Ngày hết hạn</label>
+                                <input type="date" class="form-control" id="expiry-date" name="expiry_date">
+                            </div>
+                        </div>
+                        <%--                            loại transactions --%>
+                        <div class="col-4">
+                            <div class="mb-3">
+                                <label for="form-select-type" class="form-label"> Loại </label>
+                                <select class="form-select form-control" id="form-select-type" name="type">
+                                    <option value="">---Chọn tình trạng---</option>
+                                    <option value="1"> Nhập hàng</option>
+                                    <option value="2"> Xuất Hàng</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-save">Lưu lại</button>
+                    <a href="table-data-vacxin">
+                        <button type="button" class="btn btn-return">Quay lại</button>
+                    </a>
+                </div>
             </div>
         </form>
-    </div>
+
 </div>
 </body>
 <%--<script src="../js/form-add-transaction.js"></script>--%>
