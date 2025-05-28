@@ -47,6 +47,13 @@
             <a href="form-add-transaction" class="btn btn-add btn-sm">
                 <i class="fa-solid fa-plus"></i> Thêm Giao dịch
             </a>
+
+            <input type="file" id="excelFileInput" accept=".xls,.xlsx" style="display:none" />
+            <button class="btn btn-common btn-sm" id="importExcel">
+                <i class="fas fa-file-excel"></i> Nhập Excel
+            </button>
+
+
             <button class="btn btn-common btn-sm" id="exportPDF">
                 <i class="fas fa-file-pdf"></i> Xuất PDF
             </button>
@@ -117,4 +124,5 @@
     </div>
 </div>
 </body>
+<script src="../js/table-data-transaction.js"></script>
 </html>
