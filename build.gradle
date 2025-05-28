@@ -52,6 +52,8 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.11.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.11.0'
 
+    // Apache Commons DBCP2 (connection pooling)
+    implementation 'org.apache.commons:commons-dbcp2:2.9.0'
 
 }
 
@@ -82,9 +84,9 @@ tasks.withType(Javadoc) {
 
 remotes {
     host {
-        host = '192.168.75.137'
+        host = '160.250.247.127'
         user = 'root'
-        password = '123'
+        password = 'A2zoTK7OQuEZVwdi'
     }
 }
 
@@ -124,14 +126,12 @@ task docker_upload_file_to_server {
             session(remotes.host) {
 
                 // Xóa file cũ nếu có
-                remove '/usr/deploy/test.war'
+                remove '/usr/deploy/ROOT.war'
 
                 // Upload file
-                put from: "${project.projectDir}/build/libs/TTLTWeb-1.0-SNAPSHOT.war",
-                        into: "/usr/deploy/test.war"
+                put from: "${project.projectDir}/build/libs/provide_vaccine_services-1.0-SNAPSHOT.war",
+                        into: "/usr/deploy/ROOT.war"
 
-//                put from: "${project.projectDir}/SQL1.sql",
-//                    into: "/usr/deploy/SQL1.sql"
             }
         }
     }
