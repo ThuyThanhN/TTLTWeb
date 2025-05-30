@@ -47,7 +47,6 @@ public class AddStaff extends HttpServlet {
         UserDao dao = new UserDao();
         int idUser = dao.insertStaff(user);
 
-
         // Them moudel cho user tuong ung
         int idPermission = dao.insertPermission(module);
         System.out.println("Module: " + module);
@@ -56,7 +55,7 @@ public class AddStaff extends HttpServlet {
 
         // json
         if (insertId > 0) {
-            response.getWriter().write("{\"status\":\"success\", \"id\":" + insertId + "}");
+            response.getWriter().write("{\"status\":\"success\", \"id\":" + idUser + "}");
         } else {
             response.getWriter().write("{\"status\":\"error\"}");
         }
