@@ -1,6 +1,7 @@
 package com.example.provide_vaccine_services.controller;
 
 import com.example.provide_vaccine_services.Service.MD5Hash;
+import com.example.provide_vaccine_services.dao.LogDao;
 import com.example.provide_vaccine_services.dao.UserDao;
 import com.example.provide_vaccine_services.dao.model.Users;
 import jakarta.servlet.*;
@@ -9,17 +10,21 @@ import jakarta.servlet.annotation.*;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.SQLException;
 
 @WebServlet(name = "AddStaff", value = "/admin/addStaff")
 public class AddStaff extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Không xử lý GET trong servlet này
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
+        String userIp = request.getRemoteAddr();
+        LogDao logDao = new LogDao();
 
         String name = request.getParameter("fullname");
         String gender = request.getParameter("gender");
@@ -38,27 +43,30 @@ public class AddStaff extends HttpServlet {
         int roleValue = role.equals("Admin") ? 1 : 2;
         Date sqlDate = Date.valueOf(date);
 
-        // Ma hoa mat khau
+        // Mã hóa mật khẩu
         String hashedPassword = MD5Hash.hashPassword(pass);
 
-        // Them user
-        Users user = new Users(name, gender, ident, sqlDate,  address,
+        // Tạo user mới
+        Users user = new Users(name, gender, ident, sqlDate, address,
                 province, district, ward, phone, email, hashedPassword, roleValue);
+
         UserDao dao = new UserDao();
         int idUser = dao.insertStaff(user);
 
-
-        // Them moudel cho user tuong ung
         int idPermission = dao.insertPermission(module);
-        System.out.println("Module: " + module);
-
         int insertId = dao.insertUserPermission(idUser, idPermission);
 
-        // json
-        if (insertId > 0) {
-            response.getWriter().write("{\"status\":\"success\", \"id\":" + insertId + "}");
-        } else {
-            response.getWriter().write("{\"status\":\"error\"}");
+        try {
+            if (insertId > 0) {
+                logDao.insertLog("INFO", "Thêm nhân viên thành công, idUser: " + idUser + ", module: " + module, email, userIp);
+                response.getWriter().write("{\"status\":\"success\", \"id\":" + insertId + "}");
+            } else {
+                logDao.insertLog("ERROR", "Thêm nhân viên thất bại, idUser: " + idUser + ", module: " + module, email, userIp);
+                response.getWriter().write("{\"status\":\"error\"}");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            response.getWriter().write("{\"status\":\"error\", \"message\":\"Lỗi ghi log\"}");
         }
     }
 }
