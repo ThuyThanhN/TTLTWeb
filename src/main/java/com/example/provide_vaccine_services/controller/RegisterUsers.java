@@ -77,7 +77,7 @@ public class RegisterUsers extends HttpServlet {
             String encodedToken = encodeToken(token);  // Mã hóa token tại đây
 
             // Tạo URL xác thực
-            String verificationLink = "http://localhost:8080/provide_vaccine_services_war/verifyAccount?token=" + encodedToken;
+            String verificationLink = "http://provide_vaccine_services_war/verifyAccount?token=" + encodedToken;
 
             // In thông tin liên kết xác thực ra console để kiểm tra
             System.out.println("Verification link: " + verificationLink);  // Dòng lệnh debug
