@@ -35,7 +35,7 @@ public class AddStaff extends HttpServlet {
         String module = request.getParameter("module");
         String pass = request.getParameter("password");
 
-        int roleValue = role.equals("Admin") ? 1 : 2;
+        int roleValue = role.equals("1") ? 1 : 2;
         Date sqlDate = Date.valueOf(date);
 
         // Ma hoa mat khau

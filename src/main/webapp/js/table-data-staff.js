@@ -124,7 +124,7 @@ $(document).ready(function () {
                                   <div class="col-4">
                                        <div class="mb-3">
                                            <label for="date-${id}" class="form-label">Ngày sinh </label> <br>
-                                           <input type="date" class="form-control" name="date" id="date-${id}" value="${date}">
+                                           <input type="date" class="form-control" name="date" id="date-${id}" value="${toInputDateFormat(date)}">
                                        </div>
                                   </div>
                                   <div class="col-4">
@@ -183,8 +183,8 @@ $(document).ready(function () {
                                                <label for="role-${id}" class="form-label">Chức vụ</label>
                                                <select class="form-select" id="role-${id}" name="role" required>
                                                     <option value="" selected>--Chọn chức vụ--</option>
-                                                    <option value="Admin" ${role == 1 ? 'selected' : ''}>Admin</option>
-                                                    <option value="Nhân viên" ${role == 2 ? 'selected' : ''}>Nhân viên</option>
+                                                    <option value="1" ${role == 1 ? 'selected' : ''}>Admin</option>
+                                                    <option value="2" ${role == 2 ? 'selected' : ''}>Nhân viên</option>
                                                </select>
                                                <i class="fa-solid fa-angle-down position-absolute end-0 translate-middle" style="top: 72%"></i>
                                         </div>
@@ -194,7 +194,7 @@ $(document).ready(function () {
                                                 <label for="module-${id}" class="form-label">Phân quyền:</label>
                                                 <select class="form-select" id="module-${id}" name="module" required>
                                                      <option value="" selected>-- Chọn --</option>
-                                                       <option value="none" ${module == 'none' ? 'selected' : ''}>Nhân viên</option>
+                                                     <option value="none" ${module == 'none' ? 'selected' : ''}>Nhân viên</option>
                                                      <option value="staff" ${module == 'staff' ? 'selected' : ''}>Quản lý nhân viên</option>
                                                      <option value="customer" ${module == 'customer' ? 'selected' : ''}>Quản lý khách hàng</option>
                                                      <option value="order" ${module == 'order' ? 'selected' : ''}>Quản lý đơn hàng</option>
@@ -202,9 +202,9 @@ $(document).ready(function () {
                                                      <option value="package" ${module == 'package' ? 'selected' : ''}>Quản lý gói vắc xin</option>
                                                      <option value="supplier" ${module == 'supplier' ? 'selected' : ''}>Quản lý nhà cung cấp</option>
                                                      <option value="center" ${module == 'center' ? 'selected' : ''}>Quản lý trung tâm</option>
-                                                      <option value="log" ${module == 'log' ? 'selected' : ''}>Quản lý log</option>
-                                                            <option value="transaction" ${module == 'transaction' ? 'selected' : ''}>Quản lý giao dịch</option>
-                                                            <option value="warehouse" ${module == 'warehouse' ? 'selected' : ''}>Quản lý kho hàng</option>
+                                                     <option value="log" ${module == 'log' ? 'selected' : ''}>Quản lý log</option>
+                                                     <option value="transaction" ${module == 'transaction' ? 'selected' : ''}>Quản lý giao dịch</option>
+                                                     <option value="warehouse" ${module == 'warehouse' ? 'selected' : ''}>Quản lý kho hàng</option>
                                                 </select>
                                                 <i class="fa-solid fa-angle-down position-absolute end-0 translate-middle" style="top: 72%"></i>
                                         </div>
@@ -265,6 +265,16 @@ $(document).ready(function () {
         return `${day}-${month}-${year}`;
     }
 
+    function toInputDateFormat(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        if (isNaN(date)) return '';
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
 
     $("#addStaffForm").submit(function (event) {
         event.preventDefault();
@@ -279,16 +289,15 @@ $(document).ready(function () {
         let district = $("#district").val();
         let ward = $("#ward").val();
         let phone = $("#staff-phone").val();
-        let role = $("#role").val();
+        let role = parseInt($("#role").val());
         let module = $("#module").val();
         let password = $("#password").val();
-
 
         let provinceCode = $("#province").attr("data-code");
         let districtCode = $("#district").attr("data-code");
         let wardCode = $("#ward").attr("data-code");
         console.log({
-            fullname, address, province, district, ward, phone
+            fullname, address, province, district, ward, phone, role
         });
         console.log("Module:", module);
 
@@ -389,6 +398,8 @@ $(document).ready(function () {
         let districtCode = modal.find("input[name='district']").attr("data-code");
         let wardCode = modal.find("input[name='ward']").attr("data-code");
 
+        console.log("Module:", module);
+        console.log("Date:", date);
         $.ajax({
             url: "/admin/updateStaff",
             type: "POST",
@@ -517,4 +528,3 @@ $(document).ready(function () {
     const staffTable = initializeDataTable("#staff");
     handleDeleteButton('deleteStaff', 'removeStaff', staffTable);
 });
-
