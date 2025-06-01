@@ -221,7 +221,7 @@ public class VaccineDao {
 
     // update so luong
     public void updateQuantity(int vaccineId, int delta) throws SQLException {
-        String sql = "UPDATE vaccines SET quantity = quantity + ? WHERE vaccine_id = ?";
+        String sql = "UPDATE vaccines SET stockQuantity = stockQuantity + ? WHERE id = ?";
         try {
             PreparedStatement pst = DBConnect.get(sql);
             pst.setInt(1, delta);
