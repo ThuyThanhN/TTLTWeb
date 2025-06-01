@@ -92,11 +92,11 @@
             <div class="mt-2 text-center mt-3" style="color: #9999A4; font-size: 14px; font-weight: 500">Hoặc Đăng nhập với tài khoản mạng xã hội</div>
             <div class=" authentication-group">
                 <a class="authentication-button google"
-                   href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid&redirect_uri=http://localhost:8080/provide_vaccine_services_war/login?provider=google&response_type=code&client_id=737894268831-9ab6vfskfnv7pfoh1i7nnagpmmau67oi.apps.googleusercontent.com&approval_prompt=force">
+                   href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid&redirect_uri=http://vaccine.io.vn/login?provider=google&response_type=code&client_id=737894268831-9ab6vfskfnv7pfoh1i7nnagpmmau67oi.apps.googleusercontent.com&approval_prompt=force">
                     <img src="image/google.png">
                 </a>
                 <a class="authentication-button facebook"
-                   href="https://www.facebook.com/v22.0/dialog/oauth?fields=id,name,email&client_id=1227448322128839&redirect_uri=http://localhost:8080/provide_vaccine_services_war/login?provider=facebook&scope=email">
+                   href="https://www.facebook.com/v22.0/dialog/oauth?fields=id,name,email&client_id=1227448322128839&redirect_uri=http://vaccine.io.vn/login?provider=google?provider=facebook&scope=email">
                     <img src="image/facebook.png">
                 </a>
             </div>

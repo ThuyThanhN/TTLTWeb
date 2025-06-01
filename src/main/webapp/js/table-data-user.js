@@ -29,14 +29,14 @@ $(document).ready(function () {
         var status = $(this).val();
 
         $.ajax({
-            url: "/provide_vaccine_services_war/admin/updateOrderStatus",
+            url: "/admin/updateUserStatus",
             type: "POST",
             data: {
                 id: id,
                 status: status
             },
             success: function (response) {
-                console.log("Cap nhat trang thai thanh cong", response);
+                console.log("Cập nhật trạng thái thành công!", response);
             },
             error: function (xhr) {
                 console.error("Lỗi khi cập nhật trạng thái", xhr);
