@@ -31,6 +31,8 @@ public class Transaction {
         this.expiry_date = expiry_date;
     }
 
+    public Transaction() {}
+
     public int getTransactionId() {
         return transactionId;
     }

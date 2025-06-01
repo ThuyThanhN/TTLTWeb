@@ -78,4 +78,61 @@ public class TransactionDAO {
 
         return newId;
     }
+
+    public int update(Transaction transaction) {
+        int result = 0;  // Mặc định trả về 0 (thất bại)
+
+        try {
+            String sql = "UPDATE transaction SET vaccine_id = ?, type = ?, quantity = ?, expiry_date = ?, user_id = ? WHERE id = ?";
+            PreparedStatement pst = DBConnect.getAuto(sql);
+
+            // Gán giá trị cho các tham số
+            pst.setInt(1, transaction.getVaccineId());
+            pst.setString(2, transaction.getType());
+            pst.setInt(3, transaction.getQuantity());
+            pst.setTimestamp(4, Timestamp.valueOf(transaction.getExpiry_date()));
+            pst.setInt(5, transaction.getUser().getId());
+            pst.setInt(6, transaction.getTransactionId());
+
+            // Thực thi câu lệnh update
+            result = pst.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public Transaction getTransactionById(int id) {
+        Transaction transaction = null;
+
+        try {
+            String sql = "SELECT * FROM transaction WHERE id = ?";
+            PreparedStatement pst = DBConnect.get(sql);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                int vaccineId = rs.getInt("vaccine_id");
+                String type = rs.getString("type");
+                int quantity = rs.getInt("quantity");
+                int userId = rs.getInt("user_id");
+                Timestamp timestamp = rs.getTimestamp("expiry_date");
+                LocalDateTime expiryDate = timestamp != null ? timestamp.toLocalDateTime() : null;
+
+                // Lấy thông tin người dùng
+                UserDao userDao = new UserDao();
+                Users user = userDao.getUserById(userId);
+
+                transaction = new Transaction(id, vaccineId, type, quantity, expiryDate, user);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return transaction;
+    }
+
 }
