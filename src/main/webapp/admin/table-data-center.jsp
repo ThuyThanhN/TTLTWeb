@@ -306,7 +306,6 @@
         </div>
     </div>
 </div>
-
 <script src="../js/admin_address.js"></script>
 <script src="../js/table-data-center.js"></script>
 </body>

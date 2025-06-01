@@ -3,6 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
          version="6.0">
+    <welcome-file-list>
+        <welcome-file>index</welcome-file>
+    </welcome-file-list>
     <error-page>
         <error-code>404</error-code>
         <location>/error404.jsp</location>
@@ -28,10 +31,10 @@
         <servlet-name>VnpayReturn</servlet-name>
         <url-pattern>/VnpayReturn</url-pattern> <!-- Đường dẫn của servlet -->
     </servlet-mapping>
-    <servlet>
-        <servlet-name>AccountActivationServlet</servlet-name>
-        <servlet-class>com.example.provide_vaccine_services.Service.AccountActivationServlet</servlet-class>
-    </servlet>
+<!--    <servlet>-->
+<!--        <servlet-name>AccountActivationServlet</servlet-name>-->
+<!--        <servlet-class>com.example.provide_vaccine_services.Service.AccountActivationServlet</servlet-class>-->
+<!--    </servlet>-->
     <servlet-mapping>
         <servlet-name>AccountActivationServlet</servlet-name>
         <url-pattern>/activate</url-pattern>

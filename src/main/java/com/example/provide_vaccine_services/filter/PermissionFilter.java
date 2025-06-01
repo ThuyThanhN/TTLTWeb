@@ -116,6 +116,20 @@ public class PermissionFilter implements Filter {
                 return;
             }
         }
+
+        // Phân quyền cho goi vaccine gồm thêm, sửa, xóa (3) cho userId quản lý giao dich (nhap/xuat)
+        if (path.endsWith("/admin/form-add-transaction")) {
+            int requiredPermission = Permissions.WRITE | Permissions.EXECUTE;
+
+            // Kiểm tra xem user hiện tại có đủ quyền đối với module "package" không
+            if (!permissionDao.hasPermission(userId, "transaction", requiredPermission)) {
+                // Nếu không có quyền, từ chối truy cập
+                deny(resp, req);
+                return;
+            }
+        }
+
+
         chain.doFilter(request, response);
     }
 

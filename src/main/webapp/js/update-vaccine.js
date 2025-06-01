@@ -84,7 +84,7 @@ $(document).ready(function () {
         let formData = new FormData(this);
 
         $.ajax({
-            url: "/provide_vaccine_services_war/admin/updateVaccine",
+            url: "/admin/updateVaccine",
             type: "POST",
             data: formData,
             contentType: false,
@@ -92,7 +92,7 @@ $(document).ready(function () {
             dataType: "json",
             success: function (response) {
                 if (response.status === "success") {
-                    window.location.href = "/provide_vaccine_services_war/admin/table-data-vacxin";
+                    window.location.href = "/admin/table-data-vacxin";
                 } else {
                     alert("Loi: " + response.message);
                 }

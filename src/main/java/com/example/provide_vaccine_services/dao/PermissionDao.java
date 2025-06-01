@@ -10,6 +10,21 @@ public class PermissionDao {
     // Kiểm tra xem người dùng có userId có được cấp quyền (READ, WRITE, EXECUTE) không?
     public boolean hasPermission(int userId, String module, int requiredPermission) {
         try {
+            // 1. Module "all" có toàn quyền
+            String globalSql = "SELECT p.permission FROM permissions p " +
+                    "JOIN userpermissions up ON p.id = up.permissionId " +
+                    "WHERE up.userId = ? AND p.module = 'all'";
+            PreparedStatement globalPst = DBConnect.get(globalSql);
+            globalPst.setInt(1, userId);
+            ResultSet globalRs = globalPst.executeQuery();
+            if (globalRs.next()) {
+                int globalPermission = globalRs.getInt("permission");
+                if ((globalPermission & requiredPermission) == requiredPermission) {
+                    return true; // Có quyền toàn cục => cho phép
+                }
+            }
+
+            // 2. Kiểm tra quyền theo module cụ thể
             String sql = "SELECT p.permission FROM permissions p " +
                     "JOIN userpermissions up ON p.id = up.permissionId " +
                     "WHERE up.userId = ? AND p.module = ?";
@@ -24,7 +39,6 @@ public class PermissionDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("Permission DENIED");
         return false;
     }
 }

@@ -33,9 +33,6 @@
 
     <div class="tabular-wrapper">
         <h5 class="main-title">Khách hàng</h5>
-        <a href="registerUsers" class="btn btn-add btn-sm">
-            <i class="fa-solid fa-plus"></i> Thêm khách hàng
-        </a>
         <table class="w-100 table table-striped" id="user">
             <thead>
             <tr class="list-header">

@@ -201,7 +201,7 @@ public class LoginServlet extends HttpServlet {
         String encodedToken = encodeToken(token);  // Mã hóa token
 
         // Tạo URL xác thực (địa chỉ này có thể thay đổi tùy thuộc vào cấu trúc của bạn)
-        String verificationLink = "http://localhost:8080/provide_vaccine_services_war/verifyAccount?token=" + encodedToken;
+        String verificationLink = "http://vaccine.io.vn/verifyAccount?token=" + encodedToken;
 
         // Nội dung email
         String subject = "Xác thực tài khoản";
