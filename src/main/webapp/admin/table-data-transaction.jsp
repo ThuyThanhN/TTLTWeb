@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vắc xin | Quản trị Admin</title>
+    <title>Giao dịch | Quản trị Admin</title>
     <!-- Bootstrap, jquery   -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -42,10 +42,10 @@
     <jsp:include page="headerAdmin.jsp"></jsp:include>
 
     <div class="tabular-wrapper">
-        <h5 class="main-title">Vắc xin</h5>
+        <h5 class="main-title">Giao dịch</h5>
         <div>
             <a href="form-add-transaction" class="btn btn-add btn-sm">
-                <i class="fa-solid fa-plus"></i> Thêm Giao dịch
+                <i class="fa-solid fa-plus"></i> Tạo nhập/xuất kho hàng
             </a>
 
             <input type="file" id="excelFileInput" accept=".xls,.xlsx" style="display:none" />
