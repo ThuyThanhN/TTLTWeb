@@ -518,4 +518,3 @@ $(document).ready(function () {
     handleDeleteButton('deleteStaff', 'removeStaff', staffTable);
 });
 
-

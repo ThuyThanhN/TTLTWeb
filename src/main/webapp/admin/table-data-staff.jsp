@@ -392,8 +392,8 @@
                                     <label for="role" class="form-label">Chức vụ</label>
                                     <select class="form-select" id="role" name="role" required>
                                         <option value="" selected>--Chọn chức vụ--</option>
-                                        <option value="Admin">Admin</option>
-                                        <option value="Nhân viên">Nhân viên</option>
+                                        <option value="1">Admin</option>
+                                        <option value="2 viên">Nhân viên</option>
                                     </select>
                                     <i class="fa-solid fa-angle-down position-absolute end-0 translate-middle" style="top: 72%"></i>
                                 </div>
