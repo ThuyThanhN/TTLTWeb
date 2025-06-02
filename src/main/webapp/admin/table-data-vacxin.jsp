@@ -91,7 +91,14 @@
                     </td>
                     <td>${v.stockQuantity}</td>
                     <td>
-                        <span class="status light-green color-green">${v.status}</span>
+                        <c:choose>
+                            <c:when test="${v.status eq 'Còn hàng'}">
+                                <span class="status light-green color-green">${v.status}</span>
+                            </c:when>
+                            <c:otherwise>
+                                <span class="status light-red color-red">${v.status}</span>
+                            </c:otherwise>
+                        </c:choose>
                     </td>
                     <td><f:formatNumber value="${v.price}" type="number" pattern="#,##0"/>đ</td>
                     <td>
