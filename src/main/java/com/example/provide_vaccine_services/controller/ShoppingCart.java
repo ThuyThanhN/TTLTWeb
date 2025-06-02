@@ -1,10 +1,6 @@
 package com.example.provide_vaccine_services.controller;
 
-import com.example.provide_vaccine_services.dao.ContactPersonDao;
-import com.example.provide_vaccine_services.dao.OrderDao;
-import com.example.provide_vaccine_services.dao.OrderDetailDao;
-import com.example.provide_vaccine_services.dao.PatientDao;
-import com.example.provide_vaccine_services.dao.LogDao;
+import com.example.provide_vaccine_services.dao.*;
 import com.example.provide_vaccine_services.dao.model.*;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -16,6 +12,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -153,6 +150,8 @@ public class ShoppingCart extends HttpServlet {
 
         // Lấy danh sách sản phẩm trong giỏ hàng từ session, tạo mới nếu chưa có
         List<Integer> listCart = (List<Integer>) session.getAttribute("listCart");
+
+        // chua co thi tao moi
         if (listCart == null) {
             listCart = new ArrayList<>();
             session.setAttribute("listCart", listCart);
@@ -168,7 +167,7 @@ public class ShoppingCart extends HttpServlet {
         ContactPersonDao cpDao = new ContactPersonDao();
         OrderDao orderDao = new OrderDao();
         OrderDetailDao odd = new OrderDetailDao();
-
+        VaccineDao vaccineDao = new VaccineDao();
         LogDao logDao = new LogDao();
         String userIp = request.getRemoteAddr();
 
@@ -212,17 +211,22 @@ public class ShoppingCart extends HttpServlet {
                     int result = odd.insertDetailFull(idOrder, oddOrderDetail.getIdVaccine(), oddOrderDetail.getIdPackage(),
                             oddOrderDetail.getQuantityOrder(), oddOrderDetail.getPrice());
                     System.out.println("orderDetails" + result);
+
+                    // trừ số lượng vaccine đã đặt
+                    int quantity = -oddOrderDetail.getQuantityOrder();
+                    if(oddOrderDetail.getIdPackage() < 0) {
+                        vaccineDao.updateQuantity(oddOrderDetail.getIdVaccine(), quantity);
+                    }
+
                 }
             }
         }
 
-        // Xóa các dữ liệu giỏ hàng trong session sau khi hoàn tất đặt hàng
         session.removeAttribute("listCart");
         session.removeAttribute("integerPatientsMap");
         session.removeAttribute("integerContactPersonsMap");
         session.removeAttribute("ordersOrderDetailsMap");
 
-        // Chuyển hướng người dùng dựa trên vai trò (Admin hoặc User)
         if(users.getRole() == 1) {
             response.sendRedirect("table-data-order");
         } else {

@@ -9,15 +9,21 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import com.example.provide_vaccine_services.dao.OrderDao;
+import com.example.provide_vaccine_services.dao.VaccineDao;
+import com.example.provide_vaccine_services.dao.model.OrderDetails;
 import com.example.provide_vaccine_services.dao.model.Orders;
+import com.example.provide_vaccine_services.dao.model.Vaccines;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -32,7 +38,9 @@ public class VnpayReturn extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         response.setContentType("text/html;charset=UTF-8");
+        HttpSession session = request.getSession();
         try ( PrintWriter out = response.getWriter()) {
             Map fields = new HashMap();
             for (Enumeration params = request.getParameterNames(); params.hasMoreElements();) {
@@ -60,10 +68,23 @@ public class VnpayReturn extends HttpServlet {
                 Orders order = orderDao.getOrderById(Integer.parseInt(orderId));
 
                 boolean transSuccess = false;
+
+                // kiểm tra thành công hay không
                 if ("00".equals(request.getParameter("vnp_TransactionStatus"))) {
                     // cập nhật trạng thái thanh toán
                     order.setPaymentStatus("Đã thanh toán");
                     transSuccess = true;
+                    VaccineDao vaccineDao = new VaccineDao();
+
+                    // vaccineID, quantity
+                    Map<Integer, Integer> vaccineMap = orderDao.getVaccineAndQuantity(Integer.parseInt(orderId));
+                    for (Map.Entry<Integer, Integer> entry : vaccineMap.entrySet()) {
+                        System.out.println(entry.getKey());
+                        System.out.println(entry.getValue());
+                        vaccineDao.updateQuantity(entry.getKey(), 0 - entry.getValue());
+                    }
+
+
                 } else {
                     order.setPaymentStatus("Chưa thanh toán");
                 }
@@ -89,6 +110,9 @@ public class VnpayReturn extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+
+
+
     }
 
     /**

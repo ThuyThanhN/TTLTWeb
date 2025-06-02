@@ -45,3 +45,11 @@ build/
 .gradle/
 ".gradle/" 
 ".gradle/" 
+
+
+# Gradle
+.gradle/
+build/
+.gradle/
+gradle-wrapper.jar
+gradle-wrapper.properties

@@ -40,7 +40,6 @@ public class ajaxServlet extends HttpServlet {
          *  sau đó sử dụng vnpay để thanh toán
          *
          */
-
         // nếu user chưa đăng nhập thì trả về login
         Users user = (Users) session.getAttribute("user");
         if(user == null) {
