@@ -112,7 +112,7 @@ task docker_app_start {
                     docker rm -f tomcat10 || true &&
                     docker run -d --name tomcat10 \
                     -v /usr/deploy:/usr/local/tomcat/webapps \
-                    -p 80:8080 tomcat:10.1.34
+                    -p 8081:8080 tomcat:10.1.34
                 '''
             }
         }
