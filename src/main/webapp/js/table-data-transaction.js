@@ -19,7 +19,7 @@ $(document).ready(function() {
             formData.append('excelFile', file);
 
             $.ajax({
-                url: '/provide_vaccine_services_war/admin/ImportExcelServlet',
+                url: '/admin/ImportExcelServlet',
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -98,7 +98,80 @@ $(document).ready(function() {
         });
     });
 
+    $("#exportPDF").on("click", function () {
+        $.ajax({
+            url: "/provide_vaccine_services_war/admin/exportTransaction", // Cập nhật endpoint phù hợp
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
 
+
+                let docDefinition = {
+                    content: [
+                        {text: "Danh sách Giao dịch", style: "header"},
+                        {
+                            table: {
+                                headerRows: 1,
+                                widths: ["5%", "15%", "10%", "10%", "15%", "15%", "15%"],
+                                body: [
+                                    ["ID", "Tên vắc xin", "Loại", "Số lượng", "Ngày tạo", "Hạn dùng", "Id Người thực hiện"],
+                                    ...data.map(t => [
+                                        t.id,
+                                        t.vaccineName,
+                                        t.type,
+                                        t.quantity,
+                                        t.date,
+                                        t.expiry_date || "Không có",
+                                        t.user_id
+                                    ])
+                                ]
+                            }
+                        }
+                    ],
+                    styles: {
+                        header: {fontSize: 16, bold: true, alignment: "center", margin: [0, 10, 0, 10]}
+                    }
+                };
+                pdfMake.createPdf(docDefinition).download("Danh_sach_GiaoDich.pdf");
+            },
+            error: function () {
+                alert("Lỗi tải dữ liệu giao dịch!");
+            }
+        });
+    });
+
+    $("#exportExcel").on("click", function () {
+        $.ajax({
+            url: "/provide_vaccine_services_war/admin/exportTransaction",
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                let worksheetData = [
+                    ["ID", "Tên vắc xin", "Loại", "Số lượng", "Ngày tạo", "Hạn dùng", "Id Người thực hiện"]
+                ];
+
+                data.forEach(t => {
+                    worksheetData.push([
+                        t.id,
+                        t.vaccineName,
+                        t.type,
+                        t.quantity,
+                        t.date,
+                        t.expiry_date || "Không có",
+                        t.user_id
+                    ]);
+                });
+
+                let wb = XLSX.utils.book_new();
+                let ws = XLSX.utils.aoa_to_sheet(worksheetData);
+                XLSX.utils.book_append_sheet(wb, ws, "Danh sách Giao dịch");
+                XLSX.writeFile(wb, "Danh_sach_GiaoDich.xlsx");
+            },
+            error: function () {
+                alert("Lỗi tải dữ liệu giao dịch!");
+            }
+        });
+    });
 
 });
 

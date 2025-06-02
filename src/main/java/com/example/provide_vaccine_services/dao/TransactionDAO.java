@@ -7,8 +7,11 @@ import com.example.provide_vaccine_services.dao.model.Vaccines;
 
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TransactionDAO {
 
@@ -135,4 +138,45 @@ public class TransactionDAO {
         return transaction;
     }
 
+    public List<Map<String, Object>> export() {
+        List<Map<String, Object>> transactionList = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        try {
+            String sql = "SELECT t.id, t.vaccine_id, t.type, t.quantity, t.date, t.expiry_date, t.user_id " +
+                    "FROM transaction t " +
+                    "ORDER BY t.id";
+
+            PreparedStatement pst = DBConnect.get(sql);
+            ResultSet rs = pst.executeQuery();
+
+
+            VaccineDao vaccineDAO = new VaccineDao();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                Vaccines vaccines = vaccineDAO.getVaccineById(id);
+
+
+                Map<String, Object> transactionData = new HashMap<>();
+                transactionData.put("id", rs.getInt("id"));
+                transactionData.put("vaccineName", vaccines.getName());
+                transactionData.put("type", rs.getString("type"));
+                transactionData.put("quantity", rs.getString("quantity"));
+                transactionData.put("user_id", rs.getInt("user_id"));
+
+
+                Date date = rs.getDate("date");
+                Date expiryDate = rs.getDate("expiry_date");
+
+                transactionData.put("date", date != null ? date.toLocalDate().format(formatter) : null);
+                transactionData.put("expiry_date", expiryDate != null ? expiryDate.toLocalDate().format(formatter) : null);
+
+                transactionList.add(transactionData);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return transactionList;
+
+    }
 }
