@@ -55,6 +55,9 @@ dependencies {
     // Apache Commons DBCP2 (connection pooling)
     implementation 'org.apache.commons:commons-dbcp2:2.9.0'
 
+    // apache poi
+    implementation 'org.apache.poi:poi:5.2.3'
+    implementation 'org.apache.poi:poi-ooxml:5.2.3'
 }
 
 group = 'com.example'

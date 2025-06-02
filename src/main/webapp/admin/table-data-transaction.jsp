@@ -47,6 +47,13 @@
             <a href="form-add-transaction" class="btn btn-add btn-sm">
                 <i class="fa-solid fa-plus"></i> Tạo nhập/xuất kho hàng
             </a>
+
+            <input type="file" id="excelFileInput" accept=".xls,.xlsx" style="display:none" />
+            <button class="btn btn-common btn-sm" id="importExcel">
+                <i class="fas fa-file-excel"></i> Nhập Excel
+            </button>
+
+
             <button class="btn btn-common btn-sm" id="exportPDF">
                 <i class="fas fa-file-pdf"></i> Xuất PDF
             </button>
@@ -55,7 +62,7 @@
                 <i class="fas fas fa-file-excel"></i> Xuất Excel
             </button>
         </div>
-        <table class="w-100 table table-striped" id="vaccine">
+        <table class="w-100 table table-striped" id="transaction">
             <thead>
             <tr class="list-header">
                 <th scope="col">ID</th>
@@ -73,48 +80,100 @@
                 <tr data-id="${t.transactionId}">
                     <td>${t.transactionId}</td>
                     <td>${vaccines.get(t.vaccineId)}</td>
-                    <td>${t.type == 1 ? 'Nhập' : t.type == 2 ? 'Xuất' : 'Không xác định'}</td>
+                    <td>${t.type == 'Nhập' ? 'Nhập' : t.type == 'Xuất' ? 'Xuất' : 'Không xác định'}</td>
                     <td>${t.quantity}</td>
                     <td>${t.date}</td>
                     <td>${t.expiry_date}</td>
                     <td>${t.user.id}</td>
                     <td>
                         <!-- Nut sua -->
-                        <a href="#"
-                           class="text-decoration-none edit-btn">
+                        <a href="updateTransaction?id=${t.transactionId}"
+                           class="text-decoration-none edit-btn"
+                           data-bs-toggle="modal"
+                           data-bs-target="#editTransaction-${t.transactionId}">
                             <img src="../image/edit.png" alt="Sửa" width="22" height="22">
                         </a>
+                            <%--    Modal sửa --%>
+                        <div class="modal fade" id="editTransaction-${t.transactionId}" tabindex="-1" aria-labelledby="editTransactionLabel-${t.transactionId}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editTransactionLabel-${t.transactionId}">Sửa giao dịch ${t.transactionId}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form class="editTransactionForm" method="post">
+                                        <div class="mb-3">
+                                                <label for="transactionId" class="form-label">Transaction ID</label>
+                                                <input type="text" name="id" class="form-control" id="transactionId" value="${t.transactionId}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="vaccineId" class="form-label">Tên Vaccine</label>
+                                                <input type="text" class="form-control" id="vaccineId" value="${vaccines.get(t.vaccineId)}" disabled>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="vaccineName" class="form-label">Vaccine ID</label>
+                                                <input type="text" name="vaccinesId"  class="form-control" id="vaccineName" value="${t.vaccineId}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="transactionType" class="form-label">Loại giao dịch</label>
+                                                <select class="form-select" id="transactionType" name="type" required>
+                                                    <option value="Nhập" ${t.type == 'Nhập' ? 'selected' : ''}>Nhập</option>
+                                                    <option value="Xuất" ${t.type == 'Xuất' ? 'selected' : ''}>Xuất</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="transactionQuantity" class="form-label">Số lượng</label>
+                                                <input type="number" name="quantity" class="form-control" id="transactionQuantity" value="${t.quantity}">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="expiry_date" class="form-label">Ngày hết hạn</label>
+                                                <input type="date" name="expiry_date" class="form-control" id="expiry_date" value="${t.expiry_date}">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                            <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Hủy bỏ</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <!-- Nut xoa -->
                         <a href="#"
-                           class="text-decoration-none delete-btn"
-<%--                           data-bs-toggle="modal"--%>
-<%--                           data-bs-target="#deleteVaccine"--%>
-<%--                           data-id="${t.id}" data-name="${t.name}">--%>
+                           class="text-decoration-none delete-transaction-btn"
+                           data-bs-toggle="modal"
+                           data-bs-target="#deleteTransaction"
+                           data-id="${t.transactionId}"
+                           data-name="${vaccines.get(t.vaccineId)}">
                             <img src="../image/bin.png" alt="Xóa" width="24" height="24">
                         </a>
+
                     </td>
                 </tr>
             </c:forEach>
+            <!-- Modal xóa -->
+            <div class="modal fade" id="deleteTransaction" tabindex="-1" aria-labelledby="deleteTransactionLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteTransactionLabel">Xác nhận xóa giao dịch</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">Bạn có chắc chắn muốn xóa giao dịch <strong id="transactionName"></strong>?</div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Hủy</button>
+                            <button id="confirmDeleteTransaction" class="btn btn-danger">Xóa</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             </tbody>
         </table>
     </div>
 
-    <!-- Modal xoa -->
-    <div class="modal fade" id="deleteVaccine" tabindex="-1" aria-labelledby="deleteVaccineLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteVaccineLabel">Xác nhận</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body"></div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Hủy</button>
-                    <a href="#" id="confirmDelete" class="btn btn-danger">Xóa</a>
-                </div>
-            </div>
-        </div>
-    </div>
+
+
+
 </div>
 </body>
+<script src="../js/table-data-transaction.js"></script>
 </html>

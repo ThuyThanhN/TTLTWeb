@@ -84,7 +84,7 @@ public class ProductStockDAO {
 
     public void insert(ProductStock stock, int delta) throws SQLException {
 
-        String sql = "INSERT INTO productstock (idVaccine, name, totalPrice, loss, expired) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO productstock (idVaccine, name, totalPrice, loss, expired) VALUES (?, ?, ?, ?, ?)";
         try {
             PreparedStatement pst = DBConnect.get(sql);
             pst.setInt(1, stock.getVaccineId());
@@ -94,9 +94,11 @@ public class ProductStockDAO {
             VaccineDao vaccineDao = new VaccineDao();
             Vaccines v = vaccineDao.getVaccineById(stock.getVaccineId());
             double totalPrice = v.getPrice() * delta;
+            System.out.println("Total price: " + totalPrice);  // In ra giá trị tính toán
+
             pst.setDouble(3, totalPrice);
             pst.setInt(4, stock.getLoss());
-            pst.setTimestamp(6, Timestamp.valueOf(stock.getExpired()));
+            pst.setTimestamp(5, Timestamp.valueOf(stock.getExpired()));
             pst.executeUpdate();
 
             vaccineDao.updateQuantity(v.getId(), v.getStockQuantity() + delta);
