@@ -6,7 +6,7 @@ $(document).ready(function () {
         let formData = new FormData(this);
 
         $.ajax({
-            url: "/provide_vaccine_services_war/admin/AddTransaction", // Servlet xử lý POST
+            url: "/admin/AddTransaction", // Servlet xử lý POST
             type: "POST",
             data: formData,
             contentType: false,
@@ -18,7 +18,7 @@ $(document).ready(function () {
                     title: 'Thêm giao dịch thành công!',
                     confirmButtonText: 'OK'
                 }).then(() => {
-                    window.location.href = "/provide_vaccine_services_war/admin/table-data-vacxin";
+                    window.location.href = "/admin/table-data-vacxin";
                 });
             },
             error: function (xhr) {

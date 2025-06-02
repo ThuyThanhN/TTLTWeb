@@ -114,7 +114,7 @@ $(document).ready(function () {
             let formData = new FormData(this);
 
             $.ajax({
-                url: "/provide_vaccine_services_war/admin/addVaccine",
+                url: "/admin/addVaccine",
                 type: "POST",
                 data: formData,
                 contentType: false,
@@ -138,7 +138,7 @@ $(document).ready(function () {
                         $("#vaccine").DataTable().row.add($(newRowHtml)).draw(false);
 
                         // chuyen huong den trang hien danh sach vac xin
-                        window.location.href = "/provide_vaccine_services_war/admin/table-data-vacxin";
+                        window.location.href = "/admin/table-data-vacxin";
                     }
                 },
                 error: function (xhr) {

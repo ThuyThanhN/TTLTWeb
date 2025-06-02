@@ -53,7 +53,7 @@ public class UserDao {
         return re;
     }
 
-     // Them nhan vien trong Admin
+    // Them nhan vien trong Admin
     public int insertStaff(Users u) {
         int newId = -1;
 
@@ -805,6 +805,3 @@ public class UserDao {
         return result;
     }
 }
-
-
-
