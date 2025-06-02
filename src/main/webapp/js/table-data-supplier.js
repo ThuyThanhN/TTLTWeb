@@ -130,7 +130,7 @@ $(document).ready(function () {
             let country = $("#supplier-country").val();
 
             $.ajax({
-                url: "/provide_vaccine_services_war/admin/addSupplier",
+                url: "/admin/addSupplier",
                 type: "POST",
                 data: {
                     "supplier-name": name,
@@ -195,7 +195,7 @@ $(document).ready(function () {
             let country = modal.find("input[name='supplier-country']").val();
 
             $.ajax({
-                url: "/provide_vaccine_services_war/admin/updateSupplier",
+                url: "/admin/updateSupplier",
                 type: "POST",
                 data: {
                     id: supplierId,

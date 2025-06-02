@@ -220,16 +220,40 @@ public class VaccineDao {
     }
 
     // update so luong
-    public void updateQuantity(int vaccineId, int delta) throws SQLException {
+    public void updateQuantity(int vaccineId, int delta) {
         String sql = "UPDATE vaccines SET stockQuantity = stockQuantity + ? WHERE id = ?";
         try {
             PreparedStatement pst = DBConnect.get(sql);
             pst.setInt(1, delta);
             pst.setInt(2, vaccineId);
             pst.executeUpdate();
+
+            VaccineDao vaccineDao = new VaccineDao();
+            Vaccines v = vaccineDao.getVaccineById(vaccineId);
+            if(v.getStockQuantity() == 0) {
+                vaccineDao.setStatus(vaccineId, "Hết hàng");
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setStatus(int vaccineId, String status) {
+
+        String sql = "UPDATE vaccines SET status = ? WHERE id = ?";
+
+        try {
+            PreparedStatement pst = DBConnect.get(sql);
+            pst.setString(1, status);
+            pst.setInt(2, vaccineId);
+            pst.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
     }
 
 

@@ -67,11 +67,7 @@ public class UpdateTransaction extends HttpServlet {
         oldQuantity = ( oldType.equals("Nhập")) ? -oldQuantity : oldQuantity;
         int delta = ( transaction.getType().equals("Nhập")) ?  quantity : -quantity ;
 
-        try {
-            vaccineDao.updateQuantity(transaction.getVaccineId(),oldQuantity + delta);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        vaccineDao.updateQuantity(transaction.getVaccineId(),oldQuantity + delta);
 
 
         if (result > 0) {

@@ -6,7 +6,7 @@ $(document).ready(function () {
     // xuat pdf
     $("#exportPDF").on("click", function () {
         $.ajax({
-            url: "/provide_vaccine_services_war/admin/exportVaccine", // API lấy danh sách vaccine
+            url: "/admin/exportVaccine", // API lấy danh sách vaccine
             type: "GET",
             dataType: "json",
             success: function (data) {
@@ -47,7 +47,7 @@ $(document).ready(function () {
     // xuat excel
     $("#exportExcel").on("click", function () {
         $.ajax({
-            url: "/provide_vaccine_services_war/admin/exportVaccine",
+            url: "/admin/exportVaccine",
             type: "GET",
             dataType: "json",
             success: function (data) {

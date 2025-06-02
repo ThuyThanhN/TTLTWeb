@@ -25,7 +25,7 @@ $(document).ready(function () {
         var orderId = $(this).data("id");
         console.log(orderId)
         $.ajax({
-            url: "/provide_vaccine_services_war/admin/displayDetailOrder",
+            url: "/admin/displayDetailOrder",
             type: "GET",
             data: { id: orderId },
             dataType: "json",
@@ -68,7 +68,7 @@ $(document).ready(function () {
         var status = $(this).val();
 
         $.ajax({
-            url: "/provide_vaccine_services_war/admin/updateOrderStatus",
+            url: "/admin/updateOrderStatus",
             type: "POST",
             data: {
                 order_id: orderId,
@@ -101,7 +101,7 @@ $(document).ready(function () {
     // xuat pdf
     $("#exportPDF").on("click", function () {
         $.ajax({
-            url: "/provide_vaccine_services_war/admin/exportOrder", // API lấy danh sách đơn hàng
+            url: "/admin/exportOrder", // API lấy danh sách đơn hàng
             type: "GET",
             dataType: "json",
             success: function (data) {
@@ -166,7 +166,7 @@ $(document).ready(function () {
 
     $("#exportExcel").on("click", function () {
         $.ajax({
-            url: "/provide_vaccine_services_war/admin/exportOrder",
+            url: "/admin/exportOrder",
             type: "GET",
             dataType: "json",
             success: function (data) {

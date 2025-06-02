@@ -62,7 +62,7 @@ function searchVaccine(page) {
     const query = $("#searchQuery").val().trim();
 
     $.ajax({
-        url: "/provide_vaccine_services_war/vaccine-information",
+        url: "/vaccine-information",
         type: "GET",
         data: {action: "search", query: query, page: page, age: age, disease: disease},
         success: (response) => {
@@ -142,7 +142,7 @@ function autoComplete() {
     console.log("query: " + query);
 
     $.ajax({
-        url: "/provide_vaccine_services_war/vaccine-information",
+        url: "/vaccine-information",
         type: "GET",
         data: {action: "autoComplete", query: query},
         success: (response) => {
