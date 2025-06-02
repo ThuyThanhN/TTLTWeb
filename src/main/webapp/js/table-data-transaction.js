@@ -100,7 +100,7 @@ $(document).ready(function() {
 
     $("#exportPDF").on("click", function () {
         $.ajax({
-            url: "/provide_vaccine_services_war/admin/exportTransaction", // Cập nhật endpoint phù hợp
+            url: "/admin/exportTransaction",
             type: "GET",
             dataType: "json",
             success: function (data) {
@@ -142,7 +142,7 @@ $(document).ready(function() {
 
     $("#exportExcel").on("click", function () {
         $.ajax({
-            url: "/provide_vaccine_services_war/admin/exportTransaction",
+            url: "/admin/exportTransaction",
             type: "GET",
             dataType: "json",
             success: function (data) {
