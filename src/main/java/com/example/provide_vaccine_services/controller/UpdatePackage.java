@@ -1,5 +1,6 @@
 package com.example.provide_vaccine_services.controller;
 
+import com.example.provide_vaccine_services.dao.LogDao;
 import com.example.provide_vaccine_services.dao.VaccinePackageDao;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -19,6 +20,9 @@ public class UpdatePackage extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
+
+        LogDao logDao = new LogDao();
+        String userIp = request.getRemoteAddr();
 
         try {
             int packageId = Integer.parseInt(request.getParameter("id"));
@@ -55,12 +59,27 @@ public class UpdatePackage extends HttpServlet {
             int result = dao.update(packageId, packageName, vaccineIds, dosages, ageId, totalPriceFloat, description);
 
             if (result > 0) {
+                try {
+                    logDao.insertLog("INFO", "Vaccine package updated successfully: ID=" + packageId + ", Name=" + packageName, "admin", userIp);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 response.getWriter().write("{\"status\": \"success\", \"message\": \"Cập nhật thành công\"}");
             } else {
+                try {
+                    logDao.insertLog("ERROR", "Failed to update vaccine package: ID=" + packageId + ", Name=" + packageName, "admin", userIp);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 response.getWriter().write("{\"status\": \"fail\", \"message\": \"Cập nhật thất bại\"}");
             }
 
         } catch (Exception e) {
+            try {
+                logDao.insertLog("ERROR", "Exception in UpdatePackage doPost: " + e.getMessage(), "admin", userIp);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
             e.printStackTrace();
             response.getWriter().write("{\"status\": \"error\", \"message\": \"Có lỗi xảy ra khi cập nhật\"}");
         }

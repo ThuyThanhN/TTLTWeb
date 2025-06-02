@@ -104,6 +104,9 @@ tasks.register('print_version') {
 
 task docker_app_start {
     doLast {
+
+
+
         println ssh.version
         println 'begin docker_app_start'
         ssh.run {

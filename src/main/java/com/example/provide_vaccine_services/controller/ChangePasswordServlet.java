@@ -34,20 +34,21 @@ public class ChangePasswordServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Đảm bảo dữ liệu được mã hóa UTF-8
         request.setCharacterEncoding("UTF-8");
+
         // Lấy IP người dùng
         String userIp = request.getRemoteAddr();
 
-// Tạo đối tượng LogDao (nên khai báo 1 lần đầu method)
+        // Tạo đối tượng LogDao để ghi log
         LogDao logDao = new LogDao();
 
         // Lấy dữ liệu từ form
         String currentPassword = request.getParameter("currentPassword");
         String newPassword = request.getParameter("newPassword");
         String confirmNewPassword = request.getParameter("confirmNewPassword");
+
         System.out.println("Current Password (plain): " + currentPassword);
         System.out.println("New Password (plain): " + newPassword);
         System.out.println("Confirm Password (plain): " + confirmNewPassword);
-
 
         // Kiểm tra giá trị null hoặc rỗng
         if (currentPassword == null || newPassword == null || confirmNewPassword == null ||
@@ -56,6 +57,7 @@ public class ChangePasswordServlet extends HttpServlet {
             request.getRequestDispatcher("change-password.jsp").forward(request, response);
             return;
         }
+
         // Lấy thông tin người dùng hiện tại từ session
         HttpSession session = request.getSession(false);
         Users currentUser = (Users) session.getAttribute("user");
@@ -65,20 +67,33 @@ public class ChangePasswordServlet extends HttpServlet {
             return;
         }
 
-        // Kiểm tra mật khẩu hiện tại
+        // Mã hóa mật khẩu hiện tại nhập vào
         String hashedCurrentPassword = MD5Hash.hashPassword(currentPassword);
         System.out.println("Current Password (hashed from input): " + hashedCurrentPassword);
 
+        // Kiểm tra mật khẩu hiện tại
         if (!hashedCurrentPassword.equals(currentUser.getPassword())) {
-            System.out.println("Mật khẩu mới và xác nhận không khớp!");
+            System.out.println("Mật khẩu hiện tại không chính xác!");
+
+            try {
+                logDao.insertLog("WARN", "User nhập mật khẩu hiện tại không đúng", currentUser.getEmail(), userIp);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
 
             request.setAttribute("message", "Mật khẩu hiện tại không chính xác!");
             request.getRequestDispatcher("change-password.jsp").forward(request, response);
             return;
         }
 
-        // Kiểm tra mật khẩu mới và xác nhận mật khẩu
+        // Kiểm tra mật khẩu mới và xác nhận mật khẩu có khớp không
         if (!newPassword.equals(confirmNewPassword)) {
+            try {
+                logDao.insertLog("WARN", "User nhập mật khẩu mới và xác nhận mật khẩu không khớp", currentUser.getEmail(), userIp);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
             request.setAttribute("message", "Mật khẩu mới và xác nhận không khớp!");
             request.getRequestDispatcher("change-password.jsp").forward(request, response);
             return;
@@ -95,24 +110,21 @@ public class ChangePasswordServlet extends HttpServlet {
         if (isUpdated) {
             System.out.println("Đổi mật khẩu thành công!");
 
-
-
             try {
-                logDao.insertLog("INFO", "User changed password successfully", currentUser.getEmail(), userIp);
+                logDao.insertLog("INFO", "User đổi mật khẩu thành công", currentUser.getEmail(), userIp);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
 
-            // Cập nhật session user
+            // Cập nhật session user với mật khẩu mới
             currentUser.setPassword(hashedNewPassword);
             session.setAttribute("user", currentUser);
             request.setAttribute("message", "Đổi mật khẩu thành công!");
         } else {
             System.out.println("Đổi mật khẩu thất bại!");
 
-
             try {
-                logDao.insertLog("ERROR", "Password change failed for user", currentUser.getEmail(), userIp);
+                logDao.insertLog("ERROR", "User đổi mật khẩu thất bại", currentUser.getEmail(), userIp);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -120,7 +132,7 @@ public class ChangePasswordServlet extends HttpServlet {
             request.setAttribute("message", "Đổi mật khẩu thất bại!");
         }
 
-// Trả về trang đổi mật khẩu
-        request.getRequestDispatcher("change-password.jsp").forward(request, response);}}
-
-
+        // Trả về trang đổi mật khẩu
+        request.getRequestDispatcher("change-password.jsp").forward(request, response);
+    }
+}
