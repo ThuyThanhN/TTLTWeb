@@ -234,6 +234,73 @@ public class VaccinePackageDao {
         return result;
     }
 
+    public List<Integer> getVaccineIdsByPackageId(int packageId) {
+        List<Integer> vaccineIds = new ArrayList<>();
+        // Thực hiện query lấy danh sách id vaccine trong gói packageId từ bảng liên kết
+        // ví dụ: SELECT idVaccine FROM package_vaccine WHERE idPackage = ?
+        // thêm vào vaccineIds
+        String sql = "select vaccine_id from vaccinepackages where idPackage = ?";
+
+        try {
+            PreparedStatement pst = DBConnect.get(sql);
+            pst.setInt(1, packageId);
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                vaccineIds.add(rs.getInt("vaccine_id"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return vaccineIds;
+    }
+
+    public boolean isValidpackage(int id) {
+
+        String sql = "select * from vaccinepackages vp join vaccinepmappings vm on vp.id = vm.idPackage join vaccines v on v.id = vm.idVaccine" +
+                " where idPackage = ? AND v.stockQuantity <= 0";
+        try {
+            PreparedStatement pst = DBConnect.get(sql);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
+            while(rs.next()) {
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return true;
+
+
+    }
+
+    public VaccinePackages getpackageById(int id) {
+        String sql = "select * from vaccinepackages where id = ?";
+        VaccinePackages result = null;
+        try {
+            PreparedStatement pst = DBConnect.get(sql);
+            pst.setInt(1, id);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                int vpid = rs.getInt("id");
+                String name = rs.getString("name");
+                String description = rs.getString("description");
+                float totalPrice = rs.getFloat("totalPrice");
+                result = new VaccinePackages(vpid, name, description, totalPrice);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+
+    }
+
     // Lấy gói vắc xin theo độ tuổi
 //    public List<VaccinePackages> getPackagesByAgeGroup(int ageGroupId) {
 //        List<VaccinePackages> packages = new ArrayList<>();

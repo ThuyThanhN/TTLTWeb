@@ -88,16 +88,35 @@ public class DosingSchedule extends HttpServlet {
         VaccineDao vaccine = new VaccineDao();
         AgeGroupDao ageDao = new AgeGroupDao();
         PackageAgeDao paDao = new PackageAgeDao();
+        VaccinePackageDao vpaDao = new VaccinePackageDao();
 
         List<AgeGroups> ages = ageDao.getVaccinePackagesByAge();
         List<Centers> centers = centerDao.getAll();
         List<Vaccines> vaccines = vaccine.getAll();
         List<PackageAges> pas = paDao.getAll();
+        List<VaccinePackages> vpas = vpaDao.getAll();
 
+        Map<Integer, Boolean> mapVaccine = new HashMap<>();
+        for(VaccinePackages vp : vpas) {
+            boolean isValid = vpaDao.isValidpackage(vp.getId());
+            mapVaccine.put(vp.getId(), isValid);
+        }
+
+        for(Map.Entry<Integer, Boolean> entry : mapVaccine.entrySet()) {
+            System.out.println("mapVaccine: " + entry.getKey());
+            System.out.println("isValid: " + entry.getValue());
+        }
+
+        request.setAttribute("mapVaccine", mapVaccine);
         request.setAttribute("centers", centers);
         request.setAttribute("ages", ages);
         request.setAttribute("vaccines", vaccines);
         request.setAttribute("pas", pas);
+
+        Map<Integer, Integer> vaccineQuantityMap = vaccines.stream()
+                .collect(Collectors.toMap(Vaccines::getId, Vaccines::getStockQuantity));
+
+
 
         request.getRequestDispatcher("dosing_schedule.jsp").forward(request, response);
     }
