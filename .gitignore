@@ -40,3 +40,8 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+# .gitignore
+.gradle/
+".gradle/" 
+".gradle/" 
