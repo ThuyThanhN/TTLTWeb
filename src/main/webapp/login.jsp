@@ -16,7 +16,6 @@
     <!-- Bootstrap CSS (Sửa lại, chỉ giữ 1 liên kết) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           crossorigin="anonymous">
-
     <!-- Bootstrap JS (Sửa lại, chỉ giữ 1 liên kết) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             crossorigin="anonymous"></script>
@@ -26,6 +25,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
           rel="stylesheet">
     <link rel="stylesheet" href="css/login.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 <div id="wrapper">
@@ -37,7 +37,7 @@
     <div class="login-container">
         <div class="login-form">
 
-            <form id="login-form">
+            <form method="POST" action="login" id="login-form">
                 <h5>Đăng Nhập</h5>
 
                 <!-- Thông báo lỗi từ server -->
@@ -66,6 +66,7 @@
                 </div>
 
                 <!-- Nút đăng nhập -->
+                <div class="g-recaptcha" data-sitekey="6Leh7VIrAAAAALqefOlWqNkWP7As8Bg3Zw14A7m0"></div>
                 <button type="submit" id="login-button" class="btn btn-primary w-100">Đăng nhập</button>
             </form>
 
@@ -105,6 +106,7 @@
 
 </div>
 <!--    Phần footer -->
+
 <jsp:include page="footer.jsp"></jsp:include>
 </div>
 <script src="js/login.js"></script>
