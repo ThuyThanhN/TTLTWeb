@@ -265,7 +265,7 @@ public class VaccinePackageDao {
             PreparedStatement pst = DBConnect.get(sql);
             pst.setInt(1, id);
             ResultSet rs = pst.executeQuery();
-            while(rs.next()) {
+            if(rs.next()) {
                 return false;
             }
         } catch (SQLException e) {

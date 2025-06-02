@@ -214,9 +214,10 @@
                                                                         <div class="row">
                                                                             <div class="col-6">
                                                                                 <input class="form-check-input"
+                                                                                       name="selectedpackagevaccine"
                                                                                        type="checkbox"
                                                                                        id="package-${vp.id}"
-                                                                                       data-valid="${mapVaccines.get(vp.id)}"
+                                                                                       data-valid="${mapVaccine.get(vp.id)}"
                                                                                        value="${vp.id}"
                                                                                 <c:if test="${not empty orderDetailsCart && not empty cartId}">
                                                                                 <c:forEach var="od"

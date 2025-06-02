@@ -201,11 +201,13 @@ public class ShoppingCart extends HttpServlet {
                 for (OrderDetails oddOrderDetail : orderDetails) {
                     int result = odd.insertDetailFull(idOrder, oddOrderDetail.getIdVaccine(), oddOrderDetail.getIdPackage(),
                             oddOrderDetail.getQuantityOrder(), oddOrderDetail.getPrice());
+
                     System.out.println("orderDetails" + result);
 
                     // trừ số lượng vaccine đã đặt
                     int quantity = -oddOrderDetail.getQuantityOrder();
                     vaccineDao.updateQuantity(oddOrderDetail.getIdVaccine(), quantity);
+
                 }
             }
         }

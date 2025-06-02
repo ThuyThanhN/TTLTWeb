@@ -113,8 +113,7 @@ public class DosingSchedule extends HttpServlet {
         request.setAttribute("vaccines", vaccines);
         request.setAttribute("pas", pas);
 
-        Map<Integer, Integer> vaccineQuantityMap = vaccines.stream()
-                .collect(Collectors.toMap(Vaccines::getId, Vaccines::getStockQuantity));
+
 
 
 
