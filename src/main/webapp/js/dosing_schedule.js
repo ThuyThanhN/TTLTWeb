@@ -191,7 +191,7 @@ $(document).ready(function() {
 
     // xử lý vaccine gói
     // tìm input có id có package
-    $('.form-check-input[name="selectedpackagevaccine"]').each(function() {
+    $('.form-check-input[name="selectedPackages"]').each(function() {
 
         let isValid = $(this).data('valid');
         console.log(isValid);

@@ -214,8 +214,7 @@
                                                                         <div class="row">
                                                                             <div class="col-6">
                                                                                 <input class="form-check-input"
-                                                                                       name="selectedpackagevaccine"
-                                                                                       type="checkbox"
+                                                                                       name="selectedPackages"                                                                                       type="checkbox"
                                                                                        id="package-${vp.id}"
                                                                                        data-valid="${mapVaccine.get(vp.id)}"
                                                                                        value="${vp.id}"
