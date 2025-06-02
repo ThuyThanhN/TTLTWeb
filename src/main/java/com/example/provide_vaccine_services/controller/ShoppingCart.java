@@ -1,9 +1,6 @@
 package com.example.provide_vaccine_services.controller;
 
-import com.example.provide_vaccine_services.dao.ContactPersonDao;
-import com.example.provide_vaccine_services.dao.OrderDao;
-import com.example.provide_vaccine_services.dao.OrderDetailDao;
-import com.example.provide_vaccine_services.dao.PatientDao;
+import com.example.provide_vaccine_services.dao.*;
 import com.example.provide_vaccine_services.dao.model.*;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -15,6 +12,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -173,12 +171,14 @@ public class ShoppingCart extends HttpServlet {
                     patients.getGender(), patients.getIdentification(), patients.getAddress(), patients.getProvince(),
                     patients.getDistrict(), patients.getWard()));
             System.out.println("idPatient " + idPatient);
+
             //them contact
             ContactPersonDao cpDao = new ContactPersonDao();
             ContactPersons contactPersons = integerContactPersonsMap.get(listCart.get(i));
             cpDao.insertContact(new ContactPersons(userId, idPatient, contactPersons.getFullname(), contactPersons.getRelationship(), contactPersons.getPhone()));
 
             System.out.println("contactPersons " + contactPersons.getFullname());
+
             // them orders
             OrderDao orderDao = new OrderDao();
             int finalI = i;
@@ -192,13 +192,20 @@ public class ShoppingCart extends HttpServlet {
                         foundOrder.getAppointmentDate(), foundOrder.getAppointmentTime(), foundOrder.getStatus(),
                         foundOrder.getPaymentStatus()));
                 System.out.println("idOrder" + idOrder);
+
                 // them orderdetail
                 OrderDetailDao odd = new OrderDetailDao();
+                VaccineDao vaccineDao = new VaccineDao();
+
                 List<OrderDetails> orderDetails = ordersOrderDetailsMap.get(foundOrder);
                 for (OrderDetails oddOrderDetail : orderDetails) {
                     int result = odd.insertDetailFull(idOrder, oddOrderDetail.getIdVaccine(), oddOrderDetail.getIdPackage(),
                             oddOrderDetail.getQuantityOrder(), oddOrderDetail.getPrice());
                     System.out.println("orderDetails" + result);
+
+                    // trừ số lượng vaccine đã đặt
+                    int quantity = -oddOrderDetail.getQuantityOrder();
+                    vaccineDao.updateQuantity(oddOrderDetail.getIdVaccine(), quantity);
                 }
             }
         }
