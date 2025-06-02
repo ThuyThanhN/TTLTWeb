@@ -249,7 +249,7 @@
                                                 <div class="col-3">
                                                     <div class="mb-3">
                                                         <label for="pass-${staff.id}" class="form-label">Mật khẩu</label>
-                                                        <input type="password" class="form-control" id="pass-${staff.id}" name="password" value="${staff.password}" required data-password>
+                                                        <input type="password" class="form-control" id="pass-${staff.id}" name="password" required data-password>
                                                         <div class="error-message">Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, chữ số và ký tự đặc biệt.</div>
                                                     </div>
                                                 </div>
