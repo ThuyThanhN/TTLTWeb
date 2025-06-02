@@ -3,6 +3,7 @@ package com.example.provide_vaccine_services.controller;
 import com.example.provide_vaccine_services.Service.EmailSender;
 import com.example.provide_vaccine_services.Service.GoogleLogin;
 import com.example.provide_vaccine_services.Service.TokenGenerator;
+import com.example.provide_vaccine_services.Service.vnpay.VerifyRecaptcha;
 import com.example.provide_vaccine_services.dao.LogDao;
 import com.example.provide_vaccine_services.dao.UserDao;
 import com.example.provide_vaccine_services.dao.model.Users;
@@ -70,6 +71,25 @@ public class LoginServlet extends HttpServlet {
         String userIp = request.getRemoteAddr();  // Lấy IP client
         request.setCharacterEncoding("UTF-8");
 
+        // Lấy token reCAPTCHA từ form
+        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+        System.out.println("Token g-recaptcha-response nhận được: " + gRecaptchaResponse);
+
+        // Kiểm tra token có null hoặc rỗng không
+        if (gRecaptchaResponse == null || gRecaptchaResponse.trim().isEmpty()) {
+            System.out.println("KHÔNG NHẬN ĐƯỢC TOKEN reCAPTCHA từ client");
+            response.getWriter().write("captcha_missing"); // Mã lỗi riêng cho thiếu token
+            return; // Dừng xử lý
+        }
+
+        // Nếu có token, tiến hành verify với Google
+        boolean captchaVerified = VerifyRecaptcha.verify(gRecaptchaResponse);
+        if (!captchaVerified) {
+            System.out.println("TOKEN reCAPTCHA KHÔNG HỢP LỆ hoặc XÁC THỰC THẤT BẠI");
+            response.getWriter().write("captcha_failed"); // Mã lỗi cho token sai hoặc verify thất bại
+            return; // Dừng xử lý
+        }
+
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         HttpSession session = request.getSession();
@@ -85,7 +105,6 @@ public class LoginServlet extends HttpServlet {
         Users user = userDao.checkLogin(username, password);
 
         if (user == null) {
-            // Log đăng nhập thất bại
             try {
                 logDao.insertLog("WARN", "Failed login attempt for username: " + username, username, userIp);
             } catch (SQLException e) {
@@ -156,6 +175,7 @@ public class LoginServlet extends HttpServlet {
             }
         }
     }
+
 
     private void sendActivationEmail(String email) {
         String token = TokenGenerator.generateActivationToken();
