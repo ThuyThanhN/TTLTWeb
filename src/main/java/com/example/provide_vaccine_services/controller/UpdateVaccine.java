@@ -53,7 +53,7 @@ public class UpdateVaccine extends HttpServlet {
         String name = request.getParameter("vaccineName");
         int quantity = Integer.parseInt(request.getParameter("quantity"));
         float price = Float.parseFloat(request.getParameter("price"));
-        String statusText = (Integer.parseInt(request.getParameter("status")) == 1) ? "Còn hàng" : "Hết hàng";
+        String statusText = request.getParameter("status");
         String description = request.getParameter("description");
         String prevention = request.getParameter("prevention");
         int supplierId = Integer.parseInt(request.getParameter("supplierName"));
@@ -72,7 +72,7 @@ public class UpdateVaccine extends HttpServlet {
         boolean typeUpdated = vtDao.updateType(vt);
 
         // Cap nhat VaccineDetails
-        String target = request.getParameter("editor-dt");
+        String target = request.getParameter("editor-dot");
         String immunization = request.getParameter("editor-pdt");
         String adverseReactions = request.getParameter("editor-pu");
 
@@ -82,7 +82,7 @@ public class UpdateVaccine extends HttpServlet {
 
         // Cap nhat VaccineContents
         String origin = request.getParameter("editor-ng");
-        String administrationRoute = request.getParameter("editor-dt");
+        String administrationRoute = request.getParameter("editor-dgt");
         String contraindications = request.getParameter("editor-ccd");
         String precaution = request.getParameter("editor-tt");
         String drugInteractions = request.getParameter("editor-ttt");
