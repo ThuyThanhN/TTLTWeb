@@ -6,7 +6,7 @@ public class Iconstant {
 
     public static final String GOOGLE_CLIENT_SECRET = "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";
 
-    public static final String GOOGLE_REDIRECT_URI = "http://vaccine.io.vn/login?provider=google";
+    public static final String GOOGLE_REDIRECT_URI = "https://vaccine.io.vn/login?provider=google";
 
     public static final String GOOGLE_GRANT_TYPE = "authorization_code";
 
@@ -20,7 +20,7 @@ public class Iconstant {
             "b41b29525f5c86b591bb7fbb6250a1d8";
 
     public static final String FACEBOOK_REDIRECT_URI =
-            "http://vaccine.io.vn/login?provider=facebook";
+            "https://vaccine.io.vn/login?provider=facebook";
 
     public static final String FACEBOOK_LINK_GET_TOKEN =
             "https://graph.facebook.com/v22.0/oauth/access_token?";
