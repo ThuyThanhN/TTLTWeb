@@ -192,6 +192,34 @@ public class UserDao {
         return re;
     }
 
+    public int getPermissionIdByModule(String module) {
+        String sql = "SELECT id FROM permissions WHERE module = ?";
+        try {
+            PreparedStatement pst = DBConnect.get(sql);
+            pst.setString(1, module);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public int updateUserPermission(int userId, int permissionId) {
+        String sql = "UPDATE userpermissions SET permissionId = ? WHERE userId = ?";
+        try {
+            PreparedStatement pst = DBConnect.get(sql);
+            pst.setInt(1, permissionId);
+            pst.setInt(2, userId);
+            return pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
     // Xoa
     public int delete(int idS) {
         int re = 0;
