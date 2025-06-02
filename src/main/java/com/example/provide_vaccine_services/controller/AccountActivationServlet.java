@@ -2,85 +2,89 @@ package com.example.provide_vaccine_services.controller;
 
 import com.example.provide_vaccine_services.Service.EmailSender;
 import com.example.provide_vaccine_services.Service.TokenGenerator;
+import com.example.provide_vaccine_services.dao.LogDao;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.*;
+import java.sql.SQLException;
 
 @WebServlet(name = "AccountActivationServlet", value = "/send-activation-link")
 public class AccountActivationServlet extends HttpServlet {
 
-    // Thời gian hết hạn của mã token kích hoạt (ví dụ: 5 phút)
-    private static final long TOKEN_EXPIRATION_TIME = 5 * 60 * 1000; // 5 phút (60 giây)
+    private static final long TOKEN_EXPIRATION_TIME = 5 * 60 * 1000; // 5 phút
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Chuyển hướng đến trang gửi liên kết kích hoạt tài khoản
+        LogDao logDao = new LogDao();
+        String userIp = request.getRemoteAddr();
+        try {
+            logDao.insertLog("INFO", "GET request received at /send-activation-link", null, userIp);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         request.getRequestDispatcher("send-activation-link.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Lấy email người dùng từ request (được gửi từ form)
         String email = request.getParameter("email");
+        String userIp = request.getRemoteAddr();
+        LogDao logDao = new LogDao();
 
-        // Kiểm tra nếu email hợp lệ
-        if (email == null || email.isEmpty()) {
-            request.setAttribute("error", "Vui lòng nhập email.");
+        try {
+            logDao.insertLog("INFO", "POST request to send activation link for email: " + email, null, userIp);
+
+            if (email == null || email.isEmpty()) {
+                logDao.insertLog("WARN", "Empty email received in activation link request", null, userIp);
+                request.setAttribute("error", "Vui lòng nhập email.");
+                request.getRequestDispatcher("send-activation-link.jsp").forward(request, response);
+                return;
+            }
+
+            String token = TokenGenerator.generateActivationToken();
+            String activationLink = generateActivationLink(token);
+
+            boolean emailSent = sendActivationLinkEmail(email, activationLink);
+
+            if (emailSent) {
+                logDao.insertLog("INFO", "Activation link sent successfully to email: " + email, null, userIp);
+                request.getSession().setAttribute("activationToken", token);
+                request.setAttribute("message", "Một liên kết kích hoạt đã được gửi đến email của bạn.");
+            } else {
+                logDao.insertLog("ERROR", "Failed to send activation link email to: " + email, null, userIp);
+                request.setAttribute("error", "Có lỗi khi gửi email. Vui lòng thử lại sau.");
+            }
+
             request.getRequestDispatcher("send-activation-link.jsp").forward(request, response);
-            return;
+
+        } catch (Exception e) {
+            try {
+                logDao.insertLog("ERROR", "Exception in sending activation link for email: " + email + " - " + e.getMessage(), null, userIp);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Lỗi hệ thống. Vui lòng thử lại sau.");
         }
-
-        // Tạo mã token kích hoạt tài khoản bằng lớp AccountActivationTokenGenerator
-        String token = TokenGenerator.generateActivationToken();
-
-        // Tạo URL kích hoạt tài khoản chứa mã token
-        String activationLink = generateActivationLink(token);
-
-        // Gửi email với liên kết kích hoạt tài khoản
-        boolean emailSent = sendActivationLinkEmail(email, activationLink);
-
-        if (emailSent) {
-            // Lưu mã token vào session hoặc cơ sở dữ liệu nếu cần
-            request.getSession().setAttribute("activationToken", token);
-            request.setAttribute("message", "Một liên kết kích hoạt đã được gửi đến email của bạn.");
-        } else {
-            request.setAttribute("error", "Có lỗi khi gửi email. Vui lòng thử lại sau.");
-        }
-
-        // Chuyển hướng đến trang kết quả
-        request.getRequestDispatcher("send-activation-link.jsp").forward(request, response);
     }
 
-    /**
-     * Tạo URL chứa mã token để kích hoạt tài khoản
-     * @param token Mã token ngẫu nhiên tạo từ phương thức generateActivationToken
-     * @return URL kích hoạt tài khoản chứa mã token
-     */
     private String generateActivationLink(String token) {
-        String baseUrl = "https://example.com/activate-account"; // Cập nhật URL của bạn ở đây
-        return baseUrl + "?token=" + token; // Liên kết kích hoạt tài khoản
+        String baseUrl = "https://example.com/activate-account";
+        return baseUrl + "?token=" + token;
     }
 
-    /**
-     * Gửi email với liên kết kích hoạt tài khoản
-     * @param email Địa chỉ email của người nhận
-     * @param activationLink Liên kết kích hoạt tài khoản chứa mã token
-     * @return true nếu email gửi thành công, false nếu có lỗi
-     */
     private boolean sendActivationLinkEmail(String email, String activationLink) {
         try {
-            // Tạo chủ đề và nội dung email
             String subject = "Kích hoạt tài khoản của bạn";
             String body = "<h3>Chào bạn,</h3>" +
                     "<p>Vui lòng nhấp vào liên kết dưới đây để kích hoạt tài khoản của bạn:</p>" +
                     "<a href='" + activationLink + "'>Kích hoạt tài khoản</a>";
-            // Gửi email với liên kết kích hoạt
-            EmailSender.sendEmail(email, subject, body); // Giả sử EmailSender là lớp gửi email của bạn
-            return true; // Gửi email thành công
+            EmailSender.sendEmail(email, subject, body);
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
-            return false; // Nếu có lỗi, trả về false
+            return false;
         }
     }
 }

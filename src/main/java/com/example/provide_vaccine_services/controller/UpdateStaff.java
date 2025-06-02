@@ -1,6 +1,7 @@
 package com.example.provide_vaccine_services.controller;
 
 import com.example.provide_vaccine_services.Service.MD5Hash;
+import com.example.provide_vaccine_services.dao.LogDao;
 import com.example.provide_vaccine_services.dao.UserDao;
 import com.example.provide_vaccine_services.dao.model.Users;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +25,9 @@ public class UpdateStaff extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
+
+        LogDao logDao = new LogDao();
+        String userIp = request.getRemoteAddr();
 
         String id = request.getParameter("id");
         String name = request.getParameter("fullname");
@@ -58,7 +62,7 @@ public class UpdateStaff extends HttpServlet {
             // Cập nhật user_permission
             userDao.updateUserPermission(idStaff, permissionId); // cập nhật bảng userpermissions
         } else {
-            System.out.println("Không tìm thấy permission phù hợp với module: " + module);
+            response.getWriter().write("{\"status\":\"error\", \"message\":\"Update failed.\"}");
         }
 
         ObjectMapper mapper = new ObjectMapper();
@@ -80,13 +84,24 @@ public class UpdateStaff extends HttpServlet {
             jsonMap.put("role", roleValue);
             jsonMap.put("module", module);
 
+
+            try {
+                logDao.insertLog("INFO", "Staff updated successfully: ID=" + idStaff + ", Name=" + name + ", Role=" + roleValue, "admin", userIp);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             response.getWriter().write(mapper.writeValueAsString(jsonMap));
         } else {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             jsonMap.put("status", "error");
             jsonMap.put("message", "Cập nhật thất bại.");
+
+            try {
+                logDao.insertLog("ERROR", "Failed to update staff: ID=" + idStaff + ", Name=" + name, "admin", userIp);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             response.getWriter().write(mapper.writeValueAsString(jsonMap));
         }
     }
 }
-

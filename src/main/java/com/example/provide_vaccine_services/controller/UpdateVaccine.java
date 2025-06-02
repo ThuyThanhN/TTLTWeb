@@ -104,8 +104,7 @@ public class UpdateVaccine extends HttpServlet {
             jsonResponse.put("imageUrl", imagePath);
         } else {
             jsonResponse.put("status", "error");
-            jsonResponse.put("message", "Loi khi cap nhat vac xin");
-        }
+            jsonResponse.put("message", "Loi khi cap nhat vac xin");}
 
         // json respone
         response.setContentType("application/json");
