@@ -179,4 +179,23 @@ public class TransactionDAO {
         return transactionList;
 
     }
+
+    public void deleteById(int transactionId) {
+        try {
+            String sql = "DELETE FROM transaction WHERE id = ?";
+            PreparedStatement pst = DBConnect.getAuto(sql);
+            pst.setInt(1, transactionId);
+
+            int affectedRows = pst.executeUpdate();
+            if (affectedRows > 0) {
+                System.out.println("Xóa giao dịch thành công, ID: " + transactionId);
+            } else {
+                System.out.println("Không tìm thấy giao dịch để xóa, ID: " + transactionId);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

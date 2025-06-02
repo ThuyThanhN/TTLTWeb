@@ -36,6 +36,10 @@ $(document).ready(function() {
     });
 
 
+
+
+
+    //  chỉnh sửa
     $(document).on("submit", ".editTransactionForm", function (e) {
         e.preventDefault(); // ngăn hành động mặc định
 
@@ -98,6 +102,8 @@ $(document).ready(function() {
         });
     });
 
+
+    // xuất thành pdf
     $("#exportPDF").on("click", function () {
         $.ajax({
             url: "/admin/exportTransaction",
@@ -140,6 +146,8 @@ $(document).ready(function() {
         });
     });
 
+
+    // xuất thành file excel
     $("#exportExcel").on("click", function () {
         $.ajax({
             url: "/admin/exportTransaction",
@@ -173,68 +181,94 @@ $(document).ready(function() {
         });
     });
 
+
+    // Xử lý nút xóa giao dịch
+    function handleDeleteButton(modalId, removeUrlPrefix, table) {
+        let deleteRow = null;
+        let deleteId = null;
+
+        console.log("1" + deleteId);
+        console.log("1" + deleteRow);
+
+        $("#transaction").on("click", ".delete-transaction-btn", function (e) {
+            e.preventDefault();
+
+            deleteId = $(this).data("id");
+            let itemName = $(this).data("name");
+            deleteRow = table.row($(this).closest("tr"));
+
+            $(`#${modalId} .modal-body`).text(`Bạn có chắc chắn muốn xóa giao dịch: ${itemName}?`);
+            $(`#${modalId}`).modal("show");
+        });
+
+        $("#confirmDeleteTransaction").on("click", function (e) {
+            e.preventDefault();
+
+            console.log(deleteId);
+            console.log(deleteRow);
+
+
+            if (!deleteId || !deleteRow) return;
+
+            $.ajax({
+                url: `./${removeUrlPrefix}`,
+                type: "POST",
+                data: {id: deleteId},
+                dataType: "json",
+                success: function (response) {
+                    if (response.status === "success") {
+                        deleteRow.remove().draw();
+                        const bsModal = bootstrap.Modal.getInstance(document.getElementById(modalId));
+                        console.log(bsModal)
+                        bsModal.hide();
+                    } else {
+                        alert("Xóa thất bại");
+                    }
+                },
+                error: function (xhr) {
+                    if (xhr.status === 403) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Cảnh báo',
+                            text: "Không có quyền thực hiện chức năng này!",
+                            confirmButtonText: 'OK'
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi hệ thống!',
+                            text: 'Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.',
+                            confirmButtonText: 'Đóng'
+                        });
+                    }
+                }
+            });
+        });
+
+
+    };
+    // gọi phương thức
+    const transactionTable = initializeDataTable('#transaction');
+    handleDeleteButton('deleteTransaction', 'removeTransaction', transactionTable);
 });
 
-function generateEditTransactionModalHtml(transactionId, vaccineId, type, quantity, expiryDate, userId) {
-    return `
-        <div class="modal fade" id="editTransaction-${transactionId}" data-bs-backdrop="static" 
-             data-bs-keyboard="false" tabindex="-1" aria-labelledby="editLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editLabel">Cập nhật giao dịch ${transactionId}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form class="editTransactionForm" method="post">
-                            <input type="hidden" name="id" value="${transactionId}">
-                            <div class="row">
-                                <div class="col-4">
-                                    <div class="mb-3">
-                                        <label for="vaccineId-${transactionId}" class="form-label">Vaccine</label>
-                                        <select name="vaccineId" class="form-control" id="vaccineId-${transactionId}" required>
-                                            <option value="${vaccineId}" selected>Vaccine ${vaccineId}</option>
-                                            <!-- Option list of vaccines -->
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="mb-3">
-                                        <label for="type-${transactionId}" class="form-label">Loại giao dịch</label>
-                                        <select name="type" class="form-select" id="type-${transactionId}" required>
-                                            <option value="Nhập kho" ${type === 'Nhập kho' ? 'selected' : ''}>Nhập kho</option>
-                                            <option value="Xuất kho" ${type === 'Xuất kho' ? 'selected' : ''}>Xuất kho</option>
-                                            <!-- Các loại giao dịch khác -->
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="mb-3">
-                                        <label for="quantity-${transactionId}" class="form-label">Số lượng</label>
-                                        <input type="number" name="quantity" class="form-control" id="quantity-${transactionId}" value="${quantity}" required>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="mb-3">
-                                        <label for="expiryDate-${transactionId}" class="form-label">Ngày hết hạn</label>
-                                        <input type="date" name="expiryDate" class="form-control" id="expiryDate-${transactionId}" value="${expiryDate}" required>
-                                    </div>
-                                </div>
-                                <div class="col-4">
-                                    <div class="mb-3">
-                                        <label for="userId-${transactionId}" class="form-label">Người dùng</label>
-                                        <input type="text" name="userId" class="form-control" id="userId-${transactionId}" value="${userId}" disabled>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-save">Lưu lại</button>
-                                <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Hủy bỏ</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>`;
-}
+// Ham khoi tao DataTable
+function initializeDataTable(selector) {
+    let table = $(selector).DataTable({
+        pagingType: "numbers",
+        pageLength: 5,
+        language: {
+            emptyTable: "Không có dữ liệu",
+            info: "Hiển thị _START_ đến _TOTAL_ mục",
+            infoEmpty: "Hiển thị 0 đến 0 của 0 mục",
+            infoFiltered: "(được lọc từ _MAX_ mục)",
+            lengthMenu: "Hiển thị _MENU_ mục",
+            loadingRecords: "Đang tải...",
+            processing: "Đang xử lý...",
+            search: "Tìm kiếm:",
+            zeroRecords: "Không tìm thấy dữ liệu phù hợp"
+        }
+    });
 
+    return table;
+}

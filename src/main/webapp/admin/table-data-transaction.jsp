@@ -62,7 +62,7 @@
                 <i class="fas fas fa-file-excel"></i> Xuất Excel
             </button>
         </div>
-        <table class="w-100 table table-striped" id="vaccine">
+        <table class="w-100 table table-striped" id="transaction">
             <thead>
             <tr class="list-header">
                 <th scope="col">ID</th>
@@ -139,37 +139,40 @@
                         </div>
                         <!-- Nut xoa -->
                         <a href="#"
-<%--                           class="text-decoration-none delete-btn"--%>
-<%--                           data-bs-toggle="modal"--%>
-<%--                           data-bs-target="#deleteVaccine"--%>
-<%--                           data-id="${t.id}" data-name="${t.name}">--%>
+                           class="text-decoration-none delete-transaction-btn"
+                           data-bs-toggle="modal"
+                           data-bs-target="#deleteTransaction"
+                           data-id="${t.transactionId}"
+                           data-name="${vaccines.get(t.vaccineId)}">
                             <img src="../image/bin.png" alt="Xóa" width="24" height="24">
                         </a>
+
                     </td>
                 </tr>
             </c:forEach>
+            <!-- Modal xóa -->
+            <div class="modal fade" id="deleteTransaction" tabindex="-1" aria-labelledby="deleteTransactionLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteTransactionLabel">Xác nhận xóa giao dịch</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">Bạn có chắc chắn muốn xóa giao dịch <strong id="transactionName"></strong>?</div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Hủy</button>
+                            <button id="confirmDeleteTransaction" class="btn btn-danger">Xóa</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             </tbody>
         </table>
     </div>
 
 
 
-    <!-- Modal xoa -->
-    <div class="modal fade" id="deleteVaccine" tabindex="-1" aria-labelledby="deleteVaccineLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="deleteVaccineLabel">Xác nhận</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body"></div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Hủy</button>
-                    <a href="#" id="confirmDelete" class="btn btn-danger">Xóa</a>
-                </div>
-            </div>
-        </div>
-    </div>
+
 </div>
 </body>
 <script src="../js/table-data-transaction.js"></script>
