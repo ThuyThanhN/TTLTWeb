@@ -41,8 +41,6 @@
 <div class="main-content">
     <!-- Header -->
     <jsp:include page="headerAdmin.jsp"></jsp:include>
-
-
         <form id="addTransaction" method="post">
             <div class="tabular-wrapper">
                 <div class="section-title border-bottom pb-3">Nhập/Xuất kho hàng</div>
@@ -98,5 +96,5 @@
 
 </div>
 </body>
-<%--<script src="../js/form-add-transaction.js"></script>--%>
+<script src="../js/form-add-transaction.js"></script>
 </html>

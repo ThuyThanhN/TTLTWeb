@@ -870,7 +870,7 @@ public class VaccineDao {
 
     // Đếm số vắc xin còn hàng
     public int countInStock() {
-        String sql = "SELECT COUNT(*) FROM Vaccines WHERE stockQuantity > 0";
+        String sql = "SELECT COUNT(*) FROM vaccines WHERE stockQuantity > 0";
         try (PreparedStatement pst = DBConnect.get(sql);
              ResultSet rs = pst.executeQuery()) {
             if (rs.next()) {
@@ -884,7 +884,7 @@ public class VaccineDao {
 
     // Đếm số vắc xin hết hàng
     public int countOutOfStock() {
-        String sql = "SELECT COUNT(*) FROM Vaccines WHERE stockQuantity <= 0";
+        String sql = "SELECT COUNT(*) FROM vaccines WHERE stockQuantity <= 0";
         try (PreparedStatement pst = DBConnect.get(sql);
              ResultSet rs = pst.executeQuery()) {
             if (rs.next()) {
