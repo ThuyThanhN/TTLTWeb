@@ -41,7 +41,7 @@ public class TKAdmin extends HttpServlet {
         int countInStock = vaccineDao.countInStock();
         int countOutOfStock = vaccineDao.countOutOfStock();
 
-
+        // Vắc xin bán chạy trong tháng
         List<Vaccines> countOrder = od.quantityVaccine();
 
         // Đặt các giá trị vào request để truyền cho JSP
@@ -66,7 +66,7 @@ public class TKAdmin extends HttpServlet {
         String userIp = request.getRemoteAddr();
 
         int id = Integer.parseInt(request.getParameter("id"));
-        String status = request.getParameter("status");
+        int status = Integer.parseInt(request.getParameter("status"));
 
         UserDao userDao = new UserDao();
         boolean isUpdated = userDao.updateStatus(id, status);
