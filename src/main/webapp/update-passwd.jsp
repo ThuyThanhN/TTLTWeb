@@ -30,23 +30,24 @@
     <% } %>
     <div class="change-container">
         <form class="change-form" id="changePasswordForm" action="updatePasswd" method="post">
-            <h2>Đổi mật khẩu</h2>
+            <h5>ĐỔI MẬT KHẨU</h5>
 
-            <div class="input-group password-group">
+            <div class="input-group">
                 <label for="newPassword">Mật khẩu mới</label>
-                <input type="password" id="newPassword" name="newPassword" required>
-                <span class="toggle-password">
-          <i class="fa-solid fa-eye" id="toggleNewPassword"></i>
-        </span>
+                <div class="password-group">
+                    <input type="password" id="newPassword" name="newPassword" placeholder="Nhập mật khẩu mới" required>
+                    <i class="fa-solid fa-eye eye-icon" id="toggleNewPassword"></i>
+                </div>
             </div>
             <div class="input-group password-group">
                 <label for="confirmNewPassword">Xác nhận mật khẩu mới</label>
-                <input type="password" id="confirmNewPassword" name="confirmNewPassword" required>
-                <span class="toggle-password">
-          <i class="fa-solid fa-eye" id="toggleConfirmNewPassword"></i>
-        </span>
+                <div class="password-group">
+                    <input type="password" id="confirmNewPassword" name="confirmNewPassword" placeholder="Nhập mật khẩu mới" required>
+                    <i class="fa-solid fa-eye eye-icon" id="toggleConfirmNewPassword"></i>
+                </div>
+                <span class="error-message" id="confirmPassword-error">Xác nhận mật khẩu không khớp.</span>
             </div>
-            <button type="submit" class="btn btn-primary">Đổi mật khẩu</button>
+            <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
         </form>
     </div>
     <div class="footer">
