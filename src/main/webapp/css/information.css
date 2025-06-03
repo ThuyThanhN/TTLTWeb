@@ -249,6 +249,20 @@ h1 {
     padding: 10px;
     border: 1px solid #ddd;
 }
+
+.appointment-grid {
+    display: grid;
+    gap: 20px;
+    overflow-y: scroll;
+    height: 650px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.appointment-grid::-webkit-scrollbar {
+    display: none;
+}
+
 .appointment-card {
     border: 1px solid #ddd;
     border-radius: 8px;
