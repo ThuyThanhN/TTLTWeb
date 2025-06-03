@@ -34,10 +34,14 @@ public class TransactionDAO {
                 Timestamp timestamp = rs.getTimestamp("expiry_date");
                 LocalDateTime expiry_date = timestamp != null ? timestamp.toLocalDateTime() : null;
 
+                Timestamp created_at = rs.getTimestamp("date");
+                LocalDateTime created_at2 = created_at != null ? created_at.toLocalDateTime() : null;
+
                 UserDao userDao = new UserDao();
                 Users user = userDao.getUserById(user_id);
 
                 Transaction transaction = new Transaction(id, vaccine_id, type, quantity, expiry_date, user);
+                transaction.setDate(created_at2);
 
                 transactions.add(transaction);
 
@@ -54,14 +58,15 @@ public class TransactionDAO {
         int newId = -1;
 
         try {
-            String sql = "insert into transaction( vaccine_id, type, quantity, expiry_date, user_id) " +
-                    "values(?, ?, ?, ?, ?)";
+            String sql = "insert into transaction( vaccine_id, type, quantity, expiry_date, user_id, date) " +
+                    "values(?, ?, ?, ?, ?, ?)";
             PreparedStatement pst = DBConnect.getAuto(sql);
             pst.setInt(1, t.getVaccineId());
             pst.setString(2, t.getType());
             pst.setInt(3, t.getQuantity());
             pst.setTimestamp(4, Timestamp.valueOf(t.getExpiry_date())); // chuyển đổi tại đây
             pst.setInt(5, t.getUser().getId());
+            pst.setTimestamp(6, Timestamp.valueOf(t.getDate()));
 
             int affectedRows = pst.executeUpdate();
 

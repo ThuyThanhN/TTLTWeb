@@ -15,7 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@WebServlet(name = "ListAddVaccine", value = "/admin/form-add-transaction")
+@WebServlet(name = "ListAddTransaction", value = "/admin/form-add-transaction")
 public class ListAddTransaction extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -304,9 +304,10 @@ public class UserDao {
                 String phone = rs.getString("phone");
                 String email = rs.getString("email");
                 String pass = rs.getString("password");
+                int status =  rs.getInt("status");
                 int role = rs.getInt("role");
 
-                Users user = new Users(id, name, gender, identification, date, address, district, ward, province, phone, email, pass, role);
+                Users user = new Users(id, name, gender, identification, date, address, district, ward, province, phone, email, pass, role, status);
 
                 re.add(user);
             }
@@ -730,12 +731,12 @@ public class UserDao {
         return false;
     }
 
-    public boolean updateStatus(int orderId, String status) {
+    public boolean updateStatus(int userId, int status) {
         String sql = "UPDATE users SET status = ? WHERE id = ?";
         try {
             PreparedStatement pst = DBConnect.get(sql);
-            pst.setString(1, status);
-            pst.setInt(2, orderId);
+            pst.setInt(1, status);
+            pst.setInt(2, userId);
             return pst.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();

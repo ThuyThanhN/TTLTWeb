@@ -93,7 +93,7 @@ public class RegisterUsers extends HttpServlet {
             String encodedToken = encodeToken(token);
 
             // Tạo link xác thực tài khoản
-            String verificationLink = "http://provide_vaccine_services_war/verifyAccount?token=" + encodedToken;
+            String verificationLink = "/verifyAccount?token=" + encodedToken;
 
             System.out.println("Verification link: " + verificationLink); // Debug
 

@@ -10,38 +10,37 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet(name = "UpdateOrderStatus", value = "/admin/updateOrderStatus")
+@WebServlet(name = "UpdateUserStatus", value = "/admin/updateUserStatus")
 public class UpdateUserStatus extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // No implementation as per original code
+
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
         LogDao logDao = new LogDao();
         String userIp = request.getRemoteAddr();
 
-        int orderId = Integer.parseInt(request.getParameter("order_id"));
-        String status = request.getParameter("status");
+        int id = Integer.parseInt(request.getParameter("id"));
+        int status = Integer.parseInt(request.getParameter("status"));
 
         UserDao userDao = new UserDao();
-        boolean isUpdated = userDao.updateStatus(orderId, status);
+        boolean isUpdated = userDao.updateStatus(id, status);
 
         if (isUpdated) {
             try {
-                logDao.insertLog("INFO", "Order status updated successfully. Order ID: " + orderId + ", New status: " + status, "admin", userIp);
+                logDao.insertLog("INFO", "Order status updated successfully. Order ID: " + id + ", New status: " + status, "admin", userIp);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             response.getWriter().write("{\"message\": \"success\"}");
         } else {
             try {
-                logDao.insertLog("ERROR", "Failed to update order status. Order ID: " + orderId + ", Attempted status: " + status, "admin", userIp);
+                logDao.insertLog("ERROR", "Failed to update order status. Order ID: " + id + ", Attempted status: " + status, "admin", userIp);
             } catch (Exception e) {
                 e.printStackTrace();
             }

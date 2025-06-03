@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nhập/Xuất kho hàng | Quản trị Admin </title>
+    <link rel="icon" type="image/png" href="../image/logo1.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -41,8 +42,6 @@
 <div class="main-content">
     <!-- Header -->
     <jsp:include page="headerAdmin.jsp"></jsp:include>
-
-
         <form id="addTransaction" method="post">
             <div class="tabular-wrapper">
                 <div class="section-title border-bottom pb-3">Nhập/Xuất kho hàng</div>
@@ -98,5 +97,5 @@
 
 </div>
 </body>
-<%--<script src="../js/form-add-transaction.js"></script>--%>
+<script src="../js/form-add-transaction.js"></script>
 </html>
