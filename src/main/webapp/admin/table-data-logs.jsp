@@ -4,6 +4,7 @@
 <html>
 <head>
     <title>Logs | Quản trị Admin</title>
+    <link rel="icon" type="image/png" href="../image/logo1.png">
     <!-- Bootstrap, jquery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
