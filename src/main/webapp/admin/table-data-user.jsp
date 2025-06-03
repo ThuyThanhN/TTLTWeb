@@ -53,14 +53,14 @@
                     </td>
                     <td>${c.phone}</td>
                     <td>
-                        <select class="status" name="status" data-id="${ur.id}" disabled>
-                            <option value="-1" class="status-select" ${ur.status == -1 ? 'selected' : ''}>Khóa
+                        <select class="status" name="status" data-id="${c.id}">
+                            <option value="-1" class="status-select" ${c.status == -1 ? 'selected' : ''}>Khóa
                                 tài khoản
                             </option>
-                            <option value="0" class="status-select" ${ur.status == 0 ? 'selected' : ''}>Chưa xác
+                            <option value="0" class="status-select" ${c.status == 0 ? 'selected' : ''}>Chưa xác
                                 thực
                             </option>
-                            <option value="1" class="status-select" ${ur.status == 1 ? 'selected' : ''}>Đã xác
+                            <option value="1" class="status-select" ${c.status == 1 ? 'selected' : ''}>Đã xác
                                 thực
                             </option>
                         </select>
