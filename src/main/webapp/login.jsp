@@ -96,7 +96,7 @@
                     <img src="image/google.png">
                 </a>
                 <!-- Nút đăng nhập Facebook -->
-                <button type="button" onclick="fbLogin()" class="authentication-button facebook" style="background:#4267B2; border:none;">
+                <button type="button" onclick="fbLogin()" class="authentication-button facebook mt-0" style="background:#4267B2; border:none;">
                     <img src="image/facebook.png">
                 </button>
 
@@ -107,10 +107,10 @@
                     <input type="hidden" name="fbUserEmail" id="fbUserEmail" />
                 </form>
 
-                <a class="authentication-button facebook"
-                   href="https://www.facebook.com/v22.0/dialog/oauth?fields=id,name,email&client_id=1227448322128839&redirect_uri=https://vaccine.io.vn/login?provider=facebook&scope=email">
-                    <img src="image/facebook.png">
-                </a>
+<%--                <a class="authentication-button facebook"--%>
+<%--                   href="https://www.facebook.com/v22.0/dialog/oauth?fields=id,name,email&client_id=1227448322128839&redirect_uri=https://vaccine.io.vn/login?provider=facebook&scope=email">--%>
+<%--                    <img src="image/facebook.png">--%>
+<%--                </a>--%>
             </div>
         </div>
     </div>
