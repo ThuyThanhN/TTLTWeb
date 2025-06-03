@@ -1,10 +1,8 @@
 package com.example.provide_vaccine_services.controller;
 
-import com.example.provide_vaccine_services.dao.LogDao;
-import com.example.provide_vaccine_services.dao.OrderDetailDao;
-import com.example.provide_vaccine_services.dao.UserDao;
-import com.example.provide_vaccine_services.dao.VaccineDao;
+import com.example.provide_vaccine_services.dao.*;
 import com.example.provide_vaccine_services.dao.model.Users;
+import com.example.provide_vaccine_services.dao.model.Vaccines;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -20,6 +18,7 @@ public class TKAdmin extends HttpServlet {
         VaccineDao vaccineDao = new VaccineDao();
         UserDao userDao = new UserDao();
         OrderDetailDao odd = new OrderDetailDao();
+        OrderDao od = new OrderDao();
 
         // Lấy tổng số người dùng
         int totalUser = userDao.totalUser();
@@ -42,6 +41,9 @@ public class TKAdmin extends HttpServlet {
         int countInStock = vaccineDao.countInStock();
         int countOutOfStock = vaccineDao.countOutOfStock();
 
+        // Vắc xin bán chạy trong tháng
+        List<Vaccines> countOrder = od.quantityVaccine();
+
         // Đặt các giá trị vào request để truyền cho JSP
         request.setAttribute("totalUser", totalUser);
         request.setAttribute("userCountChange", userCountChange);
@@ -52,6 +54,7 @@ public class TKAdmin extends HttpServlet {
         request.setAttribute("revenueCountChange", revenueCountChange);
         request.setAttribute("countInStock", countInStock);
         request.setAttribute("countOutOfStock", countOutOfStock);
+        request.setAttribute("countOrder", countOrder);
 
         // Forward tới trang dashboard.jsp để hiển thị
         request.getRequestDispatcher("/admin/dashboard.jsp").forward(request, response);
@@ -63,7 +66,7 @@ public class TKAdmin extends HttpServlet {
         String userIp = request.getRemoteAddr();
 
         int id = Integer.parseInt(request.getParameter("id"));
-        String status = request.getParameter("status");
+        int status = Integer.parseInt(request.getParameter("status"));
 
         UserDao userDao = new UserDao();
         boolean isUpdated = userDao.updateStatus(id, status);
