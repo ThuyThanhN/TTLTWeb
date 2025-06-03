@@ -10,9 +10,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class UserDao {
     private Users u;
@@ -55,7 +53,7 @@ public class UserDao {
         return re;
     }
 
-     // Them nhan vien trong Admin
+    // Them nhan vien trong Admin
     public int insertStaff(Users u) {
         int newId = -1;
 
@@ -83,6 +81,67 @@ public class UserDao {
             if (affectedRows > 0) {
                 // lay id moi nhat
                 String getIdSql = "SELECT MAX(id) FROM users";
+                PreparedStatement getIdStmt = DBConnect.get(getIdSql);
+                ResultSet rs = getIdStmt.executeQuery();
+                if (rs.next()) {
+                    newId = rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return newId;
+    }
+
+    public int insertPermission(String module) {
+        int newId = -1;
+
+        try {
+            String sql = "INSERT INTO permissions(module, permission) VALUES(?, ?)";
+            PreparedStatement pst = DBConnect.get(sql);
+
+            pst.setString(1, module);
+
+            // Nếu module là "order" thì chỉ cho quyền READ, còn lại full quyền
+            if ("order".equalsIgnoreCase(module)) {
+                pst.setInt(2, 1); // Quyền READ
+            } else {
+                pst.setInt(2, 7); // Quyền đầy đủ: READ | WRITE | EXECUTE
+            }
+
+            int affectedRows = pst.executeUpdate();
+
+            if (affectedRows > 0) {
+                // Lấy id mới nhất
+                String getIdSql = "SELECT MAX(id) FROM permissions";
+                PreparedStatement getIdStmt = DBConnect.get(getIdSql);
+                ResultSet rs = getIdStmt.executeQuery();
+                if (rs.next()) {
+                    newId = rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return newId;
+    }
+
+    public int insertUserPermission(int idUser, int idPermission) {
+        int newId = -1;
+
+        try {
+            String sql = "insert into userpermissions(userId, permissionId) values(?, ?)";
+            PreparedStatement pst = DBConnect.get(sql);
+
+            pst.setInt(1, idUser);
+            pst.setInt(2, idPermission);
+
+            int affectedRows = pst.executeUpdate();
+
+            if (affectedRows > 0) {
+                // lay id moi nhat
+                String getIdSql = "SELECT MAX(id) FROM userpermissions";
                 PreparedStatement getIdStmt = DBConnect.get(getIdSql);
                 ResultSet rs = getIdStmt.executeQuery();
                 if (rs.next()) {
@@ -133,6 +192,34 @@ public class UserDao {
         return re;
     }
 
+    public int getPermissionIdByModule(String module) {
+        String sql = "SELECT id FROM permissions WHERE module = ?";
+        try {
+            PreparedStatement pst = DBConnect.get(sql);
+            pst.setString(1, module);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public int updateUserPermission(int userId, int permissionId) {
+        String sql = "UPDATE userpermissions SET permissionId = ? WHERE userId = ?";
+        try {
+            PreparedStatement pst = DBConnect.get(sql);
+            pst.setInt(1, permissionId);
+            pst.setInt(2, userId);
+            return pst.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
     // Xoa
     public int delete(int idS) {
         int re = 0;
@@ -157,37 +244,42 @@ public class UserDao {
     }
 
     // Lay danh sach bao gom nhan vien va admin
-    public List<Users> getAllByStaff() {
-        List<Users> re = new ArrayList<>();
+    public List<Map<String, Object>> getAllByStaff() {
+        List<Map<String, Object>> resultList = new ArrayList<>();
 
         try {
-            String sql = "SELECT * FROM users WHERE role IN (1, 2)";
+            String sql = "SELECT u.*, p.module FROM users u " +
+                    "JOIN userpermissions up ON up.userId = u.id " +
+                    "JOIN permissions p ON p.id = up.permissionId " +
+                    "WHERE role IN (1, 2)";
             PreparedStatement pst = DBConnect.get(sql);
             ResultSet rs = pst.executeQuery();
 
             while (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("fullname");
-                String gender = rs.getString("gender");
-                String identification = rs.getString("identification");
-                Date date = rs.getDate("dateOfBirth");
-                String address = rs.getString("address");
-                String province = rs.getString("province");
-                String district = rs.getString("district");
-                String ward = rs.getString("ward");
-                String phone = rs.getString("phone");
-                String email = rs.getString("email");
-                String pass = rs.getString("password");
-                int role = rs.getInt("role");
+                Map<String, Object> resultMap = new HashMap<>();
 
-                Users user = new Users(id, name, gender, identification, date, address, province, ward, district, phone, email, pass, role);
+                resultMap.put("id", rs.getInt("id"));
+                resultMap.put("fullname", rs.getString("fullname"));
+                resultMap.put("gender", rs.getString("gender"));
+                resultMap.put("identification", rs.getString("identification"));
+                resultMap.put("dateOfBirth", rs.getDate("dateOfBirth"));
+                resultMap.put("address", rs.getString("address"));
+                resultMap.put("province", rs.getString("province"));
+                resultMap.put("district", rs.getString("district"));
+                resultMap.put("ward", rs.getString("ward"));
+                resultMap.put("phone", rs.getString("phone"));
+                resultMap.put("email", rs.getString("email"));
+                resultMap.put("password", rs.getString("password"));
+                resultMap.put("role", rs.getInt("role"));
+                resultMap.put("module", rs.getString("module"));
 
-                re.add(user);
+                resultList.add(resultMap);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return re;
+
+        return resultList;
     }
 
     // Lay danh sach khach hang
@@ -212,9 +304,10 @@ public class UserDao {
                 String phone = rs.getString("phone");
                 String email = rs.getString("email");
                 String pass = rs.getString("password");
+                int status =  rs.getInt("status");
                 int role = rs.getInt("role");
 
-                Users user = new Users(id, name, gender, identification, date, address, district, ward, province, phone, email, pass, role);
+                Users user = new Users(id, name, gender, identification, date, address, district, ward, province, phone, email, pass, role, status);
 
                 re.add(user);
             }
@@ -297,9 +390,10 @@ public class UserDao {
         return re; // Trả về kết quả (số bản ghi đã được thêm)
     }
 
-    public int insertGGUser(Users u) {
+    // thêm và trả về mật khẩu chưa mã hoá
+    public String insertGGUser(Users u) {
         int re = 0;
-
+        String rawPassword = "";
         try {
             // Câu lệnh SQL để chèn dữ liệu vào bảng users
             String sql = "INSERT INTO users(fullname, gender, identification, dateOfBirth, address, province, district, ward, phone, email, password, role, status)" +
@@ -307,6 +401,7 @@ public class UserDao {
             PreparedStatement pst = DBConnect.get(sql);
 
             String s = u.toString();
+            rawPassword = genPassword();
 
             System.out.println("user: " + s);
 
@@ -321,7 +416,7 @@ public class UserDao {
             pst.setString(8, "");
             pst.setString(9, "");
             pst.setString(10, u.getEmail());
-            pst.setString(11, genPassword());
+            pst.setString(11, MD5Hash.hashPassword(rawPassword));
             pst.setInt(12, u.getRole());
             pst.setInt(13, 1);
 
@@ -338,8 +433,11 @@ public class UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return re; // Trả về kết quả (số bản ghi đã được thêm)
+        if (re > 0) {
+            return rawPassword; // Trả về kết quả (số bản ghi đã được thêm)
+        } else {
+            return null;
+        }
     }
     public Users checkLogin(String username, String password) {
         Users user = null;
@@ -620,6 +718,122 @@ public class UserDao {
         return isValid;  // Trả về true nếu token hợp lệ, false nếu không hợp lệ
     }
 
+    public boolean lockAccount(int userId) {
+        try {
+            String sql = "UPDATE users SET status = -1 WHERE id = ?";
+            PreparedStatement pst = DBConnect.get(sql);
+            pst.setInt(1, userId);
+            return pst.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updateStatus(int userId, int status) {
+        String sql = "UPDATE users SET status = ? WHERE id = ?";
+        try {
+            PreparedStatement pst = DBConnect.get(sql);
+            pst.setInt(1, status);
+            pst.setInt(2, userId);
+            return pst.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public Users getUserById(int userId) {
+        String sql = "SELECT * FROM users WHERE id = ?";
+        try (PreparedStatement pst = DBConnect.get(sql)) {
+            pst.setInt(1, userId);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                Users user = new Users();
+                user.setId(rs.getInt("id"));
+                user.setFullname(rs.getString("fullname"));
+                user.setGender(rs.getString("gender"));
+                user.setIdentification(rs.getString("identification"));
+                user.setDateOfBirth(rs.getDate("dateOfBirth"));
+                user.setAddress(rs.getString("address"));
+                user.setProvince(rs.getString("province"));
+                user.setDistrict(rs.getString("district"));
+                user.setWard(rs.getString("ward"));
+                user.setPhone(rs.getString("phone"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(rs.getInt("role"));
+                user.setStatus(rs.getInt("status"));
+                return user;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    // Đếm số lượng người đăng ký tài khoản tuần này so với tuần trước bao nhiêu người
+    // SQL1: Đếm số người dùng mới trong tuần này tính từ t2 -> cn này
+    // SQL2: Đếm số người dùng mới trong tuần này tính từ t2 tuần trước -> t2 tuần này
+    public int getUsersCountLastWeek() {
+        int count = 0;
+        try {
+            String sql = "SELECT " +
+                    "(SELECT COUNT(*) " +
+                    "FROM users u " +
+                    "WHERE u.createdAt >= CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY " +
+                    "AND u.createdAt < CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY + INTERVAL 7 DAY " +
+                    "AND u.role = 0) " +
+                    "- " +
+                    "(SELECT COUNT(*) " +
+                    "FROM users u " +
+                    "WHERE u.createdAt >= CURDATE() - INTERVAL WEEKDAY(CURDATE()) + 7 DAY " +
+                    "AND u.createdAt < CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY + INTERVAL 7 DAY " +
+                    "AND u.role = 0) " +
+                    "AS count;";
+
+            PreparedStatement pst = DBConnect.get(sql);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                count = rs.getInt("count");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
+    // Danh sách người dùng đăng ký trong một tháng
+    public List<Users> getUsersRegisterThisMonth() {
+        List<Users> result = new ArrayList<>();
+        try {
+            String sql = "SELECT id, fullname, email, gender, createdAt, status " +
+                    "FROM users " +
+                    "WHERE role = 0 " +
+                    "AND MONTH(createdAt) = MONTH(CURDATE()) " +
+                    "AND YEAR(createdAt) = YEAR(CURDATE()) " +
+                    "ORDER BY createdAt ASC;";
+            PreparedStatement pst = DBConnect.get(sql);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                Users user = new Users();
+                user.setId(rs.getInt("id"));
+                user.setFullname(rs.getString("fullname"));
+                user.setGender(rs.getString("gender"));
+                user.setEmail(rs.getString("email"));
+                user.setCreatedAt(rs.getDate("createdAt"));
+                user.setStatus(rs.getInt("status"));  // Thêm dòng này
+                result.add(user);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     public void insertFBUser(Users user) {
         System.out.println("thêm người dùng");
         System.out.println(user.getFullname());
@@ -699,6 +913,3 @@ public class UserDao {
 
     }
 }
-
-
-

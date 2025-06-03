@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng Ký</title>
+    <link rel="icon" type="image/png" href="image/logo1.png">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -24,7 +25,7 @@
         <a href="index"><img src="image/logo.png" alt="Logo" class="img-responsive"></a>
     </div>
     <div class="form-container">
-        <h3 class="text-center mt-2">Đăng ký</h3>
+        <h5 class="mt-2">ĐĂNG KÝ</h5>
         <div class="text-center" style="color: #8F8F8F; font-size: 15px;">Đăng ký để tạo và truy cập ứng dụng của
             bạn
         </div>

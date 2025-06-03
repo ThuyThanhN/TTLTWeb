@@ -27,23 +27,6 @@ document.querySelectorAll("[data-password]").forEach(pass => {
         this.nextElementSibling.style.display = !valid ? "block" : "none";
     });
 });
-// Kiểm tra mật khẩu
-document.getElementById("password").addEventListener("input", function () {
-    const passwordInput = this.value;
-    const errorMessage = document.getElementById("password-error");
-
-    // Biểu thức chính quy để kiểm tra mật khẩu (ít nhất 8 ký tự, có chữ hoa, chữ thường, số và ký tự đặc biệt)
-    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-
-    // Kiểm tra nếu mật khẩu không hợp lệ
-    if (!passwordPattern.test(passwordInput)) {
-        errorMessage.style.display = "block";
-        errorMessage.textContent = "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, chữ số và ký tự đặc biệt.";
-    } else {
-        errorMessage.style.display = "none"; // Ẩn thông báo lỗi nếu mật khẩu hợp lệ
-    }
-});
-
 
 $(document).ready(function () {
     // Ham khoi tao DataTable
@@ -99,7 +82,7 @@ $(document).ready(function () {
         return table;
     }
 
-    function generateEditModalHtml(id, fullname, gender, ident, date, email, address, province, district, ward, provinceCode, districtCode, wardCode, phone, role, password) {
+    function generateEditModalHtml(id, fullname, gender, ident, date, email, address, province, district, ward, provinceCode, districtCode, wardCode, phone, role, password, module) {
         return `
             <div class="modal fade" id="editStaff-${id}" data-bs-backdrop="static" 
                 data-bs-keyboard="false" tabindex="-1"
@@ -141,7 +124,7 @@ $(document).ready(function () {
                                   <div class="col-4">
                                        <div class="mb-3">
                                            <label for="date-${id}" class="form-label">Ngày sinh </label> <br>
-                                           <input type="date" class="form-control" name="date" id="date-${id}" value="${date}">
+                                           <input type="date" class="form-control" name="date" id="date-${id}" value="${toInputDateFormat(date)}">
                                        </div>
                                   </div>
                                   <div class="col-4">
@@ -163,8 +146,9 @@ $(document).ready(function () {
                                                 <input type="text" placeholder="Chọn tỉnh thành" name="province"
                                                        value="${province}" class="form-control dropdown-toggle province-select"
                                                        id="province-select-${id}" data-code="${provinceCode}" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="fa-solid fa-angle-down"></i>
-                                            <ul class="dropdown-menu province-menu"></ul>
+                                                <i class="fa-solid fa-angle-down"></i>
+                                                <ul class="dropdown-menu province-menu"></ul>
+                                            </div>
                                       </div>
                                   </div>
                                   <div class="col-4">
@@ -178,7 +162,7 @@ $(document).ready(function () {
                                               <ul class="dropdown-menu district-menu"></ul>
                                           </div>
                                        </div>
-                                    </div>
+                                  </div>
                                   <div class="col-4">
                                         <label class="form-label">Phường xã</label>
                                         <div class="dropdown">
@@ -188,27 +172,47 @@ $(document).ready(function () {
                                             <ul class="dropdown-menu ward-menu"></ul>
                                         </div>
                                   </div>
-                                  <div class="col-4">
+                                  <div class="col-3">
                                         <div class="mb-3">
                                              <label for="phone-${id}" class="form-label">Số điện thoại</label>
                                              <input type="tel" class="form-control" id="phone-${id}" name="phone" value="${phone}" required>
                                         </div>
                                   </div>
-                                  <div class="col-4">
+                                  <div class="col-3">
                                         <div class="mb-3 position-relative">
                                                <label for="role-${id}" class="form-label">Chức vụ</label>
                                                <select class="form-select" id="role-${id}" name="role" required>
                                                     <option value="" selected>--Chọn chức vụ--</option>
-                                                    <option value="Admin" ${role == 1 ? 'selected' : ''}>Admin</option>
-                                                    <option value="Nhân viên" ${role == 2 ? 'selected' : ''}>Nhân viên</option>
+                                                    <option value="1" ${role == 1 ? 'selected' : ''}>Admin</option>
+                                                    <option value="2" ${role == 2 ? 'selected' : ''}>Nhân viên</option>
                                                </select>
                                                <i class="fa-solid fa-angle-down position-absolute end-0 translate-middle" style="top: 72%"></i>
                                         </div>
                                   </div>
-                                  <div class="col-4">
+                                  <div class="col-3">
+                                        <div class="mb-3 position-relative">
+                                                <label for="module-${id}" class="form-label">Phân quyền:</label>
+                                                <select class="form-select" id="module-${id}" name="module" required>
+                                                     <option value="" selected>-- Chọn --</option>
+                                                     <option value="none" ${module == 'none' ? 'selected' : ''}>Nhân viên</option>
+                                                     <option value="staff" ${module == 'staff' ? 'selected' : ''}>Quản lý nhân viên</option>
+                                                     <option value="customer" ${module == 'customer' ? 'selected' : ''}>Quản lý khách hàng</option>
+                                                     <option value="order" ${module == 'order' ? 'selected' : ''}>Quản lý đơn hàng</option>
+                                                     <option value="vaccine" ${module == 'vaccine' ? 'selected' : ''}>Quản lý vắc xin</option>
+                                                     <option value="package" ${module == 'package' ? 'selected' : ''}>Quản lý gói vắc xin</option>
+                                                     <option value="supplier" ${module == 'supplier' ? 'selected' : ''}>Quản lý nhà cung cấp</option>
+                                                     <option value="center" ${module == 'center' ? 'selected' : ''}>Quản lý trung tâm</option>
+                                                     <option value="log" ${module == 'log' ? 'selected' : ''}>Quản lý log</option>
+                                                     <option value="transaction" ${module == 'transaction' ? 'selected' : ''}>Quản lý giao dịch</option>
+                                                     <option value="warehouse" ${module == 'warehouse' ? 'selected' : ''}>Quản lý kho hàng</option>
+                                                </select>
+                                                <i class="fa-solid fa-angle-down position-absolute end-0 translate-middle" style="top: 72%"></i>
+                                        </div>
+                                  </div>
+                                  <div class="col-3">
                                          <div class="mb-3">
                                                 <label for="pass-${id}" class="form-label">Mật khẩu</label>
-                                                input type="password" class="form-control" id="pass-${id}" name="password" value="${password}" required>
+                                                <input type="password" class="form-control" id="pass-${id}" name="password" value="${password}" required>
                                          </div>
                                   </div>
                              </div>
@@ -230,10 +234,8 @@ $(document).ready(function () {
             <td>${response.fullname}</td>
             <td>${response.address}, ${response.ward}, ${response.district}, ${response.province}</td>
             <td>${response.gender}</td>
-             <td>
-                        <f:formatDate value="${response.dateOfBirth}" pattern="dd-MM-yyyy" />
-                    </td>
-                    <td>${response.phone}</td>
+            <td>${formatDate(response.date)}</td>
+            <td>${response.phone}</td>
             <td>
                 <a href="#" 
                    class="text-decoration-none edit-btn" 
@@ -254,6 +256,25 @@ $(document).ready(function () {
     `;
     }
 
+    function formatDate(dateString) {
+        if (!dateString) return "";
+        const date = new Date(dateString);
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // tháng bắt đầu từ 0
+        const year = date.getFullYear();
+        return `${day}-${month}-${year}`;
+    }
+
+    function toInputDateFormat(dateString) {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        if (isNaN(date)) return '';
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
     $("#addStaffForm").submit(function (event) {
         event.preventDefault();
 
@@ -267,19 +288,20 @@ $(document).ready(function () {
         let district = $("#district").val();
         let ward = $("#ward").val();
         let phone = $("#staff-phone").val();
-        let role = $("#role").val();
+        let role = parseInt($("#role").val());
+        let module = $("#module").val();
         let password = $("#password").val();
-
 
         let provinceCode = $("#province").attr("data-code");
         let districtCode = $("#district").attr("data-code");
         let wardCode = $("#ward").attr("data-code");
         console.log({
-            name, address, province, district, ward, phone
+            fullname, address, province, district, ward, phone, role
         });
+        console.log("Module:", module);
 
         $.ajax({
-            url: "/provide_vaccine_services_war/admin/addStaff",
+            url: "/admin/addStaff",
             type: "POST",
             data: {
                 "fullname": fullname,
@@ -293,6 +315,7 @@ $(document).ready(function () {
                 "ward": ward,
                 "phone": phone,
                 "role": role,
+                "module": module,
                 "password": password
             },
             dataType: "json",
@@ -307,7 +330,11 @@ $(document).ready(function () {
                     $("#addStaffForm")[0].reset();
 
                     // them modal moi vao
-                    $("body").append(generateEditModalHtml(fullname, gender, ident, date, email, address, province, district, ward, provinceCode, districtCode, wardCode, phone, role, password));
+                    $("body").append(generateEditModalHtml(
+                        response.id, fullname, gender, ident, date, email, address,
+                        province, district, ward, provinceCode, districtCode, wardCode,
+                        phone, role, password, module
+                    ));
 
                     let responseData = {
                         fullname: fullname,
@@ -315,6 +342,7 @@ $(document).ready(function () {
                         province: province,
                         district: district,
                         ward: ward,
+                        date: date,
                         gender: gender,
                         phone: phone
                     };
@@ -325,8 +353,23 @@ $(document).ready(function () {
                     $("#staff").DataTable().row.add($(newRowHtml)).draw(false);
                 }
             },
-            error: function () {
-                alert("Loi khi them nhan vien!");
+            error: function (xhr) {
+                if (xhr.status === 403) {
+                    const res = JSON.parse(xhr.responseText);
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Cảnh báo',
+                        text: res.message || "Không có quyền thực hiện chức năng này!",
+                        confirmButtonText: 'OK'
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi hệ thống!',
+                        text: 'Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.',
+                        confirmButtonText: 'Đóng'
+                    });
+                }
             }
         });
     });
@@ -348,14 +391,16 @@ $(document).ready(function () {
         let phone = modal.find("input[name='phone']").val();
         let role = modal.find("select[name='role']").val();
         let password = modal.find("input[name='password']").val();
+        let module = modal.find("select[name='module']").val();
 
+        let provinceCode = modal.find("input[name='province']").attr("data-code");
+        let districtCode = modal.find("input[name='district']").attr("data-code");
+        let wardCode = modal.find("input[name='ward']").attr("data-code");
 
-        let provinceCode = $("#province").attr("data-code");
-        let districtCode = $("#district").attr("data-code");
-        let wardCode = $("#ward").attr("data-code");
-
+        console.log("Module:", module);
+        console.log("Date:", date);
         $.ajax({
-            url: "/provide_vaccine_services_war/admin/updateStaff",
+            url: "/admin/updateStaff",
             type: "POST",
             data: {
                 id: staffId,
@@ -370,7 +415,8 @@ $(document).ready(function () {
                 "ward": ward,
                 "phone": phone,
                 "role": role,
-                "password": password
+                "password": password,
+                "module": module,
             },
             dataType: "json",
             success: function (response) {
@@ -380,7 +426,7 @@ $(document).ready(function () {
                     // them modal moi
                     $("body").append(generateEditModalHtml(staffId, response.fullname, response.gender, response.ident, response.date, response.email,
                         response.address, response.province, response.district, response.ward, response.provinceCode,
-                        response.districtCode, response.wardCode, response.phone, response.role, response.password));
+                        response.districtCode, response.wardCode, response.phone, response.role, response.password, response.module));
                     // cap nhat input
                     let newRowHtml = generateStaffRowHtml(staffId, response);
                     let table = $("#staff").DataTable();
@@ -393,7 +439,22 @@ $(document).ready(function () {
                 }
             },
             error: function (xhr) {
-                console.log("Lỗi: " + xhr.responseText);
+                if (xhr.status === 403) {
+                    const res = JSON.parse(xhr.responseText);
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Cảnh báo',
+                        text: res.message || "Không có quyền thực hiện chức năng này!",
+                        confirmButtonText: 'OK'
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi hệ thống!',
+                        text: 'Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.',
+                        confirmButtonText: 'Đóng'
+                    });
+                }
             }
         });
     });
@@ -442,7 +503,22 @@ $(document).ready(function () {
                     }
                 },
                 error: function (xhr) {
-                    alert("Lỗi: " + xhr.responseText);
+                    if (xhr.status === 403) {
+                        const res = JSON.parse(xhr.responseText);
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Cảnh báo',
+                            text: res.message || "Không có quyền thực hiện chức năng này!",
+                            confirmButtonText: 'OK'
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi hệ thống!',
+                            text: 'Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.',
+                            confirmButtonText: 'Đóng'
+                        });
+                    }
                 }
             });
         });
@@ -451,5 +527,3 @@ $(document).ready(function () {
     const staffTable = initializeDataTable("#staff");
     handleDeleteButton('deleteStaff', 'removeStaff', staffTable);
 });
-
-

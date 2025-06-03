@@ -3,6 +3,8 @@ package com.example.provide_vaccine_services.controller;
 import com.example.provide_vaccine_services.Service.EmailSender;
 import com.example.provide_vaccine_services.Service.GoogleLogin;
 import com.example.provide_vaccine_services.Service.TokenGenerator;
+import com.example.provide_vaccine_services.Service.vnpay.VerifyRecaptcha;
+import com.example.provide_vaccine_services.dao.LogDao;
 import com.example.provide_vaccine_services.dao.UserDao;
 import com.example.provide_vaccine_services.dao.model.Users;
 import jakarta.servlet.ServletException;
@@ -11,10 +13,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.apache.commons.dbcp2.BasicDataSource;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.sql.SQLException;
 
 @WebServlet(name = "LoginServlet", value = "/login")
 public class LoginServlet extends HttpServlet {
@@ -25,185 +29,187 @@ public class LoginServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         UserDao userDao = new UserDao();
 
+        String userIp = request.getRemoteAddr();
 
-        /**
-         *
-         * cách hoạt động của Oauth
-         *
-         * sau khi đăng nhập bên thứ 3 sẽ trả về code & provider đăng nhập ghi người dùng đăng nhập Oauth ( sẽ là null nếu không đăng nhạp oauth )
-         * ví dụ: code = FNAFJKS... provider = "google", "facebook"
-         *
-         * sử dụng code đó để lấy được
-         *  + ACCESS_TOKEN: truy cập vào dữ liệu người dùng của bên thứ 3
-         *
-         * bên thứ 3 sẽ kiểm tra ACCESS_TOKEN có hợp lệ hay không. nếu có thì trả về dữ liệu người dùng
-         *
-         */
         String code = request.getParameter("code");
         String provider = request.getParameter("provider");
 
-
-        // nếu không có code => trả về trang login và kết thúc.
         if (code == null || code.isEmpty()) {
             request.getRequestDispatcher("login.jsp").forward(request, response);
             return;
         }
 
-        // lấy dữ liệu người dùng bằng code và provider tương ứng
         Users authUser = authenticateUser(code, provider);
         if (authUser == null) {
             session.setAttribute("error", "login.jsp?error=invalid_auth");
             return;
         }
 
-        /**
-         *  kiểm tra xem user có tồn tại trong DB chưa
-         *
-         *  + nếu có => lấy thông tin người dùng đó và đăng nhập
-         *  + nếu chưa => tạo người dùng mới lưu vào database
-         *
-         */
         Users user = userDao.getUserByEmail(authUser.getEmail());
         if (user == null) {
             authUser.setRole(0);
-            userDao.insertGGUser(authUser);
+            String rawPassword = userDao.insertGGUser(authUser);
             user = authUser;
+
+            String topic = "Mật khẩu đăng nhập TTT";
+            String body = "Mật khẩu của bạn là: " + rawPassword;
+            EmailSender.sendEmail(user.getEmail(), topic, body);
         }
 
-
-        // lưu ngươi dùng vào session
         session.setAttribute("user", user);
 
-        // Kiểm tra vai trò và chuyển hướng trang
         if (user.getRole() == 1) {
-            // Vai trò admin
             response.sendRedirect("admin/dashboard");
         } else if (user.getRole() == 0) {
-            // Vai trò người dùng thường
             response.sendRedirect("index");
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Đảm bảo dữ liệu từ form được mã hóa UTF-8
+        LogDao logDao = new LogDao();  // Khởi tạo log DAO
+        String userIp = request.getRemoteAddr();  // Lấy IP client
         request.setCharacterEncoding("UTF-8");
 
-        // Lấy thông tin đăng nhập từ form
-        String username = request.getParameter("username"); // email hoặc số điện thoại
-        String password = request.getParameter("password");
+        // Lấy token reCAPTCHA từ form
+        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+        System.out.println("Token g-recaptcha-response nhận được: " + gRecaptchaResponse);
 
-        // Gọi UserDao để kiểm tra thông tin đăng nhập
+        // Kiểm tra token có null hoặc rỗng không
+        if (gRecaptchaResponse == null || gRecaptchaResponse.trim().isEmpty()) {
+            System.out.println("KHÔNG NHẬN ĐƯỢC TOKEN reCAPTCHA từ client");
+            response.getWriter().write("captcha_missing"); // Mã lỗi riêng cho thiếu token
+            return; // Dừng xử lý
+        }
+
+        // Nếu có token, tiến hành verify với Google
+        boolean captchaVerified = VerifyRecaptcha.verify(gRecaptchaResponse);
+        if (!captchaVerified) {
+            System.out.println("TOKEN reCAPTCHA KHÔNG HỢP LỆ hoặc XÁC THỰC THẤT BẠI");
+            response.getWriter().write("captcha_failed"); // Mã lỗi cho token sai hoặc verify thất bại
+            return; // Dừng xử lý
+        }
+
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        HttpSession session = request.getSession();
+
+        // Kiểm tra thời gian khóa tài khoản nếu có
+        Long lockTime = (Long) session.getAttribute("lockTime");
+        if (lockTime != null && System.currentTimeMillis() - lockTime < 60000) {
+            response.getWriter().write("locked");
+            return;
+        }
+
         UserDao userDao = new UserDao();
         Users user = userDao.checkLogin(username, password);
-        System.out.println("Status của tài khoản: " + user.getStatus()); // Kiểm tra giá trị status
 
-        if (user != null) {
-            // Kiểm tra trạng thái xác thực của tài khoản
-            if (user.getStatus() == 0) {
-//                 Nếu chưa xác thực, hiển thị modal yêu cầu xác thực và gửi email
-                request.setAttribute("modalMessage", "Tài khoản chưa được xác thực. Một email xác thực đã được gửi đến bạn.");
-                sendActivationEmail(user.getEmail()); // Gửi email xác thực
-                request.getRequestDispatcher("login.jsp").forward(request, response);
-                return;
+        if (user == null) {
+            try {
+                logDao.insertLog("WARN", "Failed login attempt for username: " + username, username, userIp);
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
+            Integer failedAttempts = (Integer) session.getAttribute("failedLoginAttempts");
+            if (failedAttempts == null) failedAttempts = 0;
+            failedAttempts++;
+            session.setAttribute("failedLoginAttempts", failedAttempts);
 
-            // Nếu trạng thái = 1 (đã xác thực), tiếp tục đăng nhập thành công
-            HttpSession session = request.getSession();
-            session.setAttribute("user", user); // Lưu thông tin người dùng vào session
+            if (failedAttempts >= 5) {
+                session.setAttribute("lockTime", System.currentTimeMillis());
+                response.getWriter().write("locked");
+            } else {
+                response.getWriter().write("error");
+            }
+            return;
+        }
 
-            // Giới hạn thời gian session (ví dụ: 30 phút)
-            session.setMaxInactiveInterval(30 * 60); // 30 phút
+        if (user.getStatus() == 0) {
+            try {
+                logDao.insertLog("WARN", "Login attempt with unverified account", user.getEmail(), userIp);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if (request.getHeader("X-Requested-With") != null) {
+                response.getWriter().write("not_verified");
+                sendActivationEmail(user.getEmail());
+            }
+            return;
+        } else if (user.getStatus() == -1) {
+            try {
+                logDao.insertLog("WARN", "Login attempt with locked account", user.getEmail(), userIp);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if (request.getHeader("X-Requested-With") != null) {
+                response.getWriter().write("lockAccount");
+                sendActivationEmail(user.getEmail());
+            }
+            return;
+        }
 
-            // Kiểm tra vai trò và chuyển hướng trang
+        // Đăng nhập thành công, reset số lần đăng nhập sai và thời gian khóa
+        session.setAttribute("failedLoginAttempts", 0);
+        session.removeAttribute("lockTime");
+
+        try {
+            logDao.insertLog("INFO", "User logged in successfully", user.getEmail(), userIp);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        session.setAttribute("user", user);
+        session.setMaxInactiveInterval(30 * 60);
+
+        if (request.getHeader("X-Requested-With") != null) {
             if (user.getRole() == 1) {
-                // Vai trò admin
-                response.sendRedirect("admin/dashboard");
+                response.getWriter().write("admin/dashboard");
             } else if (user.getRole() == 0) {
-                // Vai trò người dùng thường
-                response.sendRedirect("index");
+                response.getWriter().write("index");
             }
         } else {
-            // Đăng nhập thất bại, quay lại login.jsp với thông báo lỗi
-            request.setAttribute("error", "Tên đăng nhập hoặc mật khẩu không đúng!");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            if (user.getRole() == 1) {
+                response.sendRedirect("admin/dashboard");
+            } else if (user.getRole() == 0) {
+                response.sendRedirect("index");
+            }
         }
     }
 
-    // Phương thức gửi email xác thực
-    private void sendActivationEmail(String email) {
-        // Tạo mã token xác thực
-        String token = TokenGenerator.generateActivationToken();  // Tạo token để xác thực tài khoản
 
-        // Lưu token vào cơ sở dữ liệu để liên kết với tài khoản người dùng
+    private void sendActivationEmail(String email) {
+        String token = TokenGenerator.generateActivationToken();
         UserDao userDao = new UserDao();
-        boolean isTokenSaved = userDao.saveVerificationToken(email, token);  // Lưu token vào DB
+        boolean isTokenSaved = userDao.saveVerificationToken(email, token);
 
         if (!isTokenSaved) {
             System.out.println("Lỗi khi lưu token xác thực vào cơ sở dữ liệu!");
-            return; // Nếu không lưu được token, thoát khỏi phương thức
+            return;
         }
 
-        // Mã hóa token để có thể sử dụng trong URL
-        String encodedToken = encodeToken(token);  // Mã hóa token
+        String encodedToken = encodeToken(token);
+        String verificationLink = "https://vaccine.io.vn/verifyAccount?token=" + encodedToken;
 
-        // Tạo URL xác thực (địa chỉ này có thể thay đổi tùy thuộc vào cấu trúc của bạn)
-        String verificationLink = "http://localhost:8080/provide_vaccine_services_war/verifyAccount?token=" + encodedToken;
-
-        // Nội dung email
         String subject = "Xác thực tài khoản";
         String body = "Chào bạn,\n\nVui lòng nhấn vào liên kết dưới đây để xác thực tài khoản của bạn:\n" + verificationLink;
 
-        // Gửi email xác thực
-        EmailSender.sendEmail(email, subject, body);  // Sử dụng lớp EmailSender để gửi email
-        System.out.println("Email xác thực đã được gửi đến: " + email); // Đoạn này để kiểm tra log
+        EmailSender.sendEmail(email, subject, body);
+        System.out.println("Email xác thực đã được gửi đến: " + email);
     }
 
-    // Phương thức mã hóa token trước khi sử dụng trong URL
     private String encodeToken(String token) {
         try {
-            return URLEncoder.encode(token, "UTF-8");  // Mã hóa token tại đây
+            return URLEncoder.encode(token, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
-            return null;  // Nếu có lỗi mã hóa, trả về null
+            return null;
         }
     }
 
-
-    //  lấy người dùng từ code và provider
     private Users authenticateUser(String code, String provider) throws IOException {
-
         GoogleLogin gg = new GoogleLogin();
         String accessToken = null;
         Users authUser = null;
-
-        /**
-         *
-         *  1) sử dụng switch case để kiểm tra xem provider là gì để gọi phương thức phù hợp ( ví dụ: google, facebook )
-         *
-         *  2) lấy access_token từ code
-         *      accessToken = gg.getGGToken(code);
-         *
-         *  3) Lấy dữ liệu người dùng
-         *
-         *   + nếu lấy được thành công access_token
-         *            if (accessToken != null && !accessToken.isEmpty()) {
-         *              authUser = gg.getGGUserInfo(accessToken);
-         *            }
-         *
-         *   + nếu không thì authUser là null;
-         *
-         * ví dụ:
-         *  switch (provider) {
-         *      case "google":
-         *          accessToken = gg.getGGToken(code);
-         *          if (accessToken != null && !accessToken.isEmpty()) {
-         *              authUser = gg.getGGUserInfo(accessToken);
-         *          }
-         *          break;
-         *  }
-         */
-
 
         switch (provider) {
             case "google":
@@ -212,19 +218,16 @@ public class LoginServlet extends HttpServlet {
                     authUser = gg.getGGUserInfo(accessToken);
                 }
                 break;
-//            case "facebook":
-//                accessToken = gg.getFBToken(code);
-//                if (accessToken != null && !accessToken.isEmpty()) {
-//                    authUser = gg.getFBUserInfo(accessToken);
-//                }
-//                break;
-
-            // provider không hợp lệ
+            case "facebook":
+                accessToken = gg.getFBToken(code);
+                if (accessToken != null && !accessToken.isEmpty()) {
+                    authUser = gg.getFBUserInfo(accessToken);
+                }
+                break;
             default:
                 System.out.println(provider + " invalid!!");
                 break;
         }
-
         return authUser;
     }
 }

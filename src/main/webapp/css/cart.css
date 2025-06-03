@@ -17,13 +17,14 @@
     border-radius: 8px;
 }
 .btn-order {
-    background-color: #3997D5;
+    background-color: #fb6800;
     border-radius: 4px;
     color: #fff !important;
-    width: 100px;
+    width: 125px;
     font-weight: 500;
     margin-top: 10px;
 }
+
 .btn-add {
     background-color: #198754;
     border-radius: 4px;
@@ -39,4 +40,14 @@
 }
 .breadcrumb-item:first-child a {
     color: #337ab7 !important;
+}
+.btn-payment {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }

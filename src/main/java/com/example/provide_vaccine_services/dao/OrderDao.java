@@ -86,6 +86,7 @@ public class OrderDao {
         try {
             String sqlOrder = "SELECT o.id AS order_id, " +
                     "p.fullname AS patient_name, " +
+                    "c.name AS center_name, " +
                     "o.appointmentDate AS appointment_date, " +
                     "o.appointmentTime AS appointment_time, " +
                     "SUM(COALESCE(v.price, vp.totalPrice) * od.quantityOrder) AS total_price, " +
@@ -94,6 +95,7 @@ public class OrderDao {
                     "FROM orders o " +
                     "JOIN patients p ON o.idPatient = p.id " +
                     "JOIN orderdetails od ON o.id = od.idOrder " +
+                    "JOIN centers c ON o.idCenter = c.id " +
                     "LEFT JOIN vaccines v ON od.idVaccine = v.id " +
                     "LEFT JOIN vaccinepackages vp ON od.idPackage = vp.id " +
                     "GROUP BY o.id, p.fullname, o.appointmentDate, o.appointmentTime, o.status";
@@ -105,6 +107,7 @@ public class OrderDao {
                 Map<String, Object> orderData = new HashMap<>();
                 orderData.put("order_id", rsOrder.getInt("order_id"));
                 orderData.put("patient_name", rsOrder.getString("patient_name"));
+                orderData.put("center_name", rsOrder.getString("center_name"));
                 orderData.put("appointment_date", rsOrder.getDate("appointment_date"));
                 orderData.put("appointment_time", rsOrder.getString("appointment_time"));
                 orderData.put("total_price", rsOrder.getFloat("total_price"));
@@ -242,6 +245,7 @@ public class OrderDao {
                     "p.fullname AS patient_name, " +
                     "o.appointmentDate AS appointment_date, " +
                     "o.appointmentTime AS appointment_time, " +
+                    "o.paymentStatus AS paymentStatus, " +
                     "SUM(COALESCE(v.price, vp.totalPrice) * od.quantityOrder) AS total_price, " +
                     "o.status AS order_status, " +
                     "GROUP_CONCAT(COALESCE(v.name, vp.name) SEPARATOR ', ') AS vaccine_or_package_names " +
@@ -269,6 +273,7 @@ public class OrderDao {
                 orderData.put("total_price", rsOrder.getFloat("total_price"));
                 orderData.put("order_status", rsOrder.getString("order_status"));
                 orderData.put("vaccine_or_package_names", rsOrder.getString("vaccine_or_package_names"));
+                orderData.put("paymentStatus", rsOrder.getString("paymentStatus"));
                 re.add(orderData);
             }
         } catch (SQLException e) {
@@ -284,42 +289,43 @@ public class OrderDao {
 
         // Câu truy vấn SQL để lấy thông tin chi tiết về đơn hàng và các vắc xin liên quan
         String sql = """
-            SELECT 
-                o.id AS order_id, 
-                o.appointmentDate, 
-                o.appointmentTime, 
-                o.status AS order_status, 
-                p.id AS patient_id, 
-                p.fullname AS patient_name, 
-                p.dateOfBirth, 
-                p.gender, 
-                p.identification, 
-                p.address AS patient_address, 
-                p.province AS patient_province, 
-                p.district AS patient_district, 
-                p.ward AS patient_ward, 
-                c.id AS center_id,
-                c.name AS center_name, 
-                c.address AS center_address, 
-                c.phone AS center_phone, 
-                v.id AS vaccine_id, 
-                v.name AS vaccine_name, 
-                v.description AS vaccine_description, 
-                v.price AS vaccine_price, 
-                v.imageUrl AS vaccine_image_url,
-                vp.name AS vaccine_package_name, 
-                u.fullname AS contact_fullname,
-                u.phone AS contact_phone,
-                cp.relationship AS contact_relationship 
-            FROM orders o 
-            JOIN patients p ON o.idPatient = p.id 
-            JOIN centers c ON o.idCenter = c.id 
-            JOIN orderdetails od ON o.id = od.idOrder
-            LEFT JOIN vaccines v ON od.idVaccine = v.id
-            LEFT JOIN vaccinepackages vp ON od.idPackage = vp.id 
-            LEFT JOIN contactpersons cp ON p.id = cp.idPatient
-            LEFT JOIN users u ON cp.idUser = u.id
-            WHERE o.id = ?
+    SELECT 
+        o.id AS order_id, 
+        o.appointmentDate, 
+        o.appointmentTime, 
+        o.status AS order_status, 
+        o.paymentStatus,
+        p.id AS patient_id, 
+        p.fullname AS patient_name, 
+        p.dateOfBirth, 
+        p.gender, 
+        p.identification, 
+        p.address AS patient_address, 
+        p.province AS patient_province, 
+        p.district AS patient_district, 
+        p.ward AS patient_ward, 
+        c.id AS center_id,
+        c.name AS center_name, 
+        c.address AS center_address, 
+        c.phone AS center_phone, 
+        v.id AS vaccine_id, 
+        v.name AS vaccine_name, 
+        v.description AS vaccine_description, 
+        v.price AS vaccine_price, 
+        v.imageUrl AS vaccine_image_url,
+        vp.name AS vaccine_package_name, 
+        u.fullname AS contact_fullname,
+        u.phone AS contact_phone,
+        cp.relationship AS contact_relationship 
+    FROM orders o 
+    JOIN patients p ON o.idPatient = p.id 
+    JOIN centers c ON o.idCenter = c.id 
+    JOIN orderdetails od ON o.id = od.idOrder
+    LEFT JOIN vaccines v ON od.idVaccine = v.id
+    LEFT JOIN vaccinepackages vp ON od.idPackage = vp.id 
+    LEFT JOIN contactpersons cp ON p.id = cp.idPatient
+    LEFT JOIN users u ON cp.idUser = u.id
+    WHERE o.id = ?
     """;
 
         try (PreparedStatement pst = DBConnect.get(sql)) {
@@ -333,6 +339,7 @@ public class OrderDao {
                     order.setAppointmentDate(rs.getDate("appointmentDate"));
                     order.setAppointmentTime(rs.getString("appointmentTime"));
                     order.setStatus(rs.getString("order_status"));
+                    order.setPaymentStatus(rs.getString("paymentStatus"));
                     result.put("order", order);
 
                     // Tạo đối tượng Patient và thiết lập thông tin
@@ -390,6 +397,73 @@ public class OrderDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        return result;
+    }
+
+    public Orders getOrderById(int idOrder) {
+        Orders result = null;
+
+        String sql = "select * from orders where id = ?";
+        try  {
+            PreparedStatement pst = DBConnect.get(sql);
+            pst.setInt(1,idOrder);
+            ResultSet rs = pst.executeQuery();
+                if (rs.next()) {
+                    result = new Orders();
+                    result.setId(rs.getInt("id"));
+                    result.setIdPatient(rs.getInt("idPatient"));
+                    result.setIdCenter(rs.getInt("idCenter"));
+                    // Lấy giá trị createdAt và chuyển thành LocalDateTime
+                    Timestamp timestamp = rs.getTimestamp("createdAt");
+                    if (timestamp != null) {
+                        LocalDateTime createdAt = timestamp.toLocalDateTime();
+                        result.setCreatedAt(createdAt); // Đảm bảo phương thức setCreatedAt đã được định nghĩa trong Orders
+                    }
+                    // Lấy các trường còn lại nếu cần thiết
+                    result.setAppointmentDate(rs.getDate("appointmentDate"));
+                    result.setAppointmentTime(rs.getString("appointmentTime"));
+                    result.setStatus(rs.getString("status"));
+                    result.setPaymentStatus(rs.getString("paymentStatus"));
+                }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+
+    }
+
+    public boolean updateOrderStatus(Orders order) {
+        String sql = "UPDATE orders SET paymentStatus = ? WHERE id = ?";
+        try (PreparedStatement pst = DBConnect.get(sql)) {
+            pst.setString(1,order.getPaymentStatus());
+            pst.setInt(2,order.getId());
+            int rowsAffected = pst.executeUpdate();
+            if(rowsAffected > 0) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public Map<Integer, Integer> getVaccineAndQuantity(int orderId) {
+        String sql = "select v.id, count(*) as time from orders o join orderdetails odt on o.id = odt.idOrder inner join vaccines v on v.id = odt.idVaccine where o.id = ? GROUP BY v.id";
+        Map<Integer, Integer> result = new HashMap<>();
+
+        try {
+            PreparedStatement pst = DBConnect.get(sql);
+            pst.setInt(1, orderId);
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                result.put(rs.getInt("id"), rs.getInt("time"));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
 
         return result;

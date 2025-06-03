@@ -55,19 +55,20 @@ form{
     flex-direction: column;
 }
 .info-row {
-    font-weight: 500;
-    color: #333333; /* Đậm màu hơn cho nhãn */
+    display: grid;
+    grid-template-columns: 200px auto;
     margin-bottom: 10px;
-}
-
-.info-row .value {
-    color: #888888; /* Nhạt màu hơn cho giá trị */
-    font-weight: normal;
     font-size: 14px;
+}
+.order-info-label {
+    color: #666;
+}
+.info-row .value {
+    color: #333;
 }
 .note{
     color: #ff8b07 !important;
-    margin-top: 10px;
+    margin: 10px 0 !important;
     font-weight: 500;
 }
 /* Responsive */
@@ -107,6 +108,27 @@ form{
         font-size: 12px;
         padding: 8px;
     }
+}
+
+
+/* Button style for "Chưa thanh toán" (not paid) */
+.btn.noPaid {
+    background-color: #28a745; /* Green color for not paid status */
+    color: white;  /* White text */
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;  /* Pointer cursor to indicate the button is clickable */
+    transition: background-color 0.3s ease;  /* Smooth background color change on hover */
+}
+/* Button style for "Đã thanh toán" (paid) */
+.btn.Paid {
+    background-color: #636060; /* Gray color for paid status */
+    color: white;  /* White text */
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: not-allowed;  /* Disabled cursor to show the button is not clickable */
 }
 
 

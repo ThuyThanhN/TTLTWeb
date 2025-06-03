@@ -8,6 +8,7 @@ const errorGender = document.querySelector('.error-gender');
 const errorVaccine = document.querySelector('.error-vaccine');
 const commitmentCheckbox = document.getElementById('commitment');
 
+
 submit.addEventListener('click', (event) => {
     event.preventDefault();
     let hasError = false;
@@ -163,4 +164,84 @@ radioButtons.forEach(button => {
         const selectedLabel = this.nextElementSibling;
         selectedLabel.classList.add('selected');
     });
+});
+
+const preferredDateInput = document.getElementById('preferred_date');
+
+preferredDateInput.addEventListener('change', function () {
+    const selectedDate = new Date(this.value);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Xóa giờ phút giây để so sánh chính xác
+
+    if (selectedDate < today) {
+        Swal.fire({
+            icon: 'warning',
+            text: 'Ngày hẹn tiêm không được nhỏ hơn ngày hôm nay!',
+            confirmButtonText: 'OK'
+        });
+
+        // Reset lại ô nhập ngày
+        this.value = '';
+    }
+});
+
+
+$(document).ready(function() {
+    console.log($('.form-check-input[name="selectedpackagevaccine"]').length);
+
+    // xử lý vaccine gói
+    // tìm input có id có package
+    $('.form-check-input[name="selectedPackages"]').each(function() {
+
+        let isValid = $(this).data('valid');
+        console.log(isValid);
+
+        const checkbox = $(this);
+        const packageDiv = checkbox.closest('.vaccine-package');
+
+        let messageEl = checkbox.closest('.form-check').find('.out-of-stock-message');
+        if (messageEl.length === 0) {
+            messageEl = $('<div class="out-of-stock-message text-danger small mt-1"></div>')
+                .appendTo(checkbox.closest('.form-check'));
+        }
+
+        if (!isValid) {
+            checkbox.prop('disabled', true);
+            packageDiv.addClass('disabled-package');
+            messageEl.text('Hết hàng').show();
+        } else {
+            checkbox.prop('disabled', false);
+            packageDiv.removeClass('disabled-package');
+            messageEl.text('').hide();
+        }
+    });
+
+
+    $('.form-check-input[name="selectedVaccines"]').each(function() {
+        const quantity = parseInt($(this).data('quantity'), 10);
+        const checkbox = $(this);
+        const packageDiv = checkbox.closest('.vaccine-package');
+
+
+        let messageEl = checkbox.closest('.form-check').find('.out-of-stock-message');
+        if (messageEl.length === 0) {
+            messageEl = $('<div class="out-of-stock-message text-danger small mt-1"></div>')
+                .appendTo(checkbox.closest('.form-check'));
+        }
+
+
+        // nếu số lượng ít hơn 0 thì sẽ disable và làm mờ
+        if (quantity <= 0) {
+            checkbox.prop('disabled', true);
+            packageDiv.addClass('disabled-package');
+            messageEl.text('Hết hàng').show();
+        } else {
+            checkbox.prop('disabled', false);
+            packageDiv.removeClass('disabled-package');
+            messageEl.text('').hide();
+        }
+    });
+
+
+
 });

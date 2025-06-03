@@ -1,5 +1,6 @@
 package com.example.provide_vaccine_services.controller;
 
+import com.example.provide_vaccine_services.dao.LogDao;
 import com.example.provide_vaccine_services.dao.VaccineDao;
 import com.example.provide_vaccine_services.dao.model.Vaccines;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,27 +24,42 @@ public class ListVaccineInfo extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
+        LogDao logDao = new LogDao();
+        String userIp = request.getRemoteAddr();
 
-        // Kiểm tra nếu action là null thì gán giá trị mặc định
         if (action == null) {
             action = "";
         }
 
         switch (action) {
             case "search": {
+                try {
+                    logDao.insertLog("INFO", "Handle AJAX search request", "anonymous", userIp);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 handleAjaxSearch(request, response);
                 break;
             }
             case "autoComplete": {
+                try {
+                    logDao.insertLog("INFO", "Handle autocomplete request", "anonymous", userIp);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 handleAutoComplete(request, response);
                 break;
             }
             default: {
+                try {
+                    logDao.insertLog("INFO", "Forward to vaccine-information.jsp", "anonymous", userIp);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 request.getRequestDispatcher("vaccine-information.jsp").forward(request, response);
                 break;
             }
         }
-
     }
 
     @Override
@@ -53,47 +69,42 @@ public class ListVaccineInfo extends HttpServlet {
 
     private void handleAutoComplete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String query = request.getParameter("query");
-        String jsonString ="";
+        String jsonString = "";
         if (query != null && !query.trim().isEmpty()) {
-            List<String> suggestions = new VaccineDao().getAutoCompleteSuggestions(query);
+            VaccineDao vaccineDao = new VaccineDao();
+            List<String> suggestions = vaccineDao.getAutoCompleteSuggestions(query);
 
-            for(String s : suggestions) {
+            // Debug log từng suggestion ra console
+            for (String s : suggestions) {
                 System.out.println(s);
             }
 
-            // object mapper
             ObjectMapper mapper = new ObjectMapper();
             Map<String, Object> jsonMap = new HashMap<>();
             jsonMap.put("suggestions", suggestions);
 
-            // chuyển thành json
             jsonString = mapper.writeValueAsString(jsonMap);
 
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(jsonString);
-
         }
     }
 
-    // xử lí tìm kiếm sản phẩm trong trang
     private void handleAjaxSearch(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String jsonString = "";
         int totalVaccine = 0;
         String searchQuery = request.getParameter("query");
-        String action = request.getParameter("action");
         boolean age = Boolean.parseBoolean(request.getParameter("age"));
         boolean disease = Boolean.parseBoolean(request.getParameter("disease"));
         int pageNumber = parseIntOrDefault(request.getParameter("page"), 1);
 
-        // xử lí format thời gian
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
         mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-        List<Vaccines> vaccines;
         VaccineDao vaccineDao = new VaccineDao();
-
+        List<Vaccines> vaccines;
 
         if (searchQuery != null && !searchQuery.trim().isEmpty()) {
             totalVaccine = vaccineDao.getTotalCount(searchQuery, age, disease);
@@ -103,10 +114,8 @@ public class ListVaccineInfo extends HttpServlet {
             vaccines = vaccineDao.getVaccinesByPage(pageNumber, age, disease);
         }
 
-        //tổng số trang
-        int totalPages = (totalVaccine + 11) / 12; // Giả sử mỗi trang có 12 sản phẩm
+        int totalPages = (totalVaccine + 11) / 12; // Mỗi trang có 12 sản phẩm
 
-        // map json
         Map<String, Object> jsonMap = new HashMap<>();
         jsonMap.put("totalVaccine", totalVaccine);
         jsonMap.put("pageNumber", pageNumber);
@@ -114,15 +123,12 @@ public class ListVaccineInfo extends HttpServlet {
         jsonMap.put("totalPages", totalPages);
         jsonMap.put("vaccines", vaccines);
 
-        // chuyển thành json
         jsonString = mapper.writeValueAsString(jsonMap);
 
-        // Gửi dữ liệu JSON về client
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(jsonString);
     }
-
 
     private int parseIntOrDefault(String value, int defaultValue) {
         try {
@@ -131,5 +137,4 @@ public class ListVaccineInfo extends HttpServlet {
             return defaultValue;
         }
     }
-
 }

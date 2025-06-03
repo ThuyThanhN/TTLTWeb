@@ -18,42 +18,54 @@ a {
 /*Content*/
 .authentication-group {
     display: flex;
-    justify-content: space-evenly;
-    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
 }
-
-
 
 .login-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 75vh;
+    margin: 40px 0;
 }
 .login-container .login-form {
     padding: 20px 30px 30px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
     border-radius: 8px;
     display: flex;
     flex-direction: column;
     max-width: 400px;
     width: 100%;
 }
-.login-container h2 {
-    color: #495057;
+.login-container h5 {
+    font-weight: 800;
+    line-height: 22px;
+    color: #464E5F;
     text-align: center;
-    font-size: 28px;
+    text-transform: uppercase;
 }
 .login-container .input-group label {
-    color: #555;
-    font-size: 15px !important;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-size: 12px;
+    color: #3D3D3D;
+    text-transform: uppercase;
+    font-weight: 500;
+    line-height: 24px;
+    display: block;
 }
 .login-container .input-group input {
     width: 100%;
-    height: 40px;
-    margin: 5px 0 20px 0;
-    padding: 10px;
-    border: 1px solid #ccc;
+    height: 45px;
+    padding: 8px;
+    border-radius: 8px !important;
+    background-color: #FAFAFA !important;
+    border: 1px solid #DEDEDE;
+    color: #4B5563 !important;
+    position: relative;
+    margin-bottom: 10px;
 }
 .login-container .input-group input:focus {
     border-color: #007bff;
@@ -69,25 +81,38 @@ a {
     transform: translateY(-30%);
     cursor: pointer;
 }
+.password {
+    position: relative;
+}
+.eye-icon {
+    position: absolute;
+    right: 10px;
+    top: 58%;
+    color: #bbb;
+    cursor: pointer;
+}
 .login-container .login-options {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 15px;
+    margin: 10px 0;
 }
 .login-container .forgot-password a, .register-link a {
-    color: #007bff;
+    color: #0F75BC;
     text-decoration: none;
     font-size: 14px;
+    font-weight: 600;
 }
 .login-container button {
     height: 40px;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     background-color: #2e3a92;
     color: white;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 800;
     cursor: pointer;
+    margin-top: 10px;
+    text-transform: uppercase;
 }
 .login-container button:hover {
     background-color: #ef5322;
@@ -100,28 +125,32 @@ a {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #db4437; /* Màu đỏ Google */
     border-radius: 50%;
+    outline: solid 1px #ad9b9b38;
+    background: #fff !important;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
 }
 
 .authentication-button.google:hover {
-    background-color: #c1351d; /* Màu đậm hơn khi hover */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 /* Nút Zalo */
-.authentication-button.zalo {
+.authentication-button.facebook {
     width: 40px; /* Chiều rộng */
     height: 40px; /* Chiều cao */
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #1877f2; /* Màu xanh Zalo */
     border-radius: 50%;
-
+    outline: solid 1px #ad9b9b38;
+    background: #fff !important;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .authentication-button.facebook:hover {
-    background-color: #0d5bbf; /* Màu đậm hơn khi hover */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 /* Đổi màu icon bên trong */
@@ -139,76 +168,98 @@ a {
     font-size: 20px; /* Kích thước biểu tượng */
     color: #333; /* Màu sắc biểu tượng */
 }
+/* Modal Styles */
 .modal {
-    display: none; /* Mặc định modal bị ẩn */
-    position: fixed; /* Đặt modal cố định trên trang */
-    top: 50%; /* Đặt modal giữa trang */
-    left: 50%;
-    transform: translate(-50%, -50%); /* Đảm bảo modal nằm chính giữa màn hình */
-    background-color: transparent; /* Bỏ nền mờ */
-    width: 70%; /* Thay đổi để modal lớn hơn */
-    max-width: 1000px; /* Giới hạn chiều rộng tối đa của modal */
-    height: auto; /* Chiều cao tự động điều chỉnh */
-    z-index: 1050; /* Đảm bảo modal nằm trên các phần tử khác */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Màu nền tối */
+    z-index: 1050;
+    justify-content: center;
+    align-items: center;
+    display: none; /* Đặt mặc định là không hiển thị */
 }
 
-/* Modal content */
+/* Hiển thị modal khi cần thiết */
+.modal:not(.hidden) {
+    display: flex; /* Hiển thị modal */
+}
+
+/* Phần thân modal */
+.modal-dialog {
+    max-width: 500px;
+    margin: 15px auto;
+}
+
+/* Nội dung của modal */
 .modal-content {
-    background-color: #ffffff; /* Màu nền trắng */
-    color: #333; /* Màu chữ */
-    border-radius: 8px; /* Bo góc modal content */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Bóng nhẹ */
-    padding: 30px; /* Thêm padding để nội dung không sát lề */
-    font-size: 18px; /* Cỡ chữ dễ đọc */
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
 }
 
-/* Modal header */
+/* Tiêu đề modal */
 .modal-header {
-    background-color: #007bff; /* Màu nền xanh dương */
-    color: white; /* Màu chữ trắng */
-    font-size: 22px; /* Cỡ chữ lớn hơn một chút */
-    padding: 15px;
-    border-radius: 8px 8px 0 0; /* Bo góc trên */
-    text-align: center;
-}
-
-/* Modal footer */
-.modal-footer {
     display: flex;
-    justify-content: center; /* Căn giữa nút OK */
-    padding-top: 15px;
+    justify-content: space-between;
+    align-items: center;
 }
 
-/* Nút OK */
-.modal-footer .btn-primary {
-    background-color: #007bff; /* Màu xanh cho nút OK */
-    color: white;
-    padding: 12px 40px; /* Tăng kích thước padding để nút lớn hơn */
+.modal-footer {
+    text-align: right;
+}
+
+.modal-title {
+    margin: 0;
+    font-size: 18px;
+}
+
+/* Modal body */
+.modal-body {
+    padding: 20px;
+}
+
+/* Khi modal hiển thị, hiển thị nút đóng */
+.modal .btn-close {
+    background-color: #fff !important;
+}
+.modal .btn-close:focus {
     border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px; /* Cỡ chữ trong nút OK */
+    outline: none;
+    box-shadow: none;
+}
+/* Nút đăng nhập - hiệu ứng xoay */
+.btn-loading {
+    position: relative;
+    pointer-events: none;  /* Vô hiệu hóa tương tác khi đang tải */
+    display: inline-flex;  /* Sử dụng inline-flex để căn chỉnh các phần tử con theo chiều ngang */
+    align-items: center;  /* Căn giữa các phần tử theo chiều dọc */
+    justify-content: center; /* Căn giữa chữ "Đăng nhập" */
 }
 
-/* Nút đóng modal "X" */
-.modal-header .btn-close {
-    background-color: #ff4d4d; /* Màu đỏ cho nút đóng */
-    color: white;
-    font-size: 20px;
-    padding: 5px;
+/* Định dạng vòng xoay */
+.btn-loading .spinner {
+    margin-left: 10px;  /* Thêm khoảng cách giữa chữ "Đăng nhập" và vòng xoay */
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
     border-radius: 50%;
-    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
 }
 
-/* Hiệu ứng hover cho các nút */
-.modal-footer .btn-primary:hover {
-    background-color: #0056b3; /* Màu tối hơn khi hover */
+/* Định nghĩa chuyển động xoay */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
-.modal-header .btn-close:hover {
-    background-color: #e60000; /* Màu đỏ đậm khi hover */
+/* Ẩn vòng xoay khi chưa kích hoạt */
+.spinner {
+    display: none;
 }
-
 
 /* Responsive điều chỉnh */
 /*Khi màn hình < 768px( chiều rộng phổ biến của nhiều loại thiết bị)*/
@@ -239,42 +290,42 @@ a {
     .login-container .login-options {
         gap: 10px;
     }
-}
 
-/*Khi màn hình < 480x(chiều rộng hợp lý cho các thiết bị cầm tay theo chiều dọc)*/
-@media (max-width: 480px) {
-    .login-container h2 {
-        font-size: 22px;
+    /*Khi màn hình < 480x(chiều rộng hợp lý cho các thiết bị cầm tay theo chiều dọc)*/
+    @media (max-width: 480px) {
+        .login-container h2 {
+            font-size: 22px;
+        }
+
+        .login-container .login-form {
+            padding: 15px; /* Thêm padding để giữ form không sát lề */
+            box-shadow: none;
+        }
+
+        .login-container .input-group label {
+            font-size: 14px;
+        }
+
+        .login-container .input-group input {
+            height: 32px;
+            font-size: 13px;
+        }
+
+        .login-container button {
+            height: 32px;
+            font-size: 14px;
+        }
+
+        .login-container .login-options {
+            gap: 8px;
+            font-size: 13px;
+        }
     }
 
-    .login-container .login-form {
-        padding: 15px; /* Thêm padding để giữ form không sát lề */
-        box-shadow: none;
-    }
-
-    .login-container .input-group label {
-        font-size: 14px;
-    }
-
-    .login-container .input-group input {
-        height: 32px;
-        font-size: 13px;
-    }
-
-    .login-container button {
-        height: 32px;
-        font-size: 14px;
-    }
-
-    .login-container .login-options {
-        gap: 8px;
-        font-size: 13px;
-    }
-}
-
-/*Khi màn hình < 320px*/
-@media (max-width: 320px) {
-    .header img {
-        width: 80%;
+    /*Khi màn hình < 320px*/
+    @media (max-width: 320px) {
+        .header img {
+            width: 80%;
+        }
     }
 }

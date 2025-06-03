@@ -130,7 +130,7 @@ $(document).ready(function () {
             let country = $("#supplier-country").val();
 
             $.ajax({
-                url: "/provide_vaccine_services_war/admin/addSupplier",
+                url: "/admin/addSupplier",
                 type: "POST",
                 data: {
                     "supplier-name": name,
@@ -162,8 +162,23 @@ $(document).ready(function () {
                         $("#supplier").DataTable().row.add($(newRowHtml)).draw(false);
                     }
                 },
-                error: function () {
-                    alert("Loi khi them nha cung cap!");
+                error: function (xhr) {
+                    if (xhr.status === 403) {
+                        const res = JSON.parse(xhr.responseText);
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Cảnh báo',
+                            text: res.message || "Không có quyền thực hiện chức năng này!",
+                            confirmButtonText: 'OK'
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi hệ thống!',
+                            text: 'Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.',
+                            confirmButtonText: 'Đóng'
+                        });
+                    }
                 }
             });
         });
@@ -180,7 +195,7 @@ $(document).ready(function () {
             let country = modal.find("input[name='supplier-country']").val();
 
             $.ajax({
-                url: "/provide_vaccine_services_war/admin/updateSupplier",
+                url: "/admin/updateSupplier",
                 type: "POST",
                 data: {
                     id: supplierId,
@@ -206,7 +221,22 @@ $(document).ready(function () {
                     }
                 },
                 error: function (xhr) {
-                    console.log("Lỗi: " + xhr.responseText);
+                    if (xhr.status === 403) {
+                        const res = JSON.parse(xhr.responseText);
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Cảnh báo',
+                            text: res.message || "Không có quyền thực hiện chức năng này!",
+                            confirmButtonText: 'OK'
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi hệ thống!',
+                            text: 'Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.',
+                            confirmButtonText: 'Đóng'
+                        });
+                    }
                 }
             });
         });
@@ -251,7 +281,22 @@ $(document).ready(function () {
                     }
                 },
                 error: function (xhr) {
-                    alert("Lỗi: " + xhr.responseText);
+                    if (xhr.status === 403) {
+                        const res = JSON.parse(xhr.responseText);
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Cảnh báo',
+                            text: res.message || "Không có quyền thực hiện chức năng này!",
+                            confirmButtonText: 'OK'
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi hệ thống!',
+                            text: 'Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.',
+                            confirmButtonText: 'Đóng'
+                        });
+                    }
                 }
             });
         });

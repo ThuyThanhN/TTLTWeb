@@ -4,6 +4,7 @@
 <html>
 <head>
     <title>Trung tâm | Quản trị Admin</title>
+    <link rel="icon" type="image/png" href="../image/logo1.png">
     <!-- Bootstrap, jquery   -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -33,6 +34,7 @@
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Css   -->
     <link rel="stylesheet" href="../css/main_admin.css">
 </head>
@@ -305,7 +307,6 @@
         </div>
     </div>
 </div>
-
 <script src="../js/admin_address.js"></script>
 <script src="../js/table-data-center.js"></script>
 </body>

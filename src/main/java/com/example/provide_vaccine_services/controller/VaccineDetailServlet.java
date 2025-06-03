@@ -4,7 +4,6 @@ package com.example.provide_vaccine_services.controller;
 import com.example.provide_vaccine_services.dao.VaccineDao;
 import com.example.provide_vaccine_services.dao.model.VaccineContents;
 import com.example.provide_vaccine_services.dao.model.VaccineDetails;
-import com.example.provide_vaccine_services.dao.model.Vaccines;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

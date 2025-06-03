@@ -6,7 +6,7 @@ $(document).ready(function () {
     // xuat pdf
     $("#exportPDF").on("click", function () {
         $.ajax({
-            url: "/provide_vaccine_services_war/admin/exportVaccine", // API lấy danh sách vaccine
+            url: "/admin/exportVaccine", // API lấy danh sách vaccine
             type: "GET",
             dataType: "json",
             success: function (data) {
@@ -47,7 +47,7 @@ $(document).ready(function () {
     // xuat excel
     $("#exportExcel").on("click", function () {
         $.ajax({
-            url: "/provide_vaccine_services_war/admin/exportVaccine",
+            url: "/admin/exportVaccine",
             type: "GET",
             dataType: "json",
             success: function (data) {
@@ -143,7 +143,22 @@ $(document).ready(function () {
                     }
                 },
                 error: function (xhr) {
-                    alert("Lỗi: " + xhr.responseText);
+                    if (xhr.status === 403) {
+                        const res = JSON.parse(xhr.responseText);
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Cảnh báo',
+                            text: res.message || "Không có quyền thực hiện chức năng này!",
+                            confirmButtonText: 'OK'
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi hệ thống!',
+                            text: 'Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.',
+                            confirmButtonText: 'Đóng'
+                        });
+                    }
                 }
             });
         });

@@ -1,5 +1,6 @@
 package com.example.provide_vaccine_services.controller;
 
+import com.example.provide_vaccine_services.dao.LogDao;
 import com.example.provide_vaccine_services.dao.UserDao;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -16,58 +17,84 @@ public class VerifyAccount extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Lấy token từ URL
+        LogDao logDao = new LogDao();
+        String userIp = request.getRemoteAddr();
+
         String tokenFromUrl = request.getParameter("token");
 
-        // In thông tin debug về token nhận từ URL
-        System.out.println("Token received from URL: " + tokenFromUrl);
+        try {
+            logDao.insertLog("INFO", "Received token from URL: " + tokenFromUrl, "anonymous", userIp);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if (tokenFromUrl != null) {
             try {
-                // Giải mã token từ URL
                 String decodedToken = URLDecoder.decode(tokenFromUrl, "UTF-8");
-                System.out.println("Decoded Token: " + decodedToken);  // In token đã giải mã để kiểm tra
+                try {
+                    logDao.insertLog("INFO", "Decoded token: " + decodedToken, "anonymous", userIp);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-                // Kiểm tra token trong cơ sở dữ liệu
                 UserDao userDao = new UserDao();
-                boolean isTokenValid = userDao.isTokenValid(decodedToken);  // Kiểm tra token trong cơ sở dữ liệu
+                boolean isTokenValid = userDao.isTokenValid(decodedToken);
 
-                // In ra kết quả kiểm tra token trong cơ sở dữ liệu
-                System.out.println("Token validity check result: " + isTokenValid);  // Kiểm tra nếu token hợp lệ
+                try {
+                    logDao.insertLog("INFO", "Token validity check result: " + isTokenValid, "anonymous", userIp);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 if (isTokenValid) {
-                    // Token hợp lệ, cập nhật trạng thái tài khoản
-                    System.out.println("Token is valid, proceeding with status update...");
-
-                    boolean isUpdated = userDao.updateUserStatusToActive(decodedToken);  // Cập nhật trạng thái người dùng thành "đã xác thực"
-
-                    // In kết quả cập nhật trạng thái người dùng
-                    System.out.println("Account status update result: " + isUpdated);
+                    boolean isUpdated = userDao.updateUserStatusToActive(decodedToken);
+                    try {
+                        logDao.insertLog("INFO", "Account status update result: " + isUpdated, "anonymous", userIp);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
                     if (isUpdated) {
-                        System.out.println("Account successfully verified.");
+                        try {
+                            logDao.insertLog("INFO", "Account verified successfully for token: " + decodedToken, "anonymous", userIp);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         response.getWriter().write("Tài khoản của bạn đã được xác thực thành công!");
-                        // Sau khi xác thực thành công, chuyển hướng đến trang login
-                        response.sendRedirect("login");  // Chuyển hướng đến trang login
+                        response.sendRedirect("login");
                     } else {
-                        System.out.println("Error updating account status: Unable to update status.");
+                        try {
+                            logDao.insertLog("ERROR", "Failed to update account status for token: " + decodedToken, "anonymous", userIp);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                         response.getWriter().write("Không thể xác thực tài khoản, mã xác thực không hợp lệ.");
                     }
                 } else {
-                    // Nếu token không hợp lệ
-                    System.out.println("Invalid token received.");
+                    try {
+                        logDao.insertLog("WARN", "Invalid token received: " + decodedToken, "anonymous", userIp);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     response.getWriter().write("Mã xác thực không hợp lệ!");
-                    response.sendRedirect("send-activation-link");  // Redirect đến trang gửi activation link nếu token không hợp lệ
+                    response.sendRedirect("send-activation-link");
                 }
             } catch (UnsupportedEncodingException e) {
+                try {
+                    logDao.insertLog("ERROR", "Error decoding token: " + tokenFromUrl, "anonymous", userIp);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
                 e.printStackTrace();
                 response.getWriter().write("Lỗi giải mã token.");
             }
         } else {
-            // Nếu không có token trong URL
-            System.out.println("No token found in URL.");
+            try {
+                logDao.insertLog("WARN", "No token found in URL", "anonymous", userIp);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             response.getWriter().write("Mã xác thực không hợp lệ!");
-            response.sendRedirect("send-activation-link");  // Redirect đến trang gửi activation link nếu không có token
+            response.sendRedirect("send-activation-link");
         }
-    }
-}
+    }}
