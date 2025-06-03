@@ -19,15 +19,6 @@ document.querySelectorAll("[data-phone]").forEach(phoneInput => {
     });
 });
 
-document.querySelectorAll("[data-password]").forEach(pass => {
-    pass.addEventListener("input", function () {
-        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        const valid = passwordPattern.test(this.value);
-        pass.classList.toggle("is-invalid", !valid);
-        this.nextElementSibling.style.display = !valid ? "block" : "none";
-    });
-});
-
 $(document).ready(function () {
     // Ham khoi tao DataTable
     function initializeDataTable(selector) {
@@ -212,7 +203,7 @@ $(document).ready(function () {
                                   <div class="col-3">
                                          <div class="mb-3">
                                                 <label for="pass-${id}" class="form-label">Mật khẩu</label>
-                                                <input type="password" class="form-control" id="pass-${id}" name="password" value="${password}" required>
+                                                <input type="password" class="form-control" id="pass-${id}" name="password" value="" required>
                                          </div>
                                   </div>
                              </div>

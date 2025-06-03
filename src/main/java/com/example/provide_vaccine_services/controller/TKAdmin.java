@@ -34,8 +34,6 @@ public class TKAdmin extends HttpServlet {
 
         // Lấy tổng doanh thu
         float totalRevenue = odd.totalRevenue();
-        // Lấy thay đổi doanh thu tuần trước
-        float revenueCountChange = odd.getTotalRevenueLaskWeeks();
 
         // Đếm vắc xin còn hàng và hết hàng
         int countInStock = vaccineDao.countInStock();
@@ -51,7 +49,6 @@ public class TKAdmin extends HttpServlet {
         request.setAttribute("totalOrder", totalOrder);
         request.setAttribute("orderCountChange", orderCountChange);
         request.setAttribute("totalRevenue", totalRevenue);
-        request.setAttribute("revenueCountChange", revenueCountChange);
         request.setAttribute("countInStock", countInStock);
         request.setAttribute("countOutOfStock", countOutOfStock);
         request.setAttribute("countOrder", countOrder);
