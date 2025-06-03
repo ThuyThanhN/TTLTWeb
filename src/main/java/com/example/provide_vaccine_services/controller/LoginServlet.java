@@ -188,7 +188,7 @@ public class LoginServlet extends HttpServlet {
         }
 
         String encodedToken = encodeToken(token);
-        String verificationLink = "/verifyAccount?token=" + encodedToken;
+        String verificationLink = "https://vaccine.io.vn/verifyAccount?token=" + encodedToken;
 
         String subject = "Xác thực tài khoản";
         String body = "Chào bạn,\n\nVui lòng nhấn vào liên kết dưới đây để xác thực tài khoản của bạn:\n" + verificationLink;
