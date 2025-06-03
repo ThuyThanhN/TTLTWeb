@@ -45,7 +45,7 @@
         <h5 class="main-title">Giao dịch</h5>
         <div>
             <a href="form-add-transaction" class="btn btn-add btn-sm">
-                <i class="fa-solid fa-plus"></i> Tạo nhập/xuất kho hàng
+                <i class="fa-solid fa-plus"></i> Tạo nhập/hao hụt kho hàng
             </a>
 
             <input type="file" id="excelFileInput" accept=".xls,.xlsx" style="display:none" />
@@ -67,7 +67,7 @@
             <tr class="list-header">
                 <th scope="col">ID</th>
                 <th scope="col">Tên vắc xin</th>
-                <th scope="col">Nhập/Xuất</th>
+                <th scope="col">Nhập/Hao hụt</th>
                 <th scope="col">Số lượng</th>
                 <th scope="col">Ngày Tạo </th>
                 <th scope="col"> Ngày hết hạn vaccine </th>
@@ -80,7 +80,7 @@
                 <tr data-id="${t.transactionId}">
                     <td>${t.transactionId}</td>
                     <td>${vaccines.get(t.vaccineId)}</td>
-                    <td>${t.type == 'Nhập' ? 'Nhập' : t.type == 'Xuất' ? 'Xuất' : 'Không xác định'}</td>
+                    <td>${t.type == '1' ? 'Nhập' : 'Hao hụt'}</td>
                     <td>${t.quantity}</td>
                     <td>${t.date}</td>
                     <td>${t.expiry_date}</td>
