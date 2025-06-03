@@ -209,7 +209,9 @@ public class OrderDetailDao {
                     "SUM(od.price * od.quantityOrder) AS totalRevenue " +
                     "FROM orderdetails od " +
                     "JOIN orders o ON od.idOrder = o.id " +
-                    "WHERE o.status != 'Đã hủy';";
+                    "WHERE o.status != 'Đã hủy' " +
+                    "AND MONTH(o.createdAt) = MONTH(CURDATE()) " +
+                    "AND YEAR(o.createdAt) = YEAR(CURDATE());";
 
             PreparedStatement pst = DBConnect.get(sql);
             ResultSet rs = pst.executeQuery();
@@ -222,35 +224,5 @@ public class OrderDetailDao {
         return totalRevenue;
     }
 
-    // Tinh doanh thu tuan nay so voi tuan truoc
-    public float getTotalRevenueLaskWeeks() {
-        float revenueDiff = 0;
-        try {
-            String sql = "SELECT " +
-                    "(SELECT IFNULL(SUM(od.price * od.quantityOrder), 0) " +
-                    " FROM orderdetails od " +
-                    " JOIN orders o ON od.idOrder = o.id " +
-                    " WHERE o.status != 'Đã hủy' " +
-                    " AND o.createdAt >= CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY " +
-                    " AND o.createdAt < CURDATE() - INTERVAL WEEKDAY(CURDATE()) DAY + INTERVAL 7 DAY) " +
-                    "- " +
-                    "(SELECT IFNULL(SUM(od.price * od.quantityOrder), 0) " +
-                    " FROM orderdetails od " +
-                    " JOIN orders o ON od.idOrder = o.id " +
-                    " WHERE o.status != 'Đã hủy' " +
-                    " AND o.createdAt >= CURDATE() - INTERVAL WEEKDAY(CURDATE()) + 7 DAY " +
-                    " AND o.createdAt < CURDATE() - INTERVAL WEEKDAY(CURDATE()) + 7 DAY + INTERVAL 7 DAY) " +
-                    "AS totalRevenueDiff;";
-
-            PreparedStatement pst = DBConnect.get(sql);
-            ResultSet rs = pst.executeQuery();
-            if (rs.next()) {
-                revenueDiff = rs.getFloat("totalRevenueDiff");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return revenueDiff;
-    }
 
 }

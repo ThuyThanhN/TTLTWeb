@@ -244,7 +244,7 @@
                                 <div>
                                     <span class="title">Doanh thu</span>
                                     <div class="amount-value"><f:formatNumber value="${totalRevenue}" type="number"
-                                                                              pattern="#,##0"/></div>
+                                                                              pattern="#,##0"/>đ</div>
                                 </div>
                             </div>
                         </div>
@@ -344,23 +344,6 @@
                             </svg>
                         </div>
                     </div>
-                    <c:choose>
-                        <c:when test="${revenueCountChange >= 0}">
-                            <p class="text-sm mt-2 mb-0" style="color: #485563; font-size: 15px">
-                                Tăng <span class="bg-success-focus px-1 rounded-2 fw-medium text-success-main text-sm">+<f:formatNumber
-                                    value="${revenueCountChange}" type="number" pattern="#,##0"/></span>
-                                trong tuần này
-                            </p>
-                        </c:when>
-                        <c:when test="${revenueCountChange < 0}">
-                            <p class="text-sm mt-2 mb-0" style="color: #485563; font-size: 15px">
-                                Giảm <span
-                                    class="bg-danger-focus px-1 rounded-2 fw-medium text-danger-main text-sm"><f:formatNumber
-                                    value="${revenueCountChange}" type="number" pattern="#,##0"/></span>
-                                trong tuần này
-                            </p>
-                        </c:when>
-                    </c:choose>
                 </div>
             </div>
             <div class="col-12 col-md-6 col-lg-4">

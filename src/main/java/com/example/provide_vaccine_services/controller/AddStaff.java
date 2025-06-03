@@ -54,12 +54,12 @@ public class AddStaff extends HttpServlet {
         int idUser = dao.insertStaff(user);
 
         int idPermission = dao.insertPermission(module);
-        int insertId = dao.insertUserPermission(idUser, idPermission);
+        dao.insertUserPermission(idUser, idPermission);
 
         try {
-            if (insertId > 0) {
+            if (idUser > 0) {
                 logDao.insertLog("INFO", "Thêm nhân viên thành công, idUser: " + idUser + ", module: " + module, email, userIp);
-                response.getWriter().write("{\"status\":\"success\", \"id\":" + insertId + "}");
+                response.getWriter().write("{\"status\":\"success\", \"id\":" + idUser + "}");
             } else {
                 logDao.insertLog("ERROR", "Thêm nhân viên thất bại, idUser: " + idUser + ", module: " + module, email, userIp);
                 response.getWriter().write("{\"status\":\"error\"}");
