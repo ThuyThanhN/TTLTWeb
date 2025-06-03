@@ -18,6 +18,7 @@ public class Users implements Serializable {
     private String password;
     private int role;
     private int status;
+    private Long facebookId;
 
     // ngay tao
     private Date createdAt;
@@ -211,6 +212,14 @@ public class Users implements Serializable {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Long getFacebookId() {
+        return facebookId;
+    }
+
+    public void setFacebookId(Long facebookId) {
+        this.facebookId = facebookId;
     }
 
     public String toString() {

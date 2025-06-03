@@ -4,7 +4,6 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng nhập</title>
-    <link rel="icon" type="image/png" href="image/logo1.png">
     <!--    font awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <script src="https://kit.fontawesome.com/4760c40adb.js" crossorigin="anonymous"></script>
@@ -96,6 +95,18 @@
                    href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid&redirect_uri=https://vaccine.io.vn/login?provider=google&response_type=code&client_id=737894268831-9ab6vfskfnv7pfoh1i7nnagpmmau67oi.apps.googleusercontent.com&approval_prompt=force">
                     <img src="image/google.png">
                 </a>
+                <!-- Nút đăng nhập Facebook -->
+                <button type="button" onclick="fbLogin()" class="authentication-button facebook" style="background:#4267B2; border:none;">
+                    <img src="image/facebook.png">
+                </button>
+
+                <!-- Form ẩn để gửi data Facebook user lên servlet -->
+                <form id="fbLoginForm" action="facebookLogin" method="POST" style="display:none;">
+                    <input type="hidden" name="fbUserId" id="fbUserId" />
+                    <input type="hidden" name="fbUserName" id="fbUserName" />
+                    <input type="hidden" name="fbUserEmail" id="fbUserEmail" />
+                </form>
+
                 <a class="authentication-button facebook"
                    href="https://www.facebook.com/v22.0/dialog/oauth?fields=id,name,email&client_id=1227448322128839&redirect_uri=https://vaccine.io.vn/login?provider=facebook&scope=email">
                     <img src="image/facebook.png">
@@ -110,5 +121,8 @@
 <jsp:include page="footer.jsp"></jsp:include>
 </div>
 <script src="js/login.js"></script>
+<script src="js/login-facebook.js"></script>
+
 </body>
 </html>
+

@@ -624,7 +624,7 @@ public class UserDao {
                 user.setEmail(rs.getString("email"));
                 user.setPassword(rs.getString("password"));
                 user.setRole(rs.getInt("role"));
-                user.setStatus(rs.getInt("status"));
+                user.setStatus(rs.getInt("status"));  
 
                 return user;
             }
@@ -639,8 +639,8 @@ public class UserDao {
     private String genPassword() {
         Random rand = new Random();
         int randomNum = rand.nextInt(100000, 999999);
-        return String.valueOf(randomNum);
-
+        String password = String.valueOf(randomNum);
+        return MD5Hash.hashPassword(password);
     }
 
     public boolean updateUserStatusToActive(String token) {
@@ -832,5 +832,84 @@ public class UserDao {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public void insertFBUser(Users user) {
+        System.out.println("thêm người dùng");
+        System.out.println(user.getFullname());
+        System.out.println(user.getEmail());
+        System.out.println(user.getFacebookId());
+
+
+        int result = 0;
+        try {
+            String sql = "INSERT INTO users (fullname, gender, identification, dateOfBirth, address, province, district, ward, phone, email, password, role, status, facebookId) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            PreparedStatement pst = DBConnect.get(sql);
+
+            // Gán giá trị. Các trường không có thông tin Facebook thì để rỗng hoặc mặc định.
+            pst.setString(1, user.getFullname() != null ? user.getFullname() : "");
+            pst.setString(2, user.getGender() != null ? user.getGender() : "");
+            pst.setString(3, user.getIdentification() != null ? user.getIdentification() : "");
+            pst.setDate(4, user.getDateOfBirth() != null ? user.getDateOfBirth() : new Date(System.currentTimeMillis())); // hoặc null tùy DB
+            pst.setString(5, user.getAddress() != null ? user.getAddress() : "");
+            pst.setString(6, user.getProvince() != null ? user.getProvince() : "");
+            pst.setString(7, user.getDistrict() != null ? user.getDistrict() : "");
+            pst.setString(8, user.getWard() != null ? user.getWard() : "");
+            pst.setString(9, user.getPhone() != null ? user.getPhone() : "");
+            pst.setString(10, user.getEmail()); // email bắt buộc phải có
+            pst.setString(11, "");
+            pst.setInt(12, user.getRole()); // thường role = 0 (khách)  1 (staff)
+            pst.setInt(13, 1); // status = 1 (active)
+            pst.setLong(14,  user.getFacebookId() != null ? user.getFacebookId() : -1); // nếu không có thì set id = -1
+
+            result = pst.executeUpdate();
+
+            if (result > 0) {
+                System.out.println("Thêm user Facebook thành công");
+            } else {
+                System.out.println("Thêm user Facebook thất bại");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public Users getUserByFaceBookId(String fbUserId) {
+
+        String sql = "SELECT * FROM users WHERE facebookId = ?";
+        try (PreparedStatement pst = DBConnect.get(sql)) {
+
+            pst.setString(1, fbUserId);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                Users user = new Users();
+                user.setId(rs.getInt("id"));
+                user.setFullname(rs.getString("fullname"));
+                user.setGender(rs.getString("gender"));
+                user.setIdentification(rs.getString("identification"));
+                user.setDateOfBirth(rs.getDate("dateOfBirth"));
+                user.setAddress(rs.getString("address"));
+                user.setProvince(rs.getString("province"));
+                user.setDistrict(rs.getString("district"));
+                user.setWard(rs.getString("ward"));
+                user.setPhone(rs.getString("phone"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setRole(rs.getInt("role"));
+                user.setStatus(rs.getInt("status"));
+                user.setFacebookId(rs.getLong("facebookId"));
+
+                return user;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // Trả về null nếu không tìm thấy
+
     }
 }
