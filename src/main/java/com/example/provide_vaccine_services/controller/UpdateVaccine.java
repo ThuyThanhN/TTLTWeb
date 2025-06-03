@@ -24,41 +24,6 @@ public class UpdateVaccine extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");
-        int idVaccine = Integer.parseInt(request.getParameter("id")); // id vac xin
-
-        SupplierDao supplierDao = new SupplierDao();
-        List<Suppliers> suppliers = supplierDao.getAll();
-        Suppliers supplier = supplierDao.getById(idVaccine);
-
-        AgeGroupDao ageDao = new AgeGroupDao();
-        List<AgeGroups> ages = ageDao.getAgeGroups();
-        AgeGroups age = ageDao.getAgeById(idVaccine);
-
-        DisaseGroupDao disaseDao = new DisaseGroupDao();
-        List<DisaseGroups> disases = disaseDao.getDisaseGroups();
-        DisaseGroups disase = disaseDao.getDisaseById(idVaccine);
-
-        VaccineDao vaccineDao = new VaccineDao();
-        Vaccines vaccine = vaccineDao.getVaccineById(idVaccine);
-
-        VacccineDetailDao detailDao = new VacccineDetailDao();
-        VacccineDetails vdetail = detailDao.getVaccineDetailsById(idVaccine);
-
-        VaccineContentDao contentDao = new VaccineContentDao();
-        VaccineContents vcontent = contentDao.getVaccineContentsById(idVaccine);
-
-        request.setAttribute("v", vaccine);
-        request.setAttribute("suppliers", suppliers);
-        request.setAttribute("supplier", supplier);
-        request.setAttribute("ages", ages);
-        request.setAttribute("age", age);
-        request.setAttribute("disases", disases);
-        request.setAttribute("disase", disase);
-        request.setAttribute("vdetail", vdetail);
-        request.setAttribute("vcontent", vcontent);
-
-        request.getRequestDispatcher("update-vacxin.jsp").forward(request, response);
     }
 
     @Override
@@ -88,7 +53,7 @@ public class UpdateVaccine extends HttpServlet {
         String name = request.getParameter("vaccineName");
         int quantity = Integer.parseInt(request.getParameter("quantity"));
         float price = Float.parseFloat(request.getParameter("price"));
-        String statusText = (Integer.parseInt(request.getParameter("status")) == 1) ? "Còn hàng" : "Hết hàng";
+        String statusText = request.getParameter("status");
         String description = request.getParameter("description");
         String prevention = request.getParameter("prevention");
         int supplierId = Integer.parseInt(request.getParameter("supplierName"));
@@ -107,7 +72,7 @@ public class UpdateVaccine extends HttpServlet {
         boolean typeUpdated = vtDao.updateType(vt);
 
         // Cap nhat VaccineDetails
-        String target = request.getParameter("editor-dt");
+        String target = request.getParameter("editor-dot");
         String immunization = request.getParameter("editor-pdt");
         String adverseReactions = request.getParameter("editor-pu");
 
@@ -117,7 +82,7 @@ public class UpdateVaccine extends HttpServlet {
 
         // Cap nhat VaccineContents
         String origin = request.getParameter("editor-ng");
-        String administrationRoute = request.getParameter("editor-dt");
+        String administrationRoute = request.getParameter("editor-dgt");
         String contraindications = request.getParameter("editor-ccd");
         String precaution = request.getParameter("editor-tt");
         String drugInteractions = request.getParameter("editor-ttt");
@@ -139,8 +104,7 @@ public class UpdateVaccine extends HttpServlet {
             jsonResponse.put("imageUrl", imagePath);
         } else {
             jsonResponse.put("status", "error");
-            jsonResponse.put("message", "Loi khi cap nhat vac xin");
-        }
+            jsonResponse.put("message", "Loi khi cap nhat vac xin");}
 
         // json respone
         response.setContentType("application/json");

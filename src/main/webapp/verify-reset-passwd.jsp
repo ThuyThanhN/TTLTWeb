@@ -4,6 +4,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lấy lại mật khẩu</title>
+    <link rel="icon" type="image/png" href="image/logo1.png">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -21,6 +22,8 @@
     </div>
     <!-- Content -->
     <div class="main-content">
+        <!-- Mũi tên quay lại -->
+        <i class="fas fa-arrow-left back-arrow" onclick="window.location.href='reset-password';"></i>
         <h1 class="welcome-message">Xác thực mã OTP</h1>
         <form action="verify-reset-passwd" method="post">
             <div class="info-card">
@@ -46,12 +49,9 @@
                     </p>
                     <% } %>
                 </div>
-
                 <button type="submit" class="btn-edit">Xác nhận</button>
-
             </div>
         </form>
-
     </div>
     <!-- Footer -->
     <jsp:include page="footer.jsp"></jsp:include>
@@ -74,7 +74,6 @@
         });
     });
 </script>
-
 <script src="js/verify-reset-passwd.js"></script>
 </body>
 </html>

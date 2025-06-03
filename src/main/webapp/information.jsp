@@ -1,10 +1,12 @@
 <%@ page import="com.example.provide_vaccine_services.dao.model.Users" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thông tin cá nhân</title>
+    <link rel="icon" type="image/png" href="image/logo1.png">
     <!-- Thêm Bootstrap và Font Awesome -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -45,150 +47,146 @@
     <div class="main">
         <div class="container">
             <!-- Sidebar -->
-            <div class="sidebar">
-                <div class="profile-card">
-                    <img src="image/avatar1.png" alt="Avatar" class="profile-image">
-                    <%
-                        // Kiểm tra trạng thái tài khoản của người dùng
-                        int status = user.getStatus();  // Lấy giá trị status từ đối tượng user
-                    %>
-
-                    <!-- Hiển thị thông báo về trạng thái xác thực tài khoản -->
-                    <div class="status-message">
-                        <%= (status == 0) ? "Tài khoản chưa xác thực" : "Tài khoản đã xác minh" %>
-                    </div>
-
-                    <h2 class="sidebar-username"><%= user.getFullname() %></h2>
-                    <p><%= user.getPhone() %></p>
-                </div>
-                <ul class="menu">
-                    <li><a href="information.jsp" class="active"><i class="fa-regular fa-user"></i> Thông tin cá nhân</a></li>
-                    <li><a href="my-appointments"><i class="fa-solid fa-calendar-check"></i> Lịch hẹn tiêm vắc xin</a></li>
-                    <li><a href="changePassword"><i class="fa-solid fa-key"></i> Đổi mật khẩu</a></li>
-                    <li><a href="logout"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
-                </ul>
-            </div>
+            <jsp:include page="user_sidebar.jsp"></jsp:include>
 
             <!-- Main Content -->
             <div class="main-content">
-                <div class="welcome-message" id="user-name">Xin chào, <%= user.getFullname() %></div>
-                <h1></h1>
-                <div class="info-card">
-                    <div class="info-header">
-                        <img src="image/avatar1.png" alt="Avatar" class="info-profile-image">
-                    </div>
+                <div class="p-3 border-bottom title">Thông tin cá nhân</div>
+                <div class="p-3">
+                    <div class="welcome-message" id="user-name">Xin chào, <%= user.getFullname() %></div>
+                    <div class="info-card">
+                        <div class="info-header">
+                            <img src="image/avatar1.png" alt="Avatar" class="info-profile-image">
+                        </div>
 
-                    <div id="personal-info" class="info-details">
-                        <div class="item-info">
-                            <span class="label">Họ và tên:</span>
-                            <span class="value" id="info-username"> <%= user.getFullname() %></span>
+                        <div id="personal-info" class="info-details">
+                            <div class="item-info">
+                                <span class="label">Họ và tên:</span>
+                                <span class="value" id="info-username"> <%= user.getFullname() %></span>
+                            </div>
+                            <div class="item-info">
+                                <span class="label">Mã định danh:</span>
+                                <span class="value"><%= user.getIdentification() %></span>
+                            </div>
+                            <div class="item-info">
+                                <span class="label">Email:</span>
+                                <span class="value"><%= user.getEmail() %></span>
+                            </div>
+                            <div class="item-info">
+                                <span class="label">Số điện thoại:</span>
+                                <span class="value"><%= user.getPhone() %></span>
+                            </div>
+                            <div class="item-info">
+                                <span class="label">Giới tính:</span>
+                                <span class="value"><%= user.getGender() %></span>
+                            </div>
+                            <div class="item-info">
+                                <span class="label">Ngày sinh:</span>
+                                <span class="value"><f:formatDate value="${user.dateOfBirth}"
+                                                                  pattern="dd-MM-yyyy"/></span>
+                            </div>
+                            <div class="item-info">
+                                <span class="label">Địa chỉ:</span>
+                                <span class="value"><%= user.getAddress() %>,
+                                                    <%= user.getWard() %>, <br>
+                                                    <%= user.getDistrict() %> ,
+                                                    <%= user.getProvince() %></span>
+                            </div>
+                            <button id="edit-btn" class="btn-edit">Chỉnh sửa thông tin</button>
                         </div>
-                        <div class="item-info">
-                            <span class="label">Mã định danh:</span>
-                            <span class="value"><%= user.getIdentification() %></span>
-                        </div>
-                        <div class="item-info">
-                            <span class="label">Email:</span>
-                            <span class="value"><%= user.getEmail() %></span>
-                        </div>
-                        <div class="item-info">
-                            <span class="label">Số điện thoại:</span>
-                            <span class="value"><%= user.getPhone() %></span>
-                        </div>
-                        <div class="item-info">
-                            <span class="label">Giới tính:</span>
-                            <span class="value"><%= user.getGender() %></span>
-                        </div>
-                        <div class="item-info">
-                            <span class="label">Ngày sinh:</span>
-                            <span class="value"><%= user.getDateOfBirth() %></span>
-                        </div>
-                        <div class="item-info">
-                            <span class="label">Địa chỉ:</span>
-                            <span class="value"><%= user.getAddress() %>,<%= user.getProvince() %>,<%= user.getDistrict() %>,<%= user.getWard() %></span>
-                        </div>
-                        <button id="edit-btn" class="btn-edit">Chỉnh sửa thông tin</button>
                     </div>
 
                     <!-- Form chỉnh sửa thông tin -->
-                    <div id="edit-form" style="display: none;">
+                    <div class="scrollable" id="edit-form" style="display: none;">
                         <form action="updateInformation" method="post" class="p-4 rounded shadow-lg bg-light">
-                            <h3 class="text-center mb-4">Chỉnh sửa thông tin cá nhân</h3>
-
                             <div class="mb-3">
-                                <label for="fullname" class="form-label"><strong>Họ và tên:</strong></label>
-                                <input type="text" id="fullname" name="fullname" value="<%= user.getFullname() %>" class="form-control" placeholder="Nhập họ và tên">
+                                <label for="fullname" class="form-label">Họ và tên:</label>
+                                <input type="text" id="fullname" name="fullname" value="<%= user.getFullname() %>"
+                                       class="form-control" placeholder="Nhập họ và tên">
                             </div>
 
                             <div class="mb-3 row">
                                 <!-- Mã định danh -->
                                 <div class="col-md-6">
-                                    <label for="identification" class="form-label"><strong>Mã định danh:</strong></label>
-                                    <input type="text" id="identification" name="identification" value="<%= user.getIdentification() %>" class="form-control">
+                                    <label for="identification" class="form-label">Mã định danh:</label>
+                                    <input type="text" id="identification" name="identification"
+                                           value="<%= user.getIdentification() %>" class="form-control">
                                 </div>
 
                                 <!-- Số điện thoại -->
                                 <div class="col-md-6">
-                                    <label for="phone" class="form-label"><strong>Số điện thoại:</strong></label>
-                                    <input type="text" id="phone" name="phone" value="<%= user.getPhone() %>" class="form-control">
+                                    <label for="phone" class="form-label">Số điện thoại:</label>
+                                    <input type="text" id="phone" name="phone" value="<%= user.getPhone() %>"
+                                           class="form-control">
                                 </div>
                             </div>
 
                             <div class="mb-3 row">
                                 <!-- Giới tính -->
                                 <div class="col-md-6">
-                                    <label class="form-label"><strong>Giới tính:</strong></label>
+                                    <label class="form-label">Giới tính:</label>
                                     <div class="border rounded" style="height: 40.25px; padding: 7px 0 0 10px">
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" id="male" name="gender" value="Nam" <%= "Nam".equals(user.getGender()) ? "checked" : "" %>>
+                                            <input class="form-check-input" type="radio" id="male" name="gender"
+                                                   value="Nam" <%= "Nam".equals(user.getGender()) ? "checked" : "" %>>
                                             <label class="form-check-label" for="male">Nam</label>
                                         </div>
                                         <div class="form-check form-check-inline">
-                                            <input class="form-check-input" type="radio" id="female" name="gender" value="Nữ" <%= "Nữ".equals(user.getGender()) ? "checked" : "" %>>
+                                            <input class="form-check-input" type="radio" id="female" name="gender"
+                                                   value="Nữ" <%= "Nữ".equals(user.getGender()) ? "checked" : "" %>>
                                             <label class="form-check-label" for="female">Nữ</label>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- Ngày sinh -->
                                 <div class="col-md-6">
-                                    <label for="dateOfBirth" class="form-label"><strong>Ngày sinh:</strong></label>
-                                    <input type="date" id="dateOfBirth" name="dateOfBirth" value="<%= user.getDateOfBirth() %>" class="form-control">
+                                    <label for="dateOfBirth" class="form-label">Ngày sinh:</label>
+                                    <input type="date" id="dateOfBirth" name="dateOfBirth"
+                                           value="<%= user.getDateOfBirth() %>" class="form-control">
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <label for="email" class="form-label"><strong>Email:</strong></label>
-                                <input type="text" id="email" name="email" value="<%= user.getEmail() %>" class="form-control" placeholder="Nhập email cần thay đổi">
+                                <label for="email" class="form-label">Email:</label>
+                                <input type="text" id="email" name="email" value="<%= user.getEmail() %>"
+                                       class="form-control" placeholder="Nhập email cần thay đổi">
                             </div>
                             <div class="mb-3">
-                                <label for="address" class="form-label"><strong>Số nhà/Đường:</strong></label>
-                                <input type="text" id="address" name="address" value="<%= user.getAddress() %>" class="form-control" placeholder="Nhập địa chỉ chi tiết">
+                                <label for="address" class="form-label">Số nhà/Đường:</label>
+                                <input type="text" id="address" name="address" value="<%= user.getAddress() %>"
+                                       class="form-control" placeholder="Nhập địa chỉ chi tiết">
                             </div>
 
                             <div class="mb-3">
-                                <label for="province-select" class="form-label"><strong>Tỉnh/Thành:</strong></label>
+                                <label for="province-select" class="form-label">Tỉnh/Thành:</label>
                                 <div class="dropdown">
-                                    <input type="text" id="province-select" name="province" class="form-control dropdown-toggle province-select"
-                                           data-bs-toggle="dropdown" aria-expanded="false" value="<%= user.getProvince() %>" placeholder="Chọn tỉnh/thành">
+                                    <input type="text" id="province-select" name="province"
+                                           class="form-control dropdown-toggle province-select"
+                                           data-bs-toggle="dropdown" aria-expanded="false"
+                                           value="<%= user.getProvince() %>" placeholder="Chọn tỉnh/thành">
                                     <i class="fa-solid fa-angle-down"></i>
                                     <ul class="dropdown-menu province-menu"></ul>
                                 </div>
                             </div>
 
                             <div class="mb-3">
-                                <label for="district-select" class="form-label"><strong>Quận/Huyện:</strong></label>
+                                <label for="district-select" class="form-label">Quận/Huyện:</label>
                                 <div class="dropdown">
-                                    <input type="text" id="district-select" name="district" class="form-control dropdown-toggle district-select"
-                                           data-bs-toggle="dropdown" aria-expanded="false" placeholder="Chọn tỉnh/thành trước" value="<%= user.getDistrict() %>">
+                                    <input type="text" id="district-select" name="district"
+                                           class="form-control dropdown-toggle district-select"
+                                           data-bs-toggle="dropdown" aria-expanded="false"
+                                           placeholder="Chọn tỉnh/thành trước" value="<%= user.getDistrict() %>">
                                     <i class="fa-solid fa-angle-down"></i>
                                     <ul class="dropdown-menu district-menu"></ul>
                                 </div>
                             </div>
 
                             <div class="mb-3">
-                                <label for="ward-select" class="form-label"><strong>Phường/Xã:</strong></label>
+                                <label for="ward-select" class="form-label">Phường/Xã:</label>
                                 <div class="dropdown">
-                                    <input type="text" id="ward-select" name="ward" class="form-control dropdown-toggle ward-select"
-                                           data-bs-toggle="dropdown" aria-expanded="false" placeholder="Chọn quận/huyện trước" value="<%= user.getWard() %>">
+                                    <input type="text" id="ward-select" name="ward"
+                                           class="form-control dropdown-toggle ward-select"
+                                           data-bs-toggle="dropdown" aria-expanded="false"
+                                           placeholder="Chọn quận/huyện trước" value="<%= user.getWard() %>">
                                     <i class="fa-solid fa-angle-down"></i>
                                     <ul class="dropdown-menu ward-menu"></ul>
                                 </div>

@@ -4,6 +4,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lấy Lại Mật Khẩu</title>
+    <link rel="icon" type="image/png" href="image/logo1.png">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -21,6 +22,7 @@
     </div>
     <!-- Content -->
     <div class="main-content">
+        <i class="fas fa-arrow-left back-arrow" onclick="window.location.href='index';"></i>
         <h1 class="welcome-message">Lấy lại mật khẩu</h1>
         <%-- Hiển thị thông báo lỗi nếu có --%>
         <% if (request.getAttribute("error") != null) { %>
@@ -44,7 +46,9 @@
                 <p style="margin-top: 15px; font-size: 14px; color: #333;">
                     Chúng tôi sẽ gửi mã xác nhận đặt lại mật khẩu thông qua email.
                 </p>
-                <button type="submit" class="btn-edit">Gửi Mã</button>
+                <button type="submit" class="btn-edit">
+                    <span>Gửi Mã</span> <!-- Văn bản "Gửi Mã" sẽ bị ẩn khi loading -->
+                </button>
             </div>
 
         </form>
@@ -55,21 +59,5 @@
 
 
 <script src="js/reset-password.js"></script>
-<script>
-    // Kiểm tra định dạng email phía client
-    document.querySelector("form").addEventListener("submit", function (e) {
-        const emailField = document.getElementById("email");
-        const errorMessage = document.getElementById("error-message");
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!emailRegex.test(emailField.value)) {
-            e.preventDefault(); // Ngăn gửi form
-            errorMessage.textContent = "Vui lòng nhập email hợp lệ.";
-            errorMessage.style.display = "block";
-        } else {
-            errorMessage.style.display = "none";
-        }
-    });
-</script>
 </body>
 </html>

@@ -33,9 +33,6 @@
 
     <div class="tabular-wrapper">
         <h5 class="main-title">Khách hàng</h5>
-        <a href="registerUsers" class="btn btn-add btn-sm">
-            <i class="fa-solid fa-plus"></i> Thêm khách hàng
-        </a>
         <table class="w-100 table table-striped" id="user">
             <thead>
             <tr class="list-header">
@@ -56,9 +53,16 @@
                     </td>
                     <td>${c.phone}</td>
                     <td>
-                        <select class="status" data-id="${c.id}">
-                            <option value="active" class="status-select">Đang hoạt động</option>
-                            <option value="inactive" class="status-select">Khóa tài khoản</option>
+                        <select class="status" name="status" data-id="${ur.id}" disabled>
+                            <option value="-1" class="status-select" ${ur.status == -1 ? 'selected' : ''}>Khóa
+                                tài khoản
+                            </option>
+                            <option value="0" class="status-select" ${ur.status == 0 ? 'selected' : ''}>Chưa xác
+                                thực
+                            </option>
+                            <option value="1" class="status-select" ${ur.status == 1 ? 'selected' : ''}>Đã xác
+                                thực
+                            </option>
                         </select>
                     </td>
                 </tr>

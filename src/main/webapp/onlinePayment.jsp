@@ -9,6 +9,7 @@
 <html>
 <head>
     <title>Trang thanh toán</title>
+    <link rel="icon" type="image/png" href="image/logo1.png">
 </head>
 <body>
 <h1>Thanh toán đơn hàng</h1>

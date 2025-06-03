@@ -29,6 +29,15 @@ a {
     margin-bottom: 20px;
     border: 1px solid #dcdfe6;
 }
+.vaccine-package.disabled-package {
+    opacity: 0.5;          /* mờ đi */
+    pointer-events: none;  /* không cho tương tác chuột */
+}
+.out-of-stock-message {
+    color: red;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+}
 .vaccine-package-list .row {
     user-select: none;
     cursor: pointer;

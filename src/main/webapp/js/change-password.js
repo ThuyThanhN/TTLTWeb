@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const toggleNewPassword = document.querySelector('#toggleNewPassword');
     const newPasswordInput = document.querySelector('#newPassword');
     const newPasswordError = document.querySelector('#newPassword-error');
+    const samePasswordError = document.getElementById('samePassword-error');
+    const confirmPasswordError = document.getElementById('confirmPassword-error');
 
     const toggleConfirmNewPassword = document.querySelector('#toggleConfirmNewPassword');
     const confirmNewPasswordInput = document.querySelector('#confirmNewPassword');
@@ -23,24 +25,16 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
+    togglePasswordVisibility(toggleCurrentPassword, currentPasswordInput);
+    togglePasswordVisibility(toggleNewPassword, newPasswordInput);
+    togglePasswordVisibility(toggleConfirmNewPassword, confirmNewPasswordInput);
+
     // Kiểm tra điều kiện mật khẩu
     const validatePasswords = () => {
         const currentPassword = currentPasswordInput.value;
         const newPassword = newPasswordInput.value;
         const confirmNewPassword = confirmNewPasswordInput.value;
 
-        if (newPassword === currentPassword) {
-            alert("Mật khẩu mới phải khác mật khẩu hiện tại. Vui lòng nhập lại mật khẩu mới.");
-            newPasswordInput.value = "";
-            confirmNewPasswordInput.value = "";
-            return false;
-        }
-
-        if (newPassword !== confirmNewPassword) {
-            alert("Mật khẩu mới và xác nhận mật khẩu không khớp. Vui lòng nhập lại.");
-            confirmNewPasswordInput.value = "";
-            return false;
-        }
 
         const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
         if (!passwordPattern.test(newPassword)) {
@@ -68,6 +62,25 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+
+    newPasswordInput.addEventListener('input', () => {
+        if (newPasswordInput.value === currentPasswordInput.value && newPasswordInput.value !== "") {
+            samePasswordError.style.display = "block";
+        } else {
+            samePasswordError.style.display = "none";
+        }
+    });
+
+    confirmNewPasswordInput.addEventListener('input', () => {
+        if (
+            confirmNewPasswordInput.value !== "" &&
+            confirmNewPasswordInput.value !== newPasswordInput.value
+        ) {
+            confirmPasswordError.style.display = "block";
+        } else {
+            confirmPasswordError.style.display = "none";
+        }
+    });
 
     function closeNav() {
         const navbarCollapse = document.querySelector('.navbar-collapse');

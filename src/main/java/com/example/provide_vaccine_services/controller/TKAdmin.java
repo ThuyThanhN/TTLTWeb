@@ -1,12 +1,10 @@
 package com.example.provide_vaccine_services.controller;
 
-import com.example.provide_vaccine_services.dao.OrderDao;
+import com.example.provide_vaccine_services.dao.LogDao;
 import com.example.provide_vaccine_services.dao.OrderDetailDao;
 import com.example.provide_vaccine_services.dao.UserDao;
 import com.example.provide_vaccine_services.dao.VaccineDao;
-import com.example.provide_vaccine_services.dao.model.OrderDetails;
-import com.example.provide_vaccine_services.dao.model.Orders;
-import com.example.provide_vaccine_services.dao.model.Vaccines;
+import com.example.provide_vaccine_services.dao.model.Users;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -22,24 +20,68 @@ public class TKAdmin extends HttpServlet {
         VaccineDao vaccineDao = new VaccineDao();
         UserDao userDao = new UserDao();
         OrderDetailDao odd = new OrderDetailDao();
-        OrderDao od = new OrderDao();
 
-        int totalVacine = vaccineDao.totalVaccines();
-        int totalExpire = vaccineDao.statusVaccines();
+        // Lấy tổng số người dùng
         int totalUser = userDao.totalUser();
+        // Lấy số người dùng đăng ký tuần trước
+        int userCountChange = userDao.getUsersCountLastWeek();
+        // Lấy danh sách người dùng đăng ký trong tháng này
+        List<Users> userRegisterThisMonth = userDao.getUsersRegisterThisMonth();
+
+        // Lấy tổng đơn hàng
         int totalOrder = odd.totalOrder();
-        List<Vaccines> countOrder = od.quantityVaccine();
+        // Lấy số đơn hàng tuần trước
+        int orderCountChange = odd.getOrdersCountLastWeek();
 
-        request.setAttribute("totalVacine", totalVacine);
-        request.setAttribute("totalExpire", totalExpire);
+        // Lấy tổng doanh thu
+        float totalRevenue = odd.totalRevenue();
+        // Lấy thay đổi doanh thu tuần trước
+        float revenueCountChange = odd.getTotalRevenueLaskWeeks();
+
+        // Đếm vắc xin còn hàng và hết hàng
+        int countInStock = vaccineDao.countInStock();
+        int countOutOfStock = vaccineDao.countOutOfStock();
+
+        // Đặt các giá trị vào request để truyền cho JSP
         request.setAttribute("totalUser", totalUser);
+        request.setAttribute("userCountChange", userCountChange);
+        request.setAttribute("userRegister", userRegisterThisMonth);
         request.setAttribute("totalOrder", totalOrder);
-        request.setAttribute("countOrder", countOrder);
+        request.setAttribute("orderCountChange", orderCountChange);
+        request.setAttribute("totalRevenue", totalRevenue);
+        request.setAttribute("revenueCountChange", revenueCountChange);
+        request.setAttribute("countInStock", countInStock);
+        request.setAttribute("countOutOfStock", countOutOfStock);
 
+        // Forward tới trang dashboard.jsp để hiển thị
         request.getRequestDispatcher("/admin/dashboard.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        LogDao logDao = new LogDao();
+        String userIp = request.getRemoteAddr();
+
+        int id = Integer.parseInt(request.getParameter("id"));
+        String status = request.getParameter("status");
+
+        UserDao userDao = new UserDao();
+        boolean isUpdated = userDao.updateStatus(id, status);
+
+        if (isUpdated) {
+            try {
+                logDao.insertLog("INFO", "User status updated successfully. User ID: " + id + ", New status: " + status, "admin", userIp);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            response.getWriter().write("{\"message\": \"success\"}");
+        } else {
+            try {
+                logDao.insertLog("ERROR", "Failed to update user status. User ID: " + id + ", Attempted status: " + status, "admin", userIp);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            response.getWriter().write("{\"message\": \"error\"}");
+        }
     }
 }

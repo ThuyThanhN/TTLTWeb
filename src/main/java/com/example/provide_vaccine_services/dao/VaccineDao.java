@@ -195,42 +195,6 @@ public class VaccineDao {
         return vaccine;
     }
 
-    public int totalVaccines() {
-        int result = 0;
-
-        try {
-            String sql = "SELECT COUNT(*) AS total FROM vaccines";
-            PreparedStatement pst = DBConnect.get(sql);
-            ResultSet rs = pst.executeQuery();
-
-            if (rs.next()) {
-                result = rs.getInt("total");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return result;
-    }
-
-    public int statusVaccines() {
-        int result = 0;
-
-        try {
-            String sql = "SELECT COUNT(*) AS total FROM vaccines WHERE status = 'Hết hàng'";
-            PreparedStatement pst = DBConnect.get(sql);
-            ResultSet rs = pst.executeQuery();
-
-            if (rs.next()) {
-                result = rs.getInt("total");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return result;
-    }
-
     public String getVaccineName(int vaccineId) {
         String result = "";
 
@@ -254,6 +218,44 @@ public class VaccineDao {
         }
         return result;
     }
+
+    // update so luong
+    public void updateQuantity(int vaccineId, int delta) {
+        String sql = "UPDATE vaccines SET stockQuantity = stockQuantity + ? WHERE id = ?";
+        try {
+            PreparedStatement pst = DBConnect.get(sql);
+            pst.setInt(1, delta);
+            pst.setInt(2, vaccineId);
+            pst.executeUpdate();
+
+            VaccineDao vaccineDao = new VaccineDao();
+            Vaccines v = vaccineDao.getVaccineById(vaccineId);
+            if(v.getStockQuantity() == 0) {
+                vaccineDao.setStatus(vaccineId, "Hết hàng");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setStatus(int vaccineId, String status) {
+
+        String sql = "UPDATE vaccines SET status = ? WHERE id = ?";
+
+        try {
+            PreparedStatement pst = DBConnect.get(sql);
+            pst.setString(1, status);
+            pst.setInt(2, vaccineId);
+            pst.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
 
     // Phương thức cập nhật thông tin vắc xin
     public boolean updateVaccine(Vaccines vaccine) {
@@ -811,7 +813,7 @@ public class VaccineDao {
                             rs.getString("sideEffects"),
                             rs.getString("name"),
                             rs.getString("description"),
-                            rs.getString("imageUrl") // 🔥 Lấy ảnh từ database
+                            rs.getString("imageUrl") //
                     );
 
                     vaccineDetails = new VaccineDetails(
@@ -866,5 +868,32 @@ public class VaccineDao {
         return vaccineList;
     }
 
+    // Đếm số vắc xin còn hàng
+    public int countInStock() {
+        String sql = "SELECT COUNT(*) FROM Vaccines WHERE stockQuantity > 0";
+        try (PreparedStatement pst = DBConnect.get(sql);
+             ResultSet rs = pst.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    // Đếm số vắc xin hết hàng
+    public int countOutOfStock() {
+        String sql = "SELECT COUNT(*) FROM Vaccines WHERE stockQuantity <= 0";
+        try (PreparedStatement pst = DBConnect.get(sql);
+             ResultSet rs = pst.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 
 }

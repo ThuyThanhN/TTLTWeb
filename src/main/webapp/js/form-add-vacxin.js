@@ -114,7 +114,7 @@ $(document).ready(function () {
             let formData = new FormData(this);
 
             $.ajax({
-                url: "/provide_vaccine_services_war/admin/addVaccine",
+                url: "/admin/addVaccine",
                 type: "POST",
                 data: formData,
                 contentType: false,
@@ -138,11 +138,26 @@ $(document).ready(function () {
                         $("#vaccine").DataTable().row.add($(newRowHtml)).draw(false);
 
                         // chuyen huong den trang hien danh sach vac xin
-                        window.location.href = "/provide_vaccine_services_war/admin/table-data-vacxin";
+                        window.location.href = "/admin/table-data-vacxin";
                     }
                 },
-                error: function () {
-                    alert("Loi them vac xin!");
+                error: function (xhr) {
+                    if (xhr.status === 403) {
+                        const res = JSON.parse(xhr.responseText);
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Cảnh báo',
+                            text: res.message || "Không có quyền thực hiện chức năng này!",
+                            confirmButtonText: 'OK'
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi hệ thống!',
+                            text: 'Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.',
+                            confirmButtonText: 'Đóng'
+                        });
+                    }
                 }
             });
         });

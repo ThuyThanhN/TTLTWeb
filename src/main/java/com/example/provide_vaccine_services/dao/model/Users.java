@@ -19,6 +19,9 @@ public class Users implements Serializable {
     private int role;
     private int status;
 
+    // ngay tao
+    private Date createdAt;
+
     // Constructor không có id (dùng khi chèn người dùng mới và id được tự động tạo)
     public Users(String fullname, String gender, String identification, Date dateOfBirth,
                  String address, String province, String district, String ward, String phone,
@@ -37,7 +40,9 @@ public class Users implements Serializable {
         this.role = role;
         this.status = status;
     }
-    public Users() { }
+
+    public Users() {
+    }
 
     public Users(int id, String fullname, String gender, String identification, Date dateOfBirth, String address, String province, String district, String ward, String phone, String email, String password, int role) {
         this.id = id;
@@ -68,6 +73,24 @@ public class Users implements Serializable {
         this.email = email;
         this.password = password;
         this.role = role;
+    }
+    public Users(int id, String fullname, String gender, String identification, Date dateOfBirth,
+                 String address, String province, String district, String ward, String phone,
+                 String email, String password, int role, int status) {
+        this.id = id;
+        this.fullname = fullname;
+        this.gender = gender;
+        this.identification = identification;
+        this.dateOfBirth = dateOfBirth;
+        this.address = address;
+        this.province = province;
+        this.district = district;
+        this.ward = ward;
+        this.phone = phone;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.status = status;
     }
 
     public int getId() {
@@ -173,12 +196,21 @@ public class Users implements Serializable {
     public void setRole(int role) {
         this.role = role;
     }
+
     public int getStatus() {
         return status;
     }
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     public String toString() {

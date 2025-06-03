@@ -125,7 +125,7 @@ $(document).ready(function () {
         console.log("Dosages:", dosages);
 
         $.ajax({
-            url: "/provide_vaccine_services_war/admin/addPMapping",
+            url: "/admin/addPMapping",
             type: "POST",
             data: {
                 "package-name": name,
@@ -155,8 +155,23 @@ $(document).ready(function () {
                     alert("Có lỗi xảy ra: " + response.message);
                 }
             },
-            error: function () {
-                alert("Loi khi them goi!");
+            error: function (xhr) {
+                if (xhr.status === 403) {
+                    const res = JSON.parse(xhr.responseText);
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Cảnh báo',
+                        text: res.message || "Không có quyền thực hiện chức năng này!",
+                        confirmButtonText: 'OK'
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi hệ thống!',
+                        text: 'Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.',
+                        confirmButtonText: 'Đóng'
+                    });
+                }
             }
         });
     });
@@ -190,7 +205,7 @@ $(document).ready(function () {
         });
 
         $.ajax({
-            url: `/provide_vaccine_services_war/admin/updatePackage`,
+            url: `/admin/updatePackage`,
             type: "POST",
             traditional: true,
             dataType: "json",
@@ -218,7 +233,22 @@ $(document).ready(function () {
                 }
             },
             error: function (xhr) {
-                console.error("Loi:", xhr.responseText);
+                if (xhr.status === 403) {
+                    const res = JSON.parse(xhr.responseText);
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Cảnh báo',
+                        text: res.message || "Không có quyền thực hiện chức năng này!",
+                        confirmButtonText: 'OK'
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Lỗi hệ thống!',
+                        text: 'Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.',
+                        confirmButtonText: 'Đóng'
+                    });
+                }
             }
         });
     });
@@ -261,7 +291,22 @@ $(document).ready(function () {
                     }
                 },
                 error: function (xhr) {
-                    alert("Lỗi: " + xhr.responseText);
+                    if (xhr.status === 403) {
+                        const res = JSON.parse(xhr.responseText);
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Cảnh báo',
+                            text: res.message || "Không có quyền thực hiện chức năng này!",
+                            confirmButtonText: 'OK'
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Lỗi hệ thống!',
+                            text: 'Đã xảy ra lỗi hệ thống. Vui lòng thử lại sau.',
+                            confirmButtonText: 'Đóng'
+                        });
+                    }
                 }
             });
         });
