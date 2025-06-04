@@ -11,6 +11,7 @@ import com.example.provide_vaccine_services.dao.OrderDetailDao;
 import com.example.provide_vaccine_services.dao.PatientDao;
 import com.example.provide_vaccine_services.dao.model.*;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,6 +26,7 @@ import java.util.*;
  *
  * @author CTT VNPAY
  */
+
 public class ajaxServlet extends HttpServlet {
 
     @Override
@@ -40,7 +42,6 @@ public class ajaxServlet extends HttpServlet {
          *  sau đó sử dụng vnpay để thanh toán
          *
          */
-
         // nếu user chưa đăng nhập thì trả về login
         Users user = (Users) session.getAttribute("user");
         if(user == null) {
@@ -142,8 +143,12 @@ public class ajaxServlet extends HttpServlet {
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
         // thời gian theo múi giờ GMT+7
-        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
+        TimeZone vietnamZone = TimeZone.getTimeZone("Asia/Ho_Chi_Minh");
+        Calendar cld = Calendar.getInstance(vietnamZone);
+
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        formatter.setTimeZone(vietnamZone);  // ✅ bắt buộc để format ra đúng giờ
+
         String vnp_CreateDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
 
@@ -153,6 +158,8 @@ public class ajaxServlet extends HttpServlet {
         String vnp_ExpireDate = formatter.format(cld.getTime());
         vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
 
+        System.out.println("CreateDate: " + vnp_CreateDate);
+        System.out.println("ExpireDate: " + vnp_ExpireDate);
 
         // Sắp xếp các trường tham số theo thứ tự
         List fieldNames = new ArrayList(vnp_Params.keySet());
@@ -188,6 +195,9 @@ public class ajaxServlet extends HttpServlet {
         // Thêm mã bảo mật vào URL truy vấn
         queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
         String paymentUrl = Config.vnp_PayUrl + "?" + queryUrl;
+
+        System.out.println("===== LINK THANH TOÁN VNPAY =====");
+        System.out.println(paymentUrl);
 
 //        JsonObject job = new JsonObject();
 //        job.addProperty("code", "00");

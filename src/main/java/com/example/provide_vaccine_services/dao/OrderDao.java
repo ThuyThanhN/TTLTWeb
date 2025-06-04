@@ -448,4 +448,24 @@ public class OrderDao {
         }
         return false;
     }
+
+    public Map<Integer, Integer> getVaccineAndQuantity(int orderId) {
+        String sql = "select v.id, count(*) as time from orders o join orderdetails odt on o.id = odt.idOrder inner join vaccines v on v.id = odt.idVaccine where o.id = ? GROUP BY v.id";
+        Map<Integer, Integer> result = new HashMap<>();
+
+        try {
+            PreparedStatement pst = DBConnect.get(sql);
+            pst.setInt(1, orderId);
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                result.put(rs.getInt("id"), rs.getInt("time"));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return result;
+    }
 }

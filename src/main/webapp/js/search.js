@@ -62,7 +62,7 @@ function searchVaccine(page) {
     const query = $("#searchQuery").val().trim();
 
     $.ajax({
-        url: "/provide_vaccine_services_war/vaccine-information",
+        url: "/vaccine-information",
         type: "GET",
         data: {action: "search", query: query, page: page, age: age, disease: disease},
         success: (response) => {
@@ -103,7 +103,7 @@ function showVaccines(response) {
                     <div class="col-12 col-md-4 mb-3">
                         <div class="vx_item">
                             <a href="detail_vaccines?id=${v.id}">
-                                <img src="${v.imageUrl}" alt="">
+                                <img src="${v.imageUrl}" alt="${v.name}" loading="lazy" decoding="async">
                                 <div class="vaccine_name" title="${v.name}">${v.name}</div>
                             </a>
                             <div class="vaccine-content">${v.description}</div>
@@ -142,7 +142,7 @@ function autoComplete() {
     console.log("query: " + query);
 
     $.ajax({
-        url: "/provide_vaccine_services_war/vaccine-information",
+        url: "/vaccine-information",
         type: "GET",
         data: {action: "autoComplete", query: query},
         success: (response) => {

@@ -7,6 +7,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vắc xin | Quản trị Admin</title>
+    <link rel="icon" type="image/png" href="../image/logo1.png">
     <!-- Bootstrap, jquery   -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -91,7 +92,14 @@
                     </td>
                     <td>${v.stockQuantity}</td>
                     <td>
-                        <span class="status light-green color-green">${v.status}</span>
+                        <c:choose>
+                            <c:when test="${v.status eq 'Còn hàng'}">
+                                <span class="status light-green color-green">${v.status}</span>
+                            </c:when>
+                            <c:otherwise>
+                                <span class="status light-red color-red">${v.status}</span>
+                            </c:otherwise>
+                        </c:choose>
                     </td>
                     <td><f:formatNumber value="${v.price}" type="number" pattern="#,##0"/>đ</td>
                     <td>

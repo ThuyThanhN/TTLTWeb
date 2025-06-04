@@ -7,6 +7,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đặt lịch hẹn tiêm vắc xin</title>
+    <link rel="icon" type="image/png" href="image/logo1.png">
     <!-- Bootstrap, jquery   -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -194,8 +195,7 @@
                                     <!-- Loại vắc xin gói -->
                                     <div class="<c:if test="${!(cartId != null && cartId >0 && isPackageVaccine)}">hidden-vx</c:if> vaccine-type-content">
                                         <div style="color: #4d63a6; font-weight: 500">Chọn vắc xin</div>
-                                        <!--Vắc xin cho trẻ em / 0-9 Tháng-->
-
+                                        <!--Vắc xin hiển thị theo nhóm tuổi -->
                                         <c:forEach var="a" items="${ages}">
                                             <div class="vaccine-type-content-item">
                                                 <img src="image/down-arrow.png" alt="Icon down-arrow">
@@ -214,9 +214,9 @@
                                                                         <div class="row">
                                                                             <div class="col-6">
                                                                                 <input class="form-check-input"
-                                                                                       type="checkbox"
+                                                                                       name="selectedPackages"                                                                                       type="checkbox"
                                                                                        id="package-${vp.id}"
-                                                                                       name="selectedPackages"
+                                                                                       data-valid="${mapVaccine.get(vp.id)}"
                                                                                        value="${vp.id}"
                                                                                 <c:if test="${not empty orderDetailsCart && not empty cartId}">
                                                                                 <c:forEach var="od"
@@ -229,7 +229,9 @@
                                                                                     ${vp.name}
                                                                             </div>
                                                                             <div class="col-6 vaccine-price">
-                                                                                <f:formatNumber value="${vp.totalPrice}" type="number" pattern="#,##0" />đ
+                                                                                <f:formatNumber value="${vp.totalPrice}"
+                                                                                                type="number"
+                                                                                                pattern="#,##0"/>đ
                                                                             </div>
                                                                             <div class="col-12 vaccine-description">
                                                                                     ${vp.description}
@@ -259,6 +261,8 @@
                                                                         <input class="form-check-input" type="checkbox"
                                                                                id="vaccine-${v.id}"
                                                                                name="selectedVaccines" value="${v.id}"
+                                                                            <%-- số lượng vaccine --%>
+                                                                               data-quantity="${v.stockQuantity}"
                                                                         <c:if test="${not empty orderDetailsCart && not empty cartId}">
                                                                         <c:forEach var="od" items="${orderDetailsCart}">
                                                                         <c:if test="${od.idVaccine == v.id}">
@@ -270,7 +274,10 @@
                                                                             ${v.name}
                                                                     </div>
                                                                     <div class="col-6 vaccine-price">
-                                                                        <td><f:formatNumber value="${v.price}" type="number" pattern="#,##0" />đ</td>
+                                                                        <td><f:formatNumber value="${v.price}"
+                                                                                            type="number"
+                                                                                            pattern="#,##0"/>đ
+                                                                        </td>
                                                                     </div>
                                                                     <div class="col-12 vaccine-description">
                                                                             ${v.prevention}

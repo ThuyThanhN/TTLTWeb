@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cập nhật vắc xin | Quản trị Admin </title>
+    <link rel="icon" type="image/png" href="../image/logo1.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -78,8 +79,8 @@
                                     <div class="mb-3">
                                         <label for="form-select-vaccine" class="form-label">Tình trạng</label>
                                         <select class="form-select form-control" id="form-select-vaccine" name="status">
-                                            <option value="1">Còn hàng</option>
-                                            <option value="2">Hết hàng</option>
+                                            <option value="Còn hàng" <c:if test="${v.status eq 'Còn hàng'}">selected</c:if>>Còn hàng</option>
+                                            <option value="Hết hàng" <c:if test="${v.status eq 'Hết hàng'}">selected</c:if>>Hết hàng</option>
                                         </select>
                                     </div>
                                 </div>
@@ -179,7 +180,7 @@
                                                  aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                                 <div class="form-floating p-3">
                                                     <textarea class="ckeditor"
-                                                              name="editor-dt">${vcontent.administrationRoute}</textarea>
+                                                              name="editor-dgt">${vcontent.administrationRoute}</textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -253,7 +254,7 @@
                             <div class="my-3 content d-none" id="object-content">
                                 <div class="form-floating">
                                     <div>Đối tượng</div>
-                                    <textarea class="ckeditor" name="editor-dt">${vdetail.targetGroup}</textarea>
+                                    <textarea class="ckeditor" name="editor-f">${vdetail.targetGroup}</textarea>
                                 </div>
                             </div>
                             <div class="my-3 content d-none" id="schedule-content">

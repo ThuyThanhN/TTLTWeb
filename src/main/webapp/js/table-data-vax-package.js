@@ -125,7 +125,7 @@ $(document).ready(function () {
         console.log("Dosages:", dosages);
 
         $.ajax({
-            url: "/provide_vaccine_services_war/admin/addPMapping",
+            url: "/admin/addPMapping",
             type: "POST",
             data: {
                 "package-name": name,
@@ -205,7 +205,7 @@ $(document).ready(function () {
         });
 
         $.ajax({
-            url: `/provide_vaccine_services_war/admin/updatePackage`,
+            url: `/admin/updatePackage`,
             type: "POST",
             traditional: true,
             dataType: "json",

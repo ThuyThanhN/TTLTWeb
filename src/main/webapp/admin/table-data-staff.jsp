@@ -6,6 +6,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nhân viên | Quản trị Admin</title>
+    <link rel="icon" type="image/png" href="../image/logo1.png">
     <!-- Bootstrap, jquery   -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -239,6 +240,9 @@
                                                             <option value="package" ${staff.module == 'package' ? 'selected' : ''}>Quản lý gói vắc xin</option>
                                                             <option value="supplier" ${staff.module == 'supplier' ? 'selected' : ''}>Quản lý nhà cung cấp</option>
                                                             <option value="center" ${staff.module == 'center' ? 'selected' : ''}>Quản lý trung tâm</option>
+                                                            <option value="log" ${staff.module == 'log' ? 'selected' : ''}>Quản lý log</option>
+                                                            <option value="transaction" ${staff.module == 'transaction' ? 'selected' : ''}>Quản lý giao dịch</option>
+                                                            <option value="warehouse" ${staff.module == 'warehouse' ? 'selected' : ''}>Quản lý kho hàng</option>
                                                         </select>
                                                         <i class="fa-solid fa-angle-down position-absolute end-0 translate-middle" style="top: 72%"></i>
                                                     </div>
@@ -246,7 +250,7 @@
                                                 <div class="col-3">
                                                     <div class="mb-3">
                                                         <label for="pass-${staff.id}" class="form-label">Mật khẩu</label>
-                                                        <input type="password" class="form-control" id="pass-${staff.id}" name="password" value="${staff.password}" required data-password>
+                                                        <input type="password" class="form-control" id="pass-${staff.id}" name="password" required>
                                                         <div class="error-message">Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, chữ số và ký tự đặc biệt.</div>
                                                     </div>
                                                 </div>
@@ -389,8 +393,8 @@
                                     <label for="role" class="form-label">Chức vụ</label>
                                     <select class="form-select" id="role" name="role" required>
                                         <option value="" selected>--Chọn chức vụ--</option>
-                                        <option value="Admin">Admin</option>
-                                        <option value="Nhân viên">Nhân viên</option>
+                                        <option value="1">Admin</option>
+                                        <option value="2 viên">Nhân viên</option>
                                     </select>
                                     <i class="fa-solid fa-angle-down position-absolute end-0 translate-middle" style="top: 72%"></i>
                                 </div>
@@ -408,6 +412,9 @@
                                         <option value="package">Quản lý gói vắc xin</option>
                                         <option value="supplier">Quản lý nhà cung cấp</option>
                                         <option value="center">Quản lý trung tâm</option>
+                                        <option value="log">Quản lý log</option>
+                                        <option value="center">Quản lý giao dịch</option>
+                                        <option value="log">Quản lý kho hàng</option>
                                     </select>
                                     <i class="fa-solid fa-angle-down position-absolute end-0 translate-middle" style="top: 72%"></i>
                                 </div>
@@ -415,7 +422,7 @@
                             <div class="col-3">
                                 <div class="mb-3">
                                     <label for="password" class="form-label">Mật khẩu</label>
-                                    <input type="password" class="form-control" id="password" name="password" required data-password>
+                                    <input type="password" class="form-control" id="password" name="password" required>
                                     <div class="error-message">Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, chữ số và ký tự đặc biệt.</div>
                                 </div>
                             </div>

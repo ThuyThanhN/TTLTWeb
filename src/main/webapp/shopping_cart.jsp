@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart</title>
+    <title>Giỏ hàng</title>
     <!-- Bootstrap CSS -->
     <!-- Bootstrap, jquery   -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -33,8 +33,6 @@
     <c:set var="cart" value="${requestScope.cart}"/>
 
     <div class="container my-5">
-        <h4 class="text-center mb-4">Danh sách đặt lịch tiêm vắc xin</h4>
-
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index">Trang chủ</a></li>
@@ -52,7 +50,7 @@
                         <div class="p-2 border rounded mb-2">
                             <div class="row">
                                 <div class="col-5">
-                                    <img src="image/online-appointment.png" alt="Product" class="img-thumbnail">
+                                    <img src="image/report.png" alt="Product" class="img-thumbnail">
                                 </div>
                                 <div class="col-7">
                                     <div class="mb-1"><b>Ngày hẹn:</b> <f:formatDate value="${orders.appointmentDate}"
@@ -87,7 +85,6 @@
                 </c:forEach>
             </div>
             <div class="d-flex gap-3">
-                <p> Tổng cộng: ${totalBill} vnd</p>
                 <%-- đặt thêm --%>
                 <div>
                     <a href="dosing_schedule">
@@ -102,8 +99,11 @@
             </div>
         </form>
         <%-- Thanh toán --%>
-        <form action="payment" method="post">
-            <button type="submit" class="btn btn-order"> Đặt và Thanh toán </button>
+        <p class="fs-5 mb-0 text-end">Tổng cộng: ${totalBill} đ</p>
+        <form class="mt-2" action="payment" method="post">
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-payment">Thanh toán</button>
+            </div>
         </form>
     </div>
 </div>

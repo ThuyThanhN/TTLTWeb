@@ -6,6 +6,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Khách hàng | Quản trị Admin</title>
+    <link rel="icon" type="image/png" href="../image/logo1.png">
     <!-- Bootstrap, jquery   -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -33,9 +34,6 @@
 
     <div class="tabular-wrapper">
         <h5 class="main-title">Khách hàng</h5>
-        <a href="registerUsers" class="btn btn-add btn-sm">
-            <i class="fa-solid fa-plus"></i> Thêm khách hàng
-        </a>
         <table class="w-100 table table-striped" id="user">
             <thead>
             <tr class="list-header">
@@ -56,14 +54,14 @@
                     </td>
                     <td>${c.phone}</td>
                     <td>
-                        <select class="status" name="status" data-id="${ur.id}" disabled>
-                            <option value="-1" class="status-select" ${ur.status == -1 ? 'selected' : ''}>Khóa
+                        <select class="status" name="status" data-id="${c.id}">
+                            <option value="-1" class="status-select" ${c.status == -1 ? 'selected' : ''}>Khóa
                                 tài khoản
                             </option>
-                            <option value="0" class="status-select" ${ur.status == 0 ? 'selected' : ''}>Chưa xác
+                            <option value="0" class="status-select" ${c.status == 0 ? 'selected' : ''}>Chưa xác
                                 thực
                             </option>
-                            <option value="1" class="status-select" ${ur.status == 1 ? 'selected' : ''}>Đã xác
+                            <option value="1" class="status-select" ${c.status == 1 ? 'selected' : ''}>Đã xác
                                 thực
                             </option>
                         </select>
