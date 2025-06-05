@@ -12,7 +12,7 @@ import java.sql.SQLException;
 
 @WebServlet(name = "FileDownloadServlet", value = "/uploads/*")
 public class FileDownloadServlet extends HttpServlet {
-    private static final String UPLOAD_DIR = "D:/uploads"; // Thư mục lưu file
+    private static final String UPLOAD_DIR = "/opt/uploads";// Thư mục lưu file
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

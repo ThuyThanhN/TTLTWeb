@@ -110,7 +110,7 @@
 
 
                                         <li class="nav-item <%= (request.getRequestURI().contains("index")) ? "active" : "" %>">
-                                            <a class="nav-link " href="index.jsp">Trang chủ</a>
+                                            <a class="nav-link " href="index">Trang chủ</a>
                                         </li>
                                         <li class="nav-item <%= (request.getRequestURI().contains("introduction")) ? "active" : "" %>">
                                             <a class="nav-link" href="introduction.jsp">Giới thiệu</a>

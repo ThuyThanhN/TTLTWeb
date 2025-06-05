@@ -39,4 +39,8 @@
         <servlet-name>AccountActivationServlet</servlet-name>
         <url-pattern>/activate</url-pattern>
     </servlet-mapping>
+    <context-param>
+        <param-name>UPLOAD_PATH</param-name>
+        <param-value>/opt/uploads</param-value>
+    </context-param>
 </web-app>

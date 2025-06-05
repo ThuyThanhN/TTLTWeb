@@ -33,8 +33,7 @@ public class AddVaccine extends HttpServlet {
         String userIp = request.getRemoteAddr();
 
         try {
-            String uploadPath = "D:" + File.separator + "uploads";
-
+            String uploadPath = "/opt/uploads";
             File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) uploadDir.mkdirs();
 
